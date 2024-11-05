@@ -14,6 +14,8 @@ import {
 } from "react-icons/fa6";
 import { CardBerita } from "../../components/cardBerita";
 import { CardBeritaSkeleton } from "../../components/cardBeritaSkeleton";
+import useCookie from "react-use-cookie";
+import { CardInformasi } from "../../features/homePage/components/cardInformasi";
 
 // interface Mapel {
 //   imageMapel: string;
@@ -23,6 +25,8 @@ import { CardBeritaSkeleton } from "../../components/cardBeritaSkeleton";
 
 export const HomePage = () => {
   const articleService = ArtikelService();
+  const [cookieLogin] = useCookie("userLoginCookie");
+  const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
   // const dataMapel: Mapel[] = [
   //   {
   //     imageMapel:
@@ -106,97 +110,69 @@ export const HomePage = () => {
 
   return (
     <>
-      <div className="m-3 my-4">
-        <div className="fw-bold fs-5 mb-3 text-dark-soft">Dashboard</div>
-        <div className="container-fluid px-0">
-          <div className="row">
-            <div className="col-6 col-lg-3 col-md-4">
-              <div
-                className="card mb-3 border-0 rounded shadow-sm"
-                style={{ backgroundColor: "#A8DADC" }}
-              >
-                <div className="card-body text-center text-dark-soft">
-                  <h5 className="card-title">
-                    <FaGraduationCap className="display-5" />
-                  </h5>
-                  <div className="card-text fw-medium fs-5">Total Murid</div>
-                  <div className="card-text fw-bold fs-5">442</div>
-                </div>
-              </div>
-            </div>
-            <div className="col-6 col-lg-3 col-md-4">
-              <div
-                className="card mb-3 border-0 rounded shadow-sm"
-                style={{ backgroundColor: "#FBD288" }}
-              >
-                <div className="card-body text-center text-dark-soft">
-                  <h5 className="card-title">
-                    <FaPersonChalkboard className="display-5" />
-                  </h5>
-                  <div className="card-text fw-medium fs-5">Total Guru</div>
-                  <div className="card-text fw-bold fs-5">29</div>
-                </div>
-              </div>
-            </div>
-            <div className="col-6 col-lg-3 col-md-4">
-              <div
-                className="card mb-3 border-0 rounded shadow-sm"
-                style={{ backgroundColor: "#D4F6FF" }}
-              >
-                <div className="card-body text-center text-dark-soft">
-                  <h5 className="card-title">
-                    <FaCodeBranch className="display-5" />
-                  </h5>
-                  <div className="card-text fw-medium fs-5">Total Jurusan</div>
-                  <div className="card-text fw-bold fs-5">3</div>
-                </div>
-              </div>
-            </div>
-            <div className="col-6 col-lg-3 col-md-4">
-              <div
-                className="card mb-3 border-0 rounded shadow-sm"
-                style={{ backgroundColor: "#F95454" }}
-              >
-                <div className="card-body text-center text-dark-soft">
-                  <h5 className="card-title">
-                    <FaCodeBranch className="display-5" />
-                  </h5>
-                  <div className="card-text fw-medium fs-5">Total Murid</div>
-                  <div className="card-text fw-bold fs-5">127</div>
-                </div>
-              </div>
+      {userLoginCookie.role === "STAFF" ? (
+        <div className="m-3 m-lg-4 m-md-4 my-4">
+          <div className="fw-bold fs-5 mb-3 text-dark-soft">Dashboard</div>
+          <div className="container-fluid px-0">
+            <div className="row">
+              <CardInformasi
+                icon={<FaGraduationCap className="display-6" />}
+                title="Total Murid"
+                total={442}
+                bgColor="#FBD288"
+              />
+              <CardInformasi
+                icon={<FaPersonChalkboard className="display-6" />}
+                title="Total Guru"
+                total={29}
+                bgColor="#D4F6FF"
+              />
+              <CardInformasi
+                icon={<FaCodeBranch className="display-6" />}
+                title="Total Jurusan"
+                total={3}
+                bgColor="#F95454"
+              />
+              <CardInformasi
+                icon={<FaGraduationCap className="display-6" />}
+                title="Total Murid"
+                total={442}
+                bgColor="#A8DADC"
+              />
             </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <Hero />
+      )}
 
-      <Hero />
-
-      <div className="m-3 my-4">
-        <div className="fw-bold fs-5 text-dark-soft">Mata Pelajaran</div>
-        <div className="slider-container">
-          <div className="container">
-            {/* <Slider {...settings}>
+      {userLoginCookie.role === "STUDENT" && (
+        <div className="m-3 m-lg-4 m-md-4 my-4">
+          <div className="fw-bold fs-5 text-dark-soft">Mata Pelajaran</div>
+          <div className="slider-container">
+            <div className="container">
+              {/* <Slider {...settings}>
               {dataMapel.map((data, index) => (
                 <div key={index} className="p-2">
                   <CardMapel {...data} />
                 </div>
               ))}
             </Slider> */}
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
-      <div className="m-3 my-4">
+      <div className="m-3 m-lg-4 m-md-4 my-4">
         <div className="d-flex justify-content-between mb-3">
           <span className="fw-bold fs-5 text-dark-soft">Berita/Artikel</span>
-          <Link to="/" className="fw-medium fs-5 text-primary">
+          <Link to="/berita" className="fw-medium fs-5 text-primary">
             <u>Lainnya {">"}</u>
           </Link>
         </div>
         <section className="">
-          <div className="container px-0">
-            <div className="row g-3 d-flex justify-content-between">
+          <div className="container-fluid px-0">
+            <div className="row g-3 d-flex">
               {dataArtikel.length > 0
                 ? dataArtikel.map((data, index) => (
                     <div className="col-12 col-lg-3 col-md-6" key={index}>

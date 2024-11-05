@@ -1,13 +1,7 @@
-import React, { ReactNode, useState, useLayoutEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { ReactNode, useState, useLayoutEffect, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { FaBars, FaCircle, FaGlobe, FaNewspaper } from "react-icons/fa6";
-import {
-  Sidebar,
-  Menu,
-  MenuItem,
-  SubMenu,
-  menuClasses,
-} from "react-pro-sidebar";
+import { Sidebar, Menu, MenuItem, SubMenu, menuClasses } from "react-pro-sidebar";
 import { IoGrid } from "react-icons/io5";
 import { FaUserCircle } from "react-icons/fa";
 import AuthService from "../services/authService";
@@ -20,9 +14,10 @@ interface SideBarAdminProps {
 export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
   const authService = AuthService();
   const navigate = useNavigate();
+  const location = useLocation(); // Mengambil lokasi saat ini
   const [mobileToggled, setMobileToggled] = useState(false);
   const [desktopCollapsed, setDesktopCollapsed] = useState(false);
-  const [selectedMenu, setSelectedMenu] = useState("dashboard");
+  const [selectedMenu, setSelectedMenu] = useState(""); // Ubah default menjadi string kosong
   const [cookieLogin] = useCookie("userLoginCookie");
   const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
 
@@ -51,8 +46,24 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
     }
   }, [userLoginCookie, navigate]);
 
+  useEffect(() => {
+    // Update selectedMenu berdasarkan pathname saat ini
+    switch (location.pathname) {
+      case "/":
+        setSelectedMenu("dashboard");
+        break;
+      case "/berita":
+        setSelectedMenu("berita");
+        break;
+      case "/submenu2-1":
+        setSelectedMenu("submenu2-1");
+        break;
+      default:
+        setSelectedMenu(""); // Atau bisa disesuaikan sesuai kebutuhan
+    }
+  }, [location.pathname]); // Menjalankan effect setiap kali pathname berubah
+
   const handleMenuClick = (menu: string, path: string) => {
-    setSelectedMenu(menu);
     navigate(path);
   };
 
@@ -108,7 +119,7 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
                 </MenuItem>
                 <SubMenu icon={<FaGlobe />} label="Menu 2">
                   <MenuItem
-                    onClick={() => handleMenuClick("submenu2-1", "/")}
+                    onClick={() => handleMenuClick("submenu2-1", "/submenu2-1")}
                     style={{
                       position: "relative",
                       backgroundColor: selectedMenu === "submenu2-1" ? "#E5EAF2" : "",
@@ -177,7 +188,7 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
                   className="fw-medium"
                 >
                   <MenuItem
-                    onClick={() => handleMenuClick("submenu2-1", "/")}
+                    onClick={() => handleMenuClick("submenu2-1", "/submenu2-1")}
                     icon={<FaCircle style={{ fontSize: "8px" }} />}
                     style={{
                       position: "relative",
@@ -203,42 +214,45 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
                     style={{ border: "2px solid #021526" }}
                     onClick={() => {
                       if (window.innerWidth < 768) {
-                        console.log("1");
                         setMobileToggled(!mobileToggled);
                       } else {
-                        console.log("2");
                         setDesktopCollapsed(!desktopCollapsed);
                       }
                     }}
                   >
-                    <FaBars className="fs-4" />
+                    <FaBars />
                   </button>
                 </div>
-                <div className="dropdown">
-                  <a
-                    className="dropdown-toggle text-decoration-none text-dark-soft"
-                    href="#"
-                    role="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  >
-                    <FaUserCircle className="fs-3 me-2" />
-                    {userLoginCookie.name}
-                  </a>
-                  <ul className="dropdown-menu dropdown-menu-end">
-                    <li>
-                      <a className="dropdown-item" onClick={handleLogout}>
-                        Logout
-                      </a>
-                    </li>
-                  </ul>
+                <div className="d-flex align-items-center">
+                  <div className="dropdown">
+                    <button
+                      className="btn dropdown-toggle text-dark"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                      style={{ border: "2px solid #021526" }}
+                    >
+                      <FaUserCircle className="me-2" />
+                      {userLoginCookie?.user?.name}
+                    </button>
+                    <ul className="dropdown-menu dropdown-menu-end">
+                      <li>
+                        <button className="dropdown-item" onClick={handleLogout}>
+                          Logout
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </nav>
-            {children}
+            <div className="container-fluid" style={{ paddingTop: "20px" }}>
+              {children}
+            </div>
           </main>
         </div>
       )}
     </>
   );
 };
+
+export default SideBar;

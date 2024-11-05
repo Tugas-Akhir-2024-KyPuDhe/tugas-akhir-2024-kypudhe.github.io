@@ -42,6 +42,7 @@ export const CreateArticlePage: React.FC = () => {
 
   const handleDescriptionChange = (value: string) => {
     setFormData((prev) => ({ ...prev, description: value }));
+    setErrorsForms((prevErrors) => ({ ...prevErrors, "description": "" }));
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,6 +51,7 @@ export const CreateArticlePage: React.FC = () => {
       ...prev,
       [name]: files ? files[0] : value,
     }));
+    setErrorsForms((prevErrors) => ({ ...prevErrors, [name]: "" }));
   };
 
   const handleSelectChange = (
@@ -115,7 +117,7 @@ export const CreateArticlePage: React.FC = () => {
 
   return (
     <>
-      <div className="m-3 my-4">
+      <div className="m-3 m-lg-4 m-md-4 my-4">
         <div className="row">
           <div className="col d-flex align-items-end">
             <div className="h4 fw-medium">Tambah Berita/Artikel</div>
@@ -128,7 +130,7 @@ export const CreateArticlePage: React.FC = () => {
         </div>
       </div>
       <div
-        className="shadow p-4 m-0 m-lg-3 m-md-3 my-4 rounded"
+        className="shadow p-4 m-3 m-lg-4 m-md-4 my-4 rounded"
         style={{ backgroundColor: "#fff" }}
       >
         <form onSubmit={handleSubmit}>
@@ -139,7 +141,9 @@ export const CreateArticlePage: React.FC = () => {
                 <input
                   type="text"
                   name="title"
-                  className="form-control form-control-lg"
+                  className={`form-control form-control-lg ${
+                    errorsForms.title ? "is-invalid" : ""
+                  }`}
                   placeholder="Masukkan judul"
                   value={formData.title}
                   onChange={handleInputChange}
@@ -159,7 +163,7 @@ export const CreateArticlePage: React.FC = () => {
                   )}
                   onChange={(option) => handleSelectChange("type", option)}
                   placeholder="Pilih tipe"
-                  className="form-control-lg ps-0 pt-0"
+                  className="form-control-lg px-0 pt-0"
                   styles={{
                     control: (baseStyles) => ({
                       ...baseStyles,
@@ -238,7 +242,7 @@ export const CreateArticlePage: React.FC = () => {
                   )}
                   onChange={(option) => handleSelectChange("status", option)}
                   placeholder="Pilih Status"
-                  className="form-control-lg ps-0 pt-0"
+                  className="form-control-lg px-0 pt-0"
                   styles={{
                     control: (baseStyles) => ({
                       ...baseStyles,
@@ -255,7 +259,7 @@ export const CreateArticlePage: React.FC = () => {
               </div>
             </div>
             <div className="col-12 d-flex justify-content-end">
-              <button className="btn btn-success btn-lg w-50" type="submit">
+              <button className="btn btn-success btn-lg w-50 fw-medium" type="submit" style={{ fontSize: "1.1rem" }}>
                 Submit
               </button>
             </div>

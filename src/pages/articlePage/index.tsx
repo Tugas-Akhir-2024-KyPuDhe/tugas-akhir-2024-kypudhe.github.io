@@ -54,10 +54,10 @@ export const ArticlePage: React.FC = () => {
   }, [currentPage]);
 
   return (
-    <div className="m-0 m-lg-3 m-md-3 my-4">
+    <div className="m-3 m-lg-4 m-md-4 my-4">
       <HeaderArticle onSearch={handleSearch} keyword={keyword} setKeyword={setKeyword} />
       <section>
-        <div className="container px-0">
+        <div className="container-fluid px-0">
           <div className="row g-3 d-flex" style={{ minHeight: "63vh" }}>
             {loading
               ? Array.from({ length: 8 }).map((_, index) => (
