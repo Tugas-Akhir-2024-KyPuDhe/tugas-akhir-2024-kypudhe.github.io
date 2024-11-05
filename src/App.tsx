@@ -1,15 +1,8 @@
 import "./App.css";
-import { Route, Routes, useLocation } from "react-router-dom";
-import { ArticlePage, CreateArticlePage, DetailArticlePage, HomePage, LoginPage } from "./pages";
-import { SideBar } from "./components/sidebar";
-import PrivateRoute from "./components/privateRoute";
+import { Route, Routes } from "react-router-dom";
+import { LoginPage } from "./pages";
 
 function App() {
-  const location = useLocation();
-  const excludePathsWithoutSidebar = [/^\/login$/i];
-  const isSidebarExcluded = excludePathsWithoutSidebar.some((pattern) =>
-    pattern.test(location.pathname)
-  );
 
   return (
     <>
