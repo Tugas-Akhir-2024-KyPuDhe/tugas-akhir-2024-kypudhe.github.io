@@ -63,7 +63,7 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
     }
   }, [location.pathname]); // Menjalankan effect setiap kali pathname berubah
 
-  const handleMenuClick = (menu: string, path: string) => {
+  const handleMenuClick = (path: string) => {
     navigate(path);
   };
 
@@ -90,7 +90,7 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
                   </div>
                 </div>
                 <MenuItem
-                  onClick={() => handleMenuClick("dashboard", "/")}
+                  onClick={() => handleMenuClick("/")}
                   icon={<IoGrid />}
                   style={{
                     position: "relative",
@@ -104,7 +104,7 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
                   Dashboard
                 </MenuItem>
                 <MenuItem
-                  onClick={() => handleMenuClick("berita", "/berita")}
+                  onClick={() => handleMenuClick("/berita")}
                   icon={<FaNewspaper />}
                   style={{
                     position: "relative",
@@ -119,7 +119,7 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
                 </MenuItem>
                 <SubMenu icon={<FaGlobe />} label="Menu 2">
                   <MenuItem
-                    onClick={() => handleMenuClick("submenu2-1", "/submenu2-1")}
+                    onClick={() => handleMenuClick("/submenu2-1")}
                     style={{
                       position: "relative",
                       backgroundColor: selectedMenu === "submenu2-1" ? "#E5EAF2" : "",
@@ -150,7 +150,7 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
                 </div>
 
                 <MenuItem
-                  onClick={() => handleMenuClick("dashboard", "/")}
+                  onClick={() => handleMenuClick("/")}
                   icon={<IoGrid />}
                   style={{
                     position: "relative",
@@ -164,7 +164,7 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
                   Dashboard
                 </MenuItem>
                 <MenuItem
-                  onClick={() => handleMenuClick("berita", "/berita")}
+                  onClick={() => handleMenuClick("/berita")}
                   icon={<FaNewspaper />}
                   style={{
                     position: "relative",
@@ -188,7 +188,7 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
                   className="fw-medium"
                 >
                   <MenuItem
-                    onClick={() => handleMenuClick("submenu2-1", "/submenu2-1")}
+                    onClick={() => handleMenuClick("/submenu2-1")}
                     icon={<FaCircle style={{ fontSize: "8px" }} />}
                     style={{
                       position: "relative",
