@@ -117,7 +117,7 @@ export const CreateArticlePage: React.FC = () => {
 
   return (
     <>
-      <div className="m-3 m-lg-4 m-md-4 my-4">
+      <div className="m-1 m-lg-4 m-md-4 my-4">
         <div className="row">
           <div className="col d-flex align-items-end">
             <div className="h4 fw-medium">Tambah Berita/Artikel</div>
@@ -130,7 +130,7 @@ export const CreateArticlePage: React.FC = () => {
         </div>
       </div>
       <div
-        className="shadow p-4 m-3 m-lg-4 m-md-4 my-4 rounded"
+        className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
         style={{ backgroundColor: "#fff" }}
       >
         <form onSubmit={handleSubmit}>

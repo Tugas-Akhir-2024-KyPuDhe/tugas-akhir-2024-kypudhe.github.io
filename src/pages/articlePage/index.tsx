@@ -54,7 +54,7 @@ export const ArticlePage: React.FC = () => {
   }, [currentPage]);
 
   return (
-    <div className="m-3 m-lg-4 m-md-4 my-4">
+    <div className="m-1 m-lg-4 m-md-4 my-4">
       <HeaderArticle onSearch={handleSearch} keyword={keyword} setKeyword={setKeyword} />
       <section>
         <div className="container-fluid px-0">
