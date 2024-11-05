@@ -18,6 +18,11 @@ import { IoGrid } from "react-icons/io5";
 import { FaUserCircle } from "react-icons/fa";
 import AuthService from "../services/authService";
 import useCookie from "react-use-cookie";
+import { Footer } from "./footer";
+import { MdLibraryBooks } from "react-icons/md";
+import { LuCheckSquare } from "react-icons/lu";
+import { RiSchoolLine } from "react-icons/ri";
+import { TbBooks } from "react-icons/tb";
 
 interface SideBarAdminProps {
   children: ReactNode;
@@ -145,12 +150,13 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
               className="container-fluid"
               style={{
                 paddingTop: "20px",
-                paddingBottom: "20px",
+                paddingBottom: "1px",
                 minHeight: "90vh",
                 backgroundColor: "#EFF2F5",
               }}
             >
               {children}
+              <Footer />
             </div>
           </main>
         </div>
@@ -188,17 +194,29 @@ export const ListMenu = () => {
       case "/config-ekstra-kurikuler":
         setSelectedMenu("config-ekstra-kurikuler");
         break;
-      case "/absensi-siswa":
-        setSelectedMenu("absensi-siswa");
+      case "/data-absensi-siswa":
+        setSelectedMenu("data-absensi-siswa");
         break;
-      case "/daftar-siswa":
-        setSelectedMenu("daftar-siswa");
+      case "/data-daftar-siswa":
+        setSelectedMenu("data-daftar-siswa");
         break;
       case "/data-kelas":
         setSelectedMenu("data-kelas");
         break;
+      case "/data-nilai-siswa":
+        setSelectedMenu("data-nilai-siswa");
+        break;
       case "/nilai-siswa":
         setSelectedMenu("nilai-siswa");
+        break;
+      case "/absensi-siswa":
+        setSelectedMenu("absensi-siswa");
+        break;
+      case "/kelas-siswa":
+        setSelectedMenu("kelas-siswa");
+        break;
+      case "/mapel-siswa":
+        setSelectedMenu("mapel-siswa");
         break;
       default:
         setSelectedMenu("");
@@ -269,20 +287,39 @@ export const ListMenu = () => {
         )}
         Berita
       </MenuItem>
-      {userLoginCookie?.role === "STAFF" && (
-        <SubMenu
-          icon={<FaFileLines />}
-          label="Pengelolaan Siswa"
-          rootStyles={{
-            ["." + menuClasses.subMenuContent]: {
-              backgroundColor: "#fff",
-            },
-          }}
-          className="fw-medium"
-        >
+      {userLoginCookie?.role === "STUDENT" && (
+        <>
+          <MenuItem
+            onClick={() => handleMenuClick("/data-nilai-siswa")}
+            icon={<MdLibraryBooks />}
+            style={{
+              position: "relative",
+              backgroundColor:
+                selectedMenu === "data-nilai-siswa" ? "#E5EAF2" : "",
+            }}
+            className={`fw-medium ${
+              selectedMenu === "data-nilai-siswa"
+                ? "text-blue"
+                : "text-dark-soft"
+            }`}
+          >
+            {selectedMenu === "data-nilai-siswa" && (
+              <div
+                style={{
+                  position: "absolute",
+                  right: 0,
+                  top: 0,
+                  bottom: 0,
+                  width: "4px",
+                  backgroundColor: "var(--blue-color)",
+                }}
+              />
+            )}
+            Nilai
+          </MenuItem>
           <MenuItem
             onClick={() => handleMenuClick("/absensi-siswa")}
-            icon={<FaCircle style={{ fontSize: "8px" }} />}
+            icon={<LuCheckSquare />}
             style={{
               position: "relative",
               backgroundColor:
@@ -307,17 +344,112 @@ export const ListMenu = () => {
             Absensi
           </MenuItem>
           <MenuItem
-            onClick={() => handleMenuClick("/daftar-siswa")}
+            onClick={() => handleMenuClick("/kelas-siswa")}
+            icon={<RiSchoolLine />}
+            style={{
+              position: "relative",
+              backgroundColor: selectedMenu === "kelas-siswa" ? "#E5EAF2" : "",
+            }}
+            className={`fw-medium ${
+              selectedMenu === "kelas-siswa" ? "text-blue" : "text-dark-soft"
+            }`}
+          >
+            {selectedMenu === "kelas-siswa" && (
+              <div
+                style={{
+                  position: "absolute",
+                  right: 0,
+                  top: 0,
+                  bottom: 0,
+                  width: "4px",
+                  backgroundColor: "var(--blue-color)",
+                }}
+              />
+            )}
+            Kelas Saya
+          </MenuItem>
+          <MenuItem
+            onClick={() => handleMenuClick("/mapel-siswa")}
+            icon={<TbBooks />}
+            style={{
+              position: "relative",
+              backgroundColor: selectedMenu === "mapel-siswa" ? "#E5EAF2" : "",
+            }}
+            className={`fw-medium ${
+              selectedMenu === "mapel-siswa" ? "text-blue" : "text-dark-soft"
+            }`}
+          >
+            {selectedMenu === "mapel-siswa" && (
+              <div
+                style={{
+                  position: "absolute",
+                  right: 0,
+                  top: 0,
+                  bottom: 0,
+                  width: "4px",
+                  backgroundColor: "var(--blue-color)",
+                }}
+              />
+            )}
+            Mata Pelajaran
+          </MenuItem>
+        </>
+      )}
+      {/* pengelolaan siswa | TEACHER */}
+      {userLoginCookie?.role === "STAFF" && (
+        <SubMenu
+          icon={<FaFileLines />}
+          label="Pengelolaan Siswa"
+          rootStyles={{
+            ["." + menuClasses.subMenuContent]: {
+              backgroundColor: "#fff",
+            },
+          }}
+          className="fw-medium"
+        >
+          <MenuItem
+            onClick={() => handleMenuClick("/data-absensi-siswa")}
             icon={<FaCircle style={{ fontSize: "8px" }} />}
             style={{
               position: "relative",
-              backgroundColor: selectedMenu === "daftar-siswa" ? "#E5EAF2" : "",
+              backgroundColor:
+                selectedMenu === "data-absensi-siswa" ? "#E5EAF2" : "",
             }}
             className={`fw-medium ${
-              selectedMenu === "daftar-siswa" ? "text-blue" : "text-dark-soft"
+              selectedMenu === "data-absensi-siswa"
+                ? "text-blue"
+                : "text-dark-soft"
             }`}
           >
-            {selectedMenu === "daftar-siswa" && (
+            {selectedMenu === "data-absensi-siswa" && (
+              <div
+                style={{
+                  position: "absolute",
+                  right: 0,
+                  top: 0,
+                  bottom: 0,
+                  width: "4px",
+                  backgroundColor: "var(--blue-color)",
+                }}
+              />
+            )}
+            Absensi
+          </MenuItem>
+          <MenuItem
+            onClick={() => handleMenuClick("/data-daftar-siswa")}
+            icon={<FaCircle style={{ fontSize: "8px" }} />}
+            style={{
+              position: "relative",
+              backgroundColor:
+                selectedMenu === "data-daftar-siswa" ? "#E5EAF2" : "",
+            }}
+            className={`fw-medium ${
+              selectedMenu === "data-daftar-siswa"
+                ? "text-blue"
+                : "text-dark-soft"
+            }`}
+          >
+            {selectedMenu === "data-daftar-siswa" && (
               <div
                 style={{
                   position: "absolute",
@@ -357,17 +489,20 @@ export const ListMenu = () => {
             Data Kelas
           </MenuItem>
           <MenuItem
-            onClick={() => handleMenuClick("/nilai-siswa")}
+            onClick={() => handleMenuClick("/data-nilai-siswa")}
             icon={<FaCircle style={{ fontSize: "8px" }} />}
             style={{
               position: "relative",
-              backgroundColor: selectedMenu === "nilai-siswa" ? "#E5EAF2" : "",
+              backgroundColor:
+                selectedMenu === "data-nilai-siswa" ? "#E5EAF2" : "",
             }}
             className={`fw-medium ${
-              selectedMenu === "nilai-siswa" ? "text-blue" : "text-dark-soft"
+              selectedMenu === "data-nilai-siswa"
+                ? "text-blue"
+                : "text-dark-soft"
             }`}
           >
-            {selectedMenu === "nilai-siswa" && (
+            {selectedMenu === "data-nilai-siswa" && (
               <div
                 style={{
                   position: "absolute",
@@ -383,6 +518,7 @@ export const ListMenu = () => {
           </MenuItem>
         </SubMenu>
       )}
+      {/* Config | STAFF */}
       {userLoginCookie?.role === "STAFF" && (
         <SubMenu
           icon={<FaGlobe />}
