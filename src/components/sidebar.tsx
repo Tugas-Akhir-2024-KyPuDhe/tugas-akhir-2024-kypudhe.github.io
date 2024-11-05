@@ -1,7 +1,13 @@
 import React, { ReactNode, useState, useLayoutEffect, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { FaBars, FaCircle, FaGlobe, FaNewspaper } from "react-icons/fa6";
-import { Sidebar, Menu, MenuItem, SubMenu, menuClasses } from "react-pro-sidebar";
+import {
+  Sidebar,
+  Menu,
+  MenuItem,
+  SubMenu,
+  menuClasses,
+} from "react-pro-sidebar";
 import { IoGrid } from "react-icons/io5";
 import { FaUserCircle } from "react-icons/fa";
 import AuthService from "../services/authService";
@@ -14,10 +20,10 @@ interface SideBarAdminProps {
 export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
   const authService = AuthService();
   const navigate = useNavigate();
-  const location = useLocation(); // Mengambil lokasi saat ini
+  const location = useLocation();
   const [mobileToggled, setMobileToggled] = useState(false);
   const [desktopCollapsed, setDesktopCollapsed] = useState(false);
-  const [selectedMenu, setSelectedMenu] = useState(""); // Ubah default menjadi string kosong
+  const [selectedMenu, setSelectedMenu] = useState("");
   const [cookieLogin] = useCookie("userLoginCookie");
   const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
 
@@ -31,7 +37,6 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
       }
     };
 
-    // Set initial state based on current window size
     handleResize();
 
     window.addEventListener("resize", handleResize);
@@ -40,14 +45,13 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
     };
   }, []);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!userLoginCookie) {
       navigate("/login");
     }
   }, [userLoginCookie, navigate]);
 
   useEffect(() => {
-    // Update selectedMenu berdasarkan pathname saat ini
     switch (location.pathname) {
       case "/":
         setSelectedMenu("dashboard");
@@ -59,9 +63,9 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
         setSelectedMenu("submenu2-1");
         break;
       default:
-        setSelectedMenu(""); // Atau bisa disesuaikan sesuai kebutuhan
+        setSelectedMenu("");
     }
-  }, [location.pathname]); // Menjalankan effect setiap kali pathname berubah
+  }, [location.pathname]);
 
   const handleMenuClick = (path: string) => {
     navigate(path);
@@ -85,7 +89,10 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
             >
               <Menu>
                 <div className="p-3 pb-4 text-center">
-                  <div className="h5 fw-bold" style={{ color: "var(--blue-color)" }}>
+                  <div
+                    className="h5 fw-bold"
+                    style={{ color: "var(--blue-color)" }}
+                  >
                     SMKN 1 Lumban Julu
                   </div>
                 </div>
@@ -94,12 +101,26 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
                   icon={<IoGrid />}
                   style={{
                     position: "relative",
-                    backgroundColor: selectedMenu === "dashboard" ? "#E5EAF2" : "",
+                    backgroundColor:
+                      selectedMenu === "dashboard" ? "#E5EAF2" : "",
                   }}
-                  className={`fw-medium ${selectedMenu === "dashboard" ? "text-blue" : "text-dark-soft"}`}
+                  className={`fw-medium ${
+                    selectedMenu === "dashboard"
+                      ? "text-blue"
+                      : "text-dark-soft"
+                  }`}
                 >
                   {selectedMenu === "dashboard" && (
-                    <div style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: "4px", backgroundColor: "var(--blue-color)" }} />
+                    <div
+                      style={{
+                        position: "absolute",
+                        right: 0,
+                        top: 0,
+                        bottom: 0,
+                        width: "4px",
+                        backgroundColor: "var(--blue-color)",
+                      }}
+                    />
                   )}
                   Dashboard
                 </MenuItem>
@@ -110,10 +131,21 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
                     position: "relative",
                     backgroundColor: selectedMenu === "berita" ? "#E5EAF2" : "",
                   }}
-                  className={`fw-medium ${selectedMenu === "berita" ? "text-blue" : "text-dark-soft"}`}
+                  className={`fw-medium ${
+                    selectedMenu === "berita" ? "text-blue" : "text-dark-soft"
+                  }`}
                 >
                   {selectedMenu === "berita" && (
-                    <div style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: "4px", backgroundColor: "var(--blue-color)" }} />
+                    <div
+                      style={{
+                        position: "absolute",
+                        right: 0,
+                        top: 0,
+                        bottom: 0,
+                        width: "4px",
+                        backgroundColor: "var(--blue-color)",
+                      }}
+                    />
                   )}
                   Berita
                 </MenuItem>
@@ -122,12 +154,26 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
                     onClick={() => handleMenuClick("/submenu2-1")}
                     style={{
                       position: "relative",
-                      backgroundColor: selectedMenu === "submenu2-1" ? "#E5EAF2" : "",
+                      backgroundColor:
+                        selectedMenu === "submenu2-1" ? "#E5EAF2" : "",
                     }}
-                    className={`fw-medium ${selectedMenu === "submenu2-1" ? "text-blue" : "text-dark-soft"}`}
+                    className={`fw-medium ${
+                      selectedMenu === "submenu2-1"
+                        ? "text-blue"
+                        : "text-dark-soft"
+                    }`}
                   >
                     {selectedMenu === "submenu2-1" && (
-                      <div style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: "4px", backgroundColor: "var(--blue-color)" }} />
+                      <div
+                        style={{
+                          position: "absolute",
+                          right: 0,
+                          top: 0,
+                          bottom: 0,
+                          width: "4px",
+                          backgroundColor: "var(--blue-color)",
+                        }}
+                      />
                     )}
                     Sub Menu 2 1
                   </MenuItem>
@@ -144,7 +190,10 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
             >
               <Menu>
                 <div className="p-3 pb-4 text-center">
-                  <div className="h5 fw-bold" style={{ color: "var(--blue-color)" }}>
+                  <div
+                    className="h5 fw-bold"
+                    style={{ color: "var(--blue-color)" }}
+                  >
                     SMKN 1 Lumban Julu
                   </div>
                 </div>
@@ -154,12 +203,26 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
                   icon={<IoGrid />}
                   style={{
                     position: "relative",
-                    backgroundColor: selectedMenu === "dashboard" ? "#E5EAF2" : "",
+                    backgroundColor:
+                      selectedMenu === "dashboard" ? "#E5EAF2" : "",
                   }}
-                  className={`fw-medium ${selectedMenu === "dashboard" ? "text-blue" : "text-dark-soft"}`}
+                  className={`fw-medium ${
+                    selectedMenu === "dashboard"
+                      ? "text-blue"
+                      : "text-dark-soft"
+                  }`}
                 >
                   {selectedMenu === "dashboard" && (
-                    <div style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: "4px", backgroundColor: "var(--blue-color)" }} />
+                    <div
+                      style={{
+                        position: "absolute",
+                        right: 0,
+                        top: 0,
+                        bottom: 0,
+                        width: "4px",
+                        backgroundColor: "var(--blue-color)",
+                      }}
+                    />
                   )}
                   Dashboard
                 </MenuItem>
@@ -170,10 +233,21 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
                     position: "relative",
                     backgroundColor: selectedMenu === "berita" ? "#E5EAF2" : "",
                   }}
-                  className={`fw-medium ${selectedMenu === "berita" ? "text-blue" : "text-dark-soft"}`}
+                  className={`fw-medium ${
+                    selectedMenu === "berita" ? "text-blue" : "text-dark-soft"
+                  }`}
                 >
                   {selectedMenu === "berita" && (
-                    <div style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: "4px", backgroundColor: "var(--blue-color)" }} />
+                    <div
+                      style={{
+                        position: "absolute",
+                        right: 0,
+                        top: 0,
+                        bottom: 0,
+                        width: "4px",
+                        backgroundColor: "var(--blue-color)",
+                      }}
+                    />
                   )}
                   Berita
                 </MenuItem>
@@ -192,12 +266,26 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
                     icon={<FaCircle style={{ fontSize: "8px" }} />}
                     style={{
                       position: "relative",
-                      backgroundColor: selectedMenu === "submenu2-1" ? "#E5EAF2" : "",
+                      backgroundColor:
+                        selectedMenu === "submenu2-1" ? "#E5EAF2" : "",
                     }}
-                    className={`fw-medium ${selectedMenu === "submenu2-1" ? "text-blue" : "text-dark-soft"}`}
+                    className={`fw-medium ${
+                      selectedMenu === "submenu2-1"
+                        ? "text-blue"
+                        : "text-dark-soft"
+                    }`}
                   >
                     {selectedMenu === "submenu2-1" && (
-                      <div style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: "4px", backgroundColor: "var(--blue-color)" }} />
+                      <div
+                        style={{
+                          position: "absolute",
+                          right: 0,
+                          top: 0,
+                          bottom: 0,
+                          width: "4px",
+                          backgroundColor: "var(--blue-color)",
+                        }}
+                      />
                     )}
                     Sub Menu 2 1
                   </MenuItem>
@@ -229,14 +317,27 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
                       className="btn dropdown-toggle text-dark"
                       data-bs-toggle="dropdown"
                       aria-expanded="false"
-                      style={{ border: "2px solid #021526" }}
                     >
-                      <FaUserCircle className="me-2" />
-                      {userLoginCookie?.user?.name}
+                      <FaUserCircle className="me-3 fs-3" />
+                      {/* {userLoginCookie?.name} */}
                     </button>
                     <ul className="dropdown-menu dropdown-menu-end">
                       <li>
-                        <button className="dropdown-item" onClick={handleLogout}>
+                        <button className="dropdown-item">Profil</button>
+                      </li>
+                      <li>
+                        <button
+                          className="dropdown-item"
+                          onClick={handleLogout}
+                        >
+                          other
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className="dropdown-item"
+                          onClick={handleLogout}
+                        >
                           Logout
                         </button>
                       </li>
