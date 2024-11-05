@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import AuthService from "../services/authService";
 import useCookie from "react-use-cookie";
+import { Toast } from "../utils/myFunctions";
 
 interface PrivateRouteProps {
   Component: React.ComponentType;
@@ -30,6 +31,11 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ Component }) => {
           setCookieLogin("");
           console.log(error);
           setIsValid(false);
+          Toast.fire({
+            icon: "error",
+            title: `Sesi Anda Telah Habis, Silahkan Login Kembali`,
+            timer: 4000,
+          });
         }
       } else {
         console.log("Token not found or user is not logged in.");

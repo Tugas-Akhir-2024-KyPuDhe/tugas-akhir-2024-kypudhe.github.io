@@ -9,7 +9,7 @@ export const DetailArticlePage: React.FC = () => {
         style={{ backgroundColor: "#fff" }}
       >
         <div className="title-article mb-4">
-          <h3 className="fw-bold mb-1 text-dark-soft">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Et pariatur excepturi porro?</h3>
+          <h4 className="fw-bold mb-1 text-dark-soft">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Et pariatur excepturi porro?</h4>
           <div>
             <span className="me-4 text-blue fw-bold">Berita Umum</span>
           </div>
@@ -22,23 +22,17 @@ export const DetailArticlePage: React.FC = () => {
             style={{ height: "450px", width: "100%", objectFit: "cover" }}
           />
           <div className="mt-2">
-            <FaCalendarDay className="text-blue fs-5" />
-            <span className="ms-2 fw-medium" style={{ fontSize: "1em" }}>
+            <FaCalendarDay className="text-blue fs-6" />
+            <span className="ms-2 fw-medium" style={{ fontSize: "0.95em" }}>
               20 Nov 2024
             </span>
             <span className="mx-3">|</span>
-            <FaClock className="text-blue fs-5" />
-            <span className="ms-2 fw-medium" style={{ fontSize: "1em" }}>
+            <FaClock className="text-blue fs-6" />
+            <span className="ms-2 fw-medium" style={{ fontSize: "0.95em" }}>
               15:30
             </span>
           </div>
         </div>
-        {/* <div className="title-article mb-4">
-          <h3 className="fw-bold mb-1 text-dark-soft">Lorem ipsum dolor sit amet.</h3>
-          <div>
-            <span className="me-4 text-blue fw-bold">Berita Umum</span>
-          </div>
-        </div> */}
         <div className="description-article">
           <p>
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti,

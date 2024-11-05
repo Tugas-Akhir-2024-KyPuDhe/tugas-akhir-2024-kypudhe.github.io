@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { Artikel } from "../../interface/artikel.interface";
 import { Link } from "react-router-dom";
 import {
+  FaCaretRight,
   FaCodeBranch,
   FaGraduationCap,
   FaPersonChalkboard,
@@ -167,7 +168,7 @@ export const HomePage = () => {
         <div className="d-flex justify-content-between mb-3">
           <span className="fw-bold fs-5 text-dark-soft">Berita/Artikel</span>
           <Link to="/berita" className="fw-medium fs-5 text-primary">
-            <u>Lainnya {">"}</u>
+            Lainnya <FaCaretRight/>
           </Link>
         </div>
         <section className="">
