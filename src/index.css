@@ -1,0 +1,54 @@
+:root {
+  --blue-color: #1da4ea;
+  --green-color: #068a41;
+  --yellow-color: #f0ee2a;
+  --dark-soft: #3c3d37;
+}
+
+.bg-blue {
+  background-color: var(--blue-color);
+}
+.bg-green {
+  background-color: var(--green-color);
+}
+.bg-yellow {
+  background-color: var(--yellow-color);
+}
+
+.text-blue {
+  color: var(--blue-color);
+}
+.text-green {
+  color: var(--green-color);
+}
+.text-yellow {
+  color: var(--yellow-color);
+}
+
+.text-dark-soft {
+  color: var(--dark-soft);
+}
+
+input::placeholder {
+  color: #6c757d;
+  font-size: 0.955rem;
+}
+
+.form-control:focus {
+  box-shadow: none;
+}
+
+.label-input {
+  margin-bottom: 5px;
+  margin-left: 2px;
+  font-size: 1em;
+  font-weight: 600;
+}
+
+.invalid-form {
+  width: 100%;
+  padding-left: 5px;
+  margin-top: 0.25rem;
+  font-size: 0.875em;
+  color: #fd5c70;
+}
