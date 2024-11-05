@@ -13,21 +13,10 @@ function App() {
 
   return (
     <>
-      {isSidebarExcluded ? (
         <Routes>
           <Route path="/login" element={<LoginPage />} />
         </Routes>
-      ) : (
-        <SideBar>
-          <Routes>
-            <Route path="/" element={<PrivateRoute Component={HomePage} />} />
-            <Route path="/dashboard" element={<PrivateRoute Component={HomePage} />} />
-            <Route path="/berita" element={<PrivateRoute Component={ArticlePage} /> } />
-            <Route path="/berita/:id" element={<PrivateRoute Component={DetailArticlePage} /> } />
-            <Route path="/tambah-berita" element={ <PrivateRoute Component={CreateArticlePage} /> } />
-          </Routes>
-        </SideBar>
-      )}
+      
     </>
   );
 }
