@@ -111,7 +111,7 @@ export const HomePage = () => {
   return (
     <>
       {userLoginCookie.role === "STAFF" ? (
-        <div className="m-3 m-lg-4 m-md-4 my-4">
+        <div className="m-1 m-lg-4 m-md-4 my-4">
           <div className="fw-bold fs-5 mb-3 text-dark-soft">Dashboard</div>
           <div className="container-fluid px-0">
             <div className="row">
@@ -147,7 +147,7 @@ export const HomePage = () => {
       )}
 
       {userLoginCookie.role === "STUDENT" && (
-        <div className="m-3 m-lg-4 m-md-4 my-4">
+        <div className="m-1 m-lg-4 m-md-4 my-4">
           <div className="fw-bold fs-5 text-dark-soft">Mata Pelajaran</div>
           <div className="slider-container">
             <div className="container">
@@ -163,7 +163,7 @@ export const HomePage = () => {
         </div>
       )}
 
-      <div className="m-3 m-lg-4 m-md-4 my-4">
+      <div className="m-1 m-lg-4 m-md-4 my-4">
         <div className="d-flex justify-content-between mb-3">
           <span className="fw-bold fs-5 text-dark-soft">Berita/Artikel</span>
           <Link to="/berita" className="fw-medium fs-5 text-primary">
