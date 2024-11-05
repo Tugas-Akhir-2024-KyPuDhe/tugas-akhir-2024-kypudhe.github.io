@@ -21,15 +21,8 @@ const AuthService = () => {
       );
       return response.data;
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        // Penanganan untuk error Axios
-        console.error("Error during login:", error.response?.data || error.message);
-        throw new Error(error.response?.data?.message || "Login failed");
-      } else {
-        // Error yang tidak terduga
-        console.error("Unexpected error during login:", error);
-        throw new Error("An unexpected error occurred");
-      }
+      console.error("Error during login:", error);
+      throw error;
     }
   };
 
@@ -45,15 +38,11 @@ const AuthService = () => {
           },
         }
       );
+
       return response.data;
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.error("Error validating token:", error.response?.data || error.message);
-        throw new Error(error.response?.data?.message || "Token validation failed");
-      } else {
-        console.error("Unexpected error validating token:", error);
-        throw new Error("An unexpected error occurred");
-      }
+      console.error("Error validating token:", error);
+      throw error;
     }
   };
 
