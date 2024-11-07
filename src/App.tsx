@@ -26,7 +26,7 @@ function App() {
             <Route path="/berita/:id" element={<PrivateRoute Component={DetailArticlePage} /> } />
             <Route path="/tambah-berita" element={ <PrivateRoute Component={CreateArticlePage} /> } />
             <Route path="/content-web-banner" element={ <PrivateRoute Component={BannerPage} /> } />
-            <Route path="/content-web-tambah-banner" element={ <PrivateRoute Component={FormBanner} /> } />
+            <Route path="/content-web-banner/tambah" element={ <PrivateRoute Component={FormBanner} /> } />
           </Routes>
         </SideBar>
       )}

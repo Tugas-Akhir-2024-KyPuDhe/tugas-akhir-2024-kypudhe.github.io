@@ -12,7 +12,7 @@ export const HeaderBanner: React.FC = () => {
           <div className="row d-flex">
             <div className="col-auto">
               <Link
-                to="/content-web-tambah-banner"
+                to="/content-web-banner/tambah"
                 className="btn btn-primary border-0 bg-blue"
               >
                 <MdAdd className="display-6" />
