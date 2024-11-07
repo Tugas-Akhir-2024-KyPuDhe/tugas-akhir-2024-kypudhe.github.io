@@ -1,12 +1,5 @@
-export interface Media {
-    id: number;
-    uuid: string;
-    url: string;
-    type: string;
-    createdAt: string;
-    updatedAt: string;
-  }
-  
+import { Media } from "./media.interface";
+
   export interface Artikel {
     id: number;
     uuid: string;

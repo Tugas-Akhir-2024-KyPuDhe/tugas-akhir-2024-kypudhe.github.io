@@ -1,7 +1,9 @@
 import { ArticlePage } from "./articlePage";
 import { CreateArticlePage } from "./articlePage/createArticle";
 import { DetailArticlePage } from "./articlePage/detailArticle";
+import { BannerPage } from "./contentWebPage/bannerPage";
+import { FormBanner } from "./contentWebPage/bannerPage/formBanner";
 import { HomePage } from "./homePage";
 import { LoginPage } from "./loginPage";
 
-export { HomePage, LoginPage, ArticlePage, CreateArticlePage, DetailArticlePage }
+export { HomePage, LoginPage, ArticlePage, CreateArticlePage, DetailArticlePage, BannerPage, FormBanner }

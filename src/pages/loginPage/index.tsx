@@ -248,6 +248,7 @@ export const LoginPage: React.FC = () => {
                 <button
                   type="submit"
                   className="btn btn-primary bg-blue w-100 py-2 fw-bold"
+                  disabled={loadingFormLogin}
                 >
                   {loadingFormLogin ? (
                     <div className="spinner-border text-light" role="status">

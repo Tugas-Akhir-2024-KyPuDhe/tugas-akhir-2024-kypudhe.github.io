@@ -5,6 +5,7 @@ import {
   ResponseActionArtikel,
 } from "../interface/artikel.interface";
 import { useNavigate } from "react-router-dom";
+import useCookie from "react-use-cookie";
 
 interface ArtikelService {
   getAllArtikels: (page: number, perPage: number, keyword?: string) => Promise<GetAllArtikelResponse>;
@@ -16,6 +17,9 @@ interface ArtikelService {
 
 const ArtikelService = (): ArtikelService => {
   const navigate = useNavigate();
+  const [cookieLogin, ] = useCookie("userLoginCookie");
+  const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
+
   const apiUrl = import.meta.env.VITE_API_URL;
   
   const handleUnauthorized = (status: number) => {
@@ -33,7 +37,6 @@ const ArtikelService = (): ArtikelService => {
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error("Error fetching artikels:", error.response?.data || error.message);
-        handleUnauthorized(error.response?.status || 0);
         throw new Error(error.response?.data?.message || "Failed to fetch artikels");
       }
       throw new Error("An unexpected error occurred");
@@ -49,7 +52,6 @@ const ArtikelService = (): ArtikelService => {
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error("Error fetching artikel details:", error.response?.data || error.message);
-        handleUnauthorized(error.response?.status || 0);
         throw new Error(error.response?.data?.message || "Failed to fetch artikel details");
       }
       throw new Error("An unexpected error occurred");
@@ -64,7 +66,7 @@ const ArtikelService = (): ArtikelService => {
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            Authorization: `Bearer ${userLoginCookie.token}`,
           },
         }
       );
@@ -88,7 +90,7 @@ const ArtikelService = (): ArtikelService => {
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            Authorization: `Bearer ${userLoginCookie.token}`,
           },
         }
       );
@@ -110,7 +112,7 @@ const ArtikelService = (): ArtikelService => {
         `${apiUrl}/api/artikel/delete/${id}`,
         {
           headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            Authorization: `Bearer ${userLoginCookie.token}`,
           },
         }
       );

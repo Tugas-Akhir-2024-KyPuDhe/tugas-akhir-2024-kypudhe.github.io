@@ -1,6 +1,6 @@
 import "./App.css";
 import { Route, Routes, useLocation } from "react-router-dom";
-import { ArticlePage, CreateArticlePage, DetailArticlePage, HomePage, LoginPage } from "./pages";
+import { ArticlePage, BannerPage, CreateArticlePage, DetailArticlePage, FormBanner, HomePage, LoginPage } from "./pages";
 import { SideBar } from "./components/sidebar";
 import PrivateRoute from "./components/privateRoute";
 
@@ -25,6 +25,8 @@ function App() {
             <Route path="/berita" element={<PrivateRoute Component={ArticlePage} /> } />
             <Route path="/berita/:id" element={<PrivateRoute Component={DetailArticlePage} /> } />
             <Route path="/tambah-berita" element={ <PrivateRoute Component={CreateArticlePage} /> } />
+            <Route path="/content-web-banner" element={ <PrivateRoute Component={BannerPage} /> } />
+            <Route path="/content-web-tambah-banner" element={ <PrivateRoute Component={FormBanner} /> } />
           </Routes>
         </SideBar>
       )}

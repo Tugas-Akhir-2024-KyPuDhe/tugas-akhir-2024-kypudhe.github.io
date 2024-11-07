@@ -1,6 +1,6 @@
 import React from "react";
 import { FaCalendarDay } from "react-icons/fa6";
-import { formatDateTime } from "../utils/myFunctions";
+import { formatDate } from "../utils/myFunctions";
 import parse from "html-react-parser";
 import { Link } from "react-router-dom";
 
@@ -28,7 +28,7 @@ export const CardBerita: React.FC<Artikel> = ({
           <div className="position-absolute p-2 text-light fw-bold rounded-top bg-blue">
             <FaCalendarDay />
             <span className="ms-2" style={{ fontSize: "0.9em" }}>
-              {formatDateTime(dateArtikel)}
+              {formatDate(dateArtikel)}
             </span>
           </div>
           <img

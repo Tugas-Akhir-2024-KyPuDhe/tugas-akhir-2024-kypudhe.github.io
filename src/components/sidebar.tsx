@@ -182,17 +182,20 @@ export const ListMenu = () => {
       case "/berita":
         setSelectedMenu("berita");
         break;
-      case "/config-sekolah":
-        setSelectedMenu("config-sekolah");
+      case "/content-web-sekolah":
+        setSelectedMenu("content-web-sekolah");
         break;
-      case "/config-jurusan":
-        setSelectedMenu("config-jurusan");
+      case "/content-web-jurusan":
+        setSelectedMenu("content-web-jurusan");
         break;
-      case "/config-fasilitas":
-        setSelectedMenu("config-fasilitas");
+      case "/content-web-fasilitas":
+        setSelectedMenu("content-web-fasilitas");
         break;
-      case "/config-ekstra-kurikuler":
-        setSelectedMenu("config-ekstra-kurikuler");
+      case "/content-web-ekstra-kurikuler":
+        setSelectedMenu("content-web-ekstra-kurikuler");
+        break;
+      case "/content-web-banner":
+        setSelectedMenu("content-web-banner");
         break;
       case "/data-absensi-siswa":
         setSelectedMenu("data-absensi-siswa");
@@ -522,7 +525,7 @@ export const ListMenu = () => {
       {userLoginCookie?.role === "STAFF" && (
         <SubMenu
           icon={<FaGlobe />}
-          label="Config"
+          label="Content Web"
           rootStyles={{
             ["." + menuClasses.subMenuContent]: {
               backgroundColor: "#fff",
@@ -531,18 +534,44 @@ export const ListMenu = () => {
           className="fw-medium"
         >
           <MenuItem
-            onClick={() => handleMenuClick("/config-sekolah")}
+            onClick={() => handleMenuClick("/content-web-banner")}
             icon={<FaCircle style={{ fontSize: "8px" }} />}
             style={{
               position: "relative",
               backgroundColor:
-                selectedMenu === "config-sekolah" ? "#E5EAF2" : "",
+                selectedMenu === "content-web-banner" ? "#E5EAF2" : "",
             }}
             className={`fw-medium ${
-              selectedMenu === "config-sekolah" ? "text-blue" : "text-dark-soft"
+              selectedMenu === "content-web-banner" ? "text-blue" : "text-dark-soft"
             }`}
           >
-            {selectedMenu === "config-sekolah" && (
+            {selectedMenu === "content-web-banner" && (
+              <div
+                style={{
+                  position: "absolute",
+                  right: 0,
+                  top: 0,
+                  bottom: 0,
+                  width: "4px",
+                  backgroundColor: "var(--blue-color)",
+                }}
+              />
+            )}
+            Banner
+          </MenuItem>
+          <MenuItem
+            onClick={() => handleMenuClick("/content-web-sekolah")}
+            icon={<FaCircle style={{ fontSize: "8px" }} />}
+            style={{
+              position: "relative",
+              backgroundColor:
+                selectedMenu === "content-web-sekolah" ? "#E5EAF2" : "",
+            }}
+            className={`fw-medium ${
+              selectedMenu === "content-web-sekolah" ? "text-blue" : "text-dark-soft"
+            }`}
+          >
+            {selectedMenu === "content-web-sekolah" && (
               <div
                 style={{
                   position: "absolute",
@@ -557,18 +586,18 @@ export const ListMenu = () => {
             Sekolah
           </MenuItem>
           <MenuItem
-            onClick={() => handleMenuClick("/config-jurusan")}
+            onClick={() => handleMenuClick("/content-web-jurusan")}
             icon={<FaCircle style={{ fontSize: "8px" }} />}
             style={{
               position: "relative",
               backgroundColor:
-                selectedMenu === "config-jurusan" ? "#E5EAF2" : "",
+                selectedMenu === "content-web-jurusan" ? "#E5EAF2" : "",
             }}
             className={`fw-medium ${
-              selectedMenu === "config-jurusan" ? "text-blue" : "text-dark-soft"
+              selectedMenu === "content-web-jurusan" ? "text-blue" : "text-dark-soft"
             }`}
           >
-            {selectedMenu === "config-jurusan" && (
+            {selectedMenu === "content-web-jurusan" && (
               <div
                 style={{
                   position: "absolute",
@@ -583,20 +612,20 @@ export const ListMenu = () => {
             Jurusan
           </MenuItem>
           <MenuItem
-            onClick={() => handleMenuClick("/config-fasilitas")}
+            onClick={() => handleMenuClick("/content-web-fasilitas")}
             icon={<FaCircle style={{ fontSize: "8px" }} />}
             style={{
               position: "relative",
               backgroundColor:
-                selectedMenu === "config-fasilitas" ? "#E5EAF2" : "",
+                selectedMenu === "content-web-fasilitas" ? "#E5EAF2" : "",
             }}
             className={`fw-medium ${
-              selectedMenu === "config-fasilitas"
+              selectedMenu === "content-web-fasilitas"
                 ? "text-blue"
                 : "text-dark-soft"
             }`}
           >
-            {selectedMenu === "config-fasilitas" && (
+            {selectedMenu === "content-web-fasilitas" && (
               <div
                 style={{
                   position: "absolute",
@@ -611,20 +640,20 @@ export const ListMenu = () => {
             Fasilitas
           </MenuItem>
           <MenuItem
-            onClick={() => handleMenuClick("/config-ekstra-kurikuler")}
+            onClick={() => handleMenuClick("/content-web-ekstra-kurikuler")}
             icon={<FaCircle style={{ fontSize: "8px" }} />}
             style={{
               position: "relative",
               backgroundColor:
-                selectedMenu === "config-ekstra-kurikuler" ? "#E5EAF2" : "",
+                selectedMenu === "content-web-ekstra-kurikuler" ? "#E5EAF2" : "",
             }}
             className={`fw-medium ${
-              selectedMenu === "config-ekstra-kurikuler"
+              selectedMenu === "content-web-ekstra-kurikuler"
                 ? "text-blue"
                 : "text-dark-soft"
             }`}
           >
-            {selectedMenu === "config-ekstra-kurikuler" && (
+            {selectedMenu === "content-web-ekstra-kurikuler" && (
               <div
                 style={{
                   position: "absolute",
