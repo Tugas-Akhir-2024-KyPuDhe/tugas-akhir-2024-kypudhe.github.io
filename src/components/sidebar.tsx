@@ -192,7 +192,7 @@ export const ListMenu = () => {
         setSelectedMenu("/content-web/facility");
         break;
       case "/content-web/ekstra-kurikuler":
-        setSelectedMenu("content-web/ekstra-kurikuler");
+        setSelectedMenu("/content-web/ekstra-kurikuler");
         break;
       case "/content-web/banner":
         setSelectedMenu("content-web/banner");
@@ -645,15 +645,15 @@ export const ListMenu = () => {
             style={{
               position: "relative",
               backgroundColor:
-                selectedMenu === "content-web/ekstra-kurikuler" ? "#E5EAF2" : "",
+                selectedMenu === "/content-web/ekstra-kurikuler" ? "#E5EAF2" : "",
             }}
             className={`fw-medium ${
-              selectedMenu === "content-web/ekstra-kurikuler"
+              selectedMenu === "/content-web/ekstra-kurikuler"
                 ? "text-blue"
                 : "text-dark-soft"
             }`}
           >
-            {selectedMenu === "content-web/ekstra-kurikuler" && (
+            {selectedMenu === "/content-web/ekstra-kurikuler" && (
               <div
                 style={{
                   position: "absolute",
