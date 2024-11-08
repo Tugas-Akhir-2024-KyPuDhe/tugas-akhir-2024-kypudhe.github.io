@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import {
   GetAllBannerResponse,
+  GetDetailBannerResponse,
   ResponseActionBanner,
 } from "../interface/banner.interface";
 import { useNavigate } from "react-router-dom";
@@ -8,7 +9,7 @@ import useCookie from "react-use-cookie";
 
 interface BannerService {
   getAllBanners: () => Promise<GetAllBannerResponse>;
-  getBannerById: (id: number) => Promise<GetAllBannerResponse>;
+  getBannerById: (id: number) => Promise<GetDetailBannerResponse>;
   addBanner: (formData: FormData) => Promise<ResponseActionBanner>;
   updateBanner: (id: number, formData: FormData) => Promise<ResponseActionBanner>;
   deleteBanner: (id: number) => Promise<ResponseActionBanner>;
@@ -42,9 +43,9 @@ const BannerService = (): BannerService => {
     }
   };
 
-  const getBannerById = async (id: number): Promise<GetAllBannerResponse> => {
+  const getBannerById = async (id: number): Promise<GetDetailBannerResponse> => {
     try {
-      const response: AxiosResponse<GetAllBannerResponse> = await axios.get(
+      const response: AxiosResponse<GetDetailBannerResponse> = await axios.get(
         `${apiUrl}/api/banner/get/${id}`
       );
       return response.data;
