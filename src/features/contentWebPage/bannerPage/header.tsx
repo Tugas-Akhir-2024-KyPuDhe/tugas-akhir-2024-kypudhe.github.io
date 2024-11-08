@@ -43,7 +43,7 @@ export const Header: React.FC<HeaderBannerProps> = ({
         {addDisplay && (
           <div className="col-12 col-lg-6 col-md-6 text-end">
             <Link
-              to="/content-web-banner/tambah"
+              to="/content-web/banner/tambah"
               className="btn btn-primary border-0 bg-blue"
             >
               <MdAdd className="display-6" />

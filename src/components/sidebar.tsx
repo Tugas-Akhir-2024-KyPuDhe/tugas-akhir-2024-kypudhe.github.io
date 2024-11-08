@@ -185,17 +185,17 @@ export const ListMenu = () => {
       case "/content-web/school":
         setSelectedMenu("/content-web/school");
         break;
-      case "/content-web-jurusan":
-        setSelectedMenu("content-web-jurusan");
+      case "/content-web/jurusan":
+        setSelectedMenu("content-web/jurusan");
         break;
       case "/content-web/facility":
         setSelectedMenu("/content-web/facility");
         break;
-      case "/content-web-ekstra-kurikuler":
-        setSelectedMenu("content-web-ekstra-kurikuler");
+      case "/content-web/ekstra-kurikuler":
+        setSelectedMenu("content-web/ekstra-kurikuler");
         break;
-      case "/content-web-banner":
-        setSelectedMenu("content-web-banner");
+      case "/content-web/banner":
+        setSelectedMenu("content-web/banner");
         break;
       case "/data-absensi-siswa":
         setSelectedMenu("data-absensi-siswa");
@@ -534,18 +534,18 @@ export const ListMenu = () => {
           className="fw-medium"
         >
           <MenuItem
-            onClick={() => handleMenuClick("/content-web-banner")}
+            onClick={() => handleMenuClick("/content-web/banner")}
             icon={<FaCircle style={{ fontSize: "8px" }} />}
             style={{
               position: "relative",
               backgroundColor:
-                selectedMenu === "content-web-banner" ? "#E5EAF2" : "",
+                selectedMenu === "content-web/banner" ? "#E5EAF2" : "",
             }}
             className={`fw-medium ${
-              selectedMenu === "content-web-banner" ? "text-blue" : "text-dark-soft"
+              selectedMenu === "content-web/banner" ? "text-blue" : "text-dark-soft"
             }`}
           >
-            {selectedMenu === "content-web-banner" && (
+            {selectedMenu === "content-web/banner" && (
               <div
                 style={{
                   position: "absolute",
@@ -586,18 +586,18 @@ export const ListMenu = () => {
             Sekolah
           </MenuItem>
           <MenuItem
-            onClick={() => handleMenuClick("/content-web-jurusan")}
+            onClick={() => handleMenuClick("/content-web/jurusan")}
             icon={<FaCircle style={{ fontSize: "8px" }} />}
             style={{
               position: "relative",
               backgroundColor:
-                selectedMenu === "content-web-jurusan" ? "#E5EAF2" : "",
+                selectedMenu === "content-web/jurusan" ? "#E5EAF2" : "",
             }}
             className={`fw-medium ${
-              selectedMenu === "content-web-jurusan" ? "text-blue" : "text-dark-soft"
+              selectedMenu === "content-web/jurusan" ? "text-blue" : "text-dark-soft"
             }`}
           >
-            {selectedMenu === "content-web-jurusan" && (
+            {selectedMenu === "content-web/jurusan" && (
               <div
                 style={{
                   position: "absolute",
@@ -640,20 +640,20 @@ export const ListMenu = () => {
             Fasilitas
           </MenuItem>
           <MenuItem
-            onClick={() => handleMenuClick("/content-web-ekstra-kurikuler")}
+            onClick={() => handleMenuClick("/content-web/ekstra-kurikuler")}
             icon={<FaCircle style={{ fontSize: "8px" }} />}
             style={{
               position: "relative",
               backgroundColor:
-                selectedMenu === "content-web-ekstra-kurikuler" ? "#E5EAF2" : "",
+                selectedMenu === "content-web/ekstra-kurikuler" ? "#E5EAF2" : "",
             }}
             className={`fw-medium ${
-              selectedMenu === "content-web-ekstra-kurikuler"
+              selectedMenu === "content-web/ekstra-kurikuler"
                 ? "text-blue"
                 : "text-dark-soft"
             }`}
           >
-            {selectedMenu === "content-web-ekstra-kurikuler" && (
+            {selectedMenu === "content-web/ekstra-kurikuler" && (
               <div
                 style={{
                   position: "absolute",
