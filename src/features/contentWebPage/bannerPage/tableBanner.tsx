@@ -7,6 +7,7 @@ import BannerService from "../../../services/bannerService";
 import { formatDateTime, showConfirmationDialog, Toast } from "../../../utils/myFunctions";
 import { FaTrash } from "react-icons/fa";
 import Swal from "sweetalert2";
+import { FaPen } from "react-icons/fa6";
 
 export const TableBanner: React.FC = () => {
   const bannerService = BannerService();
@@ -105,6 +106,14 @@ export const TableBanner: React.FC = () => {
       selector: (row: Banner) => row.title,
       cell: (row: Banner) => (
         <>
+         
+          <button
+            className="btn btn-warning text me-2 text-light"
+            onClick={() => deleteBanner(row.id)}
+            disabled={loading} 
+          >
+              <FaPen />
+          </button>
           <button
             className="btn btn-danger"
             onClick={() => deleteBanner(row.id)}
@@ -171,7 +180,7 @@ export const TableBanner: React.FC = () => {
           data={filteredSkills}
           pagination
           highlightOnHover
-          pointerOnHover
+          // pointerOnHover
           customStyles={{
             rows: {
               style: {

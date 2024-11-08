@@ -46,10 +46,6 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ Component }) => {
     checkToken();
   }, [authService, userLoginCookie]);
 
-  if (isValid === null) {
-    return <div>Loading...</div>;
-  }
-
   return isValid ? <Component /> : <Navigate to="/login" />;
 };
 

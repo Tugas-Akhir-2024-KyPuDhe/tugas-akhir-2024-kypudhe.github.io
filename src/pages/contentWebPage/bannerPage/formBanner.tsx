@@ -46,8 +46,8 @@ export const FormBanner: React.FC = () => {
     const getDataBanner = async () => {
       if (id) {
         try {
-          const response = await bannerService.getAllBanners();
-          const data = response.data[0];
+          const response = await bannerService.getBannerById(parseFloat(id));
+          const data = response.data;
 
           setFormData({
             id: data.id,
@@ -175,17 +175,15 @@ export const FormBanner: React.FC = () => {
       <div className="m-1 m-lg-4 m-md-4 my-4">
         <div className="row">
           <div className="col d-flex align-items-end">
-            <div className="h4 fw-medium">
-              {formData.id ? "Update" : "Tambah"} Banner
-            </div>
-          </div>
-          <div className="col-auto">
             <button
               onClick={() => navigate(-1)}
-              className="btn btn-lg btn-danger"
+              className="btn btn-lg btn-danger me-3"
             >
               <FaArrowLeft />
             </button>
+            <div className="h4 fw-medium">
+              {formData.id ? "Update" : "Tambah"} Banner
+            </div>
           </div>
         </div>
       </div>
@@ -335,13 +333,13 @@ export const FormBanner: React.FC = () => {
                 )}
               </div>
               {imageUrl && (
-                <div className="form-group">
+                <div className="form-group mb-3">
                   <label>Current Image</label>
                   <br />
                   <img
                     src={imageUrl}
                     alt="Current Skill"
-                    style={{ maxWidth: "100%", objectFit: "contain" }}
+                    style={{ maxWidth: "50%", objectFit: "contain" }}
                   />
                 </div>
               )}

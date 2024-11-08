@@ -11,12 +11,12 @@ export const HeaderBanner: React.FC = () => {
         <div className="col-12 col-lg-6 col-md-6">
           <div className="row d-flex">
             <div className="col-auto">
-              <Link
-                to="/content-web-banner/tambah"
-                className="btn btn-primary border-0 bg-blue"
+              <button
+                onClick={() => navigate(-1)}
+                className="btn btn-lg btn-danger"
               >
-                <MdAdd className="display-6" />
-              </Link>
+                <FaArrowLeft />
+              </button>
             </div>
 
             <div className="col">
@@ -28,12 +28,12 @@ export const HeaderBanner: React.FC = () => {
           </div>
         </div>
         <div className="col-12 col-lg-6 col-md-6 text-end">
-          <button
-            onClick={() => navigate(-1)}
-            className="btn btn-lg btn-danger"
+          <Link
+            to="/content-web-banner/tambah"
+            className="btn btn-primary border-0 bg-blue"
           >
-            <FaArrowLeft />
-          </button>
+            <MdAdd className="display-6" />
+          </Link>
         </div>
       </div>
     </div>

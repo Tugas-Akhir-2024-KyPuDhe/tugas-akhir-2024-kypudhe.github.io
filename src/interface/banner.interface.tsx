@@ -21,6 +21,12 @@ import { Media } from "./media.interface";
     status: number,
     data: Banner[];
   }
+
+  export interface GetDetailBannerResponse {
+    message: string;
+    status: number;
+    data: Banner;
+  }
   
   export interface FormState {
     title: string;
