@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import BannerService from "../../../services/bannerService";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa6";
 import { Toast } from "../../../utils/myFunctions";
 
@@ -14,11 +14,22 @@ const optionsStatus = [
   { value: "Active", label: "Aktif" },
   { value: "NonActive", label: "Non Aktif" },
 ];
+interface FormState {
+  id?: number;
+  title: string;
+  description: string;
+  title_link: string;
+  link: string;
+  prioritas: string;
+  status: string;
+  media: File | null;
+}
 
 export const FormBanner: React.FC = () => {
   const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
   const bannerService = BannerService();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormState>({
     title: "",
     description: "",
     title_link: "",
@@ -27,8 +38,40 @@ export const FormBanner: React.FC = () => {
     status: optionsStatus[0].value,
     media: null,
   });
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [errorsForms, setErrorsForms] = useState<{ [key: string]: string }>({});
-  const [loadingForm, setloadingForm] = useState(false);
+  const [loadingForm, setloadingForm] = useState(true);
+
+  useEffect(() => {
+    const getDataBanner = async () => {
+      if (id) {
+        try {
+          const response = await bannerService.getAllBanners();
+          const data = response.data[0];
+
+          setFormData({
+            id: data.id,
+            title: data.title,
+            description: data.description,
+            title_link: data.title_link,
+            link: data.link,
+            prioritas: data.prioritas.toString(),
+            status: data.status,
+            media: null,
+          });
+          setImageUrl(data.banner.url);
+        } catch (error) {
+          console.error("Error fetching skill data:", error);
+        } finally {
+          setloadingForm(false);
+        }
+      } else {
+        setloadingForm(false);
+      }
+    };
+
+    getDataBanner();
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, files } = e.target;
@@ -90,9 +133,18 @@ export const FormBanner: React.FC = () => {
       payload.append(key, value as string | Blob);
     });
 
+    if (formData.media) {
+      payload.append("image", formData.media);
+    }
+
     try {
-      const addedBanner = await bannerService.addBanner(payload);
-      if (addedBanner.status === 201) {
+      let response;
+      if (formData.id) {
+        response = await bannerService.updateBanner(formData.id, payload);
+      } else {
+        response = await bannerService.addBanner(payload);
+      }
+      if (response.status === 201) {
         Toast.fire({
           icon: "success",
           title: "Banner berhasil ditambah",
@@ -123,7 +175,9 @@ export const FormBanner: React.FC = () => {
       <div className="m-1 m-lg-4 m-md-4 my-4">
         <div className="row">
           <div className="col d-flex align-items-end">
-            <div className="h4 fw-medium">Tambah Banner</div>
+            <div className="h4 fw-medium">
+              {formData.id ? "Update" : "Tambah"} Banner
+            </div>
           </div>
           <div className="col-auto">
             <button
@@ -137,8 +191,28 @@ export const FormBanner: React.FC = () => {
       </div>
       <div
         className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
-        style={{ backgroundColor: "#fff" }}
+        style={{ backgroundColor: "#fff", position: "relative" }}
       >
+        {loadingForm && (
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: "rgba(255, 255, 255, 0.7)",
+              zIndex: 9999,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        )}
         <form onSubmit={handleSubmit}>
           <div className="row">
             <div className="col-12 col-lg-9 col-md-9">
@@ -260,6 +334,17 @@ export const FormBanner: React.FC = () => {
                   <div className="invalid-form">Media masih kosong!</div>
                 )}
               </div>
+              {imageUrl && (
+                <div className="form-group">
+                  <label>Current Image</label>
+                  <br />
+                  <img
+                    src={imageUrl}
+                    alt="Current Skill"
+                    style={{ maxWidth: "100%", objectFit: "contain" }}
+                  />
+                </div>
+              )}
             </div>
             <div className="col-12">
               <div className="form-group mb-3">
@@ -291,7 +376,9 @@ export const FormBanner: React.FC = () => {
 
           <div className="col-12 d-flex justify-content-end">
             <button
-              className="btn btn-success btn-lg w-50 fw-medium"
+              className={`btn ${
+                formData.id ? "btn-warning" : "btn-success"
+              } btn-lg w-50 fw-medium`}
               type="submit"
               style={{ fontSize: "1.1rem" }}
               disabled={loadingForm}
@@ -300,8 +387,10 @@ export const FormBanner: React.FC = () => {
                 <div className="spinner-border text-light" role="status">
                   <span className="visually-hidden">Loading...</span>
                 </div>
+              ) : formData.id ? (
+                "Update"
               ) : (
-                "Submit"
+                "Tambah"
               )}
             </button>
           </div>
