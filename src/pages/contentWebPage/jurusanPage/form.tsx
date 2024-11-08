@@ -119,10 +119,10 @@ export const FormJurusanPage: React.FC = () => {
       } else {
         response = await jurusanService.store(payload);
       }
-      if (response.status === 201) {
+      if (response.status === 201 || response.status === 200) {
         Toast.fire({
           icon: "success",
-          title: `Facility ${formData.id ? "updated" : "added"} successfully`,
+          title: `Jurusan ${formData.id ? "updated" : "added"} successfully`,
         });
         setFormData({
           name: "",
@@ -139,7 +139,7 @@ export const FormJurusanPage: React.FC = () => {
         icon: "error",
         title: `${error}`,
       });
-      console.error("Error processing facility:", error);
+      console.error("Error processing Jurusan:", error);
     }
   };
 

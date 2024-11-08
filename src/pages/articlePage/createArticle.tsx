@@ -28,7 +28,7 @@ const optionsStatusArticle = [
 ];
 
 export const CreateArticlePage: React.FC = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const articleService = ArtikelService();
   const [formData, setFormData] = useState({
     title: "",
@@ -42,7 +42,7 @@ export const CreateArticlePage: React.FC = () => {
 
   const handleDescriptionChange = (value: string) => {
     setFormData((prev) => ({ ...prev, description: value }));
-    setErrorsForms((prevErrors) => ({ ...prevErrors, "description": "" }));
+    setErrorsForms((prevErrors) => ({ ...prevErrors, description: "" }));
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -118,14 +118,28 @@ export const CreateArticlePage: React.FC = () => {
   return (
     <>
       <div className="m-1 m-lg-4 m-md-4 my-4">
-        <div className="row">
-          <div className="col d-flex align-items-end">
-            <div className="h4 fw-medium">Tambah Berita/Artikel</div>
-          </div>
-          <div className="col-auto">
-            <button onClick={() => navigate(-1)} className="btn btn-lg btn-danger">
-              <FaArrowLeft />
-            </button>
+        <div className="row g-4 d-flex justify-content-between mb-3">
+          <div className="col-12 col-lg-6 col-md-6">
+            <div className="row d-flex">
+              <div className="col-auto">
+                <button
+                  onClick={() => navigate(-1)}
+                  className="btn btn-lg btn-danger"
+                >
+                  <FaArrowLeft />
+                </button>
+              </div>
+              <div className="col">
+                <div className="">
+                  <div className="fw-bold fs-5 text-dark-soft">
+                    Tambah Berita/Artikel
+                  </div>
+                  <div className="">
+                    Tambah Berita dan artikel SMKN 1 Lumban Julu
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -141,7 +155,7 @@ export const CreateArticlePage: React.FC = () => {
                 <input
                   type="text"
                   name="title"
-                  className={`form-control form-control-lg ${
+                  className={`form-control  ${
                     errorsForms.title ? "is-invalid" : ""
                   }`}
                   placeholder="Masukkan judul"
@@ -163,12 +177,11 @@ export const CreateArticlePage: React.FC = () => {
                   )}
                   onChange={(option) => handleSelectChange("type", option)}
                   placeholder="Pilih tipe"
-                  className="form-control-lg px-0 pt-0"
+                  className=" px-0 pt-0"
                   styles={{
                     control: (baseStyles) => ({
                       ...baseStyles,
                       fontSize: "0.955rem",
-                      minHeight: "48px",
                       borderRadius: "8px",
                     }),
                     option: (provided) => ({
@@ -186,7 +199,7 @@ export const CreateArticlePage: React.FC = () => {
                   <input
                     type="file"
                     name="banner"
-                    className="form-control form-control-lg fs-6"
+                    className="form-control  fs-6"
                     id="inputGroupFile02"
                     onChange={handleInputChange}
                   />
@@ -242,12 +255,11 @@ export const CreateArticlePage: React.FC = () => {
                   )}
                   onChange={(option) => handleSelectChange("status", option)}
                   placeholder="Pilih Status"
-                  className="form-control-lg px-0 pt-0"
+                  className=" px-0 pt-0"
                   styles={{
                     control: (baseStyles) => ({
                       ...baseStyles,
                       fontSize: "0.955rem",
-                      minHeight: "48px",
                       borderRadius: "8px",
                     }),
                     option: (provided) => ({
@@ -259,7 +271,11 @@ export const CreateArticlePage: React.FC = () => {
               </div>
             </div>
             <div className="col-12 d-flex justify-content-end">
-              <button className="btn btn-success btn-lg w-50 fw-medium" type="submit" style={{ fontSize: "1.1rem" }}>
+              <button
+                className="btn btn-success btn-lg w-50 fw-medium"
+                type="submit"
+                style={{ fontSize: "1.1rem" }}
+              >
                 Submit
               </button>
             </div>

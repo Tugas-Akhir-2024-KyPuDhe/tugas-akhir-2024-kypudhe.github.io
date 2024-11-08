@@ -4,6 +4,7 @@ import BannerService from "../../../services/bannerService";
 import { Toast } from "../../../utils/myFunctions";
 import { Header } from "../../../features/contentWebPage/bannerPage/header";
 import { useParams } from "react-router-dom";
+import useCookie from "react-use-cookie";
 
 const optionsPrioritas = Array.from({ length: 20 }, (_, index) => ({
   value: (index + 1).toString(),
@@ -23,9 +24,13 @@ interface FormState {
   prioritas: string;
   status: string;
   media: File | null;
+  createdBy: string;
 }
 
 export const FormBanner: React.FC = () => {
+  const [cookieLogin, ] = useCookie("userLoginCookie");
+  const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
+
   const { id } = useParams<{ id: string }>();
   const bannerService = BannerService();
   const [formData, setFormData] = useState<FormState>({
@@ -36,6 +41,7 @@ export const FormBanner: React.FC = () => {
     prioritas: optionsPrioritas[11].value,
     status: optionsStatus[0].value,
     media: null,
+    createdBy: userLoginCookie.name
   });
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [errorsForms, setErrorsForms] = useState<{ [key: string]: string }>({});
@@ -57,6 +63,7 @@ export const FormBanner: React.FC = () => {
             prioritas: data.prioritas.toString(),
             status: data.status,
             media: null,
+            createdBy: data.createdBy
           });
           setImageUrl(data.banner.url);
         } catch (error) {
@@ -130,10 +137,6 @@ export const FormBanner: React.FC = () => {
       payload.append(key, value as string | Blob);
     });
   
-    if (formData.media) {
-      payload.append("image", formData.media);
-    }
-  
     try {
       let response;
       if (formData.id) {
@@ -141,7 +144,7 @@ export const FormBanner: React.FC = () => {
       } else {
         response = await bannerService.addBanner(payload);
       }
-      if (response.status === 201) {
+      if (response.status === 201 || response.status === 200) {
         Toast.fire({
           icon: "success",
           title: `Banner ${formData.id ? "updated" : "added"} successfully`,
@@ -154,6 +157,7 @@ export const FormBanner: React.FC = () => {
           prioritas: optionsPrioritas[0].value,
           status: optionsStatus[0].value,
           media: null,
+          createdBy: userLoginCookie.name,
         });
         setloadingForm(false);
       }
@@ -203,7 +207,7 @@ export const FormBanner: React.FC = () => {
                 <input
                   type="text"
                   name="title"
-                  className={`form-control form-control-lg ${
+                  className={`form-control ${
                     errorsForms.title ? "is-invalid" : ""
                   }`}
                   placeholder="Masukkan judul"
@@ -247,7 +251,7 @@ export const FormBanner: React.FC = () => {
                 <input
                   type="text"
                   name="title_link"
-                  className={`form-control form-control-lg ${
+                  className={`form-control ${
                     errorsForms.title_link ? "is-invalid" : ""
                   }`}
                   placeholder="cth: Detail"
@@ -265,7 +269,7 @@ export const FormBanner: React.FC = () => {
                 <input
                   type="url"
                   name="link"
-                  className={`form-control form-control-lg ${
+                  className={`form-control ${
                     errorsForms.link ? "is-invalid" : ""
                   }`}
                   placeholder="cth: https://smkn1lumbanjulu/berita"
@@ -282,7 +286,7 @@ export const FormBanner: React.FC = () => {
                 <label className="mb-2 fw-medium">Deskripsi *</label>
                 <textarea
                   name="description"
-                  className={`form-control form-control-lg ${
+                  className={`form-control ${
                     errorsForms.description ? "is-invalid" : ""
                   }`}
                   placeholder="Masukkan deskripsi"
@@ -301,7 +305,7 @@ export const FormBanner: React.FC = () => {
                   <input
                     type="file"
                     name="media"
-                    className="form-control form-control-lg fs-6"
+                    className="form-control fs-6"
                     id="inputGroupFile02"
                     onChange={handleInputChange}
                   />

@@ -119,10 +119,10 @@ export const FormEkskulPage: React.FC = () => {
       } else {
         response = await ekskulService.store(payload);
       }
-      if (response.status === 201) {
+      if (response.status === 201 || response.status === 200) {
         Toast.fire({
           icon: "success",
-          title: `Facility ${formData.id ? "updated" : "added"} successfully`,
+          title: `Ekstrakurikuler ${formData.id ? "updated" : "added"} successfully`,
         });
         setFormData({
           name: "",
@@ -139,7 +139,7 @@ export const FormEkskulPage: React.FC = () => {
         icon: "error",
         title: `${error}`,
       });
-      console.error("Error processing facility:", error);
+      console.error("Error processing Ekstrakurikuler:", error);
     }
   };
 
