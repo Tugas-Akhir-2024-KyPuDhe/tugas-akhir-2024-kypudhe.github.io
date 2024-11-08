@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import BannerService from "../../../services/bannerService";
-import { useNavigate, useParams } from "react-router-dom";
-import { FaArrowLeft } from "react-icons/fa6";
 import { Toast } from "../../../utils/myFunctions";
+import { Header } from "../../../features/contentWebPage/bannerPage/header";
+import { useParams } from "react-router-dom";
 
 const optionsPrioritas = Array.from({ length: 20 }, (_, index) => ({
   value: (index + 1).toString(),
@@ -26,7 +26,6 @@ interface FormState {
 }
 
 export const FormBanner: React.FC = () => {
-  const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const bannerService = BannerService();
   const [formData, setFormData] = useState<FormState>({
@@ -105,38 +104,36 @@ export const FormBanner: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
     const requiredFields = ["title", "description", "title_link", "link"];
     const newErrors: { [key: string]: string } = {};
-
+  
     requiredFields.forEach((field) => {
       if (!formData[field as keyof typeof formData]) {
-        newErrors[field] = `${
-          field.charAt(0).toUpperCase() + field.slice(1)
-        } is required.`;
+        newErrors[field] = `${field.charAt(0).toUpperCase() + field.slice(1)} is required.`;
       }
     });
-
-    // Tambahkan pengecekan media
-    if (!formData.media) {
+  
+    // Check if media is required (only when adding a new banner)
+    if (!formData.id && !formData.media) {
       newErrors.media = "Media is required.";
     }
-
+  
     if (Object.keys(newErrors).length > 0) {
       setErrorsForms(newErrors);
       return;
     }
-
+  
     setloadingForm(true);
     const payload = new FormData();
     Object.entries(formData).forEach(([key, value]) => {
       payload.append(key, value as string | Blob);
     });
-
+  
     if (formData.media) {
       payload.append("image", formData.media);
     }
-
+  
     try {
       let response;
       if (formData.id) {
@@ -147,7 +144,7 @@ export const FormBanner: React.FC = () => {
       if (response.status === 201) {
         Toast.fire({
           icon: "success",
-          title: "Banner berhasil ditambah",
+          title: `Banner ${formData.id ? "updated" : "added"} successfully`,
         });
         setFormData({
           title: "",
@@ -163,30 +160,17 @@ export const FormBanner: React.FC = () => {
     } catch (error) {
       setloadingForm(false);
       Toast.fire({
+        timer: 10000,
         icon: "error",
         title: `${error}`,
       });
-      console.error("Error adding banner:", error);
+      console.error("Error processing banner:", error);
     }
   };
 
   return (
     <>
-      <div className="m-1 m-lg-4 m-md-4 my-4">
-        <div className="row">
-          <div className="col d-flex align-items-end">
-            <button
-              onClick={() => navigate(-1)}
-              className="btn btn-lg btn-danger me-3"
-            >
-              <FaArrowLeft />
-            </button>
-            <div className="h4 fw-medium">
-              {formData.id ? "Update" : "Tambah"} Banner
-            </div>
-          </div>
-        </div>
-      </div>
+      <Header actionText={formData.id ? "Update" : "Tambah"} backDisplay={true} addDisplay={false} />
       <div
         className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
         style={{ backgroundColor: "#fff", position: "relative" }}
@@ -312,7 +296,7 @@ export const FormBanner: React.FC = () => {
             </div>
             <div className="col-12">
               <div className="form-group mb-3">
-                <label className="mb-2 fw-medium">Gambar</label>
+                <label className="mb-2 fw-medium">Gambar *</label>
                 <div className="input-group mb-3">
                   <input
                     type="file"
@@ -334,7 +318,7 @@ export const FormBanner: React.FC = () => {
               </div>
               {imageUrl && (
                 <div className="form-group mb-3">
-                  <label>Current Image</label>
+                  <label className="mb-2 fw-medium">Gambar Sekarang</label>
                   <br />
                   <img
                     src={imageUrl}
