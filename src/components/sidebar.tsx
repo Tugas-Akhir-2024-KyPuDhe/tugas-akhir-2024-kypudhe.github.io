@@ -399,7 +399,7 @@ export const ListMenu = () => {
         </>
       )}
       {/* pengelolaan siswa | TEACHER */}
-      {userLoginCookie?.role === "STAFF" && (
+      {userLoginCookie?.role === "TEACHER" && (
         <SubMenu
           icon={<FaFileLines />}
           label="Pengelolaan Siswa"

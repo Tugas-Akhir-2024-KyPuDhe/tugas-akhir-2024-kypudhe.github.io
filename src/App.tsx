@@ -3,6 +3,7 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import { AbsensiPage, ArticlePage, BannerPage, CreateArticlePage, DetailArticlePage, FormBanner, HomePage, KelasPage, LoginPage, MapelPage, NilaiPage } from "./pages";
 import { SideBar } from "./components/sidebar";
 import PrivateRoute from "./components/privateRoute";
+import "bootstrap/dist/css/bootstrap.css";
 
 function App() {
   const location = useLocation();

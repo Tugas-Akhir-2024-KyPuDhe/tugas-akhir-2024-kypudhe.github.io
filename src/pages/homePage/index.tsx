@@ -111,7 +111,7 @@ export const HomePage = () => {
 
   return (
     <>
-      {userLoginCookie.role === "STAFF" ? (
+      {userLoginCookie.role === "STAFF" || userLoginCookie.role === "TEACHER" ? (
         <div className="m-1 m-lg-4 m-md-4 my-4">
           <div className="fw-bold fs-5 mb-3 text-dark-soft">Dashboard</div>
           <div className="container-fluid px-0">
