@@ -80,6 +80,7 @@ export const Content: React.FC = () => {
             <div className="card card-body">
               <span className={`badge mb-2 text-bg-info`} style={{maxWidth: 'fit-content'}}>{dt.hari}</span>
               <h4>{dt.nama}</h4>
+              <h6>Guru : {dt.guru}</h6>
               <hr />
               <div className="d-flex gap-3">
                 <div>
