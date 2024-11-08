@@ -24,10 +24,43 @@ import { CardInformasi } from "../../features/homePage/components/cardInformasi"
 //   guruMapel: string;
 // }
 
+
+interface MataPelajaran {
+  nama: string,
+  hari: string,
+  jam_mulai: string,
+  jam_selesai: string,
+  guru: string,
+}
+
 export const HomePage = () => {
   const articleService = ArtikelService();
   const [cookieLogin] = useCookie("userLoginCookie");
   const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
+
+  const [dataMapel] = useState<MataPelajaran[]>([
+    {
+      "nama" : "Matematika",
+      "hari" : "Senin",
+      "jam_mulai" : "10:00",
+      "jam_selesai" : "12:00",
+      "guru" : "Rizky Fadillah",
+    },
+    {
+      "nama" : "Bahasa",
+      "hari" : "Selasa",
+      "jam_mulai" : "10:00",
+      "jam_selesai" : "12:00",
+      "guru" : "Putra Fadillah",
+    },
+    {
+      "nama" : "Teknik",
+      "hari" : "Rabu",
+      "jam_mulai" : "10:00",
+      "jam_selesai" : "12:00",
+      "guru" : "John Doe",
+    },
+  ]);
   // const dataMapel: Mapel[] = [
   //   {
   //     imageMapel:
@@ -149,16 +182,29 @@ export const HomePage = () => {
 
       {userLoginCookie.role === "STUDENT" && (
         <div className="m-1 m-lg-4 m-md-4 my-4">
-          <div className="fw-bold fs-5 text-dark-soft">Mata Pelajaran</div>
-          <div className="slider-container">
-            <div className="container">
-              {/* <Slider {...settings}>
-              {dataMapel.map((data, index) => (
-                <div key={index} className="p-2">
-                  <CardMapel {...data} />
+          <div className="fw-bold fs-5 text-dark-soft mb-3">Mata Pelajaran</div>
+          <div className="container-fluid px-0">
+            <div className="row">
+            {dataMapel.map(dt=>(
+              <div className="col-12 col-lg-4 col-md-3 mb-3" key={dt.nama}>
+                <div className="card card-body">
+                  <span className={`badge mb-2 text-bg-info`} style={{maxWidth: 'fit-content'}}>{dt.hari}</span>
+                  <h4>{dt.nama}</h4>
+                  <h6>Guru : {dt.guru}</h6>
+                  <hr />
+                  <div className="d-flex gap-3">
+                    <div>
+                      <h6>Jam Mulai</h6>
+                      <p>{dt.jam_mulai}</p>
+                    </div>
+                    <div>
+                      <h6>Jam Selesai</h6>
+                      <p>{dt.jam_selesai}</p>
+                    </div>
+                  </div>
                 </div>
-              ))}
-            </Slider> */}
+              </div>
+            ))}
             </div>
           </div>
         </div>

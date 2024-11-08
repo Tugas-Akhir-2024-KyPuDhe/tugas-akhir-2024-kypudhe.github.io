@@ -1,7 +1,7 @@
 import React from "react";
 
-import { Header } from "../../features/absensi/header";
-import { Content } from "../../features/absensi/content";
+import { Header } from "../../features/absensiPage/header";
+import { Content } from "../../features/absensiPage/content";
 
 export const AbsensiPage: React.FC = () => {
   
