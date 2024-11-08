@@ -7,9 +7,11 @@ import Swal from "sweetalert2";
 import { FaPen } from "react-icons/fa6";
 import { Fajusek } from "../../../interface/fajusek.interfase";
 import FacilityService from "../../../services/facilityService";
+import { useNavigate } from "react-router-dom";
 
 export const Table: React.FC = () => {
   const facilityService = FacilityService();
+  const navigate = useNavigate();
 
   const [data, setData] = useState<Fajusek[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -81,7 +83,7 @@ export const Table: React.FC = () => {
          
           <button
             className="btn btn-warning text me-2 text-light"
-            // onClick={() => deleteBanner(row.id)}
+            onClick={() => navigate(`update/${row.id}`)}
             disabled={loading} 
           >
               <FaPen />

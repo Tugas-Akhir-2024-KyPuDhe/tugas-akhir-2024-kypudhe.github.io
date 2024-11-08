@@ -19,7 +19,7 @@ interface FormState {
 }
 
 
-export const CreateFacilityPage: React.FC = () => {
+export const FormFacilityPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const facilityService = FacilityService();
   const [formData, setFormData] = useState<FormState>({
@@ -145,7 +145,7 @@ export const CreateFacilityPage: React.FC = () => {
 
   return (
     <>
-      <Header actionText={formData.id ? "Update" : "Tambah"} backDisplay={true} addDisplay={false} />
+      <Header actionText={id ? "Update" : "Tambah"} backDisplay={true} addDisplay={false} />
       <div
         className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
         style={{ backgroundColor: "#fff", position: "relative" }}

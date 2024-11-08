@@ -1,4 +1,4 @@
-import { CreateFacilityPage } from './contentWebPage/facilityPage/create';
+import { FormFacilityPage } from './contentWebPage/facilityPage/form';
 import { FacilityPage } from './contentWebPage/facilityPage/index';
 import { SchoolPage } from './contentWebPage/schoolPage/index';
 import { AbsensiPage } from './absensiPage/index';
@@ -13,4 +13,4 @@ import { FormBanner } from "./contentWebPage/bannerPage/formBanner";
 import { HomePage } from "./homePage";
 import { LoginPage } from "./loginPage";
 
-export { HomePage, LoginPage, ArticlePage, CreateArticlePage, DetailArticlePage, BannerPage, FormBanner, NilaiPage, KelasPage, MapelPage, AbsensiPage, SchoolPage, FacilityPage, CreateFacilityPage }
+export { HomePage, LoginPage, ArticlePage, CreateArticlePage, DetailArticlePage, BannerPage, FormBanner, NilaiPage, KelasPage, MapelPage, AbsensiPage, SchoolPage, FacilityPage, FormFacilityPage }
