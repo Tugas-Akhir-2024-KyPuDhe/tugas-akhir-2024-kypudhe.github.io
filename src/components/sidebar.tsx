@@ -186,7 +186,7 @@ export const ListMenu = () => {
         setSelectedMenu("/content-web/school");
         break;
       case "/content-web/jurusan":
-        setSelectedMenu("content-web/jurusan");
+        setSelectedMenu("/content-web/jurusan");
         break;
       case "/content-web/facility":
         setSelectedMenu("/content-web/facility");
@@ -591,13 +591,13 @@ export const ListMenu = () => {
             style={{
               position: "relative",
               backgroundColor:
-                selectedMenu === "content-web/jurusan" ? "#E5EAF2" : "",
+                selectedMenu === "/content-web/jurusan" ? "#E5EAF2" : "",
             }}
             className={`fw-medium ${
-              selectedMenu === "content-web/jurusan" ? "text-blue" : "text-dark-soft"
+              selectedMenu === "/content-web/jurusan" ? "text-blue" : "text-dark-soft"
             }`}
           >
-            {selectedMenu === "content-web/jurusan" && (
+            {selectedMenu === "/content-web/jurusan" && (
               <div
                 style={{
                   position: "absolute",

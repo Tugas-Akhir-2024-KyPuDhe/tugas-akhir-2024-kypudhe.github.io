@@ -1,9 +1,10 @@
 import "./App.css";
 import { Route, Routes, useLocation } from "react-router-dom";
-import { AbsensiPage, ArticlePage, BannerPage, CreateArticlePage, DetailArticlePage, FacilityPage, FormBanner, FormFacilityPage, HomePage, KelasPage, LoginPage, MapelPage, NilaiPage, SchoolPage } from "./pages";
+import { AbsensiPage, ArticlePage, BannerPage, CreateArticlePage, DetailArticlePage, FacilityPage, FormBanner, FormFacilityPage, HomePage, JurusanPage, KelasPage, LoginPage, MapelPage, NilaiPage, SchoolPage } from "./pages";
 import { SideBar } from "./components/sidebar";
 import PrivateRoute from "./components/privateRoute";
 import "bootstrap/dist/css/bootstrap.css";
+import { FormJurusanPage } from "./pages/contentWebPage/jurusanPage/form";
 
 function App() {
   const location = useLocation();
@@ -37,6 +38,9 @@ function App() {
             <Route path="/content-web/facility" element={ <PrivateRoute Component={FacilityPage} /> } />
             <Route path="/content-web/facility/create" element={ <PrivateRoute Component={FormFacilityPage} /> } />
             <Route path="/content-web/facility/update/:id" element={ <PrivateRoute Component={FormFacilityPage} /> } />
+            <Route path="/content-web/jurusan" element={ <PrivateRoute Component={JurusanPage} /> } />
+            <Route path="/content-web/jurusan/create" element={ <PrivateRoute Component={FormJurusanPage} /> } />
+            <Route path="/content-web/jurusan/update/:id" element={ <PrivateRoute Component={FormJurusanPage} /> } />
           </Routes>
         </SideBar>
       )}
