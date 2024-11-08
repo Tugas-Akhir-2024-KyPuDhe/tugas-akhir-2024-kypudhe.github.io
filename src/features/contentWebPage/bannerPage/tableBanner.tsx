@@ -126,7 +126,7 @@ export const TableBanner: React.FC = () => {
     },
   ];
 
-  const filteredSkills = listBanner.filter((banner) =>
+  const filteredBanner = listBanner.filter((banner) =>
     banner.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -177,10 +177,9 @@ export const TableBanner: React.FC = () => {
       <StyleSheetManager>
         <DataTable
           columns={columns}
-          data={filteredSkills}
+          data={filteredBanner}
           pagination
           highlightOnHover
-          // pointerOnHover
           customStyles={{
             rows: {
               style: {
