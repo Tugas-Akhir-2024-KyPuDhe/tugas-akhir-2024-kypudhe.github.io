@@ -1,3 +1,4 @@
+import { MapelPage } from './mapelPage/index';
 import { KelasPage } from './kelasPage/index';
 import { NilaiPage } from './nilaiPage/index';
 import { ArticlePage } from "./articlePage";
@@ -8,4 +9,4 @@ import { FormBanner } from "./contentWebPage/bannerPage/formBanner";
 import { HomePage } from "./homePage";
 import { LoginPage } from "./loginPage";
 
-export { HomePage, LoginPage, ArticlePage, CreateArticlePage, DetailArticlePage, BannerPage, FormBanner, NilaiPage, KelasPage }
+export { HomePage, LoginPage, ArticlePage, CreateArticlePage, DetailArticlePage, BannerPage, FormBanner, NilaiPage, KelasPage, MapelPage }

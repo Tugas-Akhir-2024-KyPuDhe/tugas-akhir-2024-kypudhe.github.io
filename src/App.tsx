@@ -1,6 +1,6 @@
 import "./App.css";
 import { Route, Routes, useLocation } from "react-router-dom";
-import { ArticlePage, BannerPage, CreateArticlePage, DetailArticlePage, FormBanner, HomePage, KelasPage, LoginPage, NilaiPage } from "./pages";
+import { ArticlePage, BannerPage, CreateArticlePage, DetailArticlePage, FormBanner, HomePage, KelasPage, LoginPage, MapelPage, NilaiPage } from "./pages";
 import { SideBar } from "./components/sidebar";
 import PrivateRoute from "./components/privateRoute";
 
@@ -30,6 +30,7 @@ function App() {
             <Route path="/content-web-banner/update/:id" element={ <PrivateRoute Component={FormBanner} /> } />
             <Route path="/nilai" element={ <PrivateRoute Component={NilaiPage} /> } />
             <Route path="/kelas" element={ <PrivateRoute Component={KelasPage} /> } />
+            <Route path="/mata-pelajaran" element={ <PrivateRoute Component={MapelPage} /> } />
           </Routes>
         </SideBar>
       )}
