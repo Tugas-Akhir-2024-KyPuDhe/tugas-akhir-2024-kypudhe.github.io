@@ -33,7 +33,7 @@ export const Content: React.FC = () => {
     >
       <div className="row">
         {data.map(dt=>(
-          <div className="col-12 col-lg-4 col-md-3" key={dt.nama}>
+          <div className="col-12 col-lg-4 col-md-3 mb-3" key={dt.nama}>
             <div className="card card-body">
               <span className={`badge mb-2 ${dt.active ? "text-bg-success" : "text-bg-primary"}`} style={{maxWidth: 'fit-content'}}>{dt.active ? 'Aktif' : 'Lulus'}</span>
               <h4>{dt.nama}</h4>

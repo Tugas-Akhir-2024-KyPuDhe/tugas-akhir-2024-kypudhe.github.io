@@ -45,7 +45,7 @@ export const Content: React.FC = () => {
       className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
       style={{ backgroundColor: "#fff", position: "relative" }}
     >
-      <div className="row">
+      <div className="row mb-3">
         <div className="col-12 col-lg-4 col-md-3">
           <Select
             options={optionKelas}
@@ -69,7 +69,7 @@ export const Content: React.FC = () => {
       </div>
       <div className="row">
         {data.map(dt=>(
-          <div className="col-12 col-lg-4 col-md-3" key={dt.mata_pelajaran}>
+          <div className="col-12 col-lg-4 col-md-3 mb-3" key={dt.mata_pelajaran}>
             <div className="card card-body">
               <div className="d-flex justify-content-between">
                 <h4>{dt.mata_pelajaran}</h4>
