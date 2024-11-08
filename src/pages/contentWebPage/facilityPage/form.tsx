@@ -135,7 +135,6 @@ export const FormFacilityPage: React.FC = () => {
     } catch (error) {
       setloadingForm(false);
       Toast.fire({
-        timer: 10000,
         icon: "error",
         title: `${error}`,
       });
