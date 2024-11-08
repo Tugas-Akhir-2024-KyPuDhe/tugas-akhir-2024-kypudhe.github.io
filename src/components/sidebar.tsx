@@ -188,8 +188,8 @@ export const ListMenu = () => {
       case "/content-web-jurusan":
         setSelectedMenu("content-web-jurusan");
         break;
-      case "/content-web-fasilitas":
-        setSelectedMenu("content-web-fasilitas");
+      case "/content-web/facility":
+        setSelectedMenu("/content-web/facility");
         break;
       case "/content-web-ekstra-kurikuler":
         setSelectedMenu("content-web-ekstra-kurikuler");
@@ -612,20 +612,20 @@ export const ListMenu = () => {
             Jurusan
           </MenuItem>
           <MenuItem
-            onClick={() => handleMenuClick("/content-web-fasilitas")}
+            onClick={() => handleMenuClick("/content-web/facility")}
             icon={<FaCircle style={{ fontSize: "8px" }} />}
             style={{
               position: "relative",
               backgroundColor:
-                selectedMenu === "content-web-fasilitas" ? "#E5EAF2" : "",
+                selectedMenu === "/content-web/facility" ? "#E5EAF2" : "",
             }}
             className={`fw-medium ${
-              selectedMenu === "content-web-fasilitas"
+              selectedMenu === "/content-web/facility"
                 ? "text-blue"
                 : "text-dark-soft"
             }`}
           >
-            {selectedMenu === "content-web-fasilitas" && (
+            {selectedMenu === "/content-web/facility" && (
               <div
                 style={{
                   position: "absolute",

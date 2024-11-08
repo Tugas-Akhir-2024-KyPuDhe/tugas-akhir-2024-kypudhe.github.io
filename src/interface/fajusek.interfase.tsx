@@ -20,3 +20,8 @@ export interface GetSingleFajusekResponse {
   message: string;
   data: Fajusek;
 }
+
+export interface FajusekActionResponse {
+  status: number;
+  message: string;
+}
