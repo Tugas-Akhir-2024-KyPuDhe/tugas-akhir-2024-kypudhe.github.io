@@ -206,20 +206,20 @@ export const ListMenu = () => {
       case "/data-kelas":
         setSelectedMenu("data-kelas");
         break;
-      case "/data-nilai-siswa":
-        setSelectedMenu("data-nilai-siswa");
+      case "/nilai":
+        setSelectedMenu("nilai");
         break;
       case "/nilai-siswa":
         setSelectedMenu("nilai-siswa");
         break;
-      case "/absensi-siswa":
-        setSelectedMenu("absensi-siswa");
+      case "/absensi":
+        setSelectedMenu("absensi");
         break;
-      case "/kelas-siswa":
-        setSelectedMenu("kelas-siswa");
+      case "/kelas":
+        setSelectedMenu("kelas");
         break;
-      case "/mapel-siswa":
-        setSelectedMenu("mapel-siswa");
+      case "/mata-pelajaran":
+        setSelectedMenu("mata-pelajaran");
         break;
       default:
         setSelectedMenu("");
@@ -293,20 +293,20 @@ export const ListMenu = () => {
       {userLoginCookie?.role === "STUDENT" && (
         <>
           <MenuItem
-            onClick={() => handleMenuClick("/data-nilai-siswa")}
+            onClick={() => handleMenuClick("/nilai")}
             icon={<MdLibraryBooks />}
             style={{
               position: "relative",
               backgroundColor:
-                selectedMenu === "data-nilai-siswa" ? "#E5EAF2" : "",
+                selectedMenu === "nilai" ? "#E5EAF2" : "",
             }}
             className={`fw-medium ${
-              selectedMenu === "data-nilai-siswa"
+              selectedMenu === "nilai"
                 ? "text-blue"
                 : "text-dark-soft"
             }`}
           >
-            {selectedMenu === "data-nilai-siswa" && (
+            {selectedMenu === "nilai" && (
               <div
                 style={{
                   position: "absolute",
@@ -321,18 +321,18 @@ export const ListMenu = () => {
             Nilai
           </MenuItem>
           <MenuItem
-            onClick={() => handleMenuClick("/absensi-siswa")}
+            onClick={() => handleMenuClick("/absensi")}
             icon={<LuCheckSquare />}
             style={{
               position: "relative",
               backgroundColor:
-                selectedMenu === "absensi-siswa" ? "#E5EAF2" : "",
+                selectedMenu === "absensi" ? "#E5EAF2" : "",
             }}
             className={`fw-medium ${
-              selectedMenu === "absensi-siswa" ? "text-blue" : "text-dark-soft"
+              selectedMenu === "absensi" ? "text-blue" : "text-dark-soft"
             }`}
           >
-            {selectedMenu === "absensi-siswa" && (
+            {selectedMenu === "absensi" && (
               <div
                 style={{
                   position: "absolute",
@@ -347,17 +347,17 @@ export const ListMenu = () => {
             Absensi
           </MenuItem>
           <MenuItem
-            onClick={() => handleMenuClick("/kelas-siswa")}
+            onClick={() => handleMenuClick("/kelas")}
             icon={<RiSchoolLine />}
             style={{
               position: "relative",
-              backgroundColor: selectedMenu === "kelas-siswa" ? "#E5EAF2" : "",
+              backgroundColor: selectedMenu === "kelas" ? "#E5EAF2" : "",
             }}
             className={`fw-medium ${
-              selectedMenu === "kelas-siswa" ? "text-blue" : "text-dark-soft"
+              selectedMenu === "kelas" ? "text-blue" : "text-dark-soft"
             }`}
           >
-            {selectedMenu === "kelas-siswa" && (
+            {selectedMenu === "kelas" && (
               <div
                 style={{
                   position: "absolute",
@@ -372,17 +372,17 @@ export const ListMenu = () => {
             Kelas Saya
           </MenuItem>
           <MenuItem
-            onClick={() => handleMenuClick("/mapel-siswa")}
+            onClick={() => handleMenuClick("/mata-pelajaran")}
             icon={<TbBooks />}
             style={{
               position: "relative",
-              backgroundColor: selectedMenu === "mapel-siswa" ? "#E5EAF2" : "",
+              backgroundColor: selectedMenu === "mata-pelajaran" ? "#E5EAF2" : "",
             }}
             className={`fw-medium ${
-              selectedMenu === "mapel-siswa" ? "text-blue" : "text-dark-soft"
+              selectedMenu === "mata-pelajaran" ? "text-blue" : "text-dark-soft"
             }`}
           >
-            {selectedMenu === "mapel-siswa" && (
+            {selectedMenu === "mata-pelajaran" && (
               <div
                 style={{
                   position: "absolute",
