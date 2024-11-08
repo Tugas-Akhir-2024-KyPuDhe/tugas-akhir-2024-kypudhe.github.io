@@ -1,13 +1,13 @@
 import React from "react";
 
-import { HeaderBanner } from "../../../features/contentWebPage/bannerPage/headerBanner";
+import { Header } from "../../../features/contentWebPage/bannerPage/header";
 import { TableBanner } from "../../../features/contentWebPage/bannerPage/tableBanner";
 
 export const BannerPage: React.FC = () => {
   
   return (
     <>
-      <HeaderBanner />
+      <Header actionText="" backDisplay={false} addDisplay={true} />
       <TableBanner />
     </>
   );
