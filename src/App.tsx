@@ -26,9 +26,9 @@ function App() {
             <Route path="/berita" element={<PrivateRoute Component={ArticlePage} /> } />
             <Route path="/berita/:id" element={<PrivateRoute Component={DetailArticlePage} /> } />
             <Route path="/berita/tambah" element={ <PrivateRoute Component={CreateArticlePage} /> } />
-            <Route path="/content-web-banner" element={ <PrivateRoute Component={BannerPage} /> } />
-            <Route path="/content-web-banner/tambah" element={ <PrivateRoute Component={FormBanner} /> } />
-            <Route path="/content-web-banner/update/:id" element={ <PrivateRoute Component={FormBanner} /> } />
+            <Route path="/content-web/banner" element={ <PrivateRoute Component={BannerPage} /> } />
+            <Route path="/content-web/banner/tambah" element={ <PrivateRoute Component={FormBanner} /> } />
+            <Route path="/content-web/banner/update/:id" element={ <PrivateRoute Component={FormBanner} /> } />
             <Route path="/nilai" element={ <PrivateRoute Component={NilaiPage} /> } />
             <Route path="/kelas" element={ <PrivateRoute Component={KelasPage} /> } />
             <Route path="/mata-pelajaran" element={ <PrivateRoute Component={MapelPage} /> } />

@@ -109,7 +109,7 @@ export const TableBanner: React.FC = () => {
          
           <button
             className="btn btn-warning text me-2 text-light"
-            onClick={() => deleteBanner(row.id)}
+            onClick={() => navigate(`update/${row.id}`)}
             disabled={loading} 
           >
               <FaPen />
