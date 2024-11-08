@@ -262,7 +262,7 @@ export const Content: React.FC = () => {
               <hr />
               <div className="d-flex flex-wrap">
                 {dt.absensi.map((absensi, index)=>(
-                  <div key={absensi.tanggal+index} data-bs-toggle="tooltip" data-bs-title={absensi.tanggal} style={{width:50}} className={"py-1 px-2 text-center border border-light "+(absensi.status == 1 ? "bg-success" : (absensi.status == 2 ? "bg-info" : "bg-danger"))} >{index+1}</div>
+                  <div key={absensi.tanggal+index} title={absensi.tanggal} style={{width:50}} className={"py-1 px-2 text-center border border-light "+(absensi.status == 1 ? "bg-success" : (absensi.status == 2 ? "bg-info" : "bg-danger"))} >{index+1}</div>
                 ))}
               </div>
             </div>
