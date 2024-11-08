@@ -1,6 +1,6 @@
 import "./App.css";
 import { Route, Routes, useLocation } from "react-router-dom";
-import { AbsensiPage, ArticlePage, BannerPage, CreateArticlePage, DetailArticlePage, FormBanner, HomePage, KelasPage, LoginPage, MapelPage, NilaiPage } from "./pages";
+import { AbsensiPage, ArticlePage, BannerPage, CreateArticlePage, DetailArticlePage, FormBanner, HomePage, KelasPage, LoginPage, MapelPage, NilaiPage, SchoolPage } from "./pages";
 import { SideBar } from "./components/sidebar";
 import PrivateRoute from "./components/privateRoute";
 import "bootstrap/dist/css/bootstrap.css";
@@ -33,6 +33,7 @@ function App() {
             <Route path="/kelas" element={ <PrivateRoute Component={KelasPage} /> } />
             <Route path="/mata-pelajaran" element={ <PrivateRoute Component={MapelPage} /> } />
             <Route path="/absensi" element={ <PrivateRoute Component={AbsensiPage} /> } />
+            <Route path="/content-web/school" element={ <PrivateRoute Component={SchoolPage} /> } />
           </Routes>
         </SideBar>
       )}
