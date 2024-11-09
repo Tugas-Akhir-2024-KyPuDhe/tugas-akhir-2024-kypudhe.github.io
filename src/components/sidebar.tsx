@@ -209,8 +209,8 @@ export const ListMenu = () => {
       case "/nilai":
         setSelectedMenu("nilai");
         break;
-      case "/nilai-siswa":
-        setSelectedMenu("nilai-siswa");
+      case "/pengelolaan-siswa/nilai-siswa":
+        setSelectedMenu("pengelolaan-siswa/nilai-siswa");
         break;
       case "/absensi":
         setSelectedMenu("absensi");
@@ -525,20 +525,20 @@ export const ListMenu = () => {
               Data Kelas
             </MenuItem>
             <MenuItem
-              onClick={() => handleMenuClick("/data-nilai-siswa")}
+              onClick={() => handleMenuClick("/pengelolaan-siswa/nilai-siswa")}
               icon={<FaCircle style={{ fontSize: "8px" }} />}
               style={{
                 position: "relative",
                 backgroundColor:
-                  selectedMenu === "data-nilai-siswa" ? "#E5EAF2" : "",
+                  selectedMenu === "pengelolaan-siswa/nilai-siswa" ? "#E5EAF2" : "",
               }}
               className={`fw-medium ${
-                selectedMenu === "data-nilai-siswa"
+                selectedMenu === "pengelolaan-siswa/nilai-siswa"
                   ? "text-blue"
                   : "text-dark-soft"
               }`}
             >
-              {selectedMenu === "data-nilai-siswa" && (
+              {selectedMenu === "pengelolaan-siswa/nilai-siswa" && (
                 <div
                   style={{
                     position: "absolute",
@@ -550,7 +550,7 @@ export const ListMenu = () => {
                   }}
                 />
               )}
-              Nilai
+              Nilai Siswa
             </MenuItem>
           </SubMenu>
           
