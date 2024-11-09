@@ -1,6 +1,6 @@
 import "./App.css";
 import { Route, Routes, useLocation } from "react-router-dom";
-import { AbsensiPage, ArticlePage, BannerPage, CreateArticlePage, DetailArticlePage, FacilityPage, FormBanner, FormFacilityPage, HomePage, JurusanPage, KelasPage, LoginPage, MapelPage, NilaiPage, SchoolPage, FormJurusanPage, EkskulPage, FormEkskulPage, GuruMapelPage, FormGuruMapelPage, DaftarSiswaPage, FormDaftarSiswaPage, DaftarKelasPage, FormDaftarKelasPage, NilaiSiswaPage, FormNilaiSiswaPage } from "./pages";
+import { AbsensiPage, ArticlePage, BannerPage, DetailArticlePage, FacilityPage, FormBanner, FormFacilityPage, HomePage, JurusanPage, KelasPage, LoginPage, MapelPage, NilaiPage, SchoolPage, FormJurusanPage, EkskulPage, FormEkskulPage, GuruMapelPage, FormGuruMapelPage, DaftarSiswaPage, FormDaftarSiswaPage, DaftarKelasPage, FormDaftarKelasPage, NilaiSiswaPage, FormNilaiSiswaPage, FormArticlePage } from "./pages";
 import { SideBar } from "./components/sidebar";
 import PrivateRoute from "./components/privateRoute";
 import "bootstrap/dist/css/bootstrap.css";
@@ -25,7 +25,8 @@ function App() {
             <Route path="/dashboard" element={<PrivateRoute Component={HomePage} />} />
             <Route path="/berita" element={<PrivateRoute Component={ArticlePage} /> } />
             <Route path="/berita/:id" element={<PrivateRoute Component={DetailArticlePage} /> } />
-            <Route path="/berita/tambah" element={ <PrivateRoute Component={CreateArticlePage} /> } />
+            <Route path="/berita/tambah" element={ <PrivateRoute Component={FormArticlePage} /> } />
+            <Route path="/berita/update/:id" element={<PrivateRoute Component={FormArticlePage} /> } />
             <Route path="/content-web/banner" element={ <PrivateRoute Component={BannerPage} /> } />
             <Route path="/content-web/banner/tambah" element={ <PrivateRoute Component={FormBanner} /> } />
             <Route path="/content-web/banner/update/:id" element={ <PrivateRoute Component={FormBanner} /> } />

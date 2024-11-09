@@ -9,7 +9,7 @@ import useCookie from "react-use-cookie";
 
 interface ArtikelService {
   getAllArtikels: (page: number, perPage: number, keyword?: string) => Promise<GetAllArtikelResponse>;
-  getArtikelById: (id: number) => Promise<GetDetailArtikelResponse>;
+  getArtikelById: (id: string) => Promise<GetDetailArtikelResponse>;
   addArtikel: (formData: FormData) => Promise<ResponseActionArtikel>;
   updateArtikel: (id: number, formData: FormData) => Promise<ResponseActionArtikel>;
   deleteArtikel: (id: number) => Promise<ResponseActionArtikel>;
@@ -43,7 +43,7 @@ const ArtikelService = (): ArtikelService => {
     }
   };
 
-  const getArtikelById = async (id: number): Promise<GetDetailArtikelResponse> => {
+  const getArtikelById = async (id: string): Promise<GetDetailArtikelResponse> => {
     try {
       const response: AxiosResponse<GetDetailArtikelResponse> = await axios.get(
         `${apiUrl}/api/artikel/get/${id}`

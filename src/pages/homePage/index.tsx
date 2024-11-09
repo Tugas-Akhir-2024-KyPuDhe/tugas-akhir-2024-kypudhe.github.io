@@ -17,13 +17,8 @@ import { CardBerita } from "../../components/cardBerita";
 import { CardBeritaSkeleton } from "../../components/cardBeritaSkeleton";
 import useCookie from "react-use-cookie";
 import { CardInformasi } from "../../features/homePage/components/cardInformasi";
-
-// interface Mapel {
-//   imageMapel: string;
-//   namaMapel: string;
-//   guruMapel: string;
-// }
-
+import { showConfirmationDialog, Toast } from "../../utils/myFunctions";
+import Swal from "sweetalert2";
 
 interface MataPelajaran {
   nama: string,
@@ -61,81 +56,42 @@ export const HomePage = () => {
       "guru" : "John Doe",
     },
   ]);
-  // const dataMapel: Mapel[] = [
-  //   {
-  //     imageMapel:
-  //       "https://img.freepik.com/free-photo/digital-art-style-illustration-graphic-designer_23-2151536952.jpg?t=st=1730351094~exp=1730354694~hmac=f49f2f0431d73c2c786b8eb9cf8e732b40fb0e9b9979e8cc3bbfd249ce02df49&w=1060",
-  //     namaMapel: "Bahasa Indonesia",
-  //     guruMapel: "Sri Indah Wati",
-  //   },
-  //   {
-  //     imageMapel:
-  //       "https://img.freepik.com/free-photo/young-woman-working-home-office_23-2148292786.jpg?w=1060",
-  //     namaMapel: "Matematika",
-  //     guruMapel: "Joko Susilo",
-  //   },
-  //   {
-  //     imageMapel:
-  //       "https://img.freepik.com/free-photo/science-laboratory-with-glassware-equipment_23-2147494384.jpg?w=1060",
-  //     namaMapel: "Biologi",
-  //     guruMapel: "Dewi Lestari",
-  //   },
-  //   {
-  //     imageMapel:
-  //       "https://img.freepik.com/free-photo/students-classroom_23-2148281615.jpg?w=1060",
-  //     namaMapel: "Fisika",
-  //     guruMapel: "Agus Budi",
-  //   },
-  //   {
-  //     imageMapel:
-  //       "https://img.freepik.com/free-photo/hands-writing-notebook_23-2147981221.jpg?w=1060",
-  //     namaMapel: "Kimia",
-  //     guruMapel: "Siti Aisyah",
-  //   },
-  //   {
-  //     imageMapel:
-  //       "https://img.freepik.com/free-photo/happy-school-kids-learning-outside_23-2148281624.jpg?w=1060",
-  //     namaMapel: "Sejarah",
-  //     guruMapel: "Rudi Setiawan",
-  //   },
-  //   {
-  //     imageMapel:
-  //       "https://img.freepik.com/free-photo/english-teacher-classroom_23-2148228983.jpg?w=1060",
-  //     namaMapel: "Bahasa Inggris",
-  //     guruMapel: "Maria Grace",
-  //   },
-  // ];
-  // const settings = {
-  //   dots: true,
-  //   infinite: true,
-  //   speed: 500,
-  //   autoplay: true,
-
-  //   slidesToShow: 4.5,
-  //   slidesToScroll: 1,
-  //   responsive: [
-  //     {
-  //       breakpoint: 1024,
-  //       settings: {
-  //         slidesToShow: 2,
-  //         slidesToScroll: 1,
-  //       },
-  //     },
-  //     {
-  //       breakpoint: 600,
-  //       settings: {
-  //         slidesToShow: 1,
-  //         slidesToScroll: 1,
-  //       },
-  //     },
-  //   ],
-  // };
 
   const [dataArtikel, setDataArtikel] = useState<Artikel[]>([]);
+  const [loadingDeleteBerita, setLoadingDeleteBerita] = useState(false);
 
   const getAllArtikel = async () => {
     const response = await articleService.getAllArtikels(1, 8);
     setDataArtikel(response.data);
+  };
+
+  const handleDeleteBerita = async (idArtikel: number) => {
+    const result = await showConfirmationDialog({
+      title: "Ingin menghapus Berita ini?",
+      icon: "warning",
+      confirmButtonText: "Ya, Hapus!",
+      cancelButtonText: "Batal",
+    });
+
+    if (result.isConfirmed) {
+      setLoadingDeleteBerita(true);
+      try {
+        const response = await articleService.deleteArtikel(idArtikel);
+        if (response.status === 200) {
+          getAllArtikel();
+          Toast.fire({
+            icon: "success",
+            title: "Berita/Artikel berhasil dihapus",
+            timer: 4000,
+          });
+        }
+      } catch (error) {
+        console.error("Error deleting Berita/Artikel:", error);
+        Swal.fire("Gagal", "Terjadi kesalahan saat menghapus Berita/Artikel", "error");
+      } finally {
+        setLoadingDeleteBerita(false); // Set loading to false once the operation is complete
+      }
+    }
   };
 
   useEffect(() => {
@@ -224,12 +180,16 @@ export const HomePage = () => {
                 ? dataArtikel.map((data, index) => (
                     <div className="col-12 col-lg-3 col-md-6" key={index}>
                       <CardBerita
+                        idArtikel={data.id}
                         uuidArtikel={data.uuid}
                         imageArtikel={data.banner?.url || "https://plus.unsplash.com/premium_photo-1661772661721-b16346fe5b0f?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YnVzc2luZXNzfGVufDB8fDB8fHww"}
                         tipeArtikel={data.type}
-                        dateArtikel={data.date}
+                        dateArtikel={data.createdAt}
+                        statusArtikel={data.status}
                         titleArtikel={data.title}
                         descArtikel={data.description}
+                        handleDeleteBerita={handleDeleteBerita}
+                        loadingDeleteBerita={loadingDeleteBerita}
                       />
                     </div>
                   ))

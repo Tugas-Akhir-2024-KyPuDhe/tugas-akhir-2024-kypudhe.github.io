@@ -6,12 +6,12 @@ import { Media } from "./media.interface";
     bannerId: string | null;
     title: string;
     description: string;
-    date: Date;
     status: string;
     type: string;
+    category: string;
     link: string;
-    createdAt: string;
-    updatedAt: string;
+    createdAt: Date;
+    updatedAt: Date;
     media: Media[];
     banner: Media;
   }

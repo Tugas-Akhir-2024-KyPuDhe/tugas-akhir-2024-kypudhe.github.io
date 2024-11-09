@@ -42,7 +42,7 @@ export const TableBanner: React.FC = () => {
           getAllBanner();
           Toast.fire({
             icon: "success",
-            title: "Baaner berhasil dihapus",
+            title: "Baner berhasil dihapus",
             timer: 4000,
           });
         }

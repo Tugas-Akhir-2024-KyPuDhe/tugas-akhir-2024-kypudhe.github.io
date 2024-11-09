@@ -19,8 +19,25 @@ const toolbarOptions = [
 ];
 
 const optionsTypeArticle = [
-  { value: "umum", label: "Umum" },
-  { value: "private", label: "Private" },
+  { value: "Acara Umum", label: "Acara Umum" },
+  { value: "Acara Siswa", label: "Acara Siswa" },
+  { value: "Acara Staff ", label: "Acara Staff " },
+  { value: "Berita Umum", label: "Berita Umum" },
+  { value: "Berita Siswa", label: "Berita Siswa" },
+  { value: "Berita Staff", label: "Berita Staff" },
+];
+
+const optionsCategoryArticle = [
+  { value: "Pengumuman", label: "Pengumuman" },
+  { value: "Teknologi", label: "Teknologi" },
+  { value: "Pendidikan", label: "Pendidikan" },
+  { value: "Sains", label: "Sains" },
+  { value: "Kesehatan", label: "Kesehatan" },
+  { value: "Budaya", label: "Budaya" },
+  { value: "Olahraga", label: "Olahraga" },
+  { value: "Lingkungan", label: "Lingkungan" },
+  { value: "Hiburan", label: "Hiburan" },
+  { value: "Travel", label: "Travel" },
 ];
 
 const optionsStatusArticle = [
@@ -34,12 +51,13 @@ interface FormState {
   description: string;
   status: string;
   type: string;
+  category: string;
   banner: File | null;
   createBy: string;
 }
 
-export const CreateArticlePage: React.FC = () => {
-  const [cookieLogin, ] = useCookie("userLoginCookie");
+export const FormArticlePage: React.FC = () => {
+  const [cookieLogin] = useCookie("userLoginCookie");
   const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
 
   const { id } = useParams<{ id: string }>();
@@ -50,6 +68,7 @@ export const CreateArticlePage: React.FC = () => {
     description: "",
     status: optionsStatusArticle[0].value,
     type: optionsTypeArticle[0].value,
+    category: optionsCategoryArticle[0].value,
     banner: null,
     createBy: userLoginCookie.name,
   });
@@ -60,7 +79,7 @@ export const CreateArticlePage: React.FC = () => {
     const getData = async () => {
       if (id) {
         try {
-          const response = await articleService.getArtikelById(parseFloat(id));
+          const response = await articleService.getArtikelById(id);
           const data = response.data;
 
           setFormData({
@@ -69,6 +88,7 @@ export const CreateArticlePage: React.FC = () => {
             description: data.description,
             status: data.status,
             type: data.type,
+            category: data.category,
             banner: null,
             createBy: userLoginCookie.name,
           });
@@ -136,9 +156,14 @@ export const CreateArticlePage: React.FC = () => {
     });
 
     try {
-      const addedArticle = await articleService.addArtikel(payload);
+      let response;
+      if (formData.id) {
+        response = await articleService.updateArtikel(formData.id, payload);
+      } else {
+        response = await articleService.addArtikel(payload);
+      }
 
-      if (addedArticle.status === 201) {
+      if (response.status === 201 || response.status === 200) {
         Toast.fire({
           icon: "success",
           title: "Artikel berhasil ditambah",
@@ -148,6 +173,7 @@ export const CreateArticlePage: React.FC = () => {
           description: "",
           status: optionsStatusArticle[0].value,
           type: optionsTypeArticle[0].value,
+          category: optionsCategoryArticle[0].value,
           banner: null,
           createBy: userLoginCookie.name,
         });
@@ -260,6 +286,31 @@ export const CreateArticlePage: React.FC = () => {
                 />
               </div>
             </div>
+            <div className="col-12 col-lg-12 col-md-12">
+              <div className="form-group mb-3">
+                <label className="mb-2 fw-medium">Kategori</label>
+                <Select
+                  options={optionsCategoryArticle}
+                  value={optionsCategoryArticle.find(
+                    (option) => option.value === formData.category
+                  )}
+                  onChange={(option) => handleSelectChange("category", option)}
+                  placeholder="Pilih Kategori"
+                  className=" px-0 pt-0"
+                  styles={{
+                    control: (baseStyles) => ({
+                      ...baseStyles,
+                      fontSize: "0.955rem",
+                      borderRadius: "8px",
+                    }),
+                    option: (provided) => ({
+                      ...provided,
+                      fontSize: "1rem",
+                    }),
+                  }}
+                />
+              </div>
+            </div>
             <div className="col-12">
               <div className="form-group mb-3">
                 <label className="mb-2 fw-medium">Banner</label>
@@ -340,15 +391,16 @@ export const CreateArticlePage: React.FC = () => {
             </div>
             <div className="col-12 d-flex justify-content-end">
               <button
-                className="btn btn-success btn-lg w-50 fw-medium"
+                className={`btn ${formData.id ? "btn-warning" : "btn-success"}`}
                 type="submit"
-                style={{ fontSize: "1.1rem" }}
                 disabled={loadingForm}
               >
                 {loadingForm ? (
                   <div className="spinner-border text-light" role="status">
                     <span className="visually-hidden">Loading...</span>
                   </div>
+                ) : formData.id ? (
+                  "Update"
                 ) : (
                   "Tambah"
                 )}

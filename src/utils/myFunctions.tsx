@@ -46,6 +46,13 @@ export const formatDate = (dateString: Date) => {
   return options.format(date);
 };
 
+export const formatTime = (isoString: Date): string => {
+  const date = new Date(isoString);
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  return `${hours}:${minutes}`;
+};
+
 export const formatDateTime = (dateString: string) => {
   const options: Intl.DateTimeFormatOptions = {
     year: "numeric",
