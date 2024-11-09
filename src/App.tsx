@@ -1,6 +1,6 @@
 import "./App.css";
 import { Route, Routes, useLocation } from "react-router-dom";
-import { AbsensiPage, ArticlePage, BannerPage, CreateArticlePage, DetailArticlePage, FacilityPage, FormBanner, FormFacilityPage, HomePage, JurusanPage, KelasPage, LoginPage, MapelPage, NilaiPage, SchoolPage, FormJurusanPage, EkskulPage, FormEkskulPage } from "./pages";
+import { AbsensiPage, ArticlePage, BannerPage, CreateArticlePage, DetailArticlePage, FacilityPage, FormBanner, FormFacilityPage, HomePage, JurusanPage, KelasPage, LoginPage, MapelPage, NilaiPage, SchoolPage, FormJurusanPage, EkskulPage, FormEkskulPage, GuruMapelPage, FormGuruMapelPage } from "./pages";
 import { SideBar } from "./components/sidebar";
 import PrivateRoute from "./components/privateRoute";
 import "bootstrap/dist/css/bootstrap.css";
@@ -43,6 +43,9 @@ function App() {
             <Route path="/content-web/ekstra-kurikuler" element={ <PrivateRoute Component={EkskulPage} /> } />
             <Route path="/content-web/ekstra-kurikuler/create" element={ <PrivateRoute Component={FormEkskulPage} /> } />
             <Route path="/content-web/ekstra-kurikuler/update/:id" element={ <PrivateRoute Component={FormEkskulPage} /> } />
+            <Route path="/guru/mata-pelajaran" element={ <PrivateRoute Component={GuruMapelPage} /> } />
+            <Route path="/guru/mata-pelajaran/create" element={ <PrivateRoute Component={FormGuruMapelPage} /> } />
+            <Route path="/guru/mata-pelajaran/update/:id" element={ <PrivateRoute Component={FormGuruMapelPage} /> } />
           </Routes>
         </SideBar>
       )}

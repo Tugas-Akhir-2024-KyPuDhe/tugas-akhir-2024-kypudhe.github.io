@@ -1,3 +1,5 @@
+import { FormGuruMapelPage } from './guru/mapelPage/form';
+import { GuruMapelPage } from './guru/mapelPage/index';
 import { FormJurusanPage } from './contentWebPage/jurusanPage/form';
 import { FormEkskulPage } from './contentWebPage/ekskulPage/form';
 import { EkskulPage } from './contentWebPage/ekskulPage/index';
@@ -17,4 +19,4 @@ import { FormBanner } from "./contentWebPage/bannerPage/formBanner";
 import { HomePage } from "./homePage";
 import { LoginPage } from "./loginPage";
 
-export { HomePage, LoginPage, ArticlePage, CreateArticlePage, DetailArticlePage, BannerPage, FormBanner, NilaiPage, KelasPage, MapelPage, AbsensiPage, SchoolPage, FacilityPage, FormFacilityPage, JurusanPage, FormJurusanPage, EkskulPage, FormEkskulPage }
+export { HomePage, LoginPage, ArticlePage, CreateArticlePage, DetailArticlePage, BannerPage, FormBanner, NilaiPage, KelasPage, MapelPage, AbsensiPage, SchoolPage, FacilityPage, FormFacilityPage, JurusanPage, FormJurusanPage, EkskulPage, FormEkskulPage, GuruMapelPage, FormGuruMapelPage }
