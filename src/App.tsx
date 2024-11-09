@@ -1,6 +1,6 @@
 import "./App.css";
 import { Route, Routes, useLocation } from "react-router-dom";
-import { AbsensiPage, ArticlePage, BannerPage, CreateArticlePage, DetailArticlePage, FacilityPage, FormBanner, FormFacilityPage, HomePage, JurusanPage, KelasPage, LoginPage, MapelPage, NilaiPage, SchoolPage, FormJurusanPage, EkskulPage, FormEkskulPage, GuruMapelPage, FormGuruMapelPage } from "./pages";
+import { AbsensiPage, ArticlePage, BannerPage, CreateArticlePage, DetailArticlePage, FacilityPage, FormBanner, FormFacilityPage, HomePage, JurusanPage, KelasPage, LoginPage, MapelPage, NilaiPage, SchoolPage, FormJurusanPage, EkskulPage, FormEkskulPage, GuruMapelPage, FormGuruMapelPage, DaftarSiswaPage, FormDaftarSiswaPage } from "./pages";
 import { SideBar } from "./components/sidebar";
 import PrivateRoute from "./components/privateRoute";
 import "bootstrap/dist/css/bootstrap.css";
@@ -46,6 +46,9 @@ function App() {
             <Route path="/guru/mata-pelajaran" element={ <PrivateRoute Component={GuruMapelPage} /> } />
             <Route path="/guru/mata-pelajaran/create" element={ <PrivateRoute Component={FormGuruMapelPage} /> } />
             <Route path="/guru/mata-pelajaran/update/:id" element={ <PrivateRoute Component={FormGuruMapelPage} /> } />
+            <Route path="/pengelolaan-siswa/daftar-siswa" element={ <PrivateRoute Component={DaftarSiswaPage} /> } />
+            <Route path="/pengelolaan-siswa/daftar-siswa/create" element={ <PrivateRoute Component={FormDaftarSiswaPage} /> } />
+            <Route path="/pengelolaan-siswa/daftar-siswa/update/:id" element={ <PrivateRoute Component={FormDaftarSiswaPage} /> } />
           </Routes>
         </SideBar>
       )}

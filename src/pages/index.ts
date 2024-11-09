@@ -1,3 +1,5 @@
+import { FormDaftarSiswaPage } from './pengelolaanSiswa/daftarSiswaPage/form';
+import { DaftarSiswaPage } from './pengelolaanSiswa/daftarSiswaPage/index';
 import { FormGuruMapelPage } from './guru/mapelPage/form';
 import { GuruMapelPage } from './guru/mapelPage/index';
 import { FormJurusanPage } from './contentWebPage/jurusanPage/form';
@@ -19,4 +21,4 @@ import { FormBanner } from "./contentWebPage/bannerPage/formBanner";
 import { HomePage } from "./homePage";
 import { LoginPage } from "./loginPage";
 
-export { HomePage, LoginPage, ArticlePage, CreateArticlePage, DetailArticlePage, BannerPage, FormBanner, NilaiPage, KelasPage, MapelPage, AbsensiPage, SchoolPage, FacilityPage, FormFacilityPage, JurusanPage, FormJurusanPage, EkskulPage, FormEkskulPage, GuruMapelPage, FormGuruMapelPage }
+export { HomePage, LoginPage, ArticlePage, CreateArticlePage, DetailArticlePage, BannerPage, FormBanner, NilaiPage, KelasPage, MapelPage, AbsensiPage, SchoolPage, FacilityPage, FormFacilityPage, JurusanPage, FormJurusanPage, EkskulPage, FormEkskulPage, GuruMapelPage, FormGuruMapelPage, DaftarSiswaPage, FormDaftarSiswaPage }
