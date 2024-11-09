@@ -170,7 +170,7 @@ export const Table: React.FC = () => {
         <div className="col-12 col-lg-4 col-md-3">
           <input
             type="text"
-            className="form-control py-2 border-dark"
+            className="form-control border-dark"
             placeholder="Search.."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
