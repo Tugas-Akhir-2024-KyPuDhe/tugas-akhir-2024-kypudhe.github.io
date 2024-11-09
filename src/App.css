@@ -1,6 +1,18 @@
 * {
-    font-family: "Poppins", sans-serif;
+  font-family: "Poppins", sans-serif;
+}
+
+.mobile-sidebar {
+  display: none;
+}
+@media (max-width: 1199px) {
+  .mobile-sidebar {
+    display: block;
   }
+  .desktop-sidebar {
+    display: none;
+  }
+}
 
 .text-1line {
   overflow: hidden;

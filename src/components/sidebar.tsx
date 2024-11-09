@@ -23,6 +23,7 @@ import { MdLibraryBooks } from "react-icons/md";
 import { LuCheckSquare } from "react-icons/lu";
 import { RiSchoolLine } from "react-icons/ri";
 import { TbBooks } from "react-icons/tb";
+import { Link } from "react-router-dom";
 
 interface SideBarAdminProps {
   children: ReactNode;
@@ -35,22 +36,48 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
   const [desktopCollapsed, setDesktopCollapsed] = useState(false);
   const [cookieLogin] = useCookie("userLoginCookie");
   const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 1200);
 
   useLayoutEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        setMobileToggled(false);
+      const mobile = window.innerWidth < 1200;
+      setIsMobile(mobile);
+      
+      if (mobile) {
+        setMobileToggled(false); 
         setDesktopCollapsed(false);
       } else {
+        console.log("asd");
+        
+        setMobileToggled(true);
         setDesktopCollapsed(false);
       }
     };
-    handleResize();
+    handleResize(); 
+  
     window.addEventListener("resize", handleResize);
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", handleResize);
+    }
+  
     return () => {
       window.removeEventListener("resize", handleResize);
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener("resize", handleResize);
+      }
     };
   }, []);
+
+  useEffect(() => {
+    if (isMobile) {
+      setMobileToggled(true);
+      setDesktopCollapsed(true);
+    } else {
+      setMobileToggled(false);
+      setDesktopCollapsed(false);
+    }
+  }, [isMobile]);
+  
 
   useEffect(() => {
     if (!userLoginCookie) {
@@ -66,7 +93,7 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
     <>
       {userLoginCookie && (
         <div style={{ display: "flex", height: "100%", minHeight: "400px" }}>
-          {window.innerWidth < 768 ? (
+          {isMobile ? (
             <Sidebar
               backgroundColor="#fff"
               transitionDuration={600}
@@ -98,7 +125,7 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
                     className="btn"
                     style={{ border: "2px solid #021526" }}
                     onClick={() => {
-                      if (window.innerWidth < 768) {
+                      if (window.innerWidth < 1200) {
                         setMobileToggled(!mobileToggled);
                       } else {
                         setDesktopCollapsed(!desktopCollapsed);
@@ -123,7 +150,7 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
                       style={{ width: "250px" }}
                     >
                       <li>
-                        <button className="dropdown-item py-3">Profil</button>
+                        <Link to='/profil' className="dropdown-item py-3">Profil</Link>
                       </li>
                       <li>
                         <button
