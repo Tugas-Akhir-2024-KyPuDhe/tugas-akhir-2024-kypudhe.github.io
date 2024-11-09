@@ -29,6 +29,7 @@ export const FormFacilityPage: React.FC = () => {
     media: null,
   });
 
+  const [mediaList, setMediaList] = useState<{ id: number; url: string }[]>([]);
   const [errorsForms, setErrorsForms] = useState<{ [key: string]: string }>({});
   const [loadingForm, setloadingForm] = useState(true);
 
@@ -46,6 +47,12 @@ export const FormFacilityPage: React.FC = () => {
             prioritas: data.prioritas.toString(),
             media: null,
           });
+          setMediaList(
+            data.media.map((item: { id: number; url: string }) => ({
+              id: item.id,
+              url: item.url,
+            }))
+          );
         } catch (error) {
           console.error("Error fetching skill data:", error);
         } finally {
@@ -249,6 +256,33 @@ export const FormFacilityPage: React.FC = () => {
                 )}
               </div>
             </div>
+            {id && (
+              <div className="col-12">
+                <div className="form-group mb-3">
+                  <label className="mb-2">Media Sekarang</label>
+                  <div className="row">
+                    {mediaList.map((media, index) => (
+                      <div key={index} className="col-auto">
+                        <img
+                          key={media.id}
+                          src={media.url}
+                          alt="Media"
+                          className="d-block"
+                          style={{
+                            width: "100%",
+                            height: "200px",
+                            objectFit: "contain",
+                          }}
+                        />
+                        <div className="text-center mt-2">
+                          <button type="button" className="btn btn-danger text-center w-100">Hapus</button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="col-12 d-flex">

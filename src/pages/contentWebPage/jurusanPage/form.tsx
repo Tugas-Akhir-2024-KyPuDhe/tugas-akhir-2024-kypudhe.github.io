@@ -18,7 +18,6 @@ interface FormState {
   media: File | null;
 }
 
-
 export const FormJurusanPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const jurusanService = JurusanService();
@@ -29,6 +28,7 @@ export const FormJurusanPage: React.FC = () => {
     media: null,
   });
 
+  const [mediaList, setMediaList] = useState<{ id: number; url: string }[]>([]);
   const [errorsForms, setErrorsForms] = useState<{ [key: string]: string }>({});
   const [loadingForm, setloadingForm] = useState(true);
 
@@ -46,6 +46,12 @@ export const FormJurusanPage: React.FC = () => {
             prioritas: data.prioritas.toString(),
             media: null,
           });
+          setMediaList(
+            data.media.map((item: { id: number; url: string }) => ({
+              id: item.id,
+              url: item.url,
+            }))
+          );
         } catch (error) {
           console.error("Error fetching skill data:", error);
         } finally {
@@ -91,13 +97,15 @@ export const FormJurusanPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     const requiredFields = ["name", "description"];
     const newErrors: { [key: string]: string } = {};
-  
+
     requiredFields.forEach((field) => {
       if (!formData[field as keyof typeof formData]) {
-        newErrors[field] = `${field.charAt(0).toUpperCase() + field.slice(1)} is required.`;
+        newErrors[field] = `${
+          field.charAt(0).toUpperCase() + field.slice(1)
+        } is required.`;
       }
     });
 
@@ -105,13 +113,13 @@ export const FormJurusanPage: React.FC = () => {
       setErrorsForms(newErrors);
       return;
     }
-  
+
     setloadingForm(true);
     const payload = new FormData();
     Object.entries(formData).forEach(([key, value]) => {
       payload.append(key, value as string | Blob);
     });
-  
+
     try {
       let response;
       if (formData.id) {
@@ -144,7 +152,11 @@ export const FormJurusanPage: React.FC = () => {
 
   return (
     <>
-      <Header actionText={id ? "Update" : "Tambah"} backDisplay={true} addDisplay={false} />
+      <Header
+        actionText={id ? "Update" : "Tambah"}
+        backDisplay={true}
+        addDisplay={false}
+      />
       <div
         className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
         style={{ backgroundColor: "#fff", position: "relative" }}
@@ -249,13 +261,38 @@ export const FormJurusanPage: React.FC = () => {
                 )}
               </div>
             </div>
+            {id && (
+              <div className="col-12">
+                <div className="form-group mb-3">
+                  <label className="mb-2">Media Sekarang</label>
+                  <div className="row">
+                    {mediaList.map((media, index) => (
+                      <div key={index} className="col-auto">
+                        <img
+                          key={media.id}
+                          src={media.url}
+                          alt="Media"
+                          className="d-block"
+                          style={{
+                            width: "100%",
+                            height: "200px",
+                            objectFit: "contain",
+                          }}
+                        />
+                        <div className="text-center mt-2">
+                          <button type="button" className="btn btn-danger text-center w-100">Hapus</button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="col-12 d-flex">
             <button
-              className={`btn ${
-                formData.id ? "btn-warning" : "btn-success"
-              }`}
+              className={`btn ${formData.id ? "btn-warning" : "btn-success"}`}
               type="submit"
               disabled={loadingForm}
             >
