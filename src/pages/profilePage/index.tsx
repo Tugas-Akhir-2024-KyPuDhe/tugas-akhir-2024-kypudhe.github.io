@@ -13,14 +13,14 @@ export const ProfilePage = () => {
               className="img-fluid rounded mb-3"
               style={{ height: "300px", width: "100%", objectFit: "cover" }}
             />
-            <div className="fw-bold fs-5 mb-4 text-dark-soft position-relative ps-3">
+            <div className="fw-bold fs-5 mb-4 text-dark-soft position-relative pb-2">
               <div
                 style={{
                   position: "absolute",
                   left: 0,
-                  top: 0,
                   bottom: 0,
-                  width: "4px",
+                  width: "50px",
+                  height: "5px",
                   backgroundColor: "var(--blue-color)",
                 }}
               />
@@ -61,10 +61,19 @@ export const ProfilePage = () => {
                 className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 mb-lg-0 mb-md-0 rounded"
                 style={{ backgroundColor: "#fff" }}
               >
-                <div className="fw-bold fs-5 mb-3 text-dark-soft">
+                <div className="fw-bold fs-5 mb-4 text-dark-soft position-relative pb-2">
+                  <div
+                    style={{
+                      position: "absolute",
+                      left: 0,
+                      bottom: 0,
+                      width: "50px",
+                      height: "5px",
+                      backgroundColor: "var(--blue-color)",
+                    }}
+                  />
                   Kelas Saya
                 </div>
-                <hr />
                 <div className="mb-3">
                   <div className="row d-flex justify-content-between">
                     <div className="col-7 col-lg-9">
@@ -89,7 +98,17 @@ export const ProfilePage = () => {
                 className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
                 style={{ backgroundColor: "#fff" }}
               >
-                <div className="fw-bold fs-5 mb-3 text-dark-soft">
+                <div className="fw-bold fs-5 mb-4 text-dark-soft position-relative pb-2">
+                  <div
+                    style={{
+                      position: "absolute",
+                      left: 0,
+                      bottom: 0,
+                      width: "50px",
+                      height: "5px",
+                      backgroundColor: "var(--blue-color)",
+                    }}
+                  />
                   Nilai-nilai Saya
                 </div>
                 <hr />
