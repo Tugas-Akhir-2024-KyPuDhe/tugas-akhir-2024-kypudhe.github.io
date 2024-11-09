@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import Select from "react-select";
 import ArtikelService from "../../services/artikelService";
 import { Toast } from "../../utils/myFunctions";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa6";
+import useCookie from "react-use-cookie";
 
 const toolbarOptions = [
   [{ header: "1" }, { header: "2" }, { font: [] }],
@@ -27,18 +28,62 @@ const optionsStatusArticle = [
   { value: "DRAFT", label: "DRAFT" },
 ];
 
+interface FormState {
+  id?: number;
+  title: string;
+  description: string;
+  status: string;
+  type: string;
+  banner: File | null;
+  createBy: string;
+}
+
 export const CreateArticlePage: React.FC = () => {
+  const [cookieLogin, ] = useCookie("userLoginCookie");
+  const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
+
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const articleService = ArtikelService();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormState>({
     title: "",
     description: "",
     status: optionsStatusArticle[0].value,
     type: optionsTypeArticle[0].value,
     banner: null,
-    createBy: "GOD",
+    createBy: userLoginCookie.name,
   });
   const [errorsForms, setErrorsForms] = useState<{ [key: string]: string }>({});
+  const [loadingForm, setloadingForm] = useState(true);
+
+  useEffect(() => {
+    const getData = async () => {
+      if (id) {
+        try {
+          const response = await articleService.getArtikelById(parseFloat(id));
+          const data = response.data;
+
+          setFormData({
+            id: data.id,
+            title: data.title,
+            description: data.description,
+            status: data.status,
+            type: data.type,
+            banner: null,
+            createBy: userLoginCookie.name,
+          });
+        } catch (error) {
+          console.error("Error fetching skill data:", error);
+        } finally {
+          setloadingForm(false);
+        }
+      } else {
+        setloadingForm(false);
+      }
+    };
+
+    getData();
+  }, []);
 
   const handleDescriptionChange = (value: string) => {
     setFormData((prev) => ({ ...prev, description: value }));
@@ -83,6 +128,8 @@ export const CreateArticlePage: React.FC = () => {
       return;
     }
 
+    setloadingForm(true);
+
     const payload = new FormData();
     Object.entries(formData).forEach(([key, value]) => {
       payload.append(key, value as string | Blob);
@@ -90,7 +137,6 @@ export const CreateArticlePage: React.FC = () => {
 
     try {
       const addedArticle = await articleService.addArtikel(payload);
-      console.log(addedArticle);
 
       if (addedArticle.status === 201) {
         Toast.fire({
@@ -103,10 +149,12 @@ export const CreateArticlePage: React.FC = () => {
           status: optionsStatusArticle[0].value,
           type: optionsTypeArticle[0].value,
           banner: null,
-          createBy: "GOD",
+          createBy: userLoginCookie.name,
         });
+        setloadingForm(false);
       }
     } catch (error) {
+      setloadingForm(false);
       Toast.fire({
         icon: "error",
         title: `${error}`,
@@ -145,8 +193,28 @@ export const CreateArticlePage: React.FC = () => {
       </div>
       <div
         className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
-        style={{ backgroundColor: "#fff" }}
+        style={{ backgroundColor: "#fff", position: "relative" }}
       >
+        {loadingForm && (
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: "rgba(255, 255, 255, 0.7)",
+              zIndex: 9999,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        )}
         <form onSubmit={handleSubmit}>
           <div className="row">
             <div className="col-12 col-lg-9 col-md-9">
@@ -275,8 +343,15 @@ export const CreateArticlePage: React.FC = () => {
                 className="btn btn-success btn-lg w-50 fw-medium"
                 type="submit"
                 style={{ fontSize: "1.1rem" }}
+                disabled={loadingForm}
               >
-                Submit
+                {loadingForm ? (
+                  <div className="spinner-border text-light" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                ) : (
+                  "Tambah"
+                )}
               </button>
             </div>
           </div>

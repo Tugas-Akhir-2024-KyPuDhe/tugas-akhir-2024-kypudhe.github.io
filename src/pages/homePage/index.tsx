@@ -225,10 +225,7 @@ export const HomePage = () => {
                     <div className="col-12 col-lg-3 col-md-6" key={index}>
                       <CardBerita
                         uuidArtikel={data.uuid}
-                        imageArtikel={
-                          data.banner ||
-                          "https://plus.unsplash.com/premium_photo-1661772661721-b16346fe5b0f?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YnVzc2luZXNzfGVufDB8fDB8fHww"
-                        }
+                        imageArtikel={data.banner?.url || "https://plus.unsplash.com/premium_photo-1661772661721-b16346fe5b0f?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YnVzc2luZXNzfGVufDB8fDB8fHww"}
                         tipeArtikel={data.type}
                         dateArtikel={data.date}
                         titleArtikel={data.title}

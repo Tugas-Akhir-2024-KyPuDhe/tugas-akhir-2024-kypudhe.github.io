@@ -13,7 +13,7 @@ import { Media } from "./media.interface";
     createdAt: string;
     updatedAt: string;
     media: Media[];
-    banner: string | null;
+    banner: Media;
   }
   
   export interface GetAllArtikelResponse {

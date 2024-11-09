@@ -36,6 +36,7 @@ export const CardBerita: React.FC<Artikel> = ({
             loading="lazy"
             src={imageArtikel}
             alt={titleArtikel}
+            style={{ height: '200px', objectFit: "cover" }}
           />
         </Link>
         <div className="card-body border bg-white p-4 border-0 shadow-sm rounded">
