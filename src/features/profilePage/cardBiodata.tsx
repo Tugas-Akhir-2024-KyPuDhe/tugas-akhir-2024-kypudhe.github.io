@@ -1,20 +1,52 @@
-import React from "react";
+import React, { useState } from "react";
+import { FaPen } from "react-icons/fa6";
 
 interface Biodata {
+  handleUpdateAccess: () => void;
+  onSaveUpdate: (data: UpdatedBiodata) => void;
+  statusUpdateData: boolean;
   name: string;
   email: string;
   phone: string;
   address: string;
+  gender: string;
+  birthPlace: string;
+}
+
+interface UpdatedBiodata {
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  gender: string;
   birthPlace: string;
 }
 
 export const CardBiodata: React.FC<Biodata> = ({
+  handleUpdateAccess,
+  onSaveUpdate,
+  statusUpdateData,
   name,
   email,
   phone,
   address,
+  gender,
   birthPlace,
 }) => {
+  const [updatedData, setUpdatedData] = useState<UpdatedBiodata>({
+    name: name !== "-" ? name : "",
+    email: email !== "-" ? email : "",
+    phone: phone !== "-" ? phone : "",
+    address: address !== "-" ? address : "",
+    gender: gender !== "-" ? gender : "",
+    birthPlace: birthPlace !== "-" ? birthPlace : "",
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setUpdatedData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
   return (
     <div className="col-12 col-lg-5 col-md-5">
       <div
@@ -27,6 +59,7 @@ export const CardBiodata: React.FC<Biodata> = ({
           className="img-fluid rounded mb-3"
           style={{ height: "300px", width: "100%", objectFit: "cover" }}
         />
+
         <div className="fw-bold fs-5 mb-4 text-dark-soft position-relative pb-2">
           <div
             style={{
@@ -38,33 +71,99 @@ export const CardBiodata: React.FC<Biodata> = ({
               backgroundColor: "var(--blue-color)",
             }}
           />
-          {name}
+          <div className="d-flex justify-content-between">
+            <div>{name}</div>
+            <div style={{ cursor: "pointer" }} onClick={handleUpdateAccess}>
+              <FaPen />
+            </div>
+          </div>
         </div>
+
         <div>
           <label className="fw-bold text-dark-soft">Email</label>
-          <div>{email || "-"}</div>
+          {statusUpdateData ? (
+            <input
+              name="email"
+              value={updatedData.email}
+              onChange={handleChange}
+              className="form-control mt-2"
+            />
+          ) : (
+            <div>{email || "-"}</div>
+          )}
         </div>
         <hr />
 
         <div>
           <label className="fw-bold text-dark-soft">No.Telp</label>
-          <div>{phone || "-"}</div>
+          {statusUpdateData ? (
+            <input
+              name="phone"
+              value={updatedData.phone}
+              onChange={handleChange}
+              className="form-control mt-2"
+            />
+          ) : (
+            <div>{phone || "-"}</div>
+          )}
         </div>
         <hr />
+
         <div>
           <label className="fw-bold text-dark-soft">Alamat</label>
-          <div>{address || "-"}</div>
+          {statusUpdateData ? (
+            <input
+              name="address"
+              value={updatedData.address}
+              onChange={handleChange}
+              className="form-control mt-2"
+            />
+          ) : (
+            <div>{address || "-"}</div>
+          )}
         </div>
         <hr />
+
         <div>
           <label className="fw-bold text-dark-soft">Jenis Kelamin</label>
-          <div>{birthPlace || "-"}</div>
+          {statusUpdateData ? (
+            <input
+              name="gender"
+              value={updatedData.gender}
+              onChange={handleChange}
+              disabled
+              className="form-control mt-2"
+            />
+          ) : (
+            <div>{gender || "-"}</div>
+          )}
         </div>
         <hr />
-        <div className="position-relative">
+
+        <div>
           <label className="fw-bold text-dark-soft">Tanggal Lahir</label>
-          <div>{birthPlace || "-"}</div>
+          {statusUpdateData ? (
+            <input
+              name="birthPlace"
+              value={updatedData.birthPlace}
+              onChange={handleChange}
+              className="form-control mt-2"
+            />
+          ) : (
+            <div>{birthPlace || "-"}</div>
+          )}
         </div>
+
+        {statusUpdateData && (
+          <div className="mt-3 text-end">
+            <button
+              className="btn btn-warning text-light"
+              onClick={() => onSaveUpdate(updatedData)}
+            >
+              Update
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

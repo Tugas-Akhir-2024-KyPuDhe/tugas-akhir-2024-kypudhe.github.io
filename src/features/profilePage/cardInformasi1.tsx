@@ -1,7 +1,26 @@
 import React from "react";
 import useCookie from "react-use-cookie";
+import { formatDate } from "../../utils/myFunctions";
 
-export const CardInformasi1: React.FC = () => {
+interface dataInformasi {
+  // STAFF OR TEACHER
+  nip: string;
+  position: string;
+  startDate: string;
+  typeStaff: string;
+  // STUDENT
+  nis: string;
+  nisn: string;
+}
+
+export const CardInformasi1: React.FC<dataInformasi> = ({
+  nip,
+  position,
+  startDate,
+  typeStaff,
+  nis,
+  nisn,
+}) => {
   const [cookieLogin] = useCookie("userLoginCookie", "");
   const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
 
@@ -25,11 +44,23 @@ export const CardInformasi1: React.FC = () => {
                     backgroundColor: "var(--blue-color)",
                   }}
                 />
-                Kelas Saya
+                Informasi Lainnya
               </div>
 
               <div className="mb-3">
                 <div className="row d-flex justify-content-between">
+                  <div className="col-12 mb-3">
+                    <label className="fw-bold text-dark-soft">
+                      Nomor Induk Siswa
+                    </label>
+                    <div>{nis}</div>
+                  </div>
+                  <div className="col-12 mb-3">
+                    <label className="fw-bold text-dark-soft">
+                      Nomor Induk Siswa Nasional
+                    </label>
+                    <div>{nisn}</div>
+                  </div>
                   <div className="col-7 col-lg-9 mb-3">
                     <label className="fw-bold text-dark-soft">Kelas</label>
                     <div>XII-RPL-1</div>
@@ -70,25 +101,29 @@ export const CardInformasi1: React.FC = () => {
                     <label className="fw-bold text-dark-soft">
                       Nomor Induk Pegawai
                     </label>
-                    <div>-</div>
+                    <div>{nip}</div>
+                  </div>
+                  <div className="col-12 mb-3">
+                    <label className="fw-bold text-dark-soft">Status Pegawai</label>
+                    <div>{typeStaff}</div>
                   </div>
                   <div className="col-12 mb-3">
                     <label className="fw-bold text-dark-soft">Jabatan</label>
-                    <div>-</div>
+                    <div>{position}</div>
                   </div>
                   <div className="col-12 mb-3">
-                    <label className="fw-bold text-dark-soft">Posisi</label>
-                    <div>-</div>
+                    <label className="fw-bold text-dark-soft">Mata Pelajaran</label>
+                    <div>{position}</div>
                   </div>
                   <div className="col-12 mb-3">
                     <label className="fw-bold text-dark-soft">
                       Tahun Mulai
                     </label>
-                    <div>-</div>
+                    <div>{formatDate(new Date(startDate))}</div>
                   </div>
                   <div className="col-12 mb-3">
                     <label className="fw-bold text-dark-soft">
-                      Status Pekerjaan
+                      Status
                     </label>
                     <div>Aktif</div>
                   </div>

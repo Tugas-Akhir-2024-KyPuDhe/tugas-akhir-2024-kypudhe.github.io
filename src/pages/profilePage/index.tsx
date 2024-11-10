@@ -1,72 +1,33 @@
 import { useEffect, useState } from "react";
 import AuthService from "../../services/authService";
-import {
-  GetUserResponse,
-  StaffDetails,
-  StudentDetails,
-} from "../../interface/auth.interface";
 import { CardBiodata } from "../../features/profilePage/cardBiodata";
 import { CardInformasi1 } from "../../features/profilePage/cardInformasi1";
 import { CardInformasi2 } from "../../features/profilePage/cardInformasi2";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { DetailUserResponse } from "../../interface/auth.interface";
 
 export const ProfilePage = () => {
   const authService = AuthService();
 
-  const [profileDetail, setProfileDetail] = useState<
-    StudentDetails | StaffDetails | null
-  >(null);
+  const [profileDetail, setProfileDetail] = useState<DetailUserResponse | null>(
+    null
+  );
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
+  const [statusUpdateData, setstatusUpdateData] = useState(false);
+
   const getUser = async () => {
     try {
-      const response: GetUserResponse = await authService.getUser();
-
-      if (response.status === 200) {
-        if (response.user.role === "STUDENT") {
-          setProfileDetail({
-            id: response.user.details[0].id,
-            uuid: response.user.details[0].uuid,
-            name: response.user.details[0].name,
-            birthPlace: response.user.details[0].birthPlace,
-            address: response.user.details[0].address,
-            nis: "112233",
-            nisn: "332211",
-            phone: response.user.details[0].phone,
-            email: response.user.details[0].email,
-            startYear: "2018-09-02",
-            createdAt: "",
-            updatedAt: "",
-            photo: null,
-          });
-        } else if (
-          response.user.role === "STAFF" ||
-          response.user.role === "TEACHER"
-        ) {
-          setProfileDetail({
-            id: response.user.details[0].id,
-            uuid: response.user.details[0].uuid,
-            name: response.user.details[0].name,
-            birthPlace: response.user.details[0].birthPlace,
-            address: response.user.details[0].address,
-            phone: response.user.details[0].phone,
-            email: response.user.details[0].email,
-            nip: "P001",
-            type: "ADMIN",
-            startDate: "",
-            createdAt: "",
-            updatedAt: "",
-            photo: null,
-          });
-        }
-      }
+      const user = await authService.getUser();
+      setProfileDetail(user);
+      console.log(user);
 
       setLoading(false);
     } catch (err) {
-      console.error("Error fetching user data:", err);
-      setError("Failed to fetch user data.");
+      console.log(err);
+      setError("Failed to fetch user data");
       setLoading(false);
     }
   };
@@ -74,6 +35,24 @@ export const ProfilePage = () => {
   useEffect(() => {
     getUser();
   }, []);
+
+  const handleUpdateAccess = () => setstatusUpdateData(!statusUpdateData);
+
+  const handleSaveUpdate = async (updatedData: unknown) => {
+    console.log(updatedData);
+    
+    // try {
+    //   await authService.updateUser(updatedData); // Update endpoint in AuthService
+    //   setProfileDetail((prev) =>
+    //     prev
+    //       ? { ...prev, details: [{ ...prev.details[0], ...updatedData }] }
+    //       : null
+    //   );
+    //   setstatusUpdateData(false);
+    // } catch (error) {
+    //   console.error("Error updating user data:", error);
+    // }
+  };
 
   if (error) {
     return <div>{error}</div>;
@@ -84,15 +63,28 @@ export const ProfilePage = () => {
       {!loading && profileDetail ? (
         <div className="row g-0">
           <CardBiodata
-            name={profileDetail.name}
-            email={profileDetail.email || "-"}
-            phone={profileDetail.phone || "-"}
-            address={profileDetail.address || "-"}
-            birthPlace={profileDetail.birthPlace || "-"}
+            handleUpdateAccess={handleUpdateAccess}
+            onSaveUpdate={handleSaveUpdate}
+            statusUpdateData={statusUpdateData}
+            name={profileDetail.details[0].name}
+            email={profileDetail.details[0].email || "-"}
+            phone={profileDetail.details[0].phone || "-"}
+            address={profileDetail.details[0].address || "-"}
+            gender={profileDetail.details[0].gender || "-"}
+            birthPlace={profileDetail.details[0].birthPlace || "-"}
           />
           <div className="col-12 col-lg-7 col-md-7">
             <div className="row">
-              <CardInformasi1 />
+              <CardInformasi1
+                //STAFF OR TEACHER
+                nip={profileDetail.details[0].nip || "-"}
+                position={profileDetail.details[0].position || "-"}
+                startDate={profileDetail.details[0].startDate || "-"}
+                typeStaff={profileDetail.details[0].type || "-"}
+                //STUDENT
+                nis={profileDetail.details[0].nis || "-"}
+                nisn={profileDetail.details[0].nisn || "-"}
+              />
               <CardInformasi2 />
             </div>
           </div>
