@@ -224,8 +224,8 @@ export const ListMenu = () => {
       case "/content-web/banner":
         setSelectedMenu("content-web/banner");
         break;
-      case "/data-absensi-siswa":
-        setSelectedMenu("data-absensi-siswa");
+      case "/pengelolaan-siswa/absensi-siswa":
+        setSelectedMenu("pengelolaan-siswa/absensi-siswa");
         break;
       case "/pengelolaan-siswa/daftar-siswa":
         setSelectedMenu("pengelolaan-siswa/daftar-siswa");
@@ -471,20 +471,20 @@ export const ListMenu = () => {
             className="fw-medium"
           >
             <MenuItem
-              onClick={() => handleMenuClick("/data-absensi-siswa")}
+              onClick={() => handleMenuClick("/pengelolaan-siswa/absensi-siswa")}
               icon={<FaCircle style={{ fontSize: "8px" }} />}
               style={{
                 position: "relative",
                 backgroundColor:
-                  selectedMenu === "data-absensi-siswa" ? "#E5EAF2" : "",
+                  selectedMenu === "pengelolaan-siswa/absensi-siswa" ? "#E5EAF2" : "",
               }}
               className={`fw-medium ${
-                selectedMenu === "data-absensi-siswa"
+                selectedMenu === "pengelolaan-siswa/absensi-siswa"
                   ? "text-blue"
                   : "text-dark-soft"
               }`}
             >
-              {selectedMenu === "data-absensi-siswa" && (
+              {selectedMenu === "pengelolaan-siswa/absensi-siswa" && (
                 <div
                   style={{
                     position: "absolute",

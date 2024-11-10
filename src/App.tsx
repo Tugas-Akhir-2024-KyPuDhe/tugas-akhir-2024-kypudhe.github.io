@@ -1,6 +1,6 @@
 import "./App.css";
 import { Route, Routes, useLocation } from "react-router-dom";
-import { AbsensiPage, ArticlePage, BannerPage, DetailArticlePage, FacilityPage, FormBanner, FormFacilityPage, HomePage, JurusanPage, KelasPage, LoginPage, MapelPage, NilaiPage, SchoolPage, FormJurusanPage, EkskulPage, FormEkskulPage, GuruMapelPage, FormGuruMapelPage, DaftarSiswaPage, FormDaftarSiswaPage, DaftarKelasPage, FormDaftarKelasPage, NilaiSiswaPage, FormNilaiSiswaPage, FormArticlePage, ProfilePage } from "./pages";
+import { AbsensiPage, ArticlePage, BannerPage, DetailArticlePage, FacilityPage, FormBanner, FormFacilityPage, HomePage, JurusanPage, KelasPage, LoginPage, MapelPage, NilaiPage, SchoolPage, FormJurusanPage, EkskulPage, FormEkskulPage, GuruMapelPage, FormGuruMapelPage, DaftarSiswaPage, FormDaftarSiswaPage, DaftarKelasPage, FormDaftarKelasPage, NilaiSiswaPage, FormNilaiSiswaPage, FormArticlePage, ProfilePage, AbsensiSiswaPage, DetailAbsensiSiswaPage } from "./pages";
 import { SideBar } from "./components/sidebar";
 import PrivateRoute from "./components/privateRoute";
 import "bootstrap/dist/css/bootstrap.css";
@@ -57,6 +57,8 @@ function App() {
             <Route path="/pengelolaan-siswa/nilai-siswa" element={ <PrivateRoute Component={NilaiSiswaPage} /> } />
             <Route path="/pengelolaan-siswa/nilai-siswa/create" element={ <PrivateRoute Component={NilaiSiswaPage} /> } />
             <Route path="/pengelolaan-siswa/nilai-siswa/update/:id" element={ <PrivateRoute Component={FormNilaiSiswaPage} /> } />
+            <Route path="/pengelolaan-siswa/absensi-siswa" element={ <PrivateRoute Component={AbsensiSiswaPage} /> } />
+            <Route path="/pengelolaan-siswa/absensi-siswa/:id" element={ <PrivateRoute Component={DetailAbsensiSiswaPage} /> } />
           </Routes>
         </SideBar>
       )}
