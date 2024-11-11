@@ -572,18 +572,18 @@ export const ListMenu = () => {
             Banner
           </MenuItem>
           <MenuItem
-            onClick={() => handleMenuClick("/content-web/school")}
+            onClick={() => handleMenuClick("/content-web/sekolah")}
             icon={<FaCircle style={{ fontSize: "8px" }} />}
             style={{
               position: "relative",
               backgroundColor:
-                selectedMenu === "/content-web/school" ? "#E5EAF2" : "",
+                selectedMenu === "/content-web/sekolah" ? "#E5EAF2" : "",
             }}
             className={`fw-medium ${
-              selectedMenu === "/content-web/school" ? "text-blue" : "text-dark-soft"
+              selectedMenu === "/content-web/sekolah" ? "text-blue" : "text-dark-soft"
             }`}
           >
-            {selectedMenu === "/content-web/school" && (
+            {selectedMenu === "/content-web/sekolah" && (
               <div
                 style={{
                   position: "absolute",
