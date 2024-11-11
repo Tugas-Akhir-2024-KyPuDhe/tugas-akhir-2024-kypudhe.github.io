@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import { Toast } from "../../../utils/myFunctions";
 import { Header } from "../../../features/contentWebPage/facilityPage/header";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import FacilityService from "../../../services/facilityService";
 
 const optionsPrioritas = Array.from({ length: 20 }, (_, index) => ({
@@ -15,11 +15,12 @@ interface FormState {
   name: string;
   description: string;
   prioritas: string;
+  mediaIdsToDelete: number[];
   media: File | null;
 }
 
-
 export const FormFacilityPage: React.FC = () => {
+  const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const facilityService = FacilityService();
   const [formData, setFormData] = useState<FormState>({
@@ -27,6 +28,7 @@ export const FormFacilityPage: React.FC = () => {
     description: "",
     prioritas: optionsPrioritas[11].value,
     media: null,
+    mediaIdsToDelete: [],
   });
 
   const [mediaList, setMediaList] = useState<{ id: number; url: string }[]>([]);
@@ -46,6 +48,7 @@ export const FormFacilityPage: React.FC = () => {
             description: data.description,
             prioritas: data.prioritas.toString(),
             media: null,
+            mediaIdsToDelete: [],
           });
           setMediaList(
             data.media.map((item: { id: number; url: string }) => ({
@@ -96,15 +99,25 @@ export const FormFacilityPage: React.FC = () => {
     }));
   };
 
+  const handleDeleteMedia = (mediaId: number) => {
+    setMediaList((prev) => prev.filter((media) => media.id !== mediaId));
+    setFormData((prev) => ({
+      ...prev,
+      mediaIdsToDelete: [...prev.mediaIdsToDelete, mediaId],
+    }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     const requiredFields = ["name", "description"];
     const newErrors: { [key: string]: string } = {};
-  
+
     requiredFields.forEach((field) => {
       if (!formData[field as keyof typeof formData]) {
-        newErrors[field] = `${field.charAt(0).toUpperCase() + field.slice(1)} is required.`;
+        newErrors[field] = `${
+          field.charAt(0).toUpperCase() + field.slice(1)
+        } is required.`;
       }
     });
 
@@ -112,13 +125,19 @@ export const FormFacilityPage: React.FC = () => {
       setErrorsForms(newErrors);
       return;
     }
-  
+
     setloadingForm(true);
     const payload = new FormData();
     Object.entries(formData).forEach(([key, value]) => {
-      payload.append(key, value as string | Blob);
+      if (key === "mediaIdsToDelete") {
+        (value as number[]).forEach((id) =>
+          payload.append("mediaIdsToDelete[]", id.toString())
+        );
+      } else {
+        payload.append(key, value as string | Blob);
+      }
     });
-  
+
     try {
       let response;
       if (formData.id) {
@@ -131,13 +150,7 @@ export const FormFacilityPage: React.FC = () => {
           icon: "success",
           title: `Facility ${formData.id ? "updated" : "added"} successfully`,
         });
-        setFormData({
-          name: "",
-          description: "",
-          prioritas: optionsPrioritas[0].value,
-          media: null,
-        });
-        setloadingForm(false);
+        navigate(-1);
       }
     } catch (error) {
       setloadingForm(false);
@@ -151,7 +164,11 @@ export const FormFacilityPage: React.FC = () => {
 
   return (
     <>
-      <Header actionText={id ? "Update" : "Tambah"} backDisplay={true} addDisplay={false} />
+      <Header
+        actionText={id ? "Update" : "Tambah"}
+        backDisplay={true}
+        addDisplay={false}
+      />
       <div
         className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
         style={{ backgroundColor: "#fff", position: "relative" }}
@@ -261,10 +278,9 @@ export const FormFacilityPage: React.FC = () => {
                 <div className="form-group mb-3">
                   <label className="mb-2">Media Sekarang</label>
                   <div className="row">
-                    {mediaList.map((media, index) => (
-                      <div key={index} className="col-auto">
+                    {mediaList.map((media) => (
+                      <div key={media.id} className="col-auto">
                         <img
-                          key={media.id}
                           src={media.url}
                           alt="Media"
                           className="d-block"
@@ -275,7 +291,13 @@ export const FormFacilityPage: React.FC = () => {
                           }}
                         />
                         <div className="text-center mt-2">
-                          <button type="button" className="btn btn-danger text-center w-100">Hapus</button>
+                          <button
+                            type="button"
+                            className="btn btn-danger text-center w-100"
+                            onClick={() => handleDeleteMedia(media.id)}
+                          >
+                            Hapus
+                          </button>
                         </div>
                       </div>
                     ))}
@@ -287,9 +309,7 @@ export const FormFacilityPage: React.FC = () => {
 
           <div className="col-12 d-flex">
             <button
-              className={`btn ${
-                formData.id ? "btn-warning" : "btn-success"
-              }`}
+              className={`btn ${formData.id ? "btn-warning" : "btn-success"}`}
               type="submit"
               disabled={loadingForm}
             >

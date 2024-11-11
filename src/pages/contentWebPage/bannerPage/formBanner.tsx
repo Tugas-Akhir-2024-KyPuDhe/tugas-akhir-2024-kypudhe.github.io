@@ -3,7 +3,7 @@ import Select from "react-select";
 import BannerService from "../../../services/bannerService";
 import { Toast } from "../../../utils/myFunctions";
 import { Header } from "../../../features/contentWebPage/bannerPage/header";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useCookie from "react-use-cookie";
 
 const optionsPrioritas = Array.from({ length: 20 }, (_, index) => ({
@@ -28,7 +28,8 @@ interface FormState {
 }
 
 export const FormBanner: React.FC = () => {
-  const [cookieLogin, ] = useCookie("userLoginCookie");
+  const navigate = useNavigate();
+  const [cookieLogin] = useCookie("userLoginCookie");
   const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
 
   const { id } = useParams<{ id: string }>();
@@ -41,7 +42,7 @@ export const FormBanner: React.FC = () => {
     prioritas: optionsPrioritas[11].value,
     status: optionsStatus[0].value,
     media: null,
-    createdBy: userLoginCookie.name
+    createdBy: userLoginCookie.name,
   });
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [errorsForms, setErrorsForms] = useState<{ [key: string]: string }>({});
@@ -63,7 +64,7 @@ export const FormBanner: React.FC = () => {
             prioritas: data.prioritas.toString(),
             status: data.status,
             media: null,
-            createdBy: data.createdBy
+            createdBy: data.createdBy,
           });
           setImageUrl(data.banner.url);
         } catch (error) {
@@ -111,32 +112,34 @@ export const FormBanner: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     const requiredFields = ["title", "description", "title_link", "link"];
     const newErrors: { [key: string]: string } = {};
-  
+
     requiredFields.forEach((field) => {
       if (!formData[field as keyof typeof formData]) {
-        newErrors[field] = `${field.charAt(0).toUpperCase() + field.slice(1)} is required.`;
+        newErrors[field] = `${
+          field.charAt(0).toUpperCase() + field.slice(1)
+        } is required.`;
       }
     });
-  
+
     // Check if media is required (only when adding a new banner)
     if (!formData.id && !formData.media) {
       newErrors.media = "Media is required.";
     }
-  
+
     if (Object.keys(newErrors).length > 0) {
       setErrorsForms(newErrors);
       return;
     }
-  
+
     setloadingForm(true);
     const payload = new FormData();
     Object.entries(formData).forEach(([key, value]) => {
       payload.append(key, value as string | Blob);
     });
-  
+
     try {
       let response;
       if (formData.id) {
@@ -149,17 +152,7 @@ export const FormBanner: React.FC = () => {
           icon: "success",
           title: `Banner ${formData.id ? "updated" : "added"} successfully`,
         });
-        setFormData({
-          title: "",
-          description: "",
-          title_link: "",
-          link: "",
-          prioritas: optionsPrioritas[0].value,
-          status: optionsStatus[0].value,
-          media: null,
-          createdBy: userLoginCookie.name,
-        });
-        setloadingForm(false);
+        navigate(-1);
       }
     } catch (error) {
       setloadingForm(false);
@@ -173,7 +166,11 @@ export const FormBanner: React.FC = () => {
 
   return (
     <>
-      <Header actionText={formData.id ? "Update" : "Tambah"} backDisplay={true} addDisplay={false} />
+      <Header
+        actionText={formData.id ? "Update" : "Tambah"}
+        backDisplay={true}
+        addDisplay={false}
+      />
       <div
         className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
         style={{ backgroundColor: "#fff", position: "relative" }}

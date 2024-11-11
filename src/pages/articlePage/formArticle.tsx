@@ -168,16 +168,7 @@ export const FormArticlePage: React.FC = () => {
           icon: "success",
           title: "Artikel berhasil ditambah",
         });
-        setFormData({
-          title: "",
-          description: "",
-          status: optionsStatusArticle[0].value,
-          type: optionsTypeArticle[0].value,
-          category: optionsCategoryArticle[0].value,
-          banner: null,
-          createBy: userLoginCookie.name,
-        });
-        setloadingForm(false);
+        navigate(-1);
       }
     } catch (error) {
       setloadingForm(false);

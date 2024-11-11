@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import { Toast } from "../../../utils/myFunctions";
 import { Header } from "../../../features/guru/mapelPage/header";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import JurusanService from "../../../services/jurusanService";
 
 const optionsPrioritas = Array.from({ length: 20 }, (_, index) => ({
@@ -18,8 +18,8 @@ interface FormState {
   media: File | null;
 }
 
-
 export const FormGuruMapelPage: React.FC = () => {
+  const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const jurusanService = JurusanService();
   const [formData, setFormData] = useState<FormState>({
@@ -91,13 +91,15 @@ export const FormGuruMapelPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     const requiredFields = ["name", "description"];
     const newErrors: { [key: string]: string } = {};
-  
+
     requiredFields.forEach((field) => {
       if (!formData[field as keyof typeof formData]) {
-        newErrors[field] = `${field.charAt(0).toUpperCase() + field.slice(1)} is required.`;
+        newErrors[field] = `${
+          field.charAt(0).toUpperCase() + field.slice(1)
+        } is required.`;
       }
     });
 
@@ -105,13 +107,13 @@ export const FormGuruMapelPage: React.FC = () => {
       setErrorsForms(newErrors);
       return;
     }
-  
+
     setloadingForm(true);
     const payload = new FormData();
     Object.entries(formData).forEach(([key, value]) => {
       payload.append(key, value as string | Blob);
     });
-  
+
     try {
       let response;
       if (formData.id) {
@@ -124,13 +126,7 @@ export const FormGuruMapelPage: React.FC = () => {
           icon: "success",
           title: `Jurusan ${formData.id ? "updated" : "added"} successfully`,
         });
-        setFormData({
-          name: "",
-          description: "",
-          prioritas: optionsPrioritas[0].value,
-          media: null,
-        });
-        setloadingForm(false);
+        navigate(-1);
       }
     } catch (error) {
       setloadingForm(false);
@@ -144,7 +140,11 @@ export const FormGuruMapelPage: React.FC = () => {
 
   return (
     <>
-      <Header actionText={id ? "Update" : "Tambah"} backDisplay={true} addDisplay={false} />
+      <Header
+        actionText={id ? "Update" : "Tambah"}
+        backDisplay={true}
+        addDisplay={false}
+      />
       <div
         className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
         style={{ backgroundColor: "#fff", position: "relative" }}
@@ -253,9 +253,7 @@ export const FormGuruMapelPage: React.FC = () => {
 
           <div className="col-12 d-flex">
             <button
-              className={`btn ${
-                formData.id ? "btn-warning" : "btn-success"
-              }`}
+              className={`btn ${formData.id ? "btn-warning" : "btn-success"}`}
               type="submit"
               disabled={loadingForm}
             >
