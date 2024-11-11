@@ -1,13 +1,13 @@
 import React from "react";
 
-import { Header } from "../../../features/pengelolaanSiswa/absensiSiswaPage/header";
 import { Table } from "../../../features/pengelolaanSiswa/absensiSiswaPage/table";
+import { HeaderTitlePage } from "../../../components/headerTitlePage";
 
 export const AbsensiSiswaPage: React.FC = () => {
   
   return (
     <>
-      <Header actionText="" backDisplay={false} />
+      <HeaderTitlePage title="Absensi Siswa" subTitle="Absensi Siswa SMKN 1 Lumban Julu" backDisplay={false} addDisplay={false} linkAdd=""/>
       <Table />
     </>
   );

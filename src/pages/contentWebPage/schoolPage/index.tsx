@@ -1,12 +1,11 @@
 import React from "react";
-
-import { Header } from "../../../features/contentWebPage/schoolPage/header";
+import { HeaderTitlePage } from "../../../components/headerTitlePage";
 
 export const SchoolPage: React.FC = () => {
   
   return (
     <>
-      <Header actionText="" backDisplay={false} addDisplay={false} />
+      <HeaderTitlePage title="Config Sekolah" subTitle="SMKN 1 Lumban Julu" backDisplay={false} addDisplay={false} linkAdd=""/>
       <div
         className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
         style={{ backgroundColor: "#fff", position: "relative" }}

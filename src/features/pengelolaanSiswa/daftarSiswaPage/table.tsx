@@ -134,14 +134,14 @@ export const Table: React.FC = () => {
         <>
          
           <button
-            className="btn btn-warning text me-2 text-light"
+            className="btn btn-warning btn-sm text me-2 text-light"
             // onClick={() => navigate(`update/${row.id}`)}
             disabled={loading} 
           >
               <FaPen />
           </button>
           <button
-            className="btn btn-danger"
+            className="btn btn-danger btn-sm"
             onClick={() => handleDelete(row)}
             disabled={loading} 
           >
@@ -206,6 +206,7 @@ export const Table: React.FC = () => {
               control: (baseStyles) => ({
                 ...baseStyles,
                 fontSize: "0.955rem",
+                borderRadius: "8px",
               }),
               option: (provided) => ({
                 ...provided,

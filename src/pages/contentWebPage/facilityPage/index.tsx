@@ -1,13 +1,12 @@
 import React from "react";
-
-import { Header } from "../../../features/contentWebPage/facilityPage/header";
 import { Table } from "../../../features/contentWebPage/facilityPage/table";
+import { HeaderTitlePage } from "../../../components/headerTitlePage";
 
 export const FacilityPage: React.FC = () => {
   
   return (
     <>
-      <Header actionText="" backDisplay={false} addDisplay={true} />
+     <HeaderTitlePage title="Fasilitas" subTitle="Fasilitas Web SMKN 1 Lumban Julu" backDisplay={false} addDisplay={true} linkAdd="tambah" />
       <Table />
     </>
   );

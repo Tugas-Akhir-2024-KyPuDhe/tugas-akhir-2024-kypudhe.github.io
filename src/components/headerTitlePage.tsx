@@ -4,15 +4,19 @@ import { MdAdd } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 
 interface HeaderProps {
-  actionText: string;
+  title: string;
+  subTitle: string;
   backDisplay: boolean;
   addDisplay: boolean;
+  linkAdd: string;
 }
 
-export const Header: React.FC<HeaderProps> = ({
-  actionText,
+export const HeaderTitlePage: React.FC<HeaderProps> = ({
+  title,
+  subTitle,
   backDisplay,
   addDisplay,
+  linkAdd,
 }) => {
   const navigate = useNavigate();
   return (
@@ -33,9 +37,9 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="col">
               <div className="">
                 <div className="fw-bold fs-5 text-dark-soft">
-                  {actionText} Fasilitas
+                  {title}
                 </div>
-                <div className="">Fasilitas Web SMKN 1 Lumban Julu</div>
+                <div className="">{subTitle}</div>
               </div>
             </div>
           </div>
@@ -43,7 +47,7 @@ export const Header: React.FC<HeaderProps> = ({
         {addDisplay && (
           <div className="col-12 col-lg-6 col-md-6 text-end">
             <Link
-              to="/content-web/facility/create"
+              to={linkAdd}
               className="btn btn-primary border-0 bg-blue"
             >
               <MdAdd className="display-6" />

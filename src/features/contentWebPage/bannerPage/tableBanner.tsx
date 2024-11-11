@@ -81,15 +81,7 @@ export const TableBanner: React.FC = () => {
       name: "Judul Banner",
       selector: (row: Banner) => row.title,
       sortable: true,
-      cell: (row: Banner) => (
-        <label
-          className="text-primary"
-          style={{ cursor: "pointer" }}
-          onClick={() => navigate(`update/${row.id}`)}
-        >
-          {row.title}
-        </label>
-      ),
+      cell: (row: Banner) => row.title,
     },
     {
       name: "Prioritas",
@@ -108,14 +100,14 @@ export const TableBanner: React.FC = () => {
         <>
          
           <button
-            className="btn btn-warning text me-2 text-light"
+            className="btn btn-warning btn-sm text me-2 text-light"
             onClick={() => navigate(`update/${row.id}`)}
             disabled={loading} 
           >
               <FaPen />
           </button>
           <button
-            className="btn btn-danger"
+            className="btn btn-danger btn-sm"
             onClick={() => deleteBanner(row.id)}
             disabled={loading} 
           >

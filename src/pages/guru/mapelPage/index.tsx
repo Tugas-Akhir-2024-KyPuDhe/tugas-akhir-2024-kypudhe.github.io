@@ -1,13 +1,13 @@
 import React from "react";
 
-import { Header } from "../../../features/guru/mapelPage/header";
 import { Table } from "../../../features/guru/mapelPage/table";
+import { HeaderTitlePage } from "../../../components/headerTitlePage";
 
 export const GuruMapelPage: React.FC = () => {
   
   return (
     <>
-      <Header actionText="" backDisplay={false} addDisplay={true} />
+      <HeaderTitlePage title="Mata Pelajaran" subTitle="Mata Pelajaran SMKN 1 Lumban Julu" backDisplay={false} addDisplay={true} linkAdd="tambah"/>
       <Table />
     </>
   );

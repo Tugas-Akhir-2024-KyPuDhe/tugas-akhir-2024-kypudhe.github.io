@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import { Toast } from "../../../utils/myFunctions";
-import { Header } from "../../../features/contentWebPage/ekskulPage/header";
 import { useNavigate, useParams } from "react-router-dom";
 import EkskulService from "../../../services/ekskulService";
+import { HeaderTitlePage } from "../../../components/headerTitlePage";
 
 const optionsPrioritas = Array.from({ length: 20 }, (_, index) => ({
   value: (index + 1).toString(),
@@ -166,11 +166,7 @@ export const FormEkskulPage: React.FC = () => {
 
   return (
     <>
-      <Header
-        actionText={id ? "Update" : "Tambah"}
-        backDisplay={true}
-        addDisplay={false}
-      />
+      <HeaderTitlePage title={`${id ? "Update" : "Tambah"} Ekstrakurikuler`} subTitle="Ekstrakurikuler Web SMKN 1 Lumban Julu" backDisplay={true} addDisplay={false} linkAdd="" />
       <div
         className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
         style={{ backgroundColor: "#fff", position: "relative" }}

@@ -1,13 +1,13 @@
 import React from "react";
 
-import { Header } from "../../../features/contentWebPage/bannerPage/header";
 import { TableBanner } from "../../../features/contentWebPage/bannerPage/tableBanner";
+import { HeaderTitlePage } from "../../../components/headerTitlePage";
 
 export const BannerPage: React.FC = () => {
   
   return (
     <>
-      <Header actionText="" backDisplay={false} addDisplay={true} />
+      <HeaderTitlePage title="Banner" subTitle="Banner Web SMKN 1 Lumban Julu" backDisplay={false} addDisplay={true} linkAdd="tambah"/>
       <TableBanner />
     </>
   );

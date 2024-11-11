@@ -1,13 +1,12 @@
 import React from "react";
-
-import { Header } from "../../../features/pengelolaanSiswa/absensiSiswaPage/header";
 import { DetailContent } from "../../../features/pengelolaanSiswa/absensiSiswaPage/detailContent";
+import { HeaderTitlePage } from "../../../components/headerTitlePage";
 
 export const DetailAbsensiSiswaPage: React.FC = () => {
   
   return (
     <>
-      <Header actionText="Detail" backDisplay={false} />
+      <HeaderTitlePage title="Detail Absensi Siswa" subTitle="Absensi Siswa SMKN 1 Lumban Julu" backDisplay={false} addDisplay={false} linkAdd=""/>
       <DetailContent />
     </>
   );

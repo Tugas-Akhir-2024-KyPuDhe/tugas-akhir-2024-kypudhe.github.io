@@ -5,7 +5,13 @@ import { CardInformasi1 } from "../../features/profilePage/cardInformasi1";
 import { CardInformasi2 } from "../../features/profilePage/cardInformasi2";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { DetailUserResponse } from "../../interface/auth.interface";
+import {
+  DetailUserResponse,
+  UpdatedBiodata,
+} from "../../interface/auth.interface";
+import { formatGender, Toast } from "../../utils/myFunctions";
+import noPhotoFemale from "./../../assets/images/profile-female.jpg";
+import noPhotoMale from "./../../assets/images/profile-male.jpg";
 
 export const ProfilePage = () => {
   const authService = AuthService();
@@ -17,13 +23,12 @@ export const ProfilePage = () => {
   const [error, setError] = useState<string | null>(null);
 
   const [statusUpdateData, setstatusUpdateData] = useState(false);
+  const [loadingUpdateData, setloadingUpdateData] = useState(false);
 
   const getUser = async () => {
     try {
       const user = await authService.getUser();
       setProfileDetail(user);
-      console.log(user);
-
       setLoading(false);
     } catch (err) {
       console.log(err);
@@ -38,20 +43,24 @@ export const ProfilePage = () => {
 
   const handleUpdateAccess = () => setstatusUpdateData(!statusUpdateData);
 
-  const handleSaveUpdate = async (updatedData: unknown) => {
-    console.log(updatedData);
-    
-    // try {
-    //   await authService.updateUser(updatedData); // Update endpoint in AuthService
-    //   setProfileDetail((prev) =>
-    //     prev
-    //       ? { ...prev, details: [{ ...prev.details[0], ...updatedData }] }
-    //       : null
-    //   );
-    //   setstatusUpdateData(false);
-    // } catch (error) {
-    //   console.error("Error updating user data:", error);
-    // }
+  const handleSaveUpdate = async (updatedData: UpdatedBiodata) => {
+    try {
+      setloadingUpdateData(true);
+      const response = await authService.updateUser(updatedData);
+      if (response.status === 200) {
+        await getUser();
+        setstatusUpdateData(false);
+        setloadingUpdateData(false);
+        Toast.fire({
+          icon: "success",
+          title: `Data Berhasil Diupdate!`,
+          timer: 4000,
+        });
+      }
+    } catch (error) {
+      console.error("Error updating user data:", error);
+    }
+    setloadingUpdateData(false);
   };
 
   if (error) {
@@ -66,11 +75,18 @@ export const ProfilePage = () => {
             handleUpdateAccess={handleUpdateAccess}
             onSaveUpdate={handleSaveUpdate}
             statusUpdateData={statusUpdateData}
+            loadingUpdateData={loadingUpdateData}
+            photo={
+              profileDetail.details[0].photo?.url ||
+              profileDetail.details[0].gender === "L"
+                ? noPhotoMale
+                : noPhotoFemale
+            }
             name={profileDetail.details[0].name}
             email={profileDetail.details[0].email || "-"}
             phone={profileDetail.details[0].phone || "-"}
             address={profileDetail.details[0].address || "-"}
-            gender={profileDetail.details[0].gender || "-"}
+            gender={formatGender(profileDetail.details[0].gender || "-")}
             birthPlace={profileDetail.details[0].birthPlace || "-"}
           />
           <div className="col-12 col-lg-7 col-md-7">

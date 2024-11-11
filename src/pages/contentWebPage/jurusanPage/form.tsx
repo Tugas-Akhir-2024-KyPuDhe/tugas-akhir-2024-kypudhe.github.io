@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import { Toast } from "../../../utils/myFunctions";
-import { Header } from "../../../features/contentWebPage/jurusanPage/header";
 import { useNavigate, useParams } from "react-router-dom";
 import JurusanService from "../../../services/jurusanService";
+import { HeaderTitlePage } from "../../../components/headerTitlePage";
 
 const optionsPrioritas = Array.from({ length: 20 }, (_, index) => ({
   value: (index + 1).toString(),
@@ -164,11 +164,7 @@ export const FormJurusanPage: React.FC = () => {
 
   return (
     <>
-      <Header
-        actionText={id ? "Update" : "Tambah"}
-        backDisplay={true}
-        addDisplay={false}
-      />
+      <HeaderTitlePage title={`${id ? "Update" : "Tambah"} Jurusan`} subTitle="Jurusan Web SMKN 1 Lumban Julu" backDisplay={true} addDisplay={false} linkAdd="" />
       <div
         className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
         style={{ backgroundColor: "#fff", position: "relative" }}

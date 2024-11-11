@@ -1,13 +1,12 @@
 import React from "react";
-
-import { Header } from "../../features/nilaiPage/header";
 import { Content } from "../../features/nilaiPage/content";
+import { HeaderTitlePage } from "../../components/headerTitlePage";
 
 export const NilaiPage: React.FC = () => {
   
   return (
     <>
-      <Header />
+      <HeaderTitlePage title="Nilai" subTitle="Nilai Siswa" backDisplay={false} addDisplay={false} linkAdd=""/>
       <Content />
     </>
   );

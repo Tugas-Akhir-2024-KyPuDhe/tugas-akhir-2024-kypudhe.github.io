@@ -1,19 +1,13 @@
 import React, { useState } from "react";
 import { FaPen } from "react-icons/fa6";
+import { UpdatedBiodata } from "../../interface/auth.interface";
 
 interface Biodata {
   handleUpdateAccess: () => void;
   onSaveUpdate: (data: UpdatedBiodata) => void;
   statusUpdateData: boolean;
-  name: string;
-  email: string;
-  phone: string;
-  address: string;
-  gender: string;
-  birthPlace: string;
-}
-
-interface UpdatedBiodata {
+  loadingUpdateData: boolean;
+  photo: string;
   name: string;
   email: string;
   phone: string;
@@ -26,6 +20,8 @@ export const CardBiodata: React.FC<Biodata> = ({
   handleUpdateAccess,
   onSaveUpdate,
   statusUpdateData,
+  loadingUpdateData,
+  photo,
   name,
   email,
   phone,
@@ -50,15 +46,31 @@ export const CardBiodata: React.FC<Biodata> = ({
   return (
     <div className="col-12 col-lg-5 col-md-5">
       <div
-        className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 me-lg-0 me-md-0 rounded"
+        className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 me-lg-0 me-md-0 rounded position-relative"
         style={{ backgroundColor: "#fff" }}
       >
-        <img
-          src="https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fHByb2ZpbGV8ZW58MHx8MHx8fDA%3D"
-          alt=""
-          className="img-fluid rounded mb-3"
-          style={{ height: "300px", width: "100%", objectFit: "cover" }}
-        />
+        <div className="img-profile">
+          <div
+            className="position-absolute bg-light fw-bold m-4 shadow d-flex align-items-center justify-content-center"
+            style={{
+              right: "10px",
+              top: "10px",
+              borderRadius: "100%",
+              width: "40px",
+              height: "40px",
+              cursor: "pointer",
+            }}
+            // onClick={handleUpdateAccess}
+          >
+            <FaPen />
+          </div>
+          <img
+            src={photo}
+            alt=""
+            className="img-fluid rounded mb-3"
+            style={{ width: "100%", objectFit: "cover" }}
+          />
+        </div>
 
         <div className="fw-bold fs-5 mb-4 text-dark-soft position-relative pb-2">
           <div
@@ -73,12 +85,13 @@ export const CardBiodata: React.FC<Biodata> = ({
           />
           <div className="d-flex justify-content-between">
             <div>{name}</div>
-            <div style={{ cursor: "pointer" }} onClick={handleUpdateAccess}>
-              <FaPen />
-            </div>
+            {!statusUpdateData && (
+              <div style={{ cursor: "pointer" }} onClick={handleUpdateAccess}>
+                <FaPen />
+              </div>
+            )}
           </div>
         </div>
-
         <div>
           <label className="fw-bold text-dark-soft">Email</label>
           {statusUpdateData ? (
@@ -157,10 +170,23 @@ export const CardBiodata: React.FC<Biodata> = ({
         {statusUpdateData && (
           <div className="mt-3 text-end">
             <button
+              className="btn btn-danger me-3 text-light"
+              onClick={handleUpdateAccess}
+            >
+              Batal
+            </button>
+            <button
               className="btn btn-warning text-light"
               onClick={() => onSaveUpdate(updatedData)}
+              disabled={loadingUpdateData}
             >
-              Update
+              {loadingUpdateData ? (
+                <div className="spinner-border text-light" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              ) : (
+                "Update"
+              )}
             </button>
           </div>
         )}

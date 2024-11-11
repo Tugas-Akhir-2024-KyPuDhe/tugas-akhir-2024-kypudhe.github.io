@@ -1,13 +1,12 @@
 import React from "react";
-
-import { Header } from "../../features/kelasPage/header";
 import { Content } from "../../features/kelasPage/content";
+import { HeaderTitlePage } from "../../components/headerTitlePage";
 
 export const KelasPage: React.FC = () => {
   
   return (
     <>
-      <Header />
+      <HeaderTitlePage title="Kelas" subTitle="Kelas Siswa" backDisplay={false} addDisplay={false} linkAdd=""/>
       <Content />
     </>
   );

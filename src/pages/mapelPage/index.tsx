@@ -1,13 +1,12 @@
 import React from "react";
-
-import { Header } from "../../features/mapelPage/header";
 import { Content } from "../../features/mapelPage/content";
+import { HeaderTitlePage } from "../../components/headerTitlePage";
 
 export const MapelPage: React.FC = () => {
   
   return (
     <>
-      <Header />
+      <HeaderTitlePage title="Mata Pelajaran" subTitle="Mata Pelajaran Siswa" backDisplay={false} addDisplay={false} linkAdd=""/>
       <Content />
     </>
   );

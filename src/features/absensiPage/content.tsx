@@ -242,7 +242,7 @@ export const Content: React.FC = () => {
                 ...baseStyles,
                 fontSize: "0.955rem",
                 minHeight: "48px",
-                bius: "8px",
+                borderRadius: "8px",
               }),
               option: (provided) => ({
                 ...provided,

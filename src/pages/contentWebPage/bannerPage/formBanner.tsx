@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import BannerService from "../../../services/bannerService";
 import { Toast } from "../../../utils/myFunctions";
-import { Header } from "../../../features/contentWebPage/bannerPage/header";
 import { useNavigate, useParams } from "react-router-dom";
 import useCookie from "react-use-cookie";
+import { HeaderTitlePage } from "../../../components/headerTitlePage";
 
 const optionsPrioritas = Array.from({ length: 20 }, (_, index) => ({
   value: (index + 1).toString(),
@@ -166,11 +166,7 @@ export const FormBanner: React.FC = () => {
 
   return (
     <>
-      <Header
-        actionText={formData.id ? "Update" : "Tambah"}
-        backDisplay={true}
-        addDisplay={false}
-      />
+      <HeaderTitlePage title={`${id ? "Update" : "Tambah"} Banner`} subTitle="Banner Web SMKN 1 Lumban Julu" backDisplay={true} addDisplay={false} linkAdd="" />
       <div
         className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
         style={{ backgroundColor: "#fff", position: "relative" }}

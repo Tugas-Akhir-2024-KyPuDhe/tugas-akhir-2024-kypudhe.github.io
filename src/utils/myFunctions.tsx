@@ -48,22 +48,34 @@ export const formatDate = (dateString: Date) => {
 
 export const formatTime = (isoString: Date): string => {
   const date = new Date(isoString);
-  const hours = date.getHours().toString().padStart(2, '0');
-  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const hours = date.getHours().toString().padStart(2, "0");
+  const minutes = date.getMinutes().toString().padStart(2, "0");
   return `${hours}:${minutes}`;
 };
 
 export const formatDateTime = (dateString: string) => {
   const options: Intl.DateTimeFormatOptions = {
     year: "numeric",
-    month: "short", 
+    month: "short",
     day: "numeric",
   };
 
   const date = new Date(dateString);
   const hours = String(date.getHours()).padStart(2, "0");
   const minutes = String(date.getMinutes()).padStart(2, "0");
-  const formattedDate = date.toLocaleDateString("id-ID", options).replace(/,/, ''); 
+  const formattedDate = date
+    .toLocaleDateString("id-ID", options)
+    .replace(/,/, "");
   const formattedTime = `${hours}:${minutes}`;
-  return `${formattedDate} ${formattedTime} WIB`; 
+  return `${formattedDate} ${formattedTime} WIB`;
+};
+
+export const formatGender = (gender: string): string => {
+  if (gender === "L") {
+    return "Laki-laki";
+  } else if (gender === "P") {
+    return "Perempuan";
+  } else {
+    return "";
+  }
 };

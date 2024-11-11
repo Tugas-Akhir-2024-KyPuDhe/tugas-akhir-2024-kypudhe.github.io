@@ -1,13 +1,12 @@
 import React from "react";
-
-import { Header } from "../../../features/pengelolaanSiswa/daftarSiswaPage/header";
 import { Table } from "../../../features/pengelolaanSiswa/daftarSiswaPage/table";
+import { HeaderTitlePage } from "../../../components/headerTitlePage";
 
 export const DaftarSiswaPage: React.FC = () => {
   
   return (
     <>
-      <Header actionText="" backDisplay={false} addDisplay={true} />
+      <HeaderTitlePage title="Daftar Siswa" subTitle="Daftar Siswa SMKN 1 Lumban Julu" backDisplay={false} addDisplay={true} linkAdd="tambah"/>
       <Table />
     </>
   );

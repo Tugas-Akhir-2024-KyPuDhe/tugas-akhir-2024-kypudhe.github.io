@@ -4,6 +4,8 @@ import {
     LoginResponse,
     TokenValidationResponse,
     DetailUserResponse,
+    UpdateUserResponse,
+    UpdatedBiodata,
 } from "./../interface/auth.interface";
 import { useNavigate } from "react-router-dom";
 import useCookie from "react-use-cookie";
@@ -46,11 +48,10 @@ const AuthService = () => {
       }
     };
   
-    // New method to get user details
     const getUser = async (): Promise<DetailUserResponse> => {
       try {
         const response = await axios.get<LoginResponse>(
-          `${apiUrl}/api/auth/user`,
+          `${apiUrl}/api/auth/get/user`,
           {
             headers: {
               authorization: `Bearer ${userLoginCookie?.token}`,
@@ -58,6 +59,24 @@ const AuthService = () => {
           }
         );
         return response.data.user;
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        throw error;
+      }
+    };
+
+    const updateUser = async (data: UpdatedBiodata): Promise<UpdateUserResponse> => {
+      try {
+        const response = await axios.put<UpdateUserResponse>(
+          `${apiUrl}/api/auth/update/user`, data,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              authorization: `Bearer ${userLoginCookie?.token}`,
+            },
+          }
+        );
+        return response.data;
       } catch (error) {
         console.error("Error fetching user data:", error);
         throw error;
@@ -73,7 +92,8 @@ const AuthService = () => {
       loginAuth,
       logout,
       validateToken,
-      getUser,  // Exporting getUser method
+      getUser,  
+      updateUser,
     };
   };
   

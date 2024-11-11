@@ -1,3 +1,5 @@
+import { Media } from "./media.interface";
+
 export interface UserDetails {
   // === GENERAL
   id: number;
@@ -12,7 +14,7 @@ export interface UserDetails {
   mediaId: string | null;
   createdAt: string;
   updatedAt: string;
-  photo: string | null;
+  photo: Media;
   gender: string | null;
   // === STAFF OR TEARCHER
   nip?: string;
@@ -37,6 +39,10 @@ export interface LoginResponse {
   token: string;
   user: DetailUserResponse;
 }
+export interface UpdateUserResponse {
+  status: number;
+  message: string;
+}
 
 export interface LoginData {
   username: string;
@@ -46,4 +52,13 @@ export interface LoginData {
 export interface TokenValidationResponse {
   valid: boolean;
   user?: DetailUserResponse;
+}
+
+export interface UpdatedBiodata {
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  gender: string;
+  birthPlace: string;
 }

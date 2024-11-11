@@ -104,17 +104,23 @@ export const CardInformasi1: React.FC<dataInformasi> = ({
                     <div>{nip}</div>
                   </div>
                   <div className="col-12 mb-3">
-                    <label className="fw-bold text-dark-soft">Status Pegawai</label>
+                    <label className="fw-bold text-dark-soft">
+                      Status Pegawai
+                    </label>
                     <div>{typeStaff}</div>
                   </div>
                   <div className="col-12 mb-3">
                     <label className="fw-bold text-dark-soft">Jabatan</label>
                     <div>{position}</div>
                   </div>
-                  <div className="col-12 mb-3">
-                    <label className="fw-bold text-dark-soft">Mata Pelajaran</label>
-                    <div>{position}</div>
-                  </div>
+                  {userLoginCookie.role === "TEACHER" && (
+                    <div className="col-12 mb-3">
+                      <label className="fw-bold text-dark-soft">
+                        Mata Pelajaran
+                      </label>
+                      <div>-</div>
+                    </div>
+                  )}
                   <div className="col-12 mb-3">
                     <label className="fw-bold text-dark-soft">
                       Tahun Mulai
@@ -122,9 +128,7 @@ export const CardInformasi1: React.FC<dataInformasi> = ({
                     <div>{formatDate(new Date(startDate))}</div>
                   </div>
                   <div className="col-12 mb-3">
-                    <label className="fw-bold text-dark-soft">
-                      Status
-                    </label>
+                    <label className="fw-bold text-dark-soft">Status</label>
                     <div>Aktif</div>
                   </div>
                 </div>

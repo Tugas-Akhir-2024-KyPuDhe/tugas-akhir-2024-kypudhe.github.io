@@ -202,58 +202,8 @@ export const ListMenu = () => {
   const [selectedMenu, setSelectedMenu] = useState("");
 
   useEffect(() => {
-    switch (location.pathname) {
-      case "/":
-        setSelectedMenu("dashboard");
-        break;
-      case "/berita":
-        setSelectedMenu("berita");
-        break;
-      case "/content-web/school":
-        setSelectedMenu("/content-web/school");
-        break;
-      case "/content-web/jurusan":
-        setSelectedMenu("/content-web/jurusan");
-        break;
-      case "/content-web/facility":
-        setSelectedMenu("/content-web/facility");
-        break;
-      case "/content-web/ekstra-kurikuler":
-        setSelectedMenu("/content-web/ekstra-kurikuler");
-        break;
-      case "/content-web/banner":
-        setSelectedMenu("content-web/banner");
-        break;
-      case "/pengelolaan-siswa/absensi-siswa":
-        setSelectedMenu("pengelolaan-siswa/absensi-siswa");
-        break;
-      case "/pengelolaan-siswa/daftar-siswa":
-        setSelectedMenu("pengelolaan-siswa/daftar-siswa");
-        break;
-      case "/pengelolaan-siswa/daftar-kelas":
-        setSelectedMenu("pengelolaan-siswa/daftar-kelas");
-        break;
-      case "/nilai":
-        setSelectedMenu("nilai");
-        break;
-      case "/pengelolaan-siswa/nilai-siswa":
-        setSelectedMenu("pengelolaan-siswa/nilai-siswa");
-        break;
-      case "/absensi":
-        setSelectedMenu("absensi");
-        break;
-      case "/kelas":
-        setSelectedMenu("kelas");
-        break;
-      case "/mata-pelajaran":
-        setSelectedMenu("mata-pelajaran");
-        break;
-      case "/guru/mata-pelajaran":
-        setSelectedMenu("guru/mata-pelajaran");
-        break;
-      default:
-        setSelectedMenu("");
-    }
+    console.log(location.pathname);
+    setSelectedMenu(location.pathname);
   }, [location.pathname]);
 
   const handleMenuClick = (path: string) => {
@@ -275,13 +225,13 @@ export const ListMenu = () => {
         icon={<IoGrid />}
         style={{
           position: "relative",
-          backgroundColor: selectedMenu === "dashboard" ? "#E5EAF2" : "",
+          backgroundColor: selectedMenu === "/" ? "#E5EAF2" : "",
         }}
         className={`fw-medium ${
-          selectedMenu === "dashboard" ? "text-blue" : "text-dark-soft"
+          selectedMenu === "/" ? "text-blue" : "text-dark-soft"
         }`}
       >
-        {selectedMenu === "dashboard" && (
+        {selectedMenu === "/" && (
           <div
             style={{
               position: "absolute",
@@ -300,13 +250,13 @@ export const ListMenu = () => {
         icon={<FaNewspaper />}
         style={{
           position: "relative",
-          backgroundColor: selectedMenu === "berita" ? "#E5EAF2" : "",
+          backgroundColor: selectedMenu === "/berita" ? "#E5EAF2" : "",
         }}
         className={`fw-medium ${
-          selectedMenu === "berita" ? "text-blue" : "text-dark-soft"
+          selectedMenu === "/berita" ? "text-blue" : "text-dark-soft"
         }`}
       >
-        {selectedMenu === "berita" && (
+        {selectedMenu === "/berita" && (
           <div
             style={{
               position: "absolute",
@@ -328,15 +278,15 @@ export const ListMenu = () => {
             style={{
               position: "relative",
               backgroundColor:
-                selectedMenu === "nilai" ? "#E5EAF2" : "",
+                selectedMenu === "/nilai" ? "#E5EAF2" : "",
             }}
             className={`fw-medium ${
-              selectedMenu === "nilai"
+              selectedMenu === "/nilai"
                 ? "text-blue"
                 : "text-dark-soft"
             }`}
           >
-            {selectedMenu === "nilai" && (
+            {selectedMenu === "/nilai" && (
               <div
                 style={{
                   position: "absolute",
@@ -356,13 +306,13 @@ export const ListMenu = () => {
             style={{
               position: "relative",
               backgroundColor:
-                selectedMenu === "absensi" ? "#E5EAF2" : "",
+                selectedMenu === "/absensi" ? "#E5EAF2" : "",
             }}
             className={`fw-medium ${
-              selectedMenu === "absensi" ? "text-blue" : "text-dark-soft"
+              selectedMenu === "/absensi" ? "text-blue" : "text-dark-soft"
             }`}
           >
-            {selectedMenu === "absensi" && (
+            {selectedMenu === "/absensi" && (
               <div
                 style={{
                   position: "absolute",
@@ -381,13 +331,13 @@ export const ListMenu = () => {
             icon={<RiSchoolLine />}
             style={{
               position: "relative",
-              backgroundColor: selectedMenu === "kelas" ? "#E5EAF2" : "",
+              backgroundColor: selectedMenu === "/kelas" ? "#E5EAF2" : "",
             }}
             className={`fw-medium ${
-              selectedMenu === "kelas" ? "text-blue" : "text-dark-soft"
+              selectedMenu === "/kelas" ? "text-blue" : "text-dark-soft"
             }`}
           >
-            {selectedMenu === "kelas" && (
+            {selectedMenu === "/kelas" && (
               <div
                 style={{
                   position: "absolute",
@@ -406,13 +356,13 @@ export const ListMenu = () => {
             icon={<TbBooks />}
             style={{
               position: "relative",
-              backgroundColor: selectedMenu === "mata-pelajaran" ? "#E5EAF2" : "",
+              backgroundColor: selectedMenu === "/mata-pelajaran" ? "#E5EAF2" : "",
             }}
             className={`fw-medium ${
-              selectedMenu === "mata-pelajaran" ? "text-blue" : "text-dark-soft"
+              selectedMenu === "/mata-pelajaran" ? "text-blue" : "text-dark-soft"
             }`}
           >
-            {selectedMenu === "mata-pelajaran" && (
+            {selectedMenu === "/mata-pelajaran" && (
               <div
                 style={{
                   position: "absolute",
@@ -437,15 +387,15 @@ export const ListMenu = () => {
             style={{
               position: "relative",
               backgroundColor:
-                selectedMenu === "guru/mata-pelajaran" ? "#E5EAF2" : "",
+                selectedMenu === "/guru/mata-pelajaran" ? "#E5EAF2" : "",
             }}
             className={`fw-medium ${
-              selectedMenu === "guru/mata-pelajaran"
+              selectedMenu === "/guru/mata-pelajaran"
                 ? "text-blue"
                 : "text-dark-soft"
             }`}
           >
-            {selectedMenu === "guru/mata-pelajaran" && (
+            {selectedMenu === "/guru/mata-pelajaran" && (
               <div
                 style={{
                   position: "absolute",
@@ -476,15 +426,15 @@ export const ListMenu = () => {
               style={{
                 position: "relative",
                 backgroundColor:
-                  selectedMenu === "pengelolaan-siswa/absensi-siswa" ? "#E5EAF2" : "",
+                  selectedMenu === "/pengelolaan-siswa/absensi-siswa" ? "#E5EAF2" : "",
               }}
               className={`fw-medium ${
-                selectedMenu === "pengelolaan-siswa/absensi-siswa"
+                selectedMenu === "/pengelolaan-siswa/absensi-siswa"
                   ? "text-blue"
                   : "text-dark-soft"
               }`}
             >
-              {selectedMenu === "pengelolaan-siswa/absensi-siswa" && (
+              {selectedMenu === "/pengelolaan-siswa/absensi-siswa" && (
                 <div
                   style={{
                     position: "absolute",
@@ -504,15 +454,15 @@ export const ListMenu = () => {
               style={{
                 position: "relative",
                 backgroundColor:
-                  selectedMenu === "pengelolaan-siswa/daftar-siswa" ? "#E5EAF2" : "",
+                  selectedMenu === "/pengelolaan-siswa/daftar-siswa" ? "#E5EAF2" : "",
               }}
               className={`fw-medium ${
-                selectedMenu === "pengelolaan-siswa/daftar-siswa"
+                selectedMenu === "/pengelolaan-siswa/daftar-siswa"
                   ? "text-blue"
                   : "text-dark-soft"
               }`}
             >
-              {selectedMenu === "pengelolaan-siswa/daftar-siswa" && (
+              {selectedMenu === "/pengelolaan-siswa/daftar-siswa" && (
                 <div
                   style={{
                     position: "absolute",
@@ -531,13 +481,13 @@ export const ListMenu = () => {
               icon={<FaCircle style={{ fontSize: "8px" }} />}
               style={{
                 position: "relative",
-                backgroundColor: selectedMenu === "pengelolaan-siswa/daftar-kelas" ? "#E5EAF2" : "",
+                backgroundColor: selectedMenu === "/pengelolaan-siswa/daftar-kelas" ? "#E5EAF2" : "",
               }}
               className={`fw-medium ${
-                selectedMenu === "pengelolaan-siswa/daftar-kelas" ? "text-blue" : "text-dark-soft"
+                selectedMenu === "/pengelolaan-siswa/daftar-kelas" ? "text-blue" : "text-dark-soft"
               }`}
             >
-              {selectedMenu === "pengelolaan-siswa/daftar-kelas" && (
+              {selectedMenu === "/pengelolaan-siswa/daftar-kelas" && (
                 <div
                   style={{
                     position: "absolute",
@@ -557,15 +507,15 @@ export const ListMenu = () => {
               style={{
                 position: "relative",
                 backgroundColor:
-                  selectedMenu === "pengelolaan-siswa/nilai-siswa" ? "#E5EAF2" : "",
+                  selectedMenu === "/pengelolaan-siswa/nilai-siswa" ? "#E5EAF2" : "",
               }}
               className={`fw-medium ${
-                selectedMenu === "pengelolaan-siswa/nilai-siswa"
+                selectedMenu === "/pengelolaan-siswa/nilai-siswa"
                   ? "text-blue"
                   : "text-dark-soft"
               }`}
             >
-              {selectedMenu === "pengelolaan-siswa/nilai-siswa" && (
+              {selectedMenu === "/pengelolaan-siswa/nilai-siswa" && (
                 <div
                   style={{
                     position: "absolute",
@@ -601,13 +551,13 @@ export const ListMenu = () => {
             style={{
               position: "relative",
               backgroundColor:
-                selectedMenu === "content-web/banner" ? "#E5EAF2" : "",
+                selectedMenu === "/content-web/banner" ? "#E5EAF2" : "",
             }}
             className={`fw-medium ${
-              selectedMenu === "content-web/banner" ? "text-blue" : "text-dark-soft"
+              selectedMenu === "/content-web/banner" ? "text-blue" : "text-dark-soft"
             }`}
           >
-            {selectedMenu === "content-web/banner" && (
+            {selectedMenu === "/content-web/banner" && (
               <div
                 style={{
                   position: "absolute",
@@ -674,20 +624,20 @@ export const ListMenu = () => {
             Jurusan
           </MenuItem>
           <MenuItem
-            onClick={() => handleMenuClick("/content-web/facility")}
+            onClick={() => handleMenuClick("/content-web/fasilitas")}
             icon={<FaCircle style={{ fontSize: "8px" }} />}
             style={{
               position: "relative",
               backgroundColor:
-                selectedMenu === "/content-web/facility" ? "#E5EAF2" : "",
+                selectedMenu === "/content-web/fasilitas" ? "#E5EAF2" : "",
             }}
             className={`fw-medium ${
-              selectedMenu === "/content-web/facility"
+              selectedMenu === "/content-web/fasilitas"
                 ? "text-blue"
                 : "text-dark-soft"
             }`}
           >
-            {selectedMenu === "/content-web/facility" && (
+            {selectedMenu === "/content-web/fasilitas" && (
               <div
                 style={{
                   position: "absolute",
