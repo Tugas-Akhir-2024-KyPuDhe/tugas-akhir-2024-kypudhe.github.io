@@ -35,10 +35,10 @@ function App() {
             <Route path="/kelas" element={ <PrivateRoute Component={KelasPage} /> } />
             <Route path="/mata-pelajaran" element={ <PrivateRoute Component={MapelPage} /> } />
             <Route path="/absensi" element={ <PrivateRoute Component={AbsensiPage} /> } />
-            <Route path="/content-web/sekolah" element={ <PrivateRoute Component={SchoolPage} /> } />
-            <Route path="/content-web/fasilitas" element={ <PrivateRoute Component={FacilityPage} /> } />
-            <Route path="/content-web/fasilitas/tambah" element={ <PrivateRoute Component={FormFacilityPage} /> } />
-            <Route path="/content-web/fasilitas/update/:id" element={ <PrivateRoute Component={FormFacilityPage} /> } />
+            <Route path="/content-web/school" element={ <PrivateRoute Component={SchoolPage} /> } />
+            <Route path="/content-web/facility" element={ <PrivateRoute Component={FacilityPage} /> } />
+            <Route path="/content-web/facility/tambah" element={ <PrivateRoute Component={FormFacilityPage} /> } />
+            <Route path="/content-web/facility/update/:id" element={ <PrivateRoute Component={FormFacilityPage} /> } />
             <Route path="/content-web/jurusan" element={ <PrivateRoute Component={JurusanPage} /> } />
             <Route path="/content-web/jurusan/tambah" element={ <PrivateRoute Component={FormJurusanPage} /> } />
             <Route path="/content-web/jurusan/update/:id" element={ <PrivateRoute Component={FormJurusanPage} /> } />
