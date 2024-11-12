@@ -18,11 +18,14 @@ export const Table: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false); // Add loading state
 
   const getData = async () => {
+    setLoading(true);
     try {
       const response = await jurusanService.all();
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -97,6 +100,7 @@ export const Table: React.FC = () => {
           </button>
         </>
       ),
+      width: "150px",
     },
   ];
 

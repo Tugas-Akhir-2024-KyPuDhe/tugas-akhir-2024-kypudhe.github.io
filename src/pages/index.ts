@@ -27,5 +27,6 @@ import { HomePage } from "./homePage";
 import { LoginPage } from "./loginPage";
 import { FormArticlePage } from './articlePage/formArticle';
 import { ProfilePage } from './profilePage';
+import { DataSiswaPage } from './staffPages/dataKesiswaanPage/dataSiswaPage';
 
-export { HomePage, LoginPage, ArticlePage, FormArticlePage, DetailArticlePage, BannerPage, FormBanner, NilaiPage, KelasPage, MapelPage, AbsensiPage, SchoolPage, FacilityPage, FormFacilityPage, JurusanPage, FormJurusanPage, EkskulPage, FormEkskulPage, GuruMapelPage, FormGuruMapelPage, DaftarSiswaPage, FormDaftarSiswaPage, DaftarKelasPage, FormDaftarKelasPage, NilaiSiswaPage, FormNilaiSiswaPage, ProfilePage, AbsensiSiswaPage, DetailAbsensiSiswaPage }
+export { HomePage, LoginPage, ArticlePage, FormArticlePage, DetailArticlePage, BannerPage, FormBanner, NilaiPage, KelasPage, MapelPage, AbsensiPage, SchoolPage, FacilityPage, FormFacilityPage, JurusanPage, FormJurusanPage, EkskulPage, FormEkskulPage, GuruMapelPage, FormGuruMapelPage, DaftarSiswaPage, FormDaftarSiswaPage, DaftarKelasPage, FormDaftarKelasPage, NilaiSiswaPage, FormNilaiSiswaPage, ProfilePage, AbsensiSiswaPage, DetailAbsensiSiswaPage, DataSiswaPage }

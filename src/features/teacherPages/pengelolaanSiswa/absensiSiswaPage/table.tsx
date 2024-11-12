@@ -84,6 +84,7 @@ export const Table: React.FC = () => {
           </button>
         </>
       ),
+      width: "150px",
     },
   ];
 

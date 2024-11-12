@@ -17,12 +17,15 @@ export const TableBanner: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false); // Add loading state
 
-  const getAllBanner = async () => {
+  const getData = async () => {
+    setLoading(true);
     try {
       const response = await bannerService.getAllBanners();
       setListBanner(response.data);
     } catch (error) {
       console.error("Error fetching banner:", error);
+    }finally {
+      setLoading(false);
     }
   };
 
@@ -39,7 +42,7 @@ export const TableBanner: React.FC = () => {
       try {
         const response = await bannerService.deleteBanner(id);
         if (response.status === 200) {
-          getAllBanner();
+          getData();
           Toast.fire({
             icon: "success",
             title: "Baner berhasil dihapus",
@@ -115,6 +118,7 @@ export const TableBanner: React.FC = () => {
           </button>
         </>
       ),
+      width: "150px",
     },
   ];
 
@@ -123,7 +127,7 @@ export const TableBanner: React.FC = () => {
   );
 
   useEffect(() => {
-    getAllBanner();
+    getData();
   }, []);
 
   return (

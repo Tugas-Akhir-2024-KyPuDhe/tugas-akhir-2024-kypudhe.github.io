@@ -13,6 +13,7 @@ import {
   MenuItem,
   SubMenu,
   menuClasses,
+  sidebarClasses,
 } from "react-pro-sidebar";
 import { IoGrid } from "react-icons/io5";
 import { FaUserCircle } from "react-icons/fa";
@@ -22,7 +23,7 @@ import { Footer } from "./footer";
 import { MdLibraryBooks } from "react-icons/md";
 import { LuCheckSquare } from "react-icons/lu";
 import { RiSchoolLine } from "react-icons/ri";
-import { TbBooks } from "react-icons/tb";
+import { TbBooks, TbUserScreen } from "react-icons/tb";
 import { Link } from "react-router-dom";
 import { IoIosPeople } from "react-icons/io";
 
@@ -48,8 +49,6 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
         setMobileToggled(false); 
         setDesktopCollapsed(false);
       } else {
-        console.log("asd");
-        
         setMobileToggled(true);
         setDesktopCollapsed(false);
       }
@@ -110,8 +109,14 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
               collapsed={desktopCollapsed}
               collapsedWidth="0"
               transitionDuration={600}
-              width="250"
               style={{ minHeight: "100vh" }}
+              rootStyles={{
+                [`.${sidebarClasses.container}`]: {
+                  fixed: "top",
+                  height: "100vh",
+                  // width: "300px"
+                },
+              }}
             >
               <ListMenu />
             </Sidebar>
@@ -204,7 +209,6 @@ export const ListMenu = () => {
   const [selectedMenu, setSelectedMenu] = useState("");
 
   useEffect(() => {
-    console.log(location.pathname);
     setSelectedMenu(location.pathname);
   }, [location.pathname]);
 
@@ -539,8 +543,8 @@ export const ListMenu = () => {
       {userLoginCookie?.role === "STAFF" && (
         <>
           <SubMenu
-            icon={<IoIosPeople />}
-            label="Data Kesiswaan"
+            icon={<TbUserScreen />}
+            label="Manajemen Siswa"
             rootStyles={{
               ["." + menuClasses.subMenuContent]: {
                 backgroundColor: "#fff",
@@ -549,18 +553,18 @@ export const ListMenu = () => {
             className="fw-medium"
           >
             <MenuItem
-              onClick={() => handleMenuClick("/data-kesiswaan/data-siswa")}
+              onClick={() => handleMenuClick("/manajemen-siswa/data-siswa")}
               icon={<FaCircle style={{ fontSize: "8px" }} />}
               style={{
                 position: "relative",
                 backgroundColor:
-                  selectedMenu === "/data-kesiswaan/data-siswa" ? "#E5EAF2" : "",
+                  selectedMenu === "/manajemen-siswa/data-siswa" ? "#E5EAF2" : "",
               }}
               className={`fw-medium ${
-                selectedMenu === "/data-kesiswaan/data-siswa" ? "text-blue" : "text-dark-soft"
+                selectedMenu === "/manajemen-siswa/data-siswa" ? "text-blue" : "text-dark-soft"
               }`}
             >
-              {selectedMenu === "/data-kesiswaan/data-siswa" && (
+              {selectedMenu === "/manajemen-siswa/data-siswa" && (
                 <div
                   style={{
                     position: "absolute",
@@ -573,6 +577,69 @@ export const ListMenu = () => {
                 />
               )}
               Data Siswa
+            </MenuItem>
+          </SubMenu>
+          <SubMenu
+            icon={<IoIosPeople />}
+            label="Manajemen Staff"
+            rootStyles={{
+              ["." + menuClasses.subMenuContent]: {
+                backgroundColor: "#fff",
+              },
+            }}
+            className="fw-medium"
+          >
+            <MenuItem
+              onClick={() => handleMenuClick("/manajemen-staff/data-staff")}
+              icon={<FaCircle style={{ fontSize: "8px" }} />}
+              style={{
+                position: "relative",
+                backgroundColor:
+                  selectedMenu === "/manajemen-staff/data-staff" ? "#E5EAF2" : "",
+              }}
+              className={`fw-medium ${
+                selectedMenu === "/manajemen-staff/data-staff" ? "text-blue" : "text-dark-soft"
+              }`}
+            >
+              {selectedMenu === "/manajemen-staff/data-staff" && (
+                <div
+                  style={{
+                    position: "absolute",
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                    width: "4px",
+                    backgroundColor: "var(--blue-color)",
+                  }}
+                />
+              )}
+              Data Staff
+            </MenuItem>
+            <MenuItem
+              onClick={() => handleMenuClick("/manajemen-staff/data-guru")}
+              icon={<FaCircle style={{ fontSize: "8px" }} />}
+              style={{
+                position: "relative",
+                backgroundColor:
+                  selectedMenu === "/manajemen-staff/data-guru" ? "#E5EAF2" : "",
+              }}
+              className={`fw-medium ${
+                selectedMenu === "/manajemen-staff/data-guru" ? "text-blue" : "text-dark-soft"
+              }`}
+            >
+              {selectedMenu === "/manajemen-staff/data-guru" && (
+                <div
+                  style={{
+                    position: "absolute",
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                    width: "4px",
+                    backgroundColor: "var(--blue-color)",
+                  }}
+                />
+              )}
+              Data Guru
             </MenuItem>
           </SubMenu>
           <SubMenu

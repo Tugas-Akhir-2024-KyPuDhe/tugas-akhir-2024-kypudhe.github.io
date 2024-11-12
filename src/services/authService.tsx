@@ -6,6 +6,9 @@ import {
     DetailUserResponse,
     UpdateUserResponse,
     UpdatedBiodata,
+    StudentDetails,
+    StaffDetails,
+    GetUsersResponse,
 } from "./../interface/auth.interface";
 import { useNavigate } from "react-router-dom";
 import useCookie from "react-use-cookie";
@@ -65,6 +68,23 @@ const AuthService = () => {
       }
     };
 
+    const getUsers = async <T extends StudentDetails | StaffDetails>(tipe: "STUDENT" | "STAFF"): Promise<GetUsersResponse<T>> => {
+      try {
+        const response = await axios.get<GetUsersResponse<T>>(
+          `${apiUrl}/api/auth/get/users?tipe=${tipe}`,
+          {
+            headers: {
+              authorization: `Bearer ${userLoginCookie?.token}`,
+            },
+          }
+        );
+        return response.data;
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        throw error;
+      }
+    };
+
     const updateUser = async (data: UpdatedBiodata): Promise<UpdateUserResponse> => {
       try {
         const response = await axios.put<UpdateUserResponse>(
@@ -93,6 +113,7 @@ const AuthService = () => {
       logout,
       validateToken,
       getUser,  
+      getUsers,
       updateUser,
     };
   };

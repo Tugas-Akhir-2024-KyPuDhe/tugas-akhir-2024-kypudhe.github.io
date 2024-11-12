@@ -62,3 +62,49 @@ export interface UpdatedBiodata {
   gender: string;
   birthPlace: string;
 }
+
+
+export interface BaseUserDetails {
+  id: number;
+  uuid: string;
+  name: string;
+  birthPlace: string;
+  address: string;
+  phone: string;
+  email: string;
+  gender: string;
+  mediaId: string | null;
+  createdAt: string;
+  updatedAt: string;
+  user: LoginData;
+}
+
+// Student-specific details
+export interface StudentDetails extends BaseUserDetails {
+  nis: string;
+  nisn: string;
+  startYear: string;
+  endYear: string | null;
+}
+
+// Staff-specific details
+export interface StaffDetails extends BaseUserDetails {
+  nip: string;
+  type: string;
+  position: string | null;
+  startDate: string;
+  endDate: string | null;
+}
+
+// Response for fetching users
+export interface GetUsersResponse<T> {
+  status: number;
+  message: string;
+  data: T[];
+}
+
+// Updated generic response interface to handle both student and staff data
+export interface UserDataResponse<T> {
+  status: number;
+  data: T[];  // Should be an array of `T`
+}

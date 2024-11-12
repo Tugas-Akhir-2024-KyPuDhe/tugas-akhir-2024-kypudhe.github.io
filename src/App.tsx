@@ -1,6 +1,6 @@
 import "./App.css";
 import { Route, Routes, useLocation } from "react-router-dom";
-import { AbsensiPage, ArticlePage, BannerPage, DetailArticlePage, FacilityPage, FormBanner, FormFacilityPage, HomePage, JurusanPage, KelasPage, LoginPage, MapelPage, NilaiPage, SchoolPage, FormJurusanPage, EkskulPage, FormEkskulPage, GuruMapelPage, FormGuruMapelPage, DaftarSiswaPage, FormDaftarSiswaPage, DaftarKelasPage, FormDaftarKelasPage, NilaiSiswaPage, FormNilaiSiswaPage, FormArticlePage, ProfilePage, AbsensiSiswaPage, DetailAbsensiSiswaPage } from "./pages";
+import { AbsensiPage, ArticlePage, BannerPage, DetailArticlePage, FacilityPage, FormBanner, FormFacilityPage, HomePage, JurusanPage, KelasPage, LoginPage, MapelPage, NilaiPage, SchoolPage, FormJurusanPage, EkskulPage, FormEkskulPage, GuruMapelPage, FormGuruMapelPage, DaftarSiswaPage, FormDaftarSiswaPage, DaftarKelasPage, FormDaftarKelasPage, NilaiSiswaPage, FormNilaiSiswaPage, FormArticlePage, ProfilePage, AbsensiSiswaPage, DetailAbsensiSiswaPage, DataSiswaPage } from "./pages";
 import { SideBar } from "./components/sidebar";
 import PrivateRoute from "./components/privateRoute";
 import "bootstrap/dist/css/bootstrap.css";
@@ -21,20 +21,19 @@ function App() {
       ) : (
         <SideBar>
           <Routes>
+            {/* === Global */}
             <Route path="/" element={<PrivateRoute Component={HomePage} />} />
             <Route path="/profil" element={<PrivateRoute Component={ProfilePage} />} />
             <Route path="/dashboard" element={<PrivateRoute Component={HomePage} />} />
             <Route path="/berita" element={<PrivateRoute Component={ArticlePage} /> } />
             <Route path="/berita/:id" element={<PrivateRoute Component={DetailArticlePage} /> } />
+            
+            {/* === Staff */}
             <Route path="/berita/tambah" element={ <PrivateRoute Component={FormArticlePage} /> } />
             <Route path="/berita/update/:id" element={<PrivateRoute Component={FormArticlePage} /> } />
             <Route path="/content-web/banner" element={ <PrivateRoute Component={BannerPage} /> } />
             <Route path="/content-web/banner/tambah" element={ <PrivateRoute Component={FormBanner} /> } />
             <Route path="/content-web/banner/update/:id" element={ <PrivateRoute Component={FormBanner} /> } />
-            <Route path="/nilai" element={ <PrivateRoute Component={NilaiPage} /> } />
-            <Route path="/kelas" element={ <PrivateRoute Component={KelasPage} /> } />
-            <Route path="/mata-pelajaran" element={ <PrivateRoute Component={MapelPage} /> } />
-            <Route path="/absensi" element={ <PrivateRoute Component={AbsensiPage} /> } />
             <Route path="/content-web/sekolah" element={ <PrivateRoute Component={SchoolPage} /> } />
             <Route path="/content-web/fasilitas" element={ <PrivateRoute Component={FacilityPage} /> } />
             <Route path="/content-web/fasilitas/tambah" element={ <PrivateRoute Component={FormFacilityPage} /> } />
@@ -45,6 +44,13 @@ function App() {
             <Route path="/content-web/ekstra-kurikuler" element={ <PrivateRoute Component={EkskulPage} /> } />
             <Route path="/content-web/ekstra-kurikuler/tambah" element={ <PrivateRoute Component={FormEkskulPage} /> } />
             <Route path="/content-web/ekstra-kurikuler/update/:id" element={ <PrivateRoute Component={FormEkskulPage} /> } />
+            <Route path="/content-web/ekstra-kurikuler/update/" element={ <PrivateRoute Component={FormEkskulPage} /> } />
+            <Route path="/manajemen-siswa/data-siswa" element={ <PrivateRoute Component={DataSiswaPage} /> } />
+            {/* <Route path="/manajemen-siswa/data-siswa/tambah" element={ <PrivateRoute Component={FormEkskulPage} /> } />
+            <Route path="/manajemen-siswa/data-siswa/update/:id" element={ <PrivateRoute Component={FormEkskulPage} /> } />
+            <Route path="/manajemen-siswa/data-siswa/update/" element={ <PrivateRoute Component={FormEkskulPage} /> } /> */}
+            
+            {/* === Teacher */}
             <Route path="/guru/mata-pelajaran" element={ <PrivateRoute Component={GuruMapelPage} /> } />
             <Route path="/guru/mata-pelajaran/tambah" element={ <PrivateRoute Component={FormGuruMapelPage} /> } />
             <Route path="/guru/mata-pelajaran/update/:id" element={ <PrivateRoute Component={FormGuruMapelPage} /> } />
@@ -59,6 +65,12 @@ function App() {
             <Route path="/pengelolaan-siswa/nilai-siswa/update/:id" element={ <PrivateRoute Component={FormNilaiSiswaPage} /> } />
             <Route path="/pengelolaan-siswa/absensi-siswa" element={ <PrivateRoute Component={AbsensiSiswaPage} /> } />
             <Route path="/pengelolaan-siswa/absensi-siswa/:id" element={ <PrivateRoute Component={DetailAbsensiSiswaPage} /> } />
+
+            {/* === Student */}
+            <Route path="/nilai" element={ <PrivateRoute Component={NilaiPage} /> } />
+            <Route path="/kelas" element={ <PrivateRoute Component={KelasPage} /> } />
+            <Route path="/mata-pelajaran" element={ <PrivateRoute Component={MapelPage} /> } />
+            <Route path="/absensi" element={ <PrivateRoute Component={AbsensiPage} /> } />
           </Routes>
         </SideBar>
       )}
