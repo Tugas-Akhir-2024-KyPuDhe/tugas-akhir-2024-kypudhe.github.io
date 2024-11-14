@@ -1,6 +1,6 @@
 import "./App.css";
 import { Route, Routes, useLocation } from "react-router-dom";
-import { AbsensiPage, ArticlePage, BannerPage, DetailArticlePage, FacilityPage, FormBanner, FormFacilityPage, HomePage, JurusanPage, KelasPage, LoginPage, MapelPage, NilaiPage, SchoolPage, FormJurusanPage, EkskulPage, FormEkskulPage, GuruMapelPage, FormGuruMapelPage, DaftarSiswaPage, FormDaftarSiswaPage, DaftarKelasPage, FormDaftarKelasPage, NilaiSiswaPage, FormNilaiSiswaPage, FormArticlePage, ProfilePage, AbsensiSiswaPage, DetailAbsensiSiswaPage, DataSiswaPage } from "./pages";
+import { AbsensiPage, ArticlePage, BannerPage, DetailArticlePage, FacilityPage, FormBanner, FormFacilityPage, HomePage, JurusanPage, KelasPage, LoginPage, MapelPage, NilaiPage, SchoolPage, FormJurusanPage, EkskulPage, FormEkskulPage, GuruMapelPage, FormGuruMapelPage, DaftarSiswaPage, FormDaftarSiswaPage, DaftarKelasPage, FormDaftarKelasPage, NilaiSiswaPage, FormNilaiSiswaPage, FormArticlePage, ProfilePage, AbsensiSiswaPage, DetailAbsensiSiswaPage, DataSiswaPage, FormMangementSiswa } from "./pages";
 import { SideBar } from "./components/sidebar";
 import PrivateRoute from "./components/privateRoute";
 import "bootstrap/dist/css/bootstrap.css";
@@ -46,9 +46,9 @@ function App() {
             <Route path="/content-web/ekstra-kurikuler/update/:id" element={ <PrivateRoute Component={FormEkskulPage} /> } />
             <Route path="/content-web/ekstra-kurikuler/update/" element={ <PrivateRoute Component={FormEkskulPage} /> } />
             <Route path="/manajemen-siswa/data-siswa" element={ <PrivateRoute Component={DataSiswaPage} /> } />
-            {/* <Route path="/manajemen-siswa/data-siswa/tambah" element={ <PrivateRoute Component={FormEkskulPage} /> } />
-            <Route path="/manajemen-siswa/data-siswa/update/:id" element={ <PrivateRoute Component={FormEkskulPage} /> } />
-            <Route path="/manajemen-siswa/data-siswa/update/" element={ <PrivateRoute Component={FormEkskulPage} /> } /> */}
+            <Route path="/manajemen-siswa/data-siswa/tambah" element={ <PrivateRoute Component={FormMangementSiswa} /> } />
+            <Route path="/manajemen-siswa/data-siswa/update/:id" element={ <PrivateRoute Component={FormMangementSiswa} /> } />
+            <Route path="/manajemen-siswa/data-siswa/update/" element={ <PrivateRoute Component={FormMangementSiswa} /> } />
             
             {/* === Teacher */}
             <Route path="/guru/mata-pelajaran" element={ <PrivateRoute Component={GuruMapelPage} /> } />

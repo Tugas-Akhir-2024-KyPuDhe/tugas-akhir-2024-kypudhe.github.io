@@ -25,6 +25,9 @@ export interface UserDetails {
   // === STUDENT
   nis?: string;
   nisn?: string;
+
+  // === SENSITIF
+  password?: string;
 }
 
 export interface DetailUserResponse {
@@ -107,4 +110,52 @@ export interface GetUsersResponse<T> {
 export interface UserDataResponse<T> {
   status: number;
   data: T[];  // Should be an array of `T`
+}
+
+export interface FormCreateStudent {
+  id?: number;
+  password: string;
+  name: string;
+  birthPlace: string;
+  address: string;
+  nis: string;
+  nisn: string;
+  gender: string;
+  phone: string;
+  email: string;
+  startYear: string;
+}
+
+export interface StudentDetail {
+  id: number;
+  uuid: string;
+  name: string;
+  birthPlace: string;
+  address: string;
+  phone: string;
+  email: string;
+  startYear: string;
+  endYear: string | null;
+  mediaId: string | null;
+  createdAt: string;
+  updatedAt: string;
+  photo: Media;
+  gender: string;
+  nis: string;
+  nisn: string;
+  user: {
+    username: string;
+    password: string;
+  };
+}
+
+export interface ResponseGetStudentDetail{
+  status: number;
+  message: string;
+  data: StudentDetail;
+}
+
+export interface ResponseUpdatePhotoUser {
+  status: number;
+  message: string;
 }

@@ -63,6 +63,34 @@ export const ProfilePage = () => {
     setloadingUpdateData(false);
   };
 
+  const handleSavePhotoUpdate = async (id: number, photoFile: File) => {
+    try {
+      setloadingUpdateData(true);
+      const formData = new FormData();
+      formData.append("photo", photoFile);
+
+      const response = await authService.updatePhotoUser(id, formData);
+      if (response.status === 200) {
+        await getUser();
+        setstatusUpdateData(false);
+        setloadingUpdateData(false);
+        Toast.fire({
+          icon: "success",
+          title: "Foto Profil Berhasil di Perbarui",
+          timer: 4000,
+        });
+      }
+    } catch (error) {
+      Toast.fire({
+        icon: "error",
+        title: "Foto Profile Gagal di Perbarui",
+        timer: 4000,
+      });
+      console.error("Error updating photo:", error);
+    }
+    setloadingUpdateData(false);
+  };
+
   if (error) {
     return <div>{error}</div>;
   }
@@ -74,14 +102,16 @@ export const ProfilePage = () => {
           <CardBiodata
             handleUpdateAccess={handleUpdateAccess}
             onSaveUpdate={handleSaveUpdate}
+            onSavePhotoUpdate={handleSavePhotoUpdate} // Pass the new function here
             statusUpdateData={statusUpdateData}
             loadingUpdateData={loadingUpdateData}
             photo={
               profileDetail.details[0].photo?.url ||
-              profileDetail.details[0].gender === "L"
+              (profileDetail.details[0].gender === "L"
                 ? noPhotoMale
-                : noPhotoFemale
+                : noPhotoFemale)
             }
+            id={profileDetail.details[0].id}
             name={profileDetail.details[0].name}
             email={profileDetail.details[0].email || "-"}
             phone={profileDetail.details[0].phone || "-"}

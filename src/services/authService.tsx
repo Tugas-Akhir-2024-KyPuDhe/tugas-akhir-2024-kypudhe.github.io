@@ -9,6 +9,8 @@ import {
     StudentDetails,
     StaffDetails,
     GetUsersResponse,
+    ResponseGetStudentDetail,
+    ResponseUpdatePhotoUser,
 } from "./../interface/auth.interface";
 import { useNavigate } from "react-router-dom";
 import useCookie from "react-use-cookie";
@@ -102,6 +104,81 @@ const AuthService = () => {
         throw error;
       }
     };
+
+    const createStundent = async (data: FormData): Promise<UpdateUserResponse> => {
+      try {
+        const response = await axios.put<UpdateUserResponse>(
+          `${apiUrl}/api/auth/register/student`, data,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              authorization: `Bearer ${userLoginCookie?.token}`,
+            },
+          }
+        );
+        return response.data;
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        throw error;
+      }
+    };
+    
+    const updateStundent = async (id: number, data: FormData): Promise<UpdateUserResponse> => {
+      try {
+        const response = await axios.put<UpdateUserResponse>(
+          `${apiUrl}/api/auth/update/student/${id}`, data,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              authorization: `Bearer ${userLoginCookie?.token}`,
+            },
+          }
+        );
+        return response.data;
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        throw error;
+      }
+    };
+  
+    const getStudentByNis = async (nis: number): Promise<ResponseGetStudentDetail> => {
+      try {
+        const response = await axios.get<ResponseGetStudentDetail>(
+          `${apiUrl}/api/auth/get/student/${nis}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              authorization: `Bearer ${userLoginCookie?.token}`,
+            },
+          }
+        );
+        return response.data;
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        throw error;
+      }
+    };
+
+    const updatePhotoUser = async (id: number, formData: FormData): Promise<ResponseUpdatePhotoUser> => {
+      try {
+        const response = await axios.put<ResponseGetStudentDetail>(
+          `${apiUrl}/api/auth/update/user/photo/${id}`, formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              authorization: `Bearer ${userLoginCookie?.token}`,
+            },
+          }
+        );
+        return response.data;
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          console.error("Error updating photo user:", error.response?.data || error.message);
+          throw new Error(error.response?.data?.message || "Failed to update photo user");
+        }
+        throw new Error("An unexpected error occurred");
+      }
+    };
   
     const logout = () => {
       setCookieLogin("");
@@ -115,6 +192,10 @@ const AuthService = () => {
       getUser,  
       getUsers,
       updateUser,
+      createStundent,
+      updateStundent,
+      getStudentByNis,
+      updatePhotoUser
     };
   };
   
