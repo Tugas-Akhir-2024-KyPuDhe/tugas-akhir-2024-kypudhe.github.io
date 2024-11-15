@@ -27,7 +27,8 @@ import { HomePage } from "./homePage";
 import { LoginPage } from "./loginPage";
 import { FormArticlePage } from './articlePage/formArticle';
 import { ProfilePage } from './profilePage';
-import { DataSiswaPage } from './staffPages/managementSiswaPage/dataSiswaPage';
-import { FormMangementSiswa } from './staffPages/managementSiswaPage/dataSiswaPage/form';
+import { DataSiswaMangementSiswaPage } from './staffPages/managementSiswaPage/dataSiswaPage';
+import { FormSiswaMangementSiswaPage } from './staffPages/managementSiswaPage/dataSiswaPage/form';
+import { DetailSiswaMangementSiswa } from './staffPages/managementSiswaPage/dataSiswaPage/detail';
 
-export { HomePage, LoginPage, ArticlePage, FormArticlePage, DetailArticlePage, BannerPage, FormBanner, NilaiPage, KelasPage, MapelPage, AbsensiPage, SchoolPage, FacilityPage, FormFacilityPage, JurusanPage, FormJurusanPage, EkskulPage, FormEkskulPage, GuruMapelPage, FormGuruMapelPage, DaftarSiswaPage, FormDaftarSiswaPage, DaftarKelasPage, FormDaftarKelasPage, NilaiSiswaPage, FormNilaiSiswaPage, ProfilePage, AbsensiSiswaPage, DetailAbsensiSiswaPage, DataSiswaPage, FormMangementSiswa }
+export { HomePage, LoginPage, ArticlePage, FormArticlePage, DetailArticlePage, BannerPage, FormBanner, NilaiPage, KelasPage, MapelPage, AbsensiPage, SchoolPage, FacilityPage, FormFacilityPage, JurusanPage, FormJurusanPage, EkskulPage, FormEkskulPage, GuruMapelPage, FormGuruMapelPage, DaftarSiswaPage, FormDaftarSiswaPage, DaftarKelasPage, FormDaftarKelasPage, NilaiSiswaPage, FormNilaiSiswaPage, ProfilePage, AbsensiSiswaPage, DetailAbsensiSiswaPage, DataSiswaMangementSiswaPage, FormSiswaMangementSiswaPage, DetailSiswaMangementSiswa }

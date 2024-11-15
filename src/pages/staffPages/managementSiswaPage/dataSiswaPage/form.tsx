@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
-import { Toast } from "../../../../utils/myFunctions";
+import { convertStartEndYear, Toast } from "../../../../utils/myFunctions";
 import { useNavigate, useParams } from "react-router-dom";
 import { HeaderTitlePage } from "../../../../components/headerTitlePage";
 import AuthService from "../../../../services/authService";
@@ -24,7 +24,21 @@ const optionsGender = [
   { value: "P", label: "Perempuan" },
 ];
 
-export const FormMangementSiswa: React.FC = () => {
+const currentDate = new Date();
+const currentYear = currentDate.getFullYear();
+const currentMonth = String(currentDate.getMonth() + 1).padStart(2, "0");
+const currentDay = String(currentDate.getDate()).padStart(2, "0");
+
+const optionsStartYear = Array.from({ length: 11 }, (_, index) => {
+  const year = currentYear - 5 + index;
+  const value = `${year}-${currentMonth}-${currentDay}`;
+  return {
+    value: value,
+    label: year.toString(),
+  };
+});
+
+export const FormSiswaMangementSiswaPage: React.FC = () => {
   const navigate = useNavigate();
 
   const { id } = useParams<{ id: string }>();
@@ -39,7 +53,7 @@ export const FormMangementSiswa: React.FC = () => {
     gender: optionsGender[0].value,
     phone: "",
     email: "",
-    startYear: "",
+    startYear: optionsStartYear[4].value,
   });
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [errorsForms, setErrorsForms] = useState<{ [key: string]: string }>({});
@@ -49,7 +63,7 @@ export const FormMangementSiswa: React.FC = () => {
     const getDataSiswa = async () => {
       if (id) {
         try {
-          const response = await studentService.getStudentByNis(parseFloat(id));
+          const response = await studentService.getStudentByNis(parseInt(id));
           const data = response.data;
           setFormData({
             id: data.id,
@@ -62,11 +76,11 @@ export const FormMangementSiswa: React.FC = () => {
             gender: data.gender,
             phone: data.phone,
             email: data.email,
-            startYear: data.startYear,
+            startYear: convertStartEndYear(data.startYear),
           });
-          setImageUrl(data.photo.url);
+          setImageUrl(data.photo?.url);
         } catch (error) {
-          console.error("Error fetching skill data:", error);
+          console.error("Error fetching detail siswa data:", error);
         } finally {
           setloadingForm(false);
         }
@@ -111,7 +125,7 @@ export const FormMangementSiswa: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const requiredFields = ["title", "description", "title_link", "link"];
+    const requiredFields = ["name", "nis", "nisn"];
     const newErrors: { [key: string]: string } = {};
 
     requiredFields.forEach((field) => {
@@ -135,7 +149,9 @@ export const FormMangementSiswa: React.FC = () => {
     setloadingForm(true);
     const payload = new FormData();
     Object.entries(formData).forEach(([key, value]) => {
-      payload.append(key, value as string | Blob);
+      if (key !== "password" || id) {
+        payload.append(key, value as string | Blob);
+      }
     });
 
     try {
@@ -251,7 +267,36 @@ export const FormMangementSiswa: React.FC = () => {
                 )}
               </div>
             </div>
-            <div className="col-12 col-lg-6">
+            <div className="col-12 col-lg-3">
+              <div className="form-group mb-3">
+                <label className="mb-2 fw-medium">Tahun Mulai *</label>
+                <Select
+                  options={optionsStartYear}
+                  value={optionsStartYear.find((option) => {
+                    return (
+                      option.value.split("-")[0] ===
+                      formData.startYear.split("-")[0]
+                    );
+                  })}
+                  onChange={(option) => handleSelectChange("startYear", option)}
+                  placeholder="Pilih Tahun Mulai"
+                  isSearchable={false}
+                  className="form-control-lg px-0 pt-0"
+                  styles={{
+                    control: (baseStyles) => ({
+                      ...baseStyles,
+                      fontSize: "0.955rem",
+                      borderRadius: "8px",
+                    }),
+                    option: (provided) => ({
+                      ...provided,
+                      fontSize: "1rem",
+                    }),
+                  }}
+                />
+              </div>
+            </div>
+            <div className="col-12 col-lg-3">
               <div className="form-group mb-3">
                 <label className="mb-2 fw-medium">No Telp *</label>
                 <input
@@ -296,7 +341,7 @@ export const FormMangementSiswa: React.FC = () => {
                   className={`form-control ${
                     errorsForms.birthPlace ? "is-invalid" : ""
                   }`}
-                  placeholder="No.telp.."
+                  placeholder="Tempat, Tanggal Lahir.."
                   value={formData.birthPlace}
                   onChange={handleInputChange}
                 />
@@ -406,7 +451,7 @@ export const FormMangementSiswa: React.FC = () => {
                     <br />
                     <img
                       src={imageUrl}
-                      alt="Current Skill"
+                      alt={formData.name}
                       className="rounded"
                       style={{ width: "300px", objectFit: "contain" }}
                     />

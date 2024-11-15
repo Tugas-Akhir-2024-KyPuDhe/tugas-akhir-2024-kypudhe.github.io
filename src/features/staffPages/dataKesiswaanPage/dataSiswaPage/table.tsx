@@ -72,7 +72,7 @@ export const Table: React.FC = () => {
         <>
           <button
             className="btn btn-info btn-sm text me-2 text-light"
-            onClick={() => navigate(`update/${row.nis}`)}
+            onClick={() => navigate(`detail/${row.nis}`)}
             disabled={loading}
           >
             <FaEye />

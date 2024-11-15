@@ -2,7 +2,7 @@ import React from "react";
 import { HeaderTitlePage } from "../../../../components/headerTitlePage";
 import { Table } from "../../../../features/staffPages/dataKesiswaanPage/dataSiswaPage/table";
 
-export const DataSiswaPage: React.FC = () => {
+export const DataSiswaMangementSiswaPage: React.FC = () => {
   
   return (
     <>

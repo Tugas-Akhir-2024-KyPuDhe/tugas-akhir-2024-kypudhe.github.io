@@ -57,7 +57,7 @@ export const FormEkskulPage: React.FC = () => {
             }))
           );
         } catch (error) {
-          console.error("Error fetching skill data:", error);
+          console.error("Error fetching ekskul data:", error);
         } finally {
           setloadingForm(false);
         }

@@ -47,7 +47,7 @@ export const FormGuruMapelPage: React.FC = () => {
             media: null,
           });
         } catch (error) {
-          console.error("Error fetching skill data:", error);
+          console.error("Error fetching mapel data:", error);
         } finally {
           setloadingForm(false);
         }

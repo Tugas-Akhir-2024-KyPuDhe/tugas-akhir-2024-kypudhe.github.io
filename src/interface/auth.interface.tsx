@@ -134,7 +134,7 @@ export interface StudentDetail {
   address: string;
   phone: string;
   email: string;
-  startYear: string;
+  startYear: Date;
   endYear: string | null;
   mediaId: string | null;
   createdAt: string;

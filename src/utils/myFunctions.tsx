@@ -79,3 +79,11 @@ export const formatGender = (gender: string): string => {
     return "";
   }
 };
+
+export const convertStartEndYear = (startYear: Date): string => {
+  // Membuat objek Date dari string ISO
+  const date = new Date(startYear);
+  
+  // Mengambil tanggal dalam format YYYY-MM-DD
+  return date.toISOString().split('T')[0];
+};

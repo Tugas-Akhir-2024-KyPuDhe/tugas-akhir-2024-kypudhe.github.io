@@ -107,7 +107,7 @@ const AuthService = () => {
 
     const createStundent = async (data: FormData): Promise<UpdateUserResponse> => {
       try {
-        const response = await axios.put<UpdateUserResponse>(
+        const response = await axios.post<UpdateUserResponse>(
           `${apiUrl}/api/auth/register/student`, data,
           {
             headers: {

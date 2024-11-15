@@ -93,7 +93,7 @@ export const FormArticlePage: React.FC = () => {
             createBy: userLoginCookie.name,
           });
         } catch (error) {
-          console.error("Error fetching skill data:", error);
+          console.error("Error fetching article data:", error);
         } finally {
           setloadingForm(false);
         }

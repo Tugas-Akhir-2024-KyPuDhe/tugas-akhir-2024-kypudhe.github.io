@@ -57,7 +57,7 @@ export const FormJurusanPage: React.FC = () => {
             }))
           );
         } catch (error) {
-          console.error("Error fetching skill data:", error);
+          console.error("Error fetching major data:", error);
         } finally {
           setloadingForm(false);
         }

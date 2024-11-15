@@ -47,7 +47,7 @@ export const FormDaftarSiswaPage: React.FC = () => {
             media: null,
           });
         } catch (error) {
-          console.error("Error fetching skill data:", error);
+          console.error("Error fetching daftar siswa data:", error);
         } finally {
           setloadingForm(false);
         }

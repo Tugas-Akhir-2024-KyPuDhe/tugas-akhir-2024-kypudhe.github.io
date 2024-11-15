@@ -68,7 +68,7 @@ export const FormBanner: React.FC = () => {
           });
           setImageUrl(data.banner.url);
         } catch (error) {
-          console.error("Error fetching skill data:", error);
+          console.error("Error fetching banner data:", error);
         } finally {
           setloadingForm(false);
         }
@@ -318,7 +318,7 @@ export const FormBanner: React.FC = () => {
                   <br />
                   <img
                     src={imageUrl}
-                    alt="Current Skill"
+                    alt={formData.title}
                     style={{ maxWidth: "50%", objectFit: "contain" }}
                   />
                 </div>

@@ -57,7 +57,7 @@ export const FormFacilityPage: React.FC = () => {
             }))
           );
         } catch (error) {
-          console.error("Error fetching skill data:", error);
+          console.error("Error fetching facility data:", error);
         } finally {
           setloadingForm(false);
         }
