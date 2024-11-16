@@ -6,10 +6,9 @@ import { formatDate, formatGender } from "../../../../utils/myFunctions";
 import { CardProfil } from "../../../../features/staffPages/dataKesiswaanPage/dataSiswaPage/cardProfil";
 import noPhotoFemale from "./../../../../assets/images/profile-female.jpg";
 import noPhotoMale from "./../../../../assets/images/profile-male.jpg";
-import { DataAkademik } from "../../../../features/staffPages/dataKesiswaanPage/dataSiswaPage/dataAkademik";
-import { DataOrangTua } from "../../../../features/staffPages/dataKesiswaanPage/dataSiswaPage/dataOrangTua";
-import { RiwayatAkademik } from "../../../../features/staffPages/dataKesiswaanPage/dataSiswaPage/riwayatAkademik";
-
+import { CardDataOrangTua } from "../../../../components/cardDataOrangTua";
+import { CardRiwayatAkademik } from "../../../../components/cardRiwayatAkademik";
+import { CardDataAkademik } from "../../../../components/cardDataAkademik";
 interface DataState {
   id?: number;
   password?: string;
@@ -132,7 +131,10 @@ export const DetailSiswaMangementSiswa: React.FC = () => {
       </div>
 
       <div className="m-lg-4 m-md-4 my-4 rounded">
-        <ul className="nav nav-underline" style={{ borderBottom: "0.5px solid grey" }}>
+        <ul
+          className="nav nav-underline"
+          style={{ borderBottom: "0.5px solid grey" }}
+        >
           <li className="nav-item" style={{ cursor: "pointer" }}>
             <a
               className={`nav-link text-blue ${
@@ -168,7 +170,11 @@ export const DetailSiswaMangementSiswa: React.FC = () => {
 
       <div
         className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
-        style={{ backgroundColor: "#fff", position: "relative" }}
+        style={{
+          backgroundColor: "#fff",
+          position: "relative",
+          minHeight: "450px",
+        }}
       >
         {loading && (
           <div
@@ -191,11 +197,23 @@ export const DetailSiswaMangementSiswa: React.FC = () => {
           </div>
         )}
         {activeMenu === "data-akademik" ? (
-          <DataAkademik />
+          <CardDataAkademik
+            kelas={"XII"}
+            major={"Rekayasa Perangkat Lunak"}
+            startYear={"2023"}
+            studentStatus={"Aktif"}
+          />
         ) : activeMenu === "data-orang-tua" ? (
-          <DataOrangTua />
+          <CardDataOrangTua
+            nis={112233}
+            fatherName={"Agus"}
+            motherName={"Luna"}
+            phone={"082382383832"}
+            parentJob={"Pegawai Negeri"}
+            parentAddress={"Jalan Thamrin"}
+          />
         ) : activeMenu === "riwayat-akademik" ? (
-          <RiwayatAkademik />
+          <CardRiwayatAkademik />
         ) : (
           <div>Halaman tidak ditemukan</div>
         )}

@@ -1,4 +1,5 @@
 import { Media } from "./media.interface";
+import { ParentOfStudent } from "./student.interface";
 
 export interface UserDetails {
   // === GENERAL
@@ -23,8 +24,9 @@ export interface UserDetails {
   startDate?: string;
   endDate?: string | null;
   // === STUDENT
-  nis?: string;
-  nisn?: string;
+  nis?: number;
+  nisn?: number;
+  ParentOfStudent?: ParentOfStudent[];
 
   // === SENSITIF
   password?: string;

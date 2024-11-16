@@ -44,22 +44,22 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
     const handleResize = () => {
       const mobile = window.innerWidth < 1200;
       setIsMobile(mobile);
-      
+
       if (mobile) {
-        setMobileToggled(false); 
+        setMobileToggled(false);
         setDesktopCollapsed(false);
       } else {
         setMobileToggled(true);
         setDesktopCollapsed(false);
       }
     };
-    handleResize(); 
-  
+    handleResize();
+
     window.addEventListener("resize", handleResize);
     if (window.visualViewport) {
       window.visualViewport.addEventListener("resize", handleResize);
     }
-  
+
     return () => {
       window.removeEventListener("resize", handleResize);
       if (window.visualViewport) {
@@ -77,7 +77,6 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
       setDesktopCollapsed(false);
     }
   }, [isMobile]);
-  
 
   useEffect(() => {
     if (!userLoginCookie) {
@@ -157,7 +156,9 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
                       style={{ width: "250px" }}
                     >
                       <li>
-                        <Link to='/profil' className="dropdown-item py-3">Profil</Link>
+                        <Link to="/profil" className="dropdown-item py-3">
+                          Profil
+                        </Link>
                       </li>
                       <li>
                         <button
@@ -283,13 +284,10 @@ export const ListMenu = () => {
             icon={<MdLibraryBooks />}
             style={{
               position: "relative",
-              backgroundColor:
-                selectedMenu === "/nilai" ? "#E5EAF2" : "",
+              backgroundColor: selectedMenu === "/nilai" ? "#E5EAF2" : "",
             }}
             className={`fw-medium ${
-              selectedMenu === "/nilai"
-                ? "text-blue"
-                : "text-dark-soft"
+              selectedMenu === "/nilai" ? "text-blue" : "text-dark-soft"
             }`}
           >
             {selectedMenu === "/nilai" && (
@@ -311,8 +309,7 @@ export const ListMenu = () => {
             icon={<LuCheckSquare />}
             style={{
               position: "relative",
-              backgroundColor:
-                selectedMenu === "/absensi" ? "#E5EAF2" : "",
+              backgroundColor: selectedMenu === "/absensi" ? "#E5EAF2" : "",
             }}
             className={`fw-medium ${
               selectedMenu === "/absensi" ? "text-blue" : "text-dark-soft"
@@ -362,10 +359,13 @@ export const ListMenu = () => {
             icon={<TbBooks />}
             style={{
               position: "relative",
-              backgroundColor: selectedMenu === "/mata-pelajaran" ? "#E5EAF2" : "",
+              backgroundColor:
+                selectedMenu === "/mata-pelajaran" ? "#E5EAF2" : "",
             }}
             className={`fw-medium ${
-              selectedMenu === "/mata-pelajaran" ? "text-blue" : "text-dark-soft"
+              selectedMenu === "/mata-pelajaran"
+                ? "text-blue"
+                : "text-dark-soft"
             }`}
           >
             {selectedMenu === "/mata-pelajaran" && (
@@ -427,12 +427,16 @@ export const ListMenu = () => {
             className="fw-medium"
           >
             <MenuItem
-              onClick={() => handleMenuClick("/pengelolaan-siswa/absensi-siswa")}
+              onClick={() =>
+                handleMenuClick("/pengelolaan-siswa/absensi-siswa")
+              }
               icon={<FaCircle style={{ fontSize: "8px" }} />}
               style={{
                 position: "relative",
                 backgroundColor:
-                  selectedMenu === "/pengelolaan-siswa/absensi-siswa" ? "#E5EAF2" : "",
+                  selectedMenu === "/pengelolaan-siswa/absensi-siswa"
+                    ? "#E5EAF2"
+                    : "",
               }}
               className={`fw-medium ${
                 selectedMenu === "/pengelolaan-siswa/absensi-siswa"
@@ -460,7 +464,9 @@ export const ListMenu = () => {
               style={{
                 position: "relative",
                 backgroundColor:
-                  selectedMenu === "/pengelolaan-siswa/daftar-siswa" ? "#E5EAF2" : "",
+                  selectedMenu === "/pengelolaan-siswa/daftar-siswa"
+                    ? "#E5EAF2"
+                    : "",
               }}
               className={`fw-medium ${
                 selectedMenu === "/pengelolaan-siswa/daftar-siswa"
@@ -487,10 +493,15 @@ export const ListMenu = () => {
               icon={<FaCircle style={{ fontSize: "8px" }} />}
               style={{
                 position: "relative",
-                backgroundColor: selectedMenu === "/pengelolaan-siswa/daftar-kelas" ? "#E5EAF2" : "",
+                backgroundColor:
+                  selectedMenu === "/pengelolaan-siswa/daftar-kelas"
+                    ? "#E5EAF2"
+                    : "",
               }}
               className={`fw-medium ${
-                selectedMenu === "/pengelolaan-siswa/daftar-kelas" ? "text-blue" : "text-dark-soft"
+                selectedMenu === "/pengelolaan-siswa/daftar-kelas"
+                  ? "text-blue"
+                  : "text-dark-soft"
               }`}
             >
               {selectedMenu === "/pengelolaan-siswa/daftar-kelas" && (
@@ -513,7 +524,9 @@ export const ListMenu = () => {
               style={{
                 position: "relative",
                 backgroundColor:
-                  selectedMenu === "/pengelolaan-siswa/nilai-siswa" ? "#E5EAF2" : "",
+                  selectedMenu === "/pengelolaan-siswa/nilai-siswa"
+                    ? "#E5EAF2"
+                    : "",
               }}
               className={`fw-medium ${
                 selectedMenu === "/pengelolaan-siswa/nilai-siswa"
@@ -536,7 +549,6 @@ export const ListMenu = () => {
               Nilai Siswa
             </MenuItem>
           </SubMenu>
-          
         </>
       )}
       {/* Config | STAFF */}
@@ -558,10 +570,14 @@ export const ListMenu = () => {
               style={{
                 position: "relative",
                 backgroundColor:
-                  selectedMenu === "/manajemen-siswa/data-siswa" ? "#E5EAF2" : "",
+                  selectedMenu === "/manajemen-siswa/data-siswa"
+                    ? "#E5EAF2"
+                    : "",
               }}
               className={`fw-medium ${
-                selectedMenu === "/manajemen-siswa/data-siswa" ? "text-blue" : "text-dark-soft"
+                selectedMenu === "/manajemen-siswa/data-siswa"
+                  ? "text-blue"
+                  : "text-dark-soft"
               }`}
             >
               {selectedMenu === "/manajemen-siswa/data-siswa" && (
@@ -595,10 +611,14 @@ export const ListMenu = () => {
               style={{
                 position: "relative",
                 backgroundColor:
-                  selectedMenu === "/manajemen-staff/data-staff" ? "#E5EAF2" : "",
+                  selectedMenu === "/manajemen-staff/data-staff"
+                    ? "#E5EAF2"
+                    : "",
               }}
               className={`fw-medium ${
-                selectedMenu === "/manajemen-staff/data-staff" ? "text-blue" : "text-dark-soft"
+                selectedMenu === "/manajemen-staff/data-staff"
+                  ? "text-blue"
+                  : "text-dark-soft"
               }`}
             >
               {selectedMenu === "/manajemen-staff/data-staff" && (
@@ -621,10 +641,14 @@ export const ListMenu = () => {
               style={{
                 position: "relative",
                 backgroundColor:
-                  selectedMenu === "/manajemen-staff/data-guru" ? "#E5EAF2" : "",
+                  selectedMenu === "/manajemen-staff/data-guru"
+                    ? "#E5EAF2"
+                    : "",
               }}
               className={`fw-medium ${
-                selectedMenu === "/manajemen-staff/data-guru" ? "text-blue" : "text-dark-soft"
+                selectedMenu === "/manajemen-staff/data-guru"
+                  ? "text-blue"
+                  : "text-dark-soft"
               }`}
             >
               {selectedMenu === "/manajemen-staff/data-guru" && (
@@ -661,7 +685,9 @@ export const ListMenu = () => {
                   selectedMenu === "/content-web/banner" ? "#E5EAF2" : "",
               }}
               className={`fw-medium ${
-                selectedMenu === "/content-web/banner" ? "text-blue" : "text-dark-soft"
+                selectedMenu === "/content-web/banner"
+                  ? "text-blue"
+                  : "text-dark-soft"
               }`}
             >
               {selectedMenu === "/content-web/banner" && (
@@ -687,7 +713,9 @@ export const ListMenu = () => {
                   selectedMenu === "/content-web/sekolah" ? "#E5EAF2" : "",
               }}
               className={`fw-medium ${
-                selectedMenu === "/content-web/sekolah" ? "text-blue" : "text-dark-soft"
+                selectedMenu === "/content-web/sekolah"
+                  ? "text-blue"
+                  : "text-dark-soft"
               }`}
             >
               {selectedMenu === "/content-web/sekolah" && (
@@ -713,7 +741,9 @@ export const ListMenu = () => {
                   selectedMenu === "/content-web/jurusan" ? "#E5EAF2" : "",
               }}
               className={`fw-medium ${
-                selectedMenu === "/content-web/jurusan" ? "text-blue" : "text-dark-soft"
+                selectedMenu === "/content-web/jurusan"
+                  ? "text-blue"
+                  : "text-dark-soft"
               }`}
             >
               {selectedMenu === "/content-web/jurusan" && (
@@ -764,7 +794,9 @@ export const ListMenu = () => {
               style={{
                 position: "relative",
                 backgroundColor:
-                  selectedMenu === "/content-web/ekstra-kurikuler" ? "#E5EAF2" : "",
+                  selectedMenu === "/content-web/ekstra-kurikuler"
+                    ? "#E5EAF2"
+                    : "",
               }}
               className={`fw-medium ${
                 selectedMenu === "/content-web/ekstra-kurikuler"
@@ -785,6 +817,34 @@ export const ListMenu = () => {
                 />
               )}
               Ekstra Kurikuler
+            </MenuItem>
+            <MenuItem
+              onClick={() => handleMenuClick("/content-web/galeri")}
+              icon={<FaCircle style={{ fontSize: "8px" }} />}
+              style={{
+                position: "relative",
+                backgroundColor:
+                  selectedMenu === "/content-web/galeri" ? "#E5EAF2" : "",
+              }}
+              className={`fw-medium ${
+                selectedMenu === "/content-web/galeri"
+                  ? "text-blue"
+                  : "text-dark-soft"
+              }`}
+            >
+              {selectedMenu === "/content-web/galeri" && (
+                <div
+                  style={{
+                    position: "absolute",
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                    width: "4px",
+                    backgroundColor: "var(--blue-color)",
+                  }}
+                />
+              )}
+              Galeri
             </MenuItem>
           </SubMenu>
         </>

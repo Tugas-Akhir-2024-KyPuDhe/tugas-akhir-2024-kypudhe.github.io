@@ -14,6 +14,7 @@ import {
 } from "./../interface/auth.interface";
 import { useNavigate } from "react-router-dom";
 import useCookie from "react-use-cookie";
+import { FormParentOfStudent } from "../interface/student.interface";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 const AuthService = () => {
@@ -56,7 +57,7 @@ const AuthService = () => {
     const getUser = async (): Promise<DetailUserResponse> => {
       try {
         const response = await axios.get<LoginResponse>(
-          `${apiUrl}/api/auth/get/user`,
+          `${apiUrl}/api/user/get/${userLoginCookie?.token}`,
           {
             headers: {
               authorization: `Bearer ${userLoginCookie?.token}`,
@@ -73,7 +74,7 @@ const AuthService = () => {
     const getUsers = async <T extends StudentDetails | StaffDetails>(tipe: "STUDENT" | "STAFF"): Promise<GetUsersResponse<T>> => {
       try {
         const response = await axios.get<GetUsersResponse<T>>(
-          `${apiUrl}/api/auth/get/users?tipe=${tipe}`,
+          `${apiUrl}/api/user/get?tipe=${tipe}`,
           {
             headers: {
               authorization: `Bearer ${userLoginCookie?.token}`,
@@ -90,7 +91,7 @@ const AuthService = () => {
     const updateUser = async (data: UpdatedBiodata): Promise<UpdateUserResponse> => {
       try {
         const response = await axios.put<UpdateUserResponse>(
-          `${apiUrl}/api/auth/update/user`, data,
+          `${apiUrl}/api/user/update/${userLoginCookie?.token}`, data,
           {
             headers: {
               "Content-Type": "application/json",
@@ -144,7 +145,7 @@ const AuthService = () => {
     const getStudentByNis = async (nis: number): Promise<ResponseGetStudentDetail> => {
       try {
         const response = await axios.get<ResponseGetStudentDetail>(
-          `${apiUrl}/api/auth/get/student/${nis}`,
+          `${apiUrl}/api/student/get/${nis}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -162,10 +163,30 @@ const AuthService = () => {
     const updatePhotoUser = async (id: number, formData: FormData): Promise<ResponseUpdatePhotoUser> => {
       try {
         const response = await axios.put<ResponseGetStudentDetail>(
-          `${apiUrl}/api/auth/update/user/photo/${id}`, formData,
+          `${apiUrl}/api/user/update/photo/${id}`, formData,
           {
             headers: {
               "Content-Type": "multipart/form-data",
+              authorization: `Bearer ${userLoginCookie?.token}`,
+            },
+          }
+        );
+        return response.data;
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          console.error("Error updating photo user:", error.response?.data || error.message);
+          throw new Error(error.response?.data?.message || "Failed to update photo user");
+        }
+        throw new Error("An unexpected error occurred");
+      }
+    };
+
+    const updateDataParent = async (nis: number, data: FormParentOfStudent): Promise<ResponseUpdatePhotoUser> => {
+      try {
+        const response = await axios.put<ResponseGetStudentDetail>(
+          `${apiUrl}/api/student/updateParent/${nis}`, data,
+          {
+            headers: {
               authorization: `Bearer ${userLoginCookie?.token}`,
             },
           }
@@ -195,7 +216,8 @@ const AuthService = () => {
       createStundent,
       updateStundent,
       getStudentByNis,
-      updatePhotoUser
+      updatePhotoUser,
+      updateDataParent
     };
   };
   

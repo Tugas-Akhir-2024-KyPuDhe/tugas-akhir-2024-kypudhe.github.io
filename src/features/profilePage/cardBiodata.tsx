@@ -33,7 +33,7 @@ export const CardBiodata: React.FC<Biodata> = ({
   gender,
   birthPlace,
 }) => {
-  const [updatedData, setUpdatedData] = useState<UpdatedBiodata>({
+  const [initialData] = useState<UpdatedBiodata>({
     name: name !== "-" ? name : "",
     email: email !== "-" ? email : "",
     phone: phone !== "-" ? phone : "",
@@ -41,6 +41,13 @@ export const CardBiodata: React.FC<Biodata> = ({
     gender: gender !== "-" ? gender : "",
     birthPlace: birthPlace !== "-" ? birthPlace : "",
   });
+
+  const [updatedData, setUpdatedData] = useState(initialData);
+
+  const handleCancelUpdate = () => {
+    setUpdatedData(initialData);
+    if (handleUpdateAccess) handleUpdateAccess();
+  };
 
   const [tempPhoto, setTempPhoto] = useState(photo);
   const [photoFile, setPhotoFile] = useState<File | null>(null);
@@ -247,7 +254,7 @@ export const CardBiodata: React.FC<Biodata> = ({
           <div className="mt-3 text-end">
             <button
               className="btn btn-danger me-3 text-light"
-              onClick={handleUpdateAccess}
+              onClick={handleCancelUpdate}
             >
               Batal
             </button>

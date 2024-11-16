@@ -9,8 +9,8 @@ interface dataInformasi {
   startDate: string;
   typeStaff: string;
   // STUDENT
-  nis: string;
-  nisn: string;
+  nis: number;
+  nisn: number;
 }
 
 export const CardInformasi1: React.FC<dataInformasi> = ({
