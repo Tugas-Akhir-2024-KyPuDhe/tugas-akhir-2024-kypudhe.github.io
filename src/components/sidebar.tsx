@@ -200,8 +200,6 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
   );
 };
 
-export default SideBar;
-
 export const ListMenu = () => {
   const navigate = useNavigate();
   const location = useLocation();

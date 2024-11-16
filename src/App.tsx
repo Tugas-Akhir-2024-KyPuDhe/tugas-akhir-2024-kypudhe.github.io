@@ -6,7 +6,7 @@ import {
   BannerPage,
   DetailArticlePage,
   FacilityPage,
-  FormBanner,
+  FormBannerPage,
   FormFacilityPage,
   HomePage,
   JurusanPage,
@@ -33,6 +33,10 @@ import {
   DataSiswaMangementSiswaPage,
   FormSiswaMangementSiswaPage,
   DetailSiswaMangementSiswa,
+  GaleriPage,
+  FormGaleriPage,
+  NotFoundPage,
+  UpdateGaleriColletion,
 } from "./pages";
 import { SideBar } from "./components/sidebar";
 import PrivateRoute from "./components/privateRoute";
@@ -55,6 +59,7 @@ function App() {
         <SideBar>
           <Routes>
             {/* === Global */}
+            <Route path="*" element={<NotFoundPage />} />
             <Route path="/" element={<PrivateRoute Component={HomePage} />} />
             <Route
               path="/profil"
@@ -88,11 +93,11 @@ function App() {
             />
             <Route
               path="/content-web/banner/tambah"
-              element={<PrivateRoute Component={FormBanner} />}
+              element={<PrivateRoute Component={FormBannerPage} />}
             />
             <Route
               path="/content-web/banner/update/:id"
-              element={<PrivateRoute Component={FormBanner} />}
+              element={<PrivateRoute Component={FormBannerPage} />}
             />
             <Route
               path="/content-web/sekolah"
@@ -135,8 +140,20 @@ function App() {
               element={<PrivateRoute Component={FormEkskulPage} />}
             />
             <Route
-              path="/content-web/ekstra-kurikuler/update/"
-              element={<PrivateRoute Component={FormEkskulPage} />}
+              path="/content-web/galeri"
+              element={<PrivateRoute Component={GaleriPage} />}
+            />
+            <Route
+              path="/content-web/galeri/tambah"
+              element={<PrivateRoute Component={FormGaleriPage} />}
+            />
+            <Route
+              path="/content-web/galeri/update/:id"
+              element={<PrivateRoute Component={FormGaleriPage} />}
+            />
+            <Route
+              path="/content-web/galeri/koleksi/:id"
+              element={<PrivateRoute Component={UpdateGaleriColletion} />}
             />
             <Route
               path="/manajemen-siswa/data-siswa"

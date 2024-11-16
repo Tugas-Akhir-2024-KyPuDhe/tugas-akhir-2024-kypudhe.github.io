@@ -253,9 +253,7 @@ export const FormDaftarKelasPage: React.FC = () => {
 
           <div className="col-12 d-flex">
             <button
-              className={`btn ${
-                formData.id ? "btn-warning" : "btn-success"
-              }`}
+              className={`btn ${formData.id ? "btn-warning" : "btn-success"}`}
               type="submit"
               disabled={loadingForm}
             >

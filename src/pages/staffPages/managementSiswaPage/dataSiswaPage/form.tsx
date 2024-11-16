@@ -488,11 +488,9 @@ export const FormSiswaMangementSiswaPage: React.FC = () => {
             </div> */}
           </div>
 
-          <div className="col-12 d-flex justify-content-end">
+          <div className="col-12">
             <button
-              className={`btn ${
-                formData.id ? "btn-warning" : "btn-success"
-              } btn-lg w-50 fw-medium`}
+              className={`btn ${formData.id ? "btn-warning" : "btn-success"}`}
               type="submit"
               style={{ fontSize: "1.1rem" }}
               disabled={loadingForm}

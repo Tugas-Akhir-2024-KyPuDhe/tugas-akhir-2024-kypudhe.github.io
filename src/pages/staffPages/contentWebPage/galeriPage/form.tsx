@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
-import BannerService from "../../../../services/bannerService";
 import { Toast } from "../../../../utils/myFunctions";
 import { useNavigate, useParams } from "react-router-dom";
-import useCookie from "react-use-cookie";
 import { HeaderTitlePage } from "../../../../components/headerTitlePage";
+import GaleriService from "../../../../services/galeriService";
 
 const optionsPrioritas = Array.from({ length: 20 }, (_, index) => ({
   value: (index + 1).toString(),
@@ -15,60 +14,45 @@ const optionsStatus = [
   { value: "Active", label: "Aktif" },
   { value: "NonActive", label: "Non Aktif" },
 ];
+
 interface FormState {
   id?: number;
-  title: string;
+  name: string;
   description: string;
-  title_link: string;
-  link: string;
   prioritas: string;
-  status: string;
-  media: File | null;
-  createdBy: string;
+  status?: string;
 }
 
-export const FormBannerPage: React.FC = () => {
+export const FormGaleriPage: React.FC = () => {
   const navigate = useNavigate();
-  const [cookieLogin] = useCookie("userLoginCookie");
-  const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
-
   const { id } = useParams<{ id: string }>();
-  const bannerService = BannerService();
+  const galeriService = GaleriService();
   const [formData, setFormData] = useState<FormState>({
-    title: "",
+    name: "",
     description: "",
-    title_link: "",
-    link: "",
     prioritas: optionsPrioritas[11].value,
     status: optionsStatus[0].value,
-    media: null,
-    createdBy: userLoginCookie.name,
   });
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
+
   const [errorsForms, setErrorsForms] = useState<{ [key: string]: string }>({});
   const [loadingForm, setloadingForm] = useState(true);
 
   useEffect(() => {
-    const getDataBanner = async () => {
+    const getData = async () => {
       if (id) {
         try {
-          const response = await bannerService.getBannerById(parseFloat(id));
+          const response = await galeriService.getGaleriById(parseInt(id));
           const data = response.data;
 
           setFormData({
             id: data.id,
-            title: data.title,
+            name: data.name,
             description: data.description,
-            title_link: data.title_link,
-            link: data.link,
             prioritas: data.prioritas.toString(),
             status: data.status,
-            media: null,
-            createdBy: data.createdBy,
           });
-          setImageUrl(data.banner.url);
         } catch (error) {
-          console.error("Error fetching banner data:", error);
+          console.error("Error fetching galeri data:", error);
         } finally {
           setloadingForm(false);
         }
@@ -77,7 +61,7 @@ export const FormBannerPage: React.FC = () => {
       }
     };
 
-    getDataBanner();
+    getData();
   }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -113,7 +97,7 @@ export const FormBannerPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const requiredFields = ["title", "description", "title_link", "link"];
+    const requiredFields = ["name"];
     const newErrors: { [key: string]: string } = {};
 
     requiredFields.forEach((field) => {
@@ -123,11 +107,6 @@ export const FormBannerPage: React.FC = () => {
         } is required.`;
       }
     });
-
-    // Check if media is required (only when adding a new banner)
-    if (!formData.id && !formData.media) {
-      newErrors.media = "Media is required.";
-    }
 
     if (Object.keys(newErrors).length > 0) {
       setErrorsForms(newErrors);
@@ -143,14 +122,14 @@ export const FormBannerPage: React.FC = () => {
     try {
       let response;
       if (formData.id) {
-        response = await bannerService.updateBanner(formData.id, payload);
+        response = await galeriService.updateGaleri(formData.id, payload);
       } else {
-        response = await bannerService.addBanner(payload);
+        response = await galeriService.addGaleri(payload);
       }
       if (response.status === 201 || response.status === 200) {
         Toast.fire({
           icon: "success",
-          title: `Banner ${formData.id ? "updated" : "added"} successfully`,
+          title: `Galeri ${formData.id ? "updated" : "added"} successfully`,
         });
         navigate(-1);
       }
@@ -160,13 +139,19 @@ export const FormBannerPage: React.FC = () => {
         icon: "error",
         title: `${error}`,
       });
-      console.error("Error processing banner:", error);
+      console.error("Error processing galeri:", error);
     }
   };
 
   return (
     <>
-      <HeaderTitlePage title={`${id ? "Update" : "Tambah"} Banner`} subTitle="Banner Web SMKN 1 Lumban Julu" backDisplay={true} addDisplay={false} linkAdd="" />
+      <HeaderTitlePage
+        title={`${id ? "Update" : "Tambah"} Galeri`}
+        subTitle="Galeri Web SMKN 1 Lumban Julu"
+        backDisplay={true}
+        addDisplay={false}
+        linkAdd=""
+      />
       <div
         className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
         style={{ backgroundColor: "#fff", position: "relative" }}
@@ -195,25 +180,25 @@ export const FormBannerPage: React.FC = () => {
           <div className="row">
             <div className="col-12 col-lg-9 col-md-9">
               <div className="form-group mb-3">
-                <label className="mb-2 fw-medium">Judul *</label>
+                <label className="mb-2">Nama *</label>
                 <input
                   type="text"
-                  name="title"
+                  name="name"
                   className={`form-control ${
-                    errorsForms.title ? "is-invalid" : ""
+                    errorsForms.name ? "is-invalid" : ""
                   }`}
-                  placeholder="Masukkan judul"
-                  value={formData.title}
+                  placeholder="Masukkan Nama"
+                  value={formData.name}
                   onChange={handleInputChange}
                 />
-                {errorsForms.title && (
-                  <div className="invalid-form">Judul masih kosong!</div>
+                {errorsForms.name && (
+                  <div className="invalid-form">Nama masih kosong!</div>
                 )}
               </div>
             </div>
             <div className="col-12 col-lg-3 col-md-3">
               <div className="form-group mb-3">
-                <label className="mb-2 fw-medium">Prioritas</label>
+                <label className="mb-2">Prioritas</label>
                 <Select
                   options={optionsPrioritas}
                   value={optionsPrioritas.find(
@@ -221,61 +206,19 @@ export const FormBannerPage: React.FC = () => {
                   )}
                   onChange={(option) => handleSelectChange("prioritas", option)}
                   placeholder="Pilih Prioritas"
-                  className="form-control-lg px-0 pt-0"
+                  className="px-0 pt-0"
                   styles={{
                     control: (baseStyles) => ({
                       ...baseStyles,
-                      fontSize: "0.955rem",
-                      minHeight: "48px",
                       borderRadius: "8px",
-                    }),
-                    option: (provided) => ({
-                      ...provided,
-                      fontSize: "1rem",
                     }),
                   }}
                 />
               </div>
             </div>
-            <div className="col-12 col-lg-6">
-              <div className="form-group mb-3">
-                <label className="mb-2 fw-medium">Title Link *</label>
-                <input
-                  type="text"
-                  name="title_link"
-                  className={`form-control ${
-                    errorsForms.title_link ? "is-invalid" : ""
-                  }`}
-                  placeholder="cth: Detail"
-                  value={formData.title_link}
-                  onChange={handleInputChange}
-                />
-                {errorsForms.title_link && (
-                  <div className="invalid-form">Title Link masih kosong!</div>
-                )}
-              </div>
-            </div>
-            <div className="col-12 col-lg-6">
-              <div className="form-group mb-3">
-                <label className="mb-2 fw-medium">Link *</label>
-                <input
-                  type="url"
-                  name="link"
-                  className={`form-control ${
-                    errorsForms.link ? "is-invalid" : ""
-                  }`}
-                  placeholder="cth: https://smkn1lumbanjulu/berita"
-                  value={formData.link}
-                  onChange={handleInputChange}
-                />
-                {errorsForms.link && (
-                  <div className="invalid-form">Link masih kosong!</div>
-                )}
-              </div>
-            </div>
             <div className="col-12">
               <div className="form-group mb-3">
-                <label className="mb-2 fw-medium">Deskripsi *</label>
+                <label className="mb-2">Deskripsi</label>
                 <textarea
                   name="description"
                   className={`form-control ${
@@ -292,59 +235,19 @@ export const FormBannerPage: React.FC = () => {
             </div>
             <div className="col-12">
               <div className="form-group mb-3">
-                <label className="mb-2 fw-medium">Gambar *</label>
-                <div className="input-group mb-3">
-                  <input
-                    type="file"
-                    name="media"
-                    className="form-control fs-6"
-                    id="inputGroupFile02"
-                    onChange={handleInputChange}
-                  />
-                  <label
-                    className="input-group-text"
-                    htmlFor="inputGroupFile02"
-                  >
-                    Upload
-                  </label>
-                </div>
-                {errorsForms.media && (
-                  <div className="invalid-form">Media masih kosong!</div>
-                )}
-              </div>
-              {imageUrl && (
-                <div className="form-group mb-3">
-                  <label className="mb-2 fw-medium">Gambar Sekarang</label>
-                  <br />
-                  <img
-                    src={imageUrl}
-                    alt={formData.title}
-                    style={{ maxWidth: "50%", objectFit: "contain" }}
-                  />
-                </div>
-              )}
-            </div>
-            <div className="col-12">
-              <div className="form-group mb-3">
-                <label className="mb-2 fw-medium">Status</label>
+                <label className="mb-2">Status</label>
                 <Select
                   options={optionsStatus}
                   value={optionsStatus.find(
                     (option) => option.value === formData.status
                   )}
                   onChange={(option) => handleSelectChange("status", option)}
-                  placeholder="Pilih Status"
-                  className="form-control-lg px-0 pt-0"
+                  placeholder="Pilih Prioritas"
+                  className="px-0 pt-0"
                   styles={{
                     control: (baseStyles) => ({
                       ...baseStyles,
-                      fontSize: "0.955rem",
-                      minHeight: "48px",
                       borderRadius: "8px",
-                    }),
-                    option: (provided) => ({
-                      ...provided,
-                      fontSize: "1rem",
                     }),
                   }}
                 />
@@ -352,11 +255,10 @@ export const FormBannerPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="col-12">
+          <div className="col-12 d-flex">
             <button
               className={`btn ${formData.id ? "btn-warning" : "btn-success"}`}
               type="submit"
-              style={{ fontSize: "1.1rem" }}
               disabled={loadingForm}
             >
               {loadingForm ? (

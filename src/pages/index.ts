@@ -22,7 +22,7 @@ import { NilaiPage } from './studentPages/nilaiPage/index';
 import { ArticlePage } from "./articlePage";
 import { DetailArticlePage } from "./articlePage/detailArticle";
 import { BannerPage } from "./staffPages/contentWebPage/bannerPage";
-import { FormBanner } from "./staffPages/contentWebPage/bannerPage/formBanner";
+import { FormBannerPage } from "./staffPages/contentWebPage/bannerPage/formBanner";
 import { HomePage } from "./homePage";
 import { LoginPage } from "./loginPage";
 import { FormArticlePage } from './articlePage/formArticle';
@@ -30,5 +30,9 @@ import { ProfilePage } from './profilePage';
 import { DataSiswaMangementSiswaPage } from './staffPages/managementSiswaPage/dataSiswaPage';
 import { FormSiswaMangementSiswaPage } from './staffPages/managementSiswaPage/dataSiswaPage/form';
 import { DetailSiswaMangementSiswa } from './staffPages/managementSiswaPage/dataSiswaPage/detail';
+import { GaleriPage } from './staffPages/contentWebPage/galeriPage';
+import { FormGaleriPage } from './staffPages/contentWebPage/galeriPage/form';
+import { NotFoundPage } from './notFoundPage';
+import { UpdateGaleriColletion } from './staffPages/contentWebPage/galeriPage/updategaleriCollection';
 
-export { HomePage, LoginPage, ArticlePage, FormArticlePage, DetailArticlePage, BannerPage, FormBanner, NilaiPage, KelasPage, MapelPage, AbsensiPage, SchoolPage, FacilityPage, FormFacilityPage, JurusanPage, FormJurusanPage, EkskulPage, FormEkskulPage, GuruMapelPage, FormGuruMapelPage, DaftarSiswaPage, FormDaftarSiswaPage, DaftarKelasPage, FormDaftarKelasPage, NilaiSiswaPage, FormNilaiSiswaPage, ProfilePage, AbsensiSiswaPage, DetailAbsensiSiswaPage, DataSiswaMangementSiswaPage, FormSiswaMangementSiswaPage, DetailSiswaMangementSiswa }
+export { NotFoundPage, HomePage, LoginPage, ArticlePage, FormArticlePage, DetailArticlePage, BannerPage, FormBannerPage, NilaiPage, KelasPage, MapelPage, AbsensiPage, SchoolPage, FacilityPage, FormFacilityPage, JurusanPage, FormJurusanPage, EkskulPage, FormEkskulPage, GuruMapelPage, FormGuruMapelPage, DaftarSiswaPage, FormDaftarSiswaPage, DaftarKelasPage, FormDaftarKelasPage, NilaiSiswaPage, FormNilaiSiswaPage, ProfilePage, AbsensiSiswaPage, DetailAbsensiSiswaPage, DataSiswaMangementSiswaPage, FormSiswaMangementSiswaPage, DetailSiswaMangementSiswa, GaleriPage, FormGaleriPage, UpdateGaleriColletion }
