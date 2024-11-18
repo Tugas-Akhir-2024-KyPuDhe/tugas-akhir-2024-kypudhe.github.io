@@ -12,6 +12,7 @@ const optionsPrioritas = Array.from({ length: 20 }, (_, index) => ({
 
 interface FormState {
   id?: number;
+  majorCode: string;
   name: string;
   description: string;
   prioritas: string;
@@ -24,6 +25,7 @@ export const FormJurusanPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const jurusanService = JurusanService();
   const [formData, setFormData] = useState<FormState>({
+    majorCode: "",
     name: "",
     description: "",
     prioritas: optionsPrioritas[11].value,
@@ -44,6 +46,7 @@ export const FormJurusanPage: React.FC = () => {
 
           setFormData({
             id: data.id,
+            majorCode: data.majorCode,
             name: data.name,
             description: data.description,
             prioritas: data.prioritas.toString(),
@@ -110,7 +113,7 @@ export const FormJurusanPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const requiredFields = ["name", "description"];
+    const requiredFields = ["name", "majorCode", "description"];
     const newErrors: { [key: string]: string } = {};
 
     requiredFields.forEach((field) => {
@@ -191,7 +194,26 @@ export const FormJurusanPage: React.FC = () => {
         )}
         <form onSubmit={handleSubmit}>
           <div className="row">
-            <div className="col-12 col-lg-9 col-md-9">
+            <div className="col-12 col-lg-2 col-md-9">
+              <div className="form-group mb-3">
+                <label className="mb-2">Kode Jurusan *</label>
+                <input
+                  type="text"
+                  name="majorCode"
+                  className={`form-control ${
+                    errorsForms.majorCode ? "is-invalid" : ""
+                  }`}
+                  placeholder="Kode Jurusan"
+                  value={formData.majorCode}
+                  onChange={handleInputChange}
+                />
+                  <small className="text-muted">contoh: RPL</small>
+                {errorsForms.majorCode && (
+                  <div className="invalid-form">Kode Jurusan masih kosong!</div>
+                )}
+              </div>
+            </div>
+            <div className="col-12 col-lg-7 col-md-9">
               <div className="form-group mb-3">
                 <label className="mb-2">Nama *</label>
                 <input

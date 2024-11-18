@@ -1,3 +1,4 @@
+import { Fajusek } from "./fajusek.interfase";
 import { Media } from "./media.interface";
 import { ParentOfStudent } from "./student.interface";
 
@@ -90,6 +91,7 @@ export interface StudentDetails extends BaseUserDetails {
   nisn: string;
   startYear: string;
   endYear: string | null;
+  Major: Fajusek
 }
 
 // Staff-specific details

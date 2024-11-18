@@ -4,6 +4,7 @@ export interface Fajusek {
   id: number;
   uuid: string;
   name: string;
+  majorCode: string;
   description: string;
   prioritas: number;
   createdAt: string;
