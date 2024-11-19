@@ -10,6 +10,7 @@ import {
 import Select from "react-select";
 import JurusanService from "../../../../services/jurusanService";
 import { Fajusek } from "../../../../interface/fajusek.interfase";
+import Swal from "sweetalert2";
 
 export const Table: React.FC = () => {
   const userService = AuthService();
@@ -21,14 +22,16 @@ export const Table: React.FC = () => {
   const [selectedMajor, setSelectedtedMajor] = useState<{
     value: string;
   }>();
+  const [kapasitasPerKelas, setKapasitasPerKelas] = useState<number>(0);
+  const [distribusiSiswa, setDistribusiSiswa] = useState<number[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
-  const getData = async () => {
+  const getData = async (major?: string) => {
     setLoading(true);
     try {
       const response: UserDataResponse<StudentDetails> =
-        await userService.getUsers("STUDENT");
+        await userService.getUsers("STUDENT", major);
       if (response.data && response.data.length > 0) {
         setData(response.data);
       }
@@ -130,15 +133,46 @@ export const Table: React.FC = () => {
     user.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleSelectChange = (
-    name: string,
+  const handleSelectChange = async (
     selectedOption: { value: string } | null
   ) => {
     if (selectedOption) {
       setSelectedtedMajor(selectedOption);
     }
-    console.log(name);
-    console.log(selectedOption);
+    await getData(selectedOption?.value);
+  };
+
+  const handleKapasitasChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const kapasitas = parseInt(e.target.value) || 0;
+    if (selectedMajor?.value == undefined) {
+      return Swal.fire("", "Harap Pilih Jurusan Terlebih Dahulu!", "warning");
+    }
+    setKapasitasPerKelas(kapasitas);
+    if (kapasitas > 0) {
+      const totalSiswa = data.length; // Total siswa dari data
+      let hitungKelas = Math.ceil(totalSiswa / kapasitas); // Hitung jumlah kelas awal
+      const siswaTerakhir = totalSiswa % kapasitas; // Sisa siswa di kelas terakhir
+
+      // Jika siswa di kelas terakhir terlalu sedikit, kurangi jumlah kelas
+      if (
+        hitungKelas > 1 &&
+        siswaTerakhir > 0 &&
+        siswaTerakhir <= kapasitas / 2
+      ) {
+        hitungKelas -= 1;
+      }
+
+      // Distribusi siswa ke setiap kelas
+      const distribusi: number[] = Array(hitungKelas).fill(kapasitas); // Awalnya semua kelas kapasitas penuh
+      const sisa = totalSiswa % kapasitas;
+
+      if (sisa > 0) {
+        distribusi[distribusi.length - 1] = sisa + kapasitas; // Tambahkan sisa ke kelas terakhir
+      }
+      setDistribusiSiswa(distribusi); // Simpan distribusi siswa
+    } else {
+      setDistribusiSiswa([]);
+    }
   };
 
   useEffect(() => {
@@ -172,20 +206,20 @@ export const Table: React.FC = () => {
         </div>
       )}
 
-      <div className="row g-3">
-        <div className="col-6 col-lg-2">
+      <div className="row g-3 d-flex justify-content-between">
+        <div className="col-6 col-lg-2 col-md-3">
           <Select
             options={optionsMajor}
             value={selectedMajor}
-            onChange={(option) => handleSelectChange("major", option)}
-            placeholder="Pilih major"
+            onChange={(option) => handleSelectChange(option)}
+            placeholder="Pilih Jurusan"
             className="form-control-lg px-0 pt-0"
             isSearchable={false}
             styles={{
               control: (baseStyles) => ({
                 ...baseStyles,
                 fontSize: "0.955rem",
-                minHeight: "48px",
+                // minHeight: "48px",
                 borderRadius: "8px",
               }),
               option: (provided) => ({
@@ -195,26 +229,11 @@ export const Table: React.FC = () => {
             }}
           />
         </div>
-        <div className="col-6 col-lg-2">
+
+        <div className="col-6 col-lg-3 col-md-3">
           <input
             type="text"
-            name="title"
-            className={`form-control form-control-lg`}
-            placeholder="Kapasitas Kelas"
-          />
-        </div>
-        <div className="col-12 col-lg-2">
-          <button
-            className={`btn btn-lg btn-success w-100`}
-            style={{ fontSize: "1.1rem" }}
-          >
-            Buat Kelas
-          </button>
-        </div>
-        <div className="col-12 col-lg-3 col-md-3">
-          <input
-            type="text"
-            className="form-control py-2 border-dark"
+            className="form-control border-dark"
             placeholder="Search.."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -222,7 +241,7 @@ export const Table: React.FC = () => {
           />
         </div>
       </div>
-      <div className="row">
+      <div className="row g-2">
         <div className="col-12">
           Jurusan :{" "}
           <span className="fw-bold">
@@ -230,13 +249,73 @@ export const Table: React.FC = () => {
           </span>
         </div>
         <div className="col-12">
-          Total : <span className="fw-bold">40</span>
+          Total : <span className="fw-bold">{data.length}</span>
         </div>
-        <div className="col-2">
+        <div className="col-12">
           <hr />
         </div>
+        <div className="col-12">
+          <div className="fw-bold position-relative pb-2">
+            Buat Kelas
+            <div
+              style={{
+                position: "absolute",
+                left: 0,
+                bottom: 0,
+                width: "50px",
+                height: "3px",
+                backgroundColor: "var(--blue-color)",
+              }}
+            />
+          </div>
+        </div>
+        <div className="col-6 col-lg-3">
+          <div className="fw-medium mt-2">Kapasitas Kelas :</div>
+        </div>
+        <div className="col-6 col-lg-9 d-flex">
+          <div className="" style={{ width: "80px" }}>
+            <input
+              type="text"
+              name="title"
+              value={kapasitasPerKelas}
+              onChange={handleKapasitasChange}
+              onKeyPress={(event) => {
+                if (!/[0-9]/.test(event.key)) {
+                  event.preventDefault();
+                }
+              }}
+              className={`form-control text-center`}
+              placeholder=""
+            />
+          </div>
+          <span className="mt-2 ms-2">Siswa/Kelas</span>
+        </div>
+        <div className="col-6 col-lg-3">
+          <div className="fw-medium">Total Siswa :</div>
+        </div>
+        <div className="col-6 col-lg-9">
+          <span className="">{selectedMajor?.value && data.length}</span>
+        </div>
+        <div className="col-6 col-lg-3">
+          <div className="fw-medium">Jurusan :</div>
+        </div>
+        <div className="col-6 col-lg-9">
+          <span className="">{selectedMajor?.value || ""}</span>
+        </div>
+        <div className="col-6 col-lg-3">
+          <div className="fw-medium">Menjadi :</div>
+        </div>
+        <div className="col-6 col-lg-9">
+          {distribusiSiswa.map((jumlah, index) => (
+            <span key={index} className="me-4">
+              X-{selectedMajor?.value}-{index + 1}({jumlah})
+            </span>
+          ))}
+        </div>
+        <div className="col-2">
+          <button className={`btn btn-success mt-2`}>Simpan</button>
+        </div>
       </div>
-
       <DataTable
         columns={columns}
         data={filterData}
