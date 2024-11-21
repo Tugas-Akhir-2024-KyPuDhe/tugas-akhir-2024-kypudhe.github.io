@@ -590,7 +590,7 @@ export const ListMenu = () => {
                   }}
                 />
               )}
-              Data Siswa
+              Data Siswa Baru
             </MenuItem>
           </SubMenu>
           <SubMenu
