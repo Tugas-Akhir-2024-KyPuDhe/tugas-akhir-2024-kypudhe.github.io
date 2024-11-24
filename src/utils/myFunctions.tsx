@@ -89,3 +89,7 @@ export const convertStatus = (status: string): string => {
   return status === "Active" ? "Aktif" : "Non Aktif";
 };
 
+export const convertRole = (role: string): string => {
+  return role === "STAFF" ? "Pegawai" : role == "TEACHER" ? "Guru" : "Siswa/i";
+};
+

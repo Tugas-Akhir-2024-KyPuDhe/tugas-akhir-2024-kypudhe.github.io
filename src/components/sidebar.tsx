@@ -20,12 +20,13 @@ import { FaUserCircle } from "react-icons/fa";
 import AuthService from "../services/authService";
 import useCookie from "react-use-cookie";
 import { Footer } from "./footer";
-import { MdLibraryBooks } from "react-icons/md";
+import { MdKeyboardArrowDown, MdLibraryBooks } from "react-icons/md";
 import { LuCheckSquare } from "react-icons/lu";
 import { RiSchoolLine } from "react-icons/ri";
 import { TbBooks, TbUserScreen } from "react-icons/tb";
 import { Link } from "react-router-dom";
 import { IoIosPeople } from "react-icons/io";
+import { convertRole } from "../utils/myFunctions";
 
 interface SideBarAdminProps {
   children: ReactNode;
@@ -143,14 +144,21 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
                 </div>
                 <div className="d-flex align-items-center">
                   <div className="dropdown">
-                    <button
-                      className="btn dropdown-toggle text-dark"
+                    <a
+                      className="btn text-dark border-0"
                       data-bs-toggle="dropdown"
                       aria-expanded="false"
                     >
-                      <FaUserCircle className="me-3 fs-3" />
-                      {userLoginCookie?.name}
-                    </button>
+                      <div className="row">
+                        <div className="col-auto px-0 m-auto">
+                          <FaUserCircle className="me-3 fs-2" />
+                        </div>
+                        <div className="col-auto text-start px-0">
+                          <div className="fw-medium">{userLoginCookie?.name} <MdKeyboardArrowDown /> </div>
+                          <div className="" style={{ fontSize: "13px" }}>{convertRole(userLoginCookie?.role)}</div>
+                        </div>
+                      </div>
+                    </a>
                     <ul
                       className="dropdown-menu dropdown-menu-end"
                       style={{ width: "250px" }}
@@ -563,6 +571,36 @@ export const ListMenu = () => {
             className="fw-medium"
           >
             <MenuItem
+              onClick={() => handleMenuClick("/manajemen-siswa/data-siswa-baru")}
+              icon={<FaCircle style={{ fontSize: "8px" }} />}
+              style={{
+                position: "relative",
+                backgroundColor:
+                  selectedMenu === "/manajemen-siswa/data-siswa-baru"
+                    ? "#E5EAF2"
+                    : "",
+              }}
+              className={`fw-medium ${
+                selectedMenu === "/manajemen-siswa/data-siswa-baru"
+                  ? "text-blue"
+                  : "text-dark-soft"
+              }`}
+            >
+              {selectedMenu === "/manajemen-siswa/data-siswa-baru" && (
+                <div
+                  style={{
+                    position: "absolute",
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                    width: "4px",
+                    backgroundColor: "var(--blue-color)",
+                  }}
+                />
+              )}
+              Data Siswa Baru
+            </MenuItem>
+            <MenuItem
               onClick={() => handleMenuClick("/manajemen-siswa/data-siswa")}
               icon={<FaCircle style={{ fontSize: "8px" }} />}
               style={{
@@ -590,7 +628,37 @@ export const ListMenu = () => {
                   }}
                 />
               )}
-              Data Siswa Baru
+              Data Siswa
+            </MenuItem>
+            <MenuItem
+              onClick={() => handleMenuClick("/manajemen-siswa/data-kelas")}
+              icon={<FaCircle style={{ fontSize: "8px" }} />}
+              style={{
+                position: "relative",
+                backgroundColor:
+                  selectedMenu === "/manajemen-siswa/data-kelas"
+                    ? "#E5EAF2"
+                    : "",
+              }}
+              className={`fw-medium ${
+                selectedMenu === "/manajemen-siswa/data-kelas"
+                  ? "text-blue"
+                  : "text-dark-soft"
+              }`}
+            >
+              {selectedMenu === "/manajemen-siswa/data-kelas" && (
+                <div
+                  style={{
+                    position: "absolute",
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                    width: "4px",
+                    backgroundColor: "var(--blue-color)",
+                  }}
+                />
+              )}
+              Data Kelas
             </MenuItem>
           </SubMenu>
           <SubMenu
