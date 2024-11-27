@@ -151,11 +151,24 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
                     >
                       <div className="row">
                         <div className="col-auto px-0 m-auto">
-                          <FaUserCircle className="me-3 fs-2" />
+                          {userLoginCookie?.photo ? (
+                            <img
+                              src={userLoginCookie?.photo}
+                              alt=""
+                              className="img-fluid rounded-circle me-3"
+                              width={45}
+                            />
+                          ) : (
+                            <FaUserCircle className="me-3 fs-2" />
+                          )}
                         </div>
                         <div className="col-auto text-start px-0">
-                          <div className="fw-medium">{userLoginCookie?.name} <MdKeyboardArrowDown /> </div>
-                          <div className="" style={{ fontSize: "13px" }}>{convertRole(userLoginCookie?.role)}</div>
+                          <div className="fw-medium">
+                            {userLoginCookie?.name} <MdKeyboardArrowDown />{" "}
+                          </div>
+                          <div className="" style={{ fontSize: "13px" }}>
+                            {convertRole(userLoginCookie?.role)}
+                          </div>
                         </div>
                       </div>
                     </a>
@@ -571,7 +584,9 @@ export const ListMenu = () => {
             className="fw-medium"
           >
             <MenuItem
-              onClick={() => handleMenuClick("/manajemen-siswa/data-siswa-baru")}
+              onClick={() =>
+                handleMenuClick("/manajemen-siswa/data-siswa-baru")
+              }
               icon={<FaCircle style={{ fontSize: "8px" }} />}
               style={{
                 position: "relative",

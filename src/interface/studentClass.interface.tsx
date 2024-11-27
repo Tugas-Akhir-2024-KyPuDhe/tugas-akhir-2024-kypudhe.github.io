@@ -1,4 +1,5 @@
 import { StaffDetails } from "./auth.interface";
+import { StudentDetail } from "./student.interface";
 
 export interface ResponseAction {
   status: number;
@@ -29,6 +30,7 @@ export interface Class {
   createdAt: string;
   updatedAt: string;
   homeRoomTeacher: StaffDetails;
+  student: StudentDetail[]
 }
 
 export interface GetAllClassResponse {

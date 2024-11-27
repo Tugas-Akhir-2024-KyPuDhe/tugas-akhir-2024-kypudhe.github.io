@@ -59,6 +59,7 @@ export const LoginPage: React.FC = () => {
           token: response.token,
           name: response.user.name,
           role: response.user.role,
+          photo: response.user.photo,
         };
         setCookieLogin(JSON.stringify(userData), { days: 1 });
         Toast.fire({

@@ -34,6 +34,32 @@ export const Table: React.FC = () => {
       width: "50px",
     },
     {
+      name: "Baru",
+      selector: (row: Class) => row.academicYear,
+      sortable: true,
+      cell: (row: Class) => (
+        <div>
+          <button
+            className="btn btn-success btn-sm text me-2 text-light"
+            onClick={() => navigate(`detail/${row.id}`)}
+            disabled={loading}
+          >
+            <FaUserPlus />
+          </button>
+        </div>
+      ),
+      width: "80px",
+    },
+    {
+      name: "Jumlah Siswa",
+      selector: (row: Class) => row.student.length,
+      sortable: true,
+      cell: (row: Class) => (
+        <div className="d-flex m-auto">{row.student.length}</div>
+      ),
+      width: "140px",
+    },
+    {
       name: "Tahun Ajaran",
       selector: (row: Class) => row.academicYear,
       sortable: true,
@@ -66,15 +92,10 @@ export const Table: React.FC = () => {
       cell: (row: Class) => (
         <>
           <button
-            className="btn btn-success btn-sm text me-2 text-light"
-            onClick={() => navigate(`detail/${row.id}`)}
-            disabled={loading}
-          >
-            <FaUserPlus />
-          </button>
-          <button
             className="btn btn-warning btn-sm text me-2 text-light"
-            onClick={() => navigate(`manajemen-siswa/data-siswa-baru/detail/${row.id}`)}
+            onClick={() =>
+              navigate(`manajemen-siswa/data-siswa-baru/detail/${row.id}`)
+            }
             disabled={loading}
           >
             <FaPen />
@@ -121,8 +142,7 @@ export const Table: React.FC = () => {
         )}
 
         <div className="row g-3 d-flex justify-content-end">
-          <div className="col-12">
-          </div>
+          <div className="col-12"></div>
           <div className="col-6 col-lg-3 col-md-3">
             <input
               type="text"

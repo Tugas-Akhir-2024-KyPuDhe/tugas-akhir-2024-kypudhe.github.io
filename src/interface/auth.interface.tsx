@@ -35,7 +35,8 @@ export interface UserDetails {
 
 export interface DetailUserResponse {
   role: "STUDENT" | "TEACHER" | "STAFF";
-  name?: string;
+  name: string;
+  photo: string;
   details: UserDetails[];
 }
 
