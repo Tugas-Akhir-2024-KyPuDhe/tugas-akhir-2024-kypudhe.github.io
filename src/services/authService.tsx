@@ -71,7 +71,7 @@ const AuthService = () => {
       }
     };
 
-    const getUsers = async <T extends StudentDetails | StaffDetails>(tipe: "STUDENT" | "STAFF", major: string = ""): Promise<GetUsersResponse<T>> => {
+    const getUsers = async <T extends StudentDetails | StaffDetails>(tipe: "STUDENT" | "STAFF" | "TEACHER", major: string = ""): Promise<GetUsersResponse<T>> => {
       try {
         const response = await axios.get<GetUsersResponse<T>>(
           `${apiUrl}/api/user/get?tipe=${tipe}&majorCode=${major}`,

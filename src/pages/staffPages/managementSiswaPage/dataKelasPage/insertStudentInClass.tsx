@@ -1,62 +1,39 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
-import { useNavigate } from "react-router-dom";
-import { FaEye, FaPen } from "react-icons/fa6";
-// import Select from "react-select";
-// import JurusanService from "../../../../services/jurusanService";
-// import { Fajusek } from "../../../../interface/fajusek.interfase";
-// import Swal from "sweetalert2";
+import { useNavigate, useParams } from "react-router-dom";
+import { FaArrowRight, FaEye, FaPen } from "react-icons/fa6";
 import StudentService from "../../../../services/studentService";
 import { StudentDetail } from "../../../../interface/student.interface";
+import ClassStudentService from "../../../../services/classStudentService";
+import { Class } from "../../../../interface/studentClass.interface";
+import { HeaderTitlePage } from "../../../../components/headerTitlePage";
+import { SiGoogleclassroom } from "react-icons/si";
 
-export const Table: React.FC = () => {
+export const InserStudentInClassMangementSiswaPage: React.FC = () => {
   const studentService = StudentService();
-  // const jurusanService = JurusanService();
+  const classService = ClassStudentService();
   const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
 
   const [data, setData] = useState<StudentDetail[]>([]);
-  // const [dataMajor, setDataMajor] = useState<Fajusek[]>([]);
-  // const [selectedMajor, setSelectedtedMajor] = useState<{
-  //   value: string;
-  // }>();
-  // const [kapasitasPerKelas, setKapasitasPerKelas] = useState<number>(0);
-  // const [distribusiSiswa, setDistribusiSiswa] = useState<number[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  const getData = async (major?: string) => {
-    setLoading(true);
+  const [dataClass, setDataClass] = useState<Class>();
+
+  const getData = async (majorCode: string) => {
+    // setLoading(true);
     try {
-      const response = await studentService.getNewStudent(major);
+      const response = await studentService.getNewStudent(majorCode);
       if (response.data && response.data.length > 0) {
         setData(response.data);
       }
     } catch (error) {
       console.error("Error fetching Student data:", error);
     } finally {
-      setLoading(false);
+      //   setLoading(false);
     }
   };
-
-  // const getMajor = async () => {
-  //   setLoading(true);
-  //   try {
-  //     const response = await jurusanService.all();
-  //     setDataMajor(response.data);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  // const optionsMajor = [
-  //   { value: "", label: "Semua Jurusan" }, // opsi hardcode yang baru
-  //   ...dataMajor.map((data) => ({
-  //     value: data.majorCode,
-  //     label: data.majorCode,
-  //   })),
-  // ];
 
   const columns = [
     {
@@ -132,62 +109,28 @@ export const Table: React.FC = () => {
     user.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // const handleSelectChange = async (
-  //   selectedOption: { value: string } | null
-  // ) => {
-  //   setDistribusiSiswa([]);
-  //   if (selectedOption) {
-  //     setSelectedtedMajor(selectedOption);
-  //   }
-  //   await getData(selectedOption?.value);
-  // };
-
-  // const handleKapasitasChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const kapasitas = parseInt(e.target.value) || 0;
-  //   if (selectedMajor?.value == undefined || selectedMajor?.value == "") {
-  //     return Swal.fire("", "Harap Pilih Jurusan Terlebih Dahulu!", "warning");
-  //   }
-  //   if (kapasitas > data.length) {
-  //     return Swal.fire(
-  //       "",
-  //       "Kapasitas yang anda masukkan lebihi jumlah siswa yang ada!",
-  //       "warning"
-  //     );
-  //   }
-  //   setKapasitasPerKelas(kapasitas);
-  //   if (kapasitas > 0) {
-  //     const totalSiswa = data.length; // Total siswa dari data
-  //     let hitungKelas = Math.ceil(totalSiswa / kapasitas); // Hitung jumlah kelas awal
-  //     const siswaTerakhir = totalSiswa % kapasitas; // Sisa siswa di kelas terakhir
-
-  //     // Jika siswa di kelas terakhir terlalu sedikit, kurangi jumlah kelas
-  //     if (
-  //       hitungKelas > 1 &&
-  //       siswaTerakhir > 0 &&
-  //       siswaTerakhir <= kapasitas / 2
-  //     ) {
-  //       hitungKelas -= 1;
-  //     }
-
-  //     // Distribusi siswa ke setiap kelas
-  //     const distribusi: number[] = Array(hitungKelas).fill(kapasitas); // Awalnya semua kelas kapasitas penuh
-  //     const sisa = totalSiswa % kapasitas;
-
-  //     if (sisa > 0) {
-  //       distribusi[distribusi.length - 1] = sisa + kapasitas; // Tambahkan sisa ke kelas terakhir
-  //     }
-  //     setDistribusiSiswa(distribusi); // Simpan distribusi siswa
-  //   } else {
-  //     setDistribusiSiswa([]);
-  //   }
-  // };
-
   useEffect(() => {
-    getData();
-    // getMajor();
+    const getDataClass = async () => {
+      if (id) {
+        try {
+          const response = await classService.getClassById(parseInt(id));
+          const data = response.data;
+          setDataClass(data);
+          await getData(data.majorCode);
+        } catch (error) {
+          console.error("Error fetching detail class data:", error);
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        setLoading(false);
+      }
+    };
+
+    getDataClass();
   }, []);
 
-  // const handleSubmit = async () => {
+  //   const handleSubmit = async () => {
   // try {
   //   setLoading(true);
   //   const response = await classStudentService.createClassInvStudent(
@@ -210,11 +153,18 @@ export const Table: React.FC = () => {
   // }finally{
   //   setLoading(false);
   // }
-  // };
+  //   };
 
   return (
     <>
-      {/* <div
+      <HeaderTitlePage
+        title={`Pembagian Kelas Siswa`}
+        subTitle="Masukkan siswa baru kedalam kelas yang dipilih"
+        backDisplay={true}
+        addDisplay={false}
+        linkAdd=""
+      />
+      <div
         className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
         style={{ backgroundColor: "#fff", position: "relative" }}
       >
@@ -242,7 +192,7 @@ export const Table: React.FC = () => {
         <div className="row g-2">
           <div className="col-12">
             <div className="fw-bold position-relative pb-2">
-              Buat Kelas
+              Informasi Kelas
               <div
                 style={{
                   position: "absolute",
@@ -256,82 +206,25 @@ export const Table: React.FC = () => {
             </div>
           </div>
           <div className="col-6 col-lg-3">
-            <div className="fw-medium mt-2 m-auto">Jurusan :</div>
+            <div className="fw-medium mt-2 m-auto">Tahun Ajaran :</div>
+          </div>
+          <div className="col-6 col-lg-9">{dataClass?.academicYear}</div>
+          <div className="col-6 col-lg-3">
+            <div className="fw-medium m-auto">Nama Kelas :</div>
+          </div>
+          <div className="col-6 col-lg-9 d-flex">{dataClass?.name}</div>
+          <div className="col-6 col-lg-3">
+            <div className="fw-medium">Kapasitas :</div>
+          </div>
+          <div className="col-6 col-lg-9">{dataClass?.capacity}</div>
+          <div className="col-6 col-lg-3">
+            <div className="fw-medium">Wali Kelas :</div>
           </div>
           <div className="col-6 col-lg-9">
-            <div className="" style={{ width: "200px" }}>
-              <Select
-                options={optionsMajor}
-                value={selectedMajor}
-                onChange={(option) => handleSelectChange(option)}
-                placeholder="Pilih Jurusan"
-                className="form-control-lg px-0 pt-0"
-                isSearchable={false}
-                styles={{
-                  control: (baseStyles) => ({
-                    ...baseStyles,
-                    fontSize: "0.955rem",
-                    // minHeight: "48px",
-                    borderRadius: "8px",
-                  }),
-                  option: (provided) => ({
-                    ...provided,
-                    fontSize: "1rem",
-                  }),
-                }}
-              />
-            </div>
-          </div>
-          <div className="col-6 col-lg-3">
-            <div className="fw-medium m-auto">Kapasitas Kelas :</div>
-          </div>
-          <div className="col-6 col-lg-9 d-flex">
-            <div className="" style={{ width: "80px" }}>
-              <input
-                type="text"
-                name="title"
-                value={kapasitasPerKelas}
-                onChange={handleKapasitasChange}
-                onKeyPress={(event) => {
-                  if (!/[0-9]/.test(event.key)) {
-                    event.preventDefault();
-                  }
-                }}
-                className={`form-control text-center`}
-                placeholder=""
-              />
-            </div>
-            <span className="mt-2 ms-2">Siswa/Kelas</span>
-          </div>
-          <div className="col-6 col-lg-3">
-            <div className="fw-medium">Total Siswa :</div>
-          </div>
-          <div className="col-6 col-lg-9">
-            <span className="">{selectedMajor?.value && data.length}</span>
-          </div>
-          <div className="col-6 col-lg-3">
-            <div className="fw-medium">Jurusan :</div>
-          </div>
-          <div className="col-6 col-lg-9">
-            <span className="">{selectedMajor?.value || ""}</span>
-          </div>
-          <div className="col-6 col-lg-3">
-            <div className="fw-medium">Menjadi :</div>
-          </div>
-          <div className="col-6 col-lg-9">
-            {distribusiSiswa.map((jumlah, index) => (
-              <span key={index} className="me-4">
-                X-{selectedMajor?.value}-{index + 1}({jumlah})
-              </span>
-            ))}
-          </div>
-          <div className="col-2">
-            <button onClick={handleSubmit} className={`btn btn-success mt-2`}>
-              Simpan
-            </button>
+            {dataClass?.homeRoomTeacher.name}
           </div>
         </div>
-      </div> */}
+      </div>
       <div
         className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
         style={{ backgroundColor: "#fff", position: "relative" }}
@@ -357,7 +250,7 @@ export const Table: React.FC = () => {
           </div>
         )}
 
-        <div className="row g-3 d-flex justify-content-end">
+        <div className="row g-3 mb-3 d-flex justify-content-end">
           <div className="col-12">
             <div className="fw-bold position-relative pb-2">
               Siswa Baru
@@ -372,6 +265,13 @@ export const Table: React.FC = () => {
                 }}
               />
             </div>
+          </div>
+          <div className="col-6 col-lg-9 col-md-3">
+            <button className="btn btn-success">
+              Masukkan Siswa Kedalam Kelas
+            </button>
+            <FaArrowRight className="mx-4" />
+            <SiGoogleclassroom className="fs-3 me-2" /> <span>{dataClass?.name}</span>
           </div>
           <div className="col-6 col-lg-3 col-md-3">
             <input

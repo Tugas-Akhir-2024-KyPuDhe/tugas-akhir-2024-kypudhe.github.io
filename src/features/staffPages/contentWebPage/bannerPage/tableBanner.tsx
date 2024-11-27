@@ -23,7 +23,6 @@ export const TableBanner: React.FC = () => {
       const response = await bannerService.getAllBanners();
       setListBanner(response.data);
     } catch (error) {
-      console.error("Error fetching banner:", error);
     }finally {
       setLoading(false);
     }

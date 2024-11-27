@@ -1,10 +1,13 @@
 import { Media } from "./media.interface";
 
 export interface Fajusek {
+  staffId: string | undefined;
   id: number;
   uuid: string;
   name: string;
   majorCode: string;
+  academicYear: string;
+  capacity: string;
   description: string;
   prioritas: number;
   createdAt: string;

@@ -1,27 +1,27 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { useNavigate } from "react-router-dom";
-import { FaEye, FaPen } from "react-icons/fa6";
-import StudentService from "../../../../services/studentService";
-import { StudentDetail } from "../../../../interface/student.interface";
+import { FaPen, FaUserPlus } from "react-icons/fa6";
+import ClassStudentService from "../../../../services/classStudentService";
+import { Class } from "../../../../interface/studentClass.interface";
 
 export const Table: React.FC = () => {
-  const studentService = StudentService();
+  const classService = ClassStudentService();
   const navigate = useNavigate();
 
-  const [data, setData] = useState<StudentDetail[]>([]);
+  const [data, setData] = useState<Class[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
-  const getData = async (major?: string) => {
+  const getData = async () => {
     setLoading(true);
     try {
-      const response = await studentService.getNewStudent(major);
+      const response = await classService.getAllClass();
       if (response.data && response.data.length > 0) {
         setData(response.data);
       }
     } catch (error) {
-      console.error("Error fetching Student data:", error);
+      console.error("Error fetching Class data:", error);
     } finally {
       setLoading(false);
     }
@@ -30,63 +30,51 @@ export const Table: React.FC = () => {
   const columns = [
     {
       name: "No",
-      cell: (_row: StudentDetail, index: number) => index + 1,
+      cell: (_row: Class, index: number) => index + 1,
       width: "50px",
     },
     {
-      name: "Nama",
-      selector: (row: StudentDetail) => row.name,
+      name: "Tahun Ajaran",
+      selector: (row: Class) => row.academicYear,
       sortable: true,
-      cell: (row: StudentDetail) => row.name,
+      cell: (row: Class) => row.academicYear,
+      width: "300px",
     },
     {
-      name: "NIS",
-      selector: (row: StudentDetail) => row.nis,
+      name: "Kelas",
+      selector: (row: Class) => row.name,
       sortable: true,
-      cell: (row: StudentDetail) => row.nis,
-      width: "100px",
+      cell: (row: Class) => row.name,
+      // width: "100px",
     },
     {
-      name: "NISN",
-      selector: (row: StudentDetail) => row.nisn,
+      name: "Kapasitas",
+      selector: (row: Class) => row.capacity,
       sortable: true,
-      cell: (row: StudentDetail) => row.nisn,
-      width: "100px",
+      cell: (row: Class) => row.capacity,
+      // width: "100px",
     },
     {
-      name: "Jurusan",
-      selector: (row: StudentDetail) => row.Major.majorCode,
+      name: "Wali Kelas",
+      selector: (row: Class) => row.homeRoomTeacher.name,
       sortable: true,
-      cell: (row: StudentDetail) => row.Major.majorCode,
-      width: "100px",
-    },
-    {
-      name: "No.Telp",
-      selector: (row: StudentDetail) => row.phone,
-      sortable: true,
-      cell: (row: StudentDetail) => row.phone,
-      width: "120px",
-    },
-    {
-      name: "Email",
-      selector: (row: StudentDetail) => row.email,
-      sortable: true,
-      cell: (row: StudentDetail) => row.email,
+      cell: (row: Class) => row.homeRoomTeacher.name,
+      // width: "100px",
     },
     {
       name: "Action",
-      cell: (row: StudentDetail) => (
+      cell: (row: Class) => (
         <>
           <button
-            className="btn btn-info btn-sm text me-2 text-light"
-            onClick={() => navigate(`detail/${row.nis}`)}
+            className="btn btn-success btn-sm text me-2 text-light"
+            onClick={() => navigate(`detail/${row.id}`)}
             disabled={loading}
           >
-            <FaEye />
+            <FaUserPlus />
           </button>
           <button
             className="btn btn-warning btn-sm text me-2 text-light"
-            onClick={() => navigate(`update/${row.nis}`)}
+            onClick={() => navigate(`manajemen-siswa/data-siswa-baru/detail/${row.id}`)}
             disabled={loading}
           >
             <FaPen />

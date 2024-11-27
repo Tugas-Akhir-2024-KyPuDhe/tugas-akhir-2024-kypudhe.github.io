@@ -147,6 +147,7 @@ export interface StudentDetail {
   gender: string;
   nis: string;
   nisn: string;
+  Major: Fajusek
   user: {
     username: string;
     password: string;

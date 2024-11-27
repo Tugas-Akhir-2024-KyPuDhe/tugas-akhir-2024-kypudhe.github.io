@@ -1,104 +1,179 @@
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
-import { convertStartEndYear, Toast } from "../../../../utils/myFunctions";
+import { convertToRoman, Toast } from "../../../../utils/myFunctions";
 import { useNavigate, useParams } from "react-router-dom";
 import { HeaderTitlePage } from "../../../../components/headerTitlePage";
 import AuthService from "../../../../services/authService";
+import JurusanService from "../../../../services/jurusanService";
+import { Fajusek } from "../../../../interface/fajusek.interfase";
+import { StaffDetails } from "../../../../interface/auth.interface";
+import ClassStudentService from "../../../../services/classStudentService";
+import { FormState } from "../../../../interface/studentClass.interface";
+import { AxiosError } from "axios";
 
-interface FormState {
-  id?: number;
-  password?: string;
-  name: string;
-  birthPlace: string;
-  address: string;
-  nis: string;
-  nisn: string;
-  gender: string;
-  phone: string;
-  email: string;
-  startYear: string;
-}
-
-const optionsGender = [
-  { value: "L", label: "Laki-laki" },
-  { value: "P", label: "Perempuan" },
-];
-
-const currentDate = new Date();
-const currentYear = currentDate.getFullYear();
-const currentMonth = String(currentDate.getMonth() + 1).padStart(2, "0");
-const currentDay = String(currentDate.getDate()).padStart(2, "0");
-
-const optionsStartYear = Array.from({ length: 11 }, (_, index) => {
-  const year = currentYear - 5 + index;
-  const value = `${year}-${currentMonth}-${currentDay}`;
-  return {
-    value: value,
-    label: year.toString(),
-  };
-});
+const optionsGrade = Array.from({ length: 3 }, (_, index) => ({
+  value: convertToRoman(index + 10),
+  label: convertToRoman(index + 10),
+}));
 
 export const FormDataKelasMangementSiswaPage: React.FC = () => {
   const navigate = useNavigate();
+  const majorService = JurusanService();
+  const staffService = AuthService();
+  const classService = ClassStudentService();
 
   const { id } = useParams<{ id: string }>();
-  const studentService = AuthService();
-  const [formData, setFormData] = useState<FormState>({
-    password: "",
-    name: "",
-    birthPlace: "",
-    address: "",
-    nis: "",
-    nisn: "",
-    gender: optionsGender[0].value,
-    phone: "",
-    email: "",
-    startYear: optionsStartYear[4].value,
-  });
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [errorsForms, setErrorsForms] = useState<{ [key: string]: string }>({});
   const [loadingForm, setloadingForm] = useState(true);
+  const [dataMajor, setDataMajor] = useState<Fajusek[]>([]);
+  const [dataTeachers, setdataTeachers] = useState<StaffDetails[]>([]);
+  const optionsMajor = [
+    ...dataMajor.map((data) => ({
+      value: data.majorCode,
+      label: data.majorCode,
+    })),
+  ];
+  const optionsTeacher = [
+    ...dataTeachers.map((data) => ({
+      value: data.id.toString(),
+      label: data.name,
+    })),
+  ];
+  const [formData, setFormData] = useState<FormState>({
+    academicYear: "",
+    staffId: "",
+    name: ``,
+    description: "",
+    majorCode: "",
+    grade: optionsGrade[0].value,
+    group: "1",
+    capacity: "",
+  });
+
+  const updateClassName = (grade: string, majorCode: string, group: string) => {
+    return `${grade}-${majorCode}-${group}`;
+  };
+
+  const getTeacher = async () => {
+    setloadingForm(true);
+    try {
+      const response = await staffService.getUsers("TEACHER");
+      setdataTeachers(response.data as StaffDetails[]);
+      if (!id) {
+        if (response.data && response.data.length > 0) {
+          setFormData((prev) => ({
+            ...prev,
+            staffId: response.data[0]?.id.toString() || "",
+          }));
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching Student data:", error);
+    } finally {
+      setloadingForm(false);
+    }
+  };
+
+  const getMajor = async () => {
+    setloadingForm(true);
+    try {
+      const response = await majorService.all();
+      setDataMajor(response.data);
+      if (!id) {
+        const initialMajorCode = response.data[0]?.majorCode || "";
+        setFormData((prev) => ({
+          ...prev,
+          majorCode: initialMajorCode,
+          name: updateClassName(
+            prev.grade || "",
+            initialMajorCode,
+            prev.group || ""
+          ),
+        }));
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setloadingForm(false);
+    }
+  };
 
   useEffect(() => {
-    const getDataSiswa = async () => {
+    getTeacher();
+    getMajor();
+  }, []);
+
+  useEffect(() => {
+    const getDataClass = async () => {
       if (id) {
         try {
-          const response = await studentService.getStudentByNis(parseInt(id));
+          const response = await classService.getClassById(parseInt(id));
           const data = response.data;
           setFormData({
             id: data.id,
-            password: data.user.password,
+            staffId: data.staffId?.toString(),
             name: data.name,
-            birthPlace: data.birthPlace,
-            address: data.address,
-            nis: data.nis,
-            nisn: data.nisn,
-            gender: data.gender,
-            phone: data.phone,
-            email: data.email,
-            startYear: convertStartEndYear(data.startYear),
+            academicYear: data.academicYear,
+            description: data.description,
+            majorCode: data.majorCode,
+            capacity: data.capacity.toString(),
           });
-          setImageUrl(data.photo?.url);
         } catch (error) {
-          console.error("Error fetching detail siswa data:", error);
+          console.error("Error fetching detail class data:", error);
         } finally {
-          setloadingForm(false);
+          // setloadingForm(false);
         }
       } else {
         setloadingForm(false);
       }
     };
 
-    getDataSiswa();
+    getDataClass();
   }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, files } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: files ? files[0] : value,
-    }));
+    const { name, value } = e.target;
+
+    setFormData((prev) => {
+      const updatedFormData = {
+        ...prev,
+        [name]: value,
+      };
+
+      if (name === "group") {
+        updatedFormData.name = updateClassName(
+          updatedFormData.grade || "",
+          updatedFormData.majorCode,
+          value
+        );
+      }
+
+      return updatedFormData;
+    });
+
     setErrorsForms((prevErrors) => ({ ...prevErrors, [name]: "" }));
+  };
+
+  const handleSelectChange = (
+    name: string,
+    selectedOption: { value: string } | null
+  ) => {
+    setFormData((prev) => {
+      const updatedFormData = {
+        ...prev,
+        [name]: selectedOption ? selectedOption.value : "",
+      };
+
+      if (name === "grade" || name === "majorCode") {
+        updatedFormData.name = updateClassName(
+          name === "grade" ? selectedOption?.value || "" : prev.grade || "",
+          name === "majorCode" ? selectedOption?.value || "" : prev.majorCode,
+          prev.group || ""
+        );
+      }
+
+      return updatedFormData;
+    });
   };
 
   const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -112,20 +187,10 @@ export const FormDataKelasMangementSiswaPage: React.FC = () => {
     setErrorsForms((prevErrors) => ({ ...prevErrors, [name]: "" }));
   };
 
-  const handleSelectChange = (
-    name: string,
-    selectedOption: { value: string } | null
-  ) => {
-    setFormData((prev) => ({
-      ...prev,
-      [name]: selectedOption ? selectedOption.value : "",
-    }));
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const requiredFields = ["name", "nis", "nisn"];
+    const requiredFields = ["academicYear", "capacity", "staffId"];
     const newErrors: { [key: string]: string } = {};
 
     requiredFields.forEach((field) => {
@@ -136,7 +201,7 @@ export const FormDataKelasMangementSiswaPage: React.FC = () => {
       }
     });
 
-    // Check if media is required (only when adding a new banner)
+    // Check if media is required (only when adding a new class)
     // if (!formData.id && !formData.media) {
     //   newErrors.media = "Media is required.";
     // }
@@ -149,40 +214,45 @@ export const FormDataKelasMangementSiswaPage: React.FC = () => {
     setloadingForm(true);
     const payload = new FormData();
     Object.entries(formData).forEach(([key, value]) => {
-      if (key !== "password" || id) {
-        payload.append(key, value as string | Blob);
-      }
+      payload.append(key, value as string | Blob);
     });
 
     try {
       let response;
       if (formData.id) {
-        response = await studentService.updateStundent(formData.id, payload);
+        response = await classService.updateClass(formData.id, formData);
       } else {
-        response = await studentService.createStundent(payload);
+        response = await classService.createClass(formData);
       }
       if (response.status === 201 || response.status === 200) {
         Toast.fire({
           icon: "success",
-          title: `Siswa ${formData.id ? "updated" : "added"} successfully`,
+          title: `Kelas Berhasil ${formData.id ? "Diupdated" : "Ditambah"}`,
         });
         navigate(-1);
       }
     } catch (error) {
       setloadingForm(false);
+      const axiosError = error as AxiosError;
+      if (axiosError.response?.status === 409) {
+        return Toast.fire({
+          icon: "error",
+          title: `Kelas Tersebut Sudah Ada!`,
+          timer: 3500,
+        });
+      }
       Toast.fire({
         icon: "error",
         title: `${error}`,
       });
-      console.error("Error processing banner:", error);
     }
   };
 
   return (
     <>
       <HeaderTitlePage
-        title={`${id ? "Update" : "Tambah"} Siswa`}
-        subTitle="Siswa Web SMKN 1 Lumban Julu"
+        title={`${id ? "Update" : "Tambah"} Kelas Siswa`}
+        subTitle="Kelas Siswa Web SMKN 1 Lumban Julu"
         backDisplay={true}
         addDisplay={false}
         linkAdd=""
@@ -213,72 +283,94 @@ export const FormDataKelasMangementSiswaPage: React.FC = () => {
         )}
         <form onSubmit={handleSubmit}>
           <div className="row">
+            <div className="col-12 col-lg-3 col-md-6">
+              <div className="form-group mb-3">
+                <label className="mb-2 fw-medium">Nama Kelas *</label>
+                <input
+                  type="text"
+                  name="academicYear"
+                  disabled
+                  className={`form-control`}
+                  value={formData.name}
+                />
+              </div>
+            </div>
             <div className="col-12 col-lg-6 col-md-6">
               <div className="form-group mb-3">
-                <label className="mb-2 fw-medium">Nama Siswa *</label>
+                <label className="mb-2 fw-medium">Tahun Ajaran *</label>
                 <input
                   type="text"
-                  name="name"
+                  name="academicYear"
                   className={`form-control ${
-                    errorsForms.name ? "is-invalid" : ""
+                    errorsForms.academicYear ? "is-invalid" : ""
                   }`}
-                  placeholder="Masukkan Nama"
-                  value={formData.name}
+                  placeholder="Masukkan Tahun Ajaran.."
+                  value={formData.academicYear}
                   onChange={handleInputChange}
                 />
-                {errorsForms.name && (
-                  <div className="invalid-form">Nama Siswa masih kosong!</div>
-                )}
-              </div>
-            </div>
-            <div className="col-6 col-lg-3 col-md-3">
-              <div className="form-group mb-3">
-                <label className="mb-2 fw-medium">NIS *</label>
-                <input
-                  type="text"
-                  name="nis"
-                  className={`form-control ${
-                    errorsForms.nis ? "is-invalid" : ""
-                  }`}
-                  placeholder="Masukkan NIS.."
-                  value={formData.nis}
-                  onChange={handleInputChange}
-                />
-                {errorsForms.nis && (
-                  <div className="invalid-form">NIS masih kosong!</div>
-                )}
-              </div>
-            </div>
-            <div className="col-6 col-lg-3 col-md-3">
-              <div className="form-group mb-3">
-                <label className="mb-2 fw-medium">NISN *</label>
-                <input
-                  type="text"
-                  name="nisn"
-                  className={`form-control ${
-                    errorsForms.nisn ? "is-invalid" : ""
-                  }`}
-                  placeholder="Masukkan NISN.."
-                  value={formData.nisn}
-                  onChange={handleInputChange}
-                />
-                {errorsForms.nisn && (
-                  <div className="invalid-form">NISN masih kosong!</div>
+                {errorsForms.academicYear && (
+                  <div className="invalid-form">Tahun Ajaran masih kosong!</div>
                 )}
               </div>
             </div>
             <div className="col-12 col-lg-3">
               <div className="form-group mb-3">
-                <label className="mb-2 fw-medium">Tahun Mulai *</label>
+                <label className="mb-2 fw-medium">Kapasitas *</label>
+                <input
+                  type="text"
+                  name="capacity"
+                  className={`form-control ${
+                    errorsForms.capacity ? "is-invalid" : ""
+                  }`}
+                  placeholder="Kapasitas Kelas.."
+                  value={formData.capacity}
+                  onChange={handleInputChange}
+                  onKeyPress={(event) => {
+                    if (!/[0-9]/.test(event.key)) {
+                      event.preventDefault();
+                    }
+                  }}
+                />
+                {errorsForms.capacity && (
+                  <div className="invalid-form">Kapasitas masih kosong!</div>
+                )}
+              </div>
+            </div>
+            <div className="col-12 col-lg-4">
+              <div className="form-group mb-3">
+                <label className="mb-2 fw-medium">Wali Kelas *</label>
                 <Select
-                  options={optionsStartYear}
-                  value={optionsStartYear.find((option) => {
-                    return (
-                      option.value.split("-")[0] ===
-                      formData.startYear.split("-")[0]
-                    );
+                  options={optionsTeacher}
+                  value={optionsTeacher.find((option) => {
+                    return option.value === formData.staffId;
                   })}
-                  onChange={(option) => handleSelectChange("startYear", option)}
+                  onChange={(option) => handleSelectChange("staffId", option)}
+                  placeholder="Pilih Wali Kelas"
+                  isSearchable={false}
+                  className="form-control-lg px-0 pt-0"
+                  styles={{
+                    control: (baseStyles) => ({
+                      ...baseStyles,
+                      fontSize: "0.955rem",
+                      borderRadius: "8px",
+                    }),
+                    option: (provided) => ({
+                      ...provided,
+                      fontSize: "1rem",
+                    }),
+                  }}
+                />
+              </div>
+            </div>
+            <div className="col-12 col-lg-3">
+              <div className="form-group mb-3">
+                <label className="mb-2 fw-medium">Kelas Tingkat *</label>
+                <Select
+                  options={optionsGrade}
+                  value={optionsGrade.find((option) => {
+                    return option.value === formData.grade;
+                  })}
+                  onChange={(option) => handleSelectChange("grade", option)}
                   placeholder="Pilih Tahun Mulai"
                   isSearchable={false}
                   className="form-control-lg px-0 pt-0"
@@ -298,68 +390,14 @@ export const FormDataKelasMangementSiswaPage: React.FC = () => {
             </div>
             <div className="col-12 col-lg-3">
               <div className="form-group mb-3">
-                <label className="mb-2 fw-medium">No Telp *</label>
-                <input
-                  type="text"
-                  name="phone"
-                  className={`form-control ${
-                    errorsForms.phone ? "is-invalid" : ""
-                  }`}
-                  placeholder="No.telp.."
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                />
-                {errorsForms.phone && (
-                  <div className="invalid-form">No Telp Link masih kosong!</div>
-                )}
-              </div>
-            </div>
-            <div className="col-12 col-lg-6">
-              <div className="form-group mb-3">
-                <label className="mb-2 fw-medium">Email *</label>
-                <input
-                  type="text"
-                  name="email"
-                  className={`form-control ${
-                    errorsForms.email ? "is-invalid" : ""
-                  }`}
-                  placeholder="Email Siswa.."
-                  value={formData.email}
-                  onChange={handleInputChange}
-                />
-                {errorsForms.email && (
-                  <div className="invalid-form">Email masih kosong!</div>
-                )}
-              </div>
-            </div>
-            <div className="col-12 col-lg-9">
-              <div className="form-group mb-3">
-                <label className="mb-2 fw-medium">Tempat Tanggal Lahir</label>
-                <input
-                  type="text"
-                  name="birthPlace"
-                  className={`form-control ${
-                    errorsForms.birthPlace ? "is-invalid" : ""
-                  }`}
-                  placeholder="Tempat, Tanggal Lahir.."
-                  value={formData.birthPlace}
-                  onChange={handleInputChange}
-                />
-                {errorsForms.birthPlace && (
-                  <div className="invalid-form">No Telp Link masih kosong!</div>
-                )}
-              </div>
-            </div>
-            <div className="col-12 col-lg-3 col-md-3">
-              <div className="form-group mb-3">
-                <label className="mb-2 fw-medium">Jenis Kelamin</label>
+                <label className="mb-2 fw-medium">Kelas Jurusan *</label>
                 <Select
-                  options={optionsGender}
-                  value={optionsGender.find(
-                    (option) => option.value === formData.gender
-                  )}
-                  onChange={(option) => handleSelectChange("prioritas", option)}
-                  placeholder="Pilih Jenis Kelamin"
+                  options={optionsMajor}
+                  value={optionsMajor.find((option) => {
+                    return option.value === formData.majorCode;
+                  })}
+                  onChange={(option) => handleSelectChange("majorCode", option)}
+                  placeholder="Pilih Jurusan"
                   isSearchable={false}
                   className="form-control-lg px-0 pt-0"
                   styles={{
@@ -376,90 +414,46 @@ export const FormDataKelasMangementSiswaPage: React.FC = () => {
                 />
               </div>
             </div>
+            <div className="col-12 col-lg-2">
+              <div className="form-group mb-3">
+                <label className="mb-2 fw-medium">Kelompok *</label>
+                <input
+                  type="text"
+                  name="group"
+                  className={`form-control ${
+                    errorsForms.group ? "is-invalid" : ""
+                  }`}
+                  placeholder="Kelompok Kelas.."
+                  value={formData.group}
+                  onChange={handleInputChange}
+                  onKeyPress={(event) => {
+                    if (!/[0-9]/.test(event.key)) {
+                      event.preventDefault();
+                    }
+                  }}
+                />
+                {errorsForms.group && (
+                  <div className="invalid-form">Kelompok masih kosong!</div>
+                )}
+              </div>
+            </div>
             <div className="col-12">
               <div className="form-group mb-3">
-                <label className="mb-2 fw-medium">Alamat *</label>
+                <label className="mb-2">Deskripsi</label>
                 <textarea
-                  name="address"
+                  name="description"
                   className={`form-control ${
-                    errorsForms.address ? "is-invalid" : ""
+                    errorsForms.description ? "is-invalid" : ""
                   }`}
-                  placeholder="Masukkan Alamat Siswa"
-                  value={formData.address}
+                  placeholder="Masukkan deskripsi"
+                  value={formData.description}
                   onChange={handleTextareaChange}
                 />
-                {errorsForms.address && (
+                {errorsForms.description && (
                   <div className="invalid-form">Deskripsi masih kosong!</div>
                 )}
               </div>
             </div>
-            {id && (
-              <div className="col-12 col-lg-12">
-                <div className="form-group mb-3">
-                  <label className="mb-2 fw-medium">Password *</label>
-                  <input
-                    type="text"
-                    name="password"
-                    className={`form-control ${
-                      errorsForms.password ? "is-invalid" : ""
-                    }`}
-                    placeholder="Password akun siswa.."
-                    value={formData.password}
-                    onChange={handleInputChange}
-                  />
-                  <small id="helpId" className="text-muted">
-                    *Password Diencripsi
-                  </small>
-                  {errorsForms.password && (
-                    <div className="invalid-form">password masih kosong!</div>
-                  )}
-                </div>
-              </div>
-            )}
-            <div className="col-12">
-              <div className="form-group mb-3">
-                {id ? (
-                  <label className="mb-2 fw-medium">Update Gambar *</label>
-                ) : (
-                  <label className="mb-2 fw-medium">Gambar *</label>
-                )}
-                <div className="input-group mb-3">
-                  <input
-                    type="file"
-                    name="media"
-                    className="form-control fs-6"
-                    id="inputGroupFile02"
-                    onChange={handleInputChange}
-                  />
-                  <label
-                    className="input-group-text"
-                    htmlFor="inputGroupFile02"
-                  >
-                    Upload
-                  </label>
-                </div>
-                {errorsForms.media && (
-                  <div className="invalid-form">Media masih kosong!</div>
-                )}
-              </div>
-            </div>
-            {id && (
-              <div className="col-12">
-                {imageUrl && (
-                  <div className="form-group mb-3">
-                    <label className="mb-2 fw-medium">Gambar Sekarang</label>
-                    <br />
-                    <img
-                      src={imageUrl}
-                      alt={formData.name}
-                      className="rounded"
-                      style={{ width: "300px", objectFit: "contain" }}
-                    />
-                  </div>
-                )}
-              </div>
-            )}
-
             {/* <div className="col-12">
               <div className="form-group mb-3">
                 <label className="mb-2 fw-medium">Status</label>
