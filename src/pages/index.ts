@@ -34,5 +34,7 @@ import { GaleriPage } from './staffPages/contentWebPage/galeriPage';
 import { FormGaleriPage } from './staffPages/contentWebPage/galeriPage/form';
 import { NotFoundPage } from './notFoundPage';
 import { UpdateGaleriColletion } from './staffPages/contentWebPage/galeriPage/updategaleriCollection';
+import { DataKelasMangementSiswaPage } from './staffPages/managementSiswaPage/dataKelasPage';
+import { FormDataKelasMangementSiswaPage } from './staffPages/managementSiswaPage/dataKelasPage/form';
 
-export { NotFoundPage, HomePage, LoginPage, ArticlePage, FormArticlePage, DetailArticlePage, BannerPage, FormBannerPage, NilaiPage, KelasPage, MapelPage, AbsensiPage, SchoolPage, FacilityPage, FormFacilityPage, JurusanPage, FormJurusanPage, EkskulPage, FormEkskulPage, GuruMapelPage, FormGuruMapelPage, DaftarSiswaPage, FormDaftarSiswaPage, DaftarKelasPage, FormDaftarKelasPage, NilaiSiswaPage, FormNilaiSiswaPage, ProfilePage, AbsensiSiswaPage, DetailAbsensiSiswaPage, DataSiswaMangementSiswaPage, FormSiswaMangementSiswaPage, DetailSiswaMangementSiswa, GaleriPage, FormGaleriPage, UpdateGaleriColletion }
+export { NotFoundPage, HomePage, LoginPage, ArticlePage, FormArticlePage, DetailArticlePage, BannerPage, FormBannerPage, NilaiPage, KelasPage, MapelPage, AbsensiPage, SchoolPage, FacilityPage, FormFacilityPage, JurusanPage, FormJurusanPage, EkskulPage, FormEkskulPage, GuruMapelPage, FormGuruMapelPage, DaftarSiswaPage, FormDaftarSiswaPage, DaftarKelasPage, FormDaftarKelasPage, NilaiSiswaPage, FormNilaiSiswaPage, ProfilePage, AbsensiSiswaPage, DetailAbsensiSiswaPage, DataSiswaMangementSiswaPage, FormSiswaMangementSiswaPage, DetailSiswaMangementSiswa, GaleriPage, FormGaleriPage, UpdateGaleriColletion, DataKelasMangementSiswaPage,FormDataKelasMangementSiswaPage }

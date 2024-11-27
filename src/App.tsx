@@ -37,6 +37,8 @@ import {
   FormGaleriPage,
   NotFoundPage,
   UpdateGaleriColletion,
+  DataKelasMangementSiswaPage,
+  FormDataKelasMangementSiswaPage,
 } from "./pages";
 import { SideBar } from "./components/sidebar";
 import PrivateRoute from "./components/privateRoute";
@@ -170,6 +172,18 @@ function App() {
             <Route
               path="/manajemen-siswa/data-siswa-baru/detail/:id"
               element={<PrivateRoute Component={DetailSiswaMangementSiswa} />}
+            />
+            <Route
+              path="/manajemen-siswa/data-kelas"
+              element={<PrivateRoute Component={DataKelasMangementSiswaPage} />}
+            />
+            <Route
+              path="/manajemen-siswa/data-kelas/tambah"
+              element={<PrivateRoute Component={FormDataKelasMangementSiswaPage} />}
+            />
+            <Route
+              path="/manajemen-siswa/data-kelas/update/:id"
+              element={<PrivateRoute Component={FormDataKelasMangementSiswaPage} />}
             />
 
             {/* === Teacher */}

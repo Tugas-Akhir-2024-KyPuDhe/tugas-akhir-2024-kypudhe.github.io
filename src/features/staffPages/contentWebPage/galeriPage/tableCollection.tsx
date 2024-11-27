@@ -18,7 +18,10 @@ interface FormState {
   prioritas: string;
   status: string;
   mediaIdsToDelete: number[];
-  media: File | null;
+  media1: File | null;
+  media2: File | null;
+  media3: File | null;
+  media4: File | null;
 }
 
 export const TableCollectionGaleri: React.FC = () => {
@@ -32,7 +35,10 @@ export const TableCollectionGaleri: React.FC = () => {
     prioritas: "",
     status: "",
     mediaIdsToDelete: [],
-    media: null,
+    media1: null,
+    media2: null,
+    media3: null,
+    media4: null,
   });
 
   const getData = async () => {
@@ -47,7 +53,10 @@ export const TableCollectionGaleri: React.FC = () => {
           description: data.description,
           prioritas: data.prioritas.toString(),
           status: data.status,
-          media: null,
+          media1: null,
+          media2: null,
+          media3: null,
+          media4: null,
           mediaIdsToDelete: [],
         });
         setMediaList(
@@ -69,10 +78,6 @@ export const TableCollectionGaleri: React.FC = () => {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    getData();
-  }, []);
 
   const columns = [
     {
@@ -114,11 +119,14 @@ export const TableCollectionGaleri: React.FC = () => {
   ];
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, files } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: files ? files[0] : value,
-    }));
+    const { name, files } = e.target;
+
+    if (files && files[0]) {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: files[0],
+      }));
+    }
   };
 
   const handleDeleteMedia = async (mediaId: number) => {
@@ -139,23 +147,19 @@ export const TableCollectionGaleri: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    if (formData.mediaIdsToDelete.length > 0) {
-      handleSubmit();
-    }
-  }, [formData.mediaIdsToDelete]);
-
   const handleSubmit = async () => {
-    const requiredFields = ["name", "description"];
-    const newErrors: { [key: string]: string } = {};
-
-    requiredFields.forEach((field) => {
-      if (!formData[field as keyof typeof formData]) {
-        newErrors[field] = `${
-          field.charAt(0).toUpperCase() + field.slice(1)
-        } is required.`;
-      }
-    });
+    if (
+      formData.media1 == null &&
+      formData.media2 == null &&
+      formData.media3 == null &&
+      formData.media4 == null
+    ) {
+      return Toast.fire({
+        icon: "warning",
+        title: `Masukkan gambar minimal 1 gambar!`,
+        timer: 3500,
+      });
+    }
 
     setLoading(true);
     const payload = new FormData();
@@ -164,6 +168,8 @@ export const TableCollectionGaleri: React.FC = () => {
         (value as number[]).forEach((id) =>
           payload.append("mediaIdsToDelete[]", id.toString())
         );
+      } else if (key.startsWith("media") && value) {
+        payload.append("media", value as File);
       } else {
         payload.append(key, value as string | Blob);
       }
@@ -179,11 +185,23 @@ export const TableCollectionGaleri: React.FC = () => {
             icon: "success",
             title: `Galeri ${formData.id ? "updated" : "added"} successfully`,
           });
-          const fileInput = document.getElementById(
-            "inputFileGaleri"
+          const fileInput1 = document.getElementById(
+            "inputFileGaleri1"
           ) as HTMLInputElement;
-          if (fileInput) {
-            fileInput.value = "";
+          const fileInput2 = document.getElementById(
+            "inputFileGaleri2"
+          ) as HTMLInputElement;
+          const fileInput3 = document.getElementById(
+            "inputFileGaleri3"
+          ) as HTMLInputElement;
+          const fileInput4 = document.getElementById(
+            "inputFileGaleri4"
+          ) as HTMLInputElement;
+          if (fileInput1 || fileInput2 || fileInput3 || fileInput4) {
+            fileInput1.value = "";
+            fileInput2.value = "";
+            fileInput3.value = "";
+            fileInput4.value = "";
           }
         }
       }
@@ -197,6 +215,16 @@ export const TableCollectionGaleri: React.FC = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  useEffect(() => {
+    if (formData.mediaIdsToDelete.length > 0) {
+      handleSubmit();
+    }
+  }, [formData.mediaIdsToDelete]);
 
   return (
     <div
@@ -253,18 +281,24 @@ export const TableCollectionGaleri: React.FC = () => {
       <div className="col-12">
         <div className="form-group mb-3">
           <label className="mb-2 fw-medium">Foto Galeri</label>
-          <div className="input-group mb-3">
-            <input
-              type="file"
-              name="media"
-              className="form-control  fs-6"
-              id="inputFileGaleri"
-              onChange={handleInputChange}
-            />
-            <label className="input-group-text" htmlFor="inputFileGaleri">
-              Upload
-            </label>
-          </div>
+          {[1, 2, 3, 4].map((index) => (
+            <div className="input-group mb-3" key={`media${index}`}>
+              <input
+                type="file"
+                name={`media${index}`}
+                className="form-control fs-6"
+                id={`inputFileGaleri${index}`}
+                accept=".jpeg, .jpg, .png, .gif"
+                onChange={handleInputChange}
+              />
+              <label
+                className="input-group-text"
+                htmlFor={`inputFileGaleri${index}`}
+              >
+                Upload
+              </label>
+            </div>
+          ))}
         </div>
       </div>
       <div className="col-12">
