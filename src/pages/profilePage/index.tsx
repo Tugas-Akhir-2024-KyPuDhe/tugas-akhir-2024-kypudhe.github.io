@@ -61,6 +61,7 @@ export const ProfilePage = () => {
       setProfileDetail(user);
       setLoading(false);
     } catch (err) {
+      console.log(err);
       setError("Failed to fetch user data");
       setLoading(false);
     }
