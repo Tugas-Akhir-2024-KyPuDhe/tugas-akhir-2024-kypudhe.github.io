@@ -103,8 +103,9 @@ export const Table: React.FC = () => {
     },
     {
       name: "Status",
-      selector: (row: Galeri) => convertStatus(row.status),
+      selector: (row: Galeri) => row.status,
       sortable: true,
+      cell: (row: Galeri) => convertStatus(row.status),
       width: "100px",
     },
     {
