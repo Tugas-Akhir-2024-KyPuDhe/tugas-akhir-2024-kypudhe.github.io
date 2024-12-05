@@ -40,6 +40,8 @@ import {
   DataKelasMangementSiswaPage,
   FormDataKelasMangementSiswaPage,
   InserStudentInClassMangementSiswaPage,
+  DataMapelMangementSiswaPage,
+  FormMapelMangementSiswaPage,
 } from "./pages";
 import { SideBar } from "./components/sidebar";
 import PrivateRoute from "./components/privateRoute";
@@ -187,8 +189,20 @@ function App() {
               element={<PrivateRoute Component={FormDataKelasMangementSiswaPage} />}
             />
             <Route
-              path="/manajemen-siswa/data-kelas/detail/:id"
+              path="/manajemen-siswa/data-mapel/detail/:id"
               element={<PrivateRoute Component={InserStudentInClassMangementSiswaPage} />}
+            />
+            <Route
+              path="/manajemen-siswa/data-mapel"
+              element={<PrivateRoute Component={DataMapelMangementSiswaPage} />}
+            />
+            <Route
+              path="/manajemen-siswa/data-mapel/tambah"
+              element={<PrivateRoute Component={FormMapelMangementSiswaPage} />}
+            />
+            <Route
+              path="/manajemen-siswa/data-mapel/update/:id"
+              element={<PrivateRoute Component={FormMapelMangementSiswaPage} />}
             />
 
             {/* === Teacher */}
@@ -249,7 +263,7 @@ function App() {
               element={<PrivateRoute Component={DetailAbsensiSiswaPage} />}
             />
 
-            {/* === Student */}
+            {/* #region | Student  */}
             <Route
               path="/nilai"
               element={<PrivateRoute Component={NilaiPage} />}
@@ -266,6 +280,7 @@ function App() {
               path="/absensi"
               element={<PrivateRoute Component={AbsensiPage} />}
             />
+            {/* #endregion */}
           </Routes>
         </SideBar>
       )}

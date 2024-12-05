@@ -4,11 +4,7 @@ import { Toast } from "../../../../utils/myFunctions";
 import { useNavigate, useParams } from "react-router-dom";
 import EkskulService from "../../../../services/ekskulService";
 import { HeaderTitlePage } from "../../../../components/headerTitlePage";
-
-const optionsPrioritas = Array.from({ length: 20 }, (_, index) => ({
-  value: (index + 1).toString(),
-  label: (index + 1).toString(),
-}));
+import { optionsPrioritas } from "../../../../utils/optionsData";
 
 interface FormState {
   id?: number;

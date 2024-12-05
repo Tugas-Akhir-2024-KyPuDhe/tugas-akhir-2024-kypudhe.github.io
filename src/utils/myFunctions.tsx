@@ -1,3 +1,4 @@
+import { FaCircle } from "react-icons/fa6";
 import Swal from "sweetalert2";
 
 export const Toast = Swal.mixin({
@@ -82,11 +83,21 @@ export const formatGender = (gender: string): string => {
 
 export const convertStartEndYear = (startYear: Date): string => {
   const date = new Date(startYear);
-  return date.toISOString().split('T')[0];
+  return date.toISOString().split("T")[0];
 };
 
-export const convertStatus = (status: string): string => {
-  return status === "Active" ? "Aktif" : "Non Aktif";
+export const convertStatus = (status: string): JSX.Element => {
+  return status === "Active" ? (
+    <>
+      <FaCircle className="text-success me-2" style={{ fontSize: "0.5rem" }} />
+      Aktif
+    </>
+  ) : (
+    <>
+      <FaCircle className="text-danger me-2" style={{ fontSize: "0.5rem" }} />
+      Non Aktif
+    </>
+  );
 };
 
 export const convertRole = (role: string): string => {
@@ -99,22 +110,22 @@ export const convertToRoman = (num: number): string => {
   }
 
   const romanNumerals: [number, string][] = [
-    [1000, 'M'],
-    [900, 'CM'],
-    [500, 'D'],
-    [400, 'CD'],
-    [100, 'C'],
-    [90, 'XC'],
-    [50, 'L'],
-    [40, 'XL'],
-    [10, 'X'],
-    [9, 'IX'],
-    [5, 'V'],
-    [4, 'IV'],
-    [1, 'I'],
+    [1000, "M"],
+    [900, "CM"],
+    [500, "D"],
+    [400, "CD"],
+    [100, "C"],
+    [90, "XC"],
+    [50, "L"],
+    [40, "XL"],
+    [10, "X"],
+    [9, "IX"],
+    [5, "V"],
+    [4, "IV"],
+    [1, "I"],
   ];
 
-  let result = '';
+  let result = "";
   for (const [value, symbol] of romanNumerals) {
     while (num >= value) {
       result += symbol;
@@ -127,5 +138,3 @@ export const convertToRoman = (num: number): string => {
 // Contoh penggunaan fungsi
 const angka = 2024;
 console.log(`Angka ${angka} dalam Romawi adalah: ${convertToRoman(angka)}`);
-
-

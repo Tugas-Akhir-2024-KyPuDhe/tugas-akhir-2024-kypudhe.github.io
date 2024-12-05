@@ -7,6 +7,7 @@ import { Toast } from "../../utils/myFunctions";
 import { useNavigate, useParams } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa6";
 import useCookie from "react-use-cookie";
+import { optionsStatusArticle } from "../../utils/optionsData";
 
 const toolbarOptions = [
   [{ header: "1" }, { header: "2" }, { font: [] }],
@@ -38,11 +39,6 @@ const optionsCategoryArticle = [
   { value: "Lingkungan", label: "Lingkungan" },
   { value: "Hiburan", label: "Hiburan" },
   { value: "Travel", label: "Travel" },
-];
-
-const optionsStatusArticle = [
-  { value: "PUBLISH", label: "PUBLISH" },
-  { value: "DRAFT", label: "DRAFT" },
 ];
 
 interface FormState {

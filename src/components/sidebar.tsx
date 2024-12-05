@@ -675,6 +675,36 @@ export const ListMenu = () => {
               )}
               Data Kelas
             </MenuItem>
+            <MenuItem
+              onClick={() => handleMenuClick("/manajemen-siswa/data-mapel")}
+              icon={<FaCircle style={{ fontSize: "8px" }} />}
+              style={{
+                position: "relative",
+                backgroundColor:
+                  selectedMenu === "/manajemen-siswa/data-mapel"
+                    ? "#E5EAF2"
+                    : "",
+              }}
+              className={`fw-medium ${
+                selectedMenu === "/manajemen-siswa/data-mapel"
+                  ? "text-blue"
+                  : "text-dark-soft"
+              }`}
+            >
+              {selectedMenu === "/manajemen-siswa/data-mapel" && (
+                <div
+                  style={{
+                    position: "absolute",
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                    width: "4px",
+                    backgroundColor: "var(--blue-color)",
+                  }}
+                />
+              )}
+              Mata Pelajaran
+            </MenuItem>
           </SubMenu>
           <SubMenu
             icon={<IoIosPeople />}

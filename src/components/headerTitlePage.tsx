@@ -26,19 +26,17 @@ export const HeaderTitlePage: React.FC<HeaderProps> = ({
           <div className="row d-flex">
             {backDisplay && (
               <div className="col-auto">
-              <button
-                onClick={() => navigate(-1)}
-                className="btn btn-lg btn-danger"
-              >
-                <FaArrowLeft />
-              </button>
-            </div>
+                <button
+                  onClick={() => navigate(-1)}
+                  className="btn btn-lg btn-danger"
+                >
+                  <FaArrowLeft />
+                </button>
+              </div>
             )}
             <div className="col">
               <div className="">
-                <div className="fw-bold fs-5 text-dark-soft">
-                  {title}
-                </div>
+                <div className="fw-bold fs-5 text-dark-soft">{title}</div>
                 <div className="">{subTitle}</div>
               </div>
             </div>
@@ -46,10 +44,7 @@ export const HeaderTitlePage: React.FC<HeaderProps> = ({
         </div>
         {addDisplay && (
           <div className="col-12 col-lg-6 col-md-6 text-end">
-            <Link
-              to={linkAdd}
-              className="btn btn-primary border-0 bg-blue"
-            >
+            <Link to={linkAdd} className="btn btn-primary border-0 bg-blue">
               <MdAdd className="display-6" />
             </Link>
           </div>

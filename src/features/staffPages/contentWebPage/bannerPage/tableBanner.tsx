@@ -4,7 +4,7 @@ import { StyleSheetManager } from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { Banner } from "../../../../interface/banner.interface";
 import BannerService from "../../../../services/bannerService";
-import { formatDateTime, showConfirmationDialog, Toast } from "../../../../utils/myFunctions";
+import { convertStatus, formatDateTime, showConfirmationDialog, Toast } from "../../../../utils/myFunctions";
 import { FaTrash } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { FaPen } from "react-icons/fa6";
@@ -23,6 +23,7 @@ export const TableBanner: React.FC = () => {
       const response = await bannerService.getAllBanners();
       setListBanner(response.data);
     } catch (error) {
+      console.error(error)
     }finally {
       setLoading(false);
     }
@@ -94,6 +95,13 @@ export const TableBanner: React.FC = () => {
       name: "Dibuat Pada",
       selector: (row: Banner) => formatDateTime(row.createdAt),
       sortable: true,
+    },
+    {
+      name: "Status",
+      selector: (row: Banner) => row.status,
+      sortable: true,
+      cell: (row: Banner) => convertStatus(row.status),
+      width: "100px",
     },
     {
       name: "Action",

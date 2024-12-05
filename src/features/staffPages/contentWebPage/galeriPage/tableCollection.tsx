@@ -183,7 +183,7 @@ export const TableCollectionGaleri: React.FC = () => {
           await getData();
           Toast.fire({
             icon: "success",
-            title: `Galeri ${formData.id ? "updated" : "added"} successfully`,
+            title: `Galeri Berhasil ${formData.id ? "Diupdate" : "Ditambah"}`,
           });
           const fileInput1 = document.getElementById(
             "inputFileGaleri1"

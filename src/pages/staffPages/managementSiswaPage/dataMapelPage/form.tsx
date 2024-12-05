@@ -2,29 +2,32 @@ import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import { Toast } from "../../../../utils/myFunctions";
 import { useNavigate, useParams } from "react-router-dom";
-import JurusanService from "../../../../services/jurusanService";
 import { HeaderTitlePage } from "../../../../components/headerTitlePage";
-import { optionsPrioritas } from "../../../../utils/optionsData";
+import CourseService from "../../../../services/courseService";
+import { optionsGrade, optionsStatus } from "../../../../utils/optionsData";
 
 interface FormState {
   id?: number;
   name: string;
+  code: string;
+  grade: string;
   description: string;
-  prioritas: string;
-  media: File | null;
+  status?: string;
 }
 
-export const FormDaftarSiswaPage: React.FC = () => {
+export const FormMapelMangementSiswaPage: React.FC = () => {
   const navigate = useNavigate();
+
   const { id } = useParams<{ id: string }>();
-  const jurusanService = JurusanService();
+  const courseService = CourseService();
   const [formData, setFormData] = useState<FormState>({
     name: "",
+    code: "",
     description: "",
-    prioritas: optionsPrioritas[11].value,
-    media: null,
+    status: optionsStatus[0].value,
+    grade: optionsGrade[0].value,
   });
-
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [errorsForms, setErrorsForms] = useState<{ [key: string]: string }>({});
   const [loadingForm, setloadingForm] = useState(true);
 
@@ -32,18 +35,19 @@ export const FormDaftarSiswaPage: React.FC = () => {
     const getData = async () => {
       if (id) {
         try {
-          const response = await jurusanService.single(parseFloat(id));
+          const response = await courseService.getCourseById(parseInt(id));
           const data = response.data;
-
           setFormData({
             id: data.id,
             name: data.name,
+            code: data.code,
             description: data.description,
-            prioritas: data.prioritas.toString(),
-            media: null,
+            grade: data.grade,
+            status: data.status,
           });
+          setImageUrl(data.image?.url);
         } catch (error) {
-          console.error("Error fetching daftar siswa data:", error);
+          console.error("Error fetching detail mata pelajaran data:", error);
         } finally {
           setloadingForm(false);
         }
@@ -88,7 +92,7 @@ export const FormDaftarSiswaPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const requiredFields = ["name", "description"];
+    const requiredFields = ["code", "name"];
     const newErrors: { [key: string]: string } = {};
 
     requiredFields.forEach((field) => {
@@ -113,14 +117,16 @@ export const FormDaftarSiswaPage: React.FC = () => {
     try {
       let response;
       if (formData.id) {
-        response = await jurusanService.update(formData.id, payload);
+        response = await courseService.updateCourse(formData.id, payload);
       } else {
-        response = await jurusanService.store(payload);
+        response = await courseService.addCourse(payload);
       }
       if (response.status === 201 || response.status === 200) {
         Toast.fire({
           icon: "success",
-          title: `Jurusan Berhasil ${formData.id ? "Diupdate" : "Ditambah"}`,
+          title: `Mata Pelajaran Berhasil ${
+            formData.id ? "Diupdate" : "Ditambah"
+          }`,
         });
         navigate(-1);
       }
@@ -130,13 +136,19 @@ export const FormDaftarSiswaPage: React.FC = () => {
         icon: "error",
         title: `${error}`,
       });
-      console.error("Error processing Jurusan:", error);
+      console.error("Error processing banner:", error);
     }
   };
 
   return (
     <>
-      <HeaderTitlePage title={`${id ? "Update" : "Tambah"} Daftar Kelas`} subTitle="Daftar Kelas SMKN 1 Lumban Julu" backDisplay={true} addDisplay={false} linkAdd="" />
+      <HeaderTitlePage
+        title={`${id ? "Update" : "Tambah"} mata Pelajaran`}
+        subTitle="Mata Pelajaran SMKN 1 Lumban Julu"
+        backDisplay={true}
+        addDisplay={false}
+        linkAdd=""
+      />
       <div
         className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
         style={{ backgroundColor: "#fff", position: "relative" }}
@@ -163,39 +175,66 @@ export const FormDaftarSiswaPage: React.FC = () => {
         )}
         <form onSubmit={handleSubmit}>
           <div className="row">
-            <div className="col-12 col-lg-9 col-md-9">
+            <div className="col-12 col-lg-3 col-md-3">
               <div className="form-group mb-3">
-                <label className="mb-2">Nama *</label>
+                <label className="mb-2 fw-medium">Kode Mapel *</label>
+                <input
+                  type="text"
+                  name="code"
+                  className={`form-control ${
+                    errorsForms.code ? "is-invalid" : ""
+                  }`}
+                  placeholder="Kode Mapel.."
+                  value={formData.code}
+                  onChange={handleInputChange}
+                />
+                {errorsForms.code && (
+                  <div className="invalid-form">Kode Mapel masih kosong!</div>
+                )}
+              </div>
+            </div>
+            <div className="col-12 col-md-7">
+              <div className="form-group mb-3">
+                <label className="mb-2 fw-medium">Nama Mapel *</label>
                 <input
                   type="text"
                   name="name"
                   className={`form-control ${
                     errorsForms.name ? "is-invalid" : ""
                   }`}
-                  placeholder="Masukkan Nama"
+                  placeholder="Nama Mapel.."
                   value={formData.name}
                   onChange={handleInputChange}
                 />
                 {errorsForms.name && (
-                  <div className="invalid-form">Nama masih kosong!</div>
+                  <div className="invalid-form">Nama Mapel masih kosong!</div>
                 )}
               </div>
             </div>
-            <div className="col-12 col-lg-3 col-md-3">
+            <div className="col-12 col-lg-2">
               <div className="form-group mb-3">
-                <label className="mb-2">Prioritas</label>
+                <label className="mb-2 fw-medium">Tingkat *</label>
                 <Select
-                  options={optionsPrioritas}
-                  value={optionsPrioritas.find(
-                    (option) => option.value === formData.prioritas
-                  )}
-                  onChange={(option) => handleSelectChange("prioritas", option)}
-                  placeholder="Pilih Prioritas"
-                  className="px-0 pt-0"
+                  options={optionsGrade}
+                  value={optionsGrade.find((option) => {
+                    return (
+                      option.value.split("-")[0] ===
+                      formData.grade.split("-")[0]
+                    );
+                  })}
+                  onChange={(option) => handleSelectChange("grade", option)}
+                  placeholder="Pilih TIngkat Kelas"
+                  isSearchable={false}
+                  className="form-control-lg px-0 pt-0"
                   styles={{
                     control: (baseStyles) => ({
                       ...baseStyles,
+                      fontSize: "0.955rem",
                       borderRadius: "8px",
+                    }),
+                    option: (provided) => ({
+                      ...provided,
+                      fontSize: "1rem",
                     }),
                   }}
                 />
@@ -203,7 +242,7 @@ export const FormDaftarSiswaPage: React.FC = () => {
             </div>
             <div className="col-12">
               <div className="form-group mb-3">
-                <label className="mb-2">Deskripsi *</label>
+                <label className="mb-2 fw-medium">Deskripsi *</label>
                 <textarea
                   name="description"
                   className={`form-control ${
@@ -213,14 +252,41 @@ export const FormDaftarSiswaPage: React.FC = () => {
                   value={formData.description}
                   onChange={handleTextareaChange}
                 />
-                {errorsForms.description && (
-                  <div className="invalid-form">Deskripsi masih kosong!</div>
-                )}
               </div>
             </div>
             <div className="col-12">
               <div className="form-group mb-3">
-                <label className="mb-2">Media</label>
+                <label className="mb-2 fw-medium">Status</label>
+                <Select
+                  options={optionsStatus}
+                  value={optionsStatus.find(
+                    (option) => option.value === formData.status
+                  )}
+                  onChange={(option) => handleSelectChange("status", option)}
+                  placeholder="Pilih Status"
+                  className="form-control-lg px-0 pt-0"
+                  styles={{
+                    control: (baseStyles) => ({
+                      ...baseStyles,
+                      fontSize: "0.955rem",
+                      minHeight: "48px",
+                      borderRadius: "8px",
+                    }),
+                    option: (provided) => ({
+                      ...provided,
+                      fontSize: "1rem",
+                    }),
+                  }}
+                />
+              </div>
+            </div>
+            <div className="col-12">
+              <div className="form-group mb-3">
+                {id ? (
+                  <label className="mb-2 fw-medium">Update Gambar *</label>
+                ) : (
+                  <label className="mb-2 fw-medium">Gambar *</label>
+                )}
                 <div className="input-group mb-3">
                   <input
                     type="file"
@@ -236,17 +302,31 @@ export const FormDaftarSiswaPage: React.FC = () => {
                     Upload
                   </label>
                 </div>
-                {errorsForms.media && (
-                  <div className="invalid-form">Media masih kosong!</div>
-                )}
               </div>
             </div>
+            {id && (
+              <div className="col-12">
+                {imageUrl && (
+                  <div className="form-group mb-3">
+                    <label className="mb-2 fw-medium">Gambar Sekarang</label>
+                    <br />
+                    <img
+                      src={imageUrl}
+                      alt={formData.name}
+                      className="rounded"
+                      style={{ width: "300px", objectFit: "contain" }}
+                    />
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
-          <div className="col-12 d-flex">
+          <div className="col-12">
             <button
               className={`btn ${formData.id ? "btn-warning" : "btn-success"}`}
               type="submit"
+              style={{ fontSize: "1.1rem" }}
               disabled={loadingForm}
             >
               {loadingForm ? (

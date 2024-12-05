@@ -4,11 +4,7 @@ import { Toast } from "../../../../utils/myFunctions";
 import { useParams } from "react-router-dom";
 import JurusanService from "../../../../services/jurusanService";
 import { HeaderTitlePage } from "../../../../components/headerTitlePage";
-
-const optionsPrioritas = Array.from({ length: 20 }, (_, index) => ({
-  value: (index + 1).toString(),
-  label: (index + 1).toString(),
-}));
+import { optionsPrioritas } from "../../../../utils/optionsData";
 
 interface FormState {
   id?: number;
@@ -122,7 +118,7 @@ export const FormDaftarKelasPage: React.FC = () => {
       if (response.status === 201 || response.status === 200) {
         Toast.fire({
           icon: "success",
-          title: `Jurusan ${formData.id ? "updated" : "added"} successfully`,
+          title: `Jurusan Berhasil ${formData.id ? "Diupdate" : "Ditambah"}`,
         });
         setFormData({
           name: "",

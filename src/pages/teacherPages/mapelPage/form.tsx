@@ -4,11 +4,8 @@ import { Toast } from "../../../utils/myFunctions";
 import { useNavigate, useParams } from "react-router-dom";
 import JurusanService from "../../../services/jurusanService";
 import { HeaderTitlePage } from "../../../components/headerTitlePage";
+import { optionsPrioritas } from "../../../utils/optionsData";
 
-const optionsPrioritas = Array.from({ length: 20 }, (_, index) => ({
-  value: (index + 1).toString(),
-  label: (index + 1).toString(),
-}));
 
 interface FormState {
   id?: number;
@@ -124,7 +121,7 @@ export const FormGuruMapelPage: React.FC = () => {
       if (response.status === 201 || response.status === 200) {
         Toast.fire({
           icon: "success",
-          title: `Jurusan ${formData.id ? "updated" : "added"} successfully`,
+          title: `Jurusan Berhasil ${formData.id ? "Diupdate" : "Ditambah"}`,
         });
         navigate(-1);
       }

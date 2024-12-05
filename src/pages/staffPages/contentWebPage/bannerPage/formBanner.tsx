@@ -5,16 +5,8 @@ import { Toast } from "../../../../utils/myFunctions";
 import { useNavigate, useParams } from "react-router-dom";
 import useCookie from "react-use-cookie";
 import { HeaderTitlePage } from "../../../../components/headerTitlePage";
+import { optionsPrioritas, optionsStatus } from "../../../../utils/optionsData";
 
-const optionsPrioritas = Array.from({ length: 20 }, (_, index) => ({
-  value: (index + 1).toString(),
-  label: (index + 1).toString(),
-}));
-
-const optionsStatus = [
-  { value: "Active", label: "Aktif" },
-  { value: "NonActive", label: "Non Aktif" },
-];
 interface FormState {
   id?: number;
   title: string;
@@ -150,7 +142,7 @@ export const FormBannerPage: React.FC = () => {
       if (response.status === 201 || response.status === 200) {
         Toast.fire({
           icon: "success",
-          title: `Banner ${formData.id ? "updated" : "added"} successfully`,
+          title: `Banner Berhasil ${formData.id ? "Diupdate" : "Ditambah"}`,
         });
         navigate(-1);
       }

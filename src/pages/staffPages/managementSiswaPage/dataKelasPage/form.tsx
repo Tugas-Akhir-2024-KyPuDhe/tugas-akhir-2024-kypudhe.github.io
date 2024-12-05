@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
-import { convertToRoman, Toast } from "../../../../utils/myFunctions";
+import { Toast } from "../../../../utils/myFunctions";
 import { useNavigate, useParams } from "react-router-dom";
 import { HeaderTitlePage } from "../../../../components/headerTitlePage";
 import AuthService from "../../../../services/authService";
@@ -10,11 +10,7 @@ import { StaffDetails } from "../../../../interface/auth.interface";
 import ClassStudentService from "../../../../services/classStudentService";
 import { FormState } from "../../../../interface/studentClass.interface";
 import { AxiosError } from "axios";
-
-const optionsGrade = Array.from({ length: 3 }, (_, index) => ({
-  value: convertToRoman(index + 10),
-  label: convertToRoman(index + 10),
-}));
+import { optionsGrade } from "../../../../utils/optionsData";
 
 export const FormDataKelasMangementSiswaPage: React.FC = () => {
   const navigate = useNavigate();

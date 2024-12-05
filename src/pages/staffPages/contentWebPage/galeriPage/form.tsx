@@ -4,16 +4,7 @@ import { Toast } from "../../../../utils/myFunctions";
 import { useNavigate, useParams } from "react-router-dom";
 import { HeaderTitlePage } from "../../../../components/headerTitlePage";
 import GaleriService from "../../../../services/galeriService";
-
-const optionsPrioritas = Array.from({ length: 20 }, (_, index) => ({
-  value: (index + 1).toString(),
-  label: (index + 1).toString(),
-}));
-
-const optionsStatus = [
-  { value: "Active", label: "Aktif" },
-  { value: "NonActive", label: "Non Aktif" },
-];
+import { optionsPrioritas, optionsStatus } from "../../../../utils/optionsData";
 
 interface FormState {
   id?: number;
@@ -129,7 +120,7 @@ export const FormGaleriPage: React.FC = () => {
       if (response.status === 201 || response.status === 200) {
         Toast.fire({
           icon: "success",
-          title: `Galeri ${formData.id ? "updated" : "added"} successfully`,
+          title: `Galeri Berhasil ${formData.id ? "Diupdate" : "Ditambah"}`,
         });
         navigate(-1);
       }

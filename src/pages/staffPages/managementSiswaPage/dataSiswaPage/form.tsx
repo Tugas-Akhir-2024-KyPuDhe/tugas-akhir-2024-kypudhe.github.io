@@ -4,6 +4,7 @@ import { convertStartEndYear, Toast } from "../../../../utils/myFunctions";
 import { useNavigate, useParams } from "react-router-dom";
 import { HeaderTitlePage } from "../../../../components/headerTitlePage";
 import AuthService from "../../../../services/authService";
+import { optionsGender, optionsStartYear } from "../../../../utils/optionsData";
 
 interface FormState {
   id?: number;
@@ -19,24 +20,9 @@ interface FormState {
   startYear: string;
 }
 
-const optionsGender = [
-  { value: "L", label: "Laki-laki" },
-  { value: "P", label: "Perempuan" },
-];
 
-const currentDate = new Date();
-const currentYear = currentDate.getFullYear();
-const currentMonth = String(currentDate.getMonth() + 1).padStart(2, "0");
-const currentDay = String(currentDate.getDate()).padStart(2, "0");
 
-const optionsStartYear = Array.from({ length: 11 }, (_, index) => {
-  const year = currentYear - 5 + index;
-  const value = `${year}-${currentMonth}-${currentDay}`;
-  return {
-    value: value,
-    label: year.toString(),
-  };
-});
+
 
 export const FormSiswaMangementSiswaPage: React.FC = () => {
   const navigate = useNavigate();
@@ -164,7 +150,7 @@ export const FormSiswaMangementSiswaPage: React.FC = () => {
       if (response.status === 201 || response.status === 200) {
         Toast.fire({
           icon: "success",
-          title: `Siswa ${formData.id ? "updated" : "added"} successfully`,
+          title: `Siswa Berhasil ${formData.id ? "Diupdate" : "Ditambah"}`,
         });
         navigate(-1);
       }
