@@ -42,6 +42,8 @@ import {
   InserStudentInClassMangementSiswaPage,
   DataMapelMangementSiswaPage,
   FormMapelMangementSiswaPage,
+  DataStaffMangementStaffPage,
+  FormStaffMangementStaffPage,
 } from "./pages";
 import { SideBar } from "./components/sidebar";
 import PrivateRoute from "./components/privateRoute";
@@ -203,6 +205,22 @@ function App() {
             <Route
               path="/manajemen-siswa/data-mapel/update/:id"
               element={<PrivateRoute Component={FormMapelMangementSiswaPage} />}
+            />
+            <Route
+              path="/manajemen-staff/data-staff"
+              element={<PrivateRoute Component={DataStaffMangementStaffPage} />}
+            />
+            <Route
+              path="/manajemen-staff/data-staff/tambah"
+              element={<PrivateRoute Component={FormStaffMangementStaffPage} />}
+            />
+            <Route
+              path="/manajemen-staff/data-staff/detail/:id"
+              element={<PrivateRoute Component={FormStaffMangementStaffPage} />}
+            />
+            <Route
+              path="/manajemen-staff/data-staff/update/:id"
+              element={<PrivateRoute Component={FormStaffMangementStaffPage} />}
             />
 
             {/* === Teacher */}

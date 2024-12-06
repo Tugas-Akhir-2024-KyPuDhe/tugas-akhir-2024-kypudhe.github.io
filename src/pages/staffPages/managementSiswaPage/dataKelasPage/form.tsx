@@ -3,7 +3,6 @@ import Select from "react-select";
 import { Toast } from "../../../../utils/myFunctions";
 import { useNavigate, useParams } from "react-router-dom";
 import { HeaderTitlePage } from "../../../../components/headerTitlePage";
-import AuthService from "../../../../services/authService";
 import JurusanService from "../../../../services/jurusanService";
 import { Fajusek } from "../../../../interface/fajusek.interfase";
 import { StaffDetails } from "../../../../interface/auth.interface";
@@ -11,11 +10,12 @@ import ClassStudentService from "../../../../services/classStudentService";
 import { FormState } from "../../../../interface/studentClass.interface";
 import { AxiosError } from "axios";
 import { optionsGrade } from "../../../../utils/optionsData";
+import StaffService from "../../../../services/staffService";
 
 export const FormDataKelasMangementSiswaPage: React.FC = () => {
   const navigate = useNavigate();
   const majorService = JurusanService();
-  const staffService = AuthService();
+  const staffService = StaffService();
   const classService = ClassStudentService();
 
   const { id } = useParams<{ id: string }>();
@@ -53,7 +53,7 @@ export const FormDataKelasMangementSiswaPage: React.FC = () => {
   const getTeacher = async () => {
     setloadingForm(true);
     try {
-      const response = await staffService.getUsers("TEACHER");
+      const response = await staffService.getStaff("TEACHER");
       setdataTeachers(response.data as StaffDetails[]);
       if (!id) {
         if (response.data && response.data.length > 0) {

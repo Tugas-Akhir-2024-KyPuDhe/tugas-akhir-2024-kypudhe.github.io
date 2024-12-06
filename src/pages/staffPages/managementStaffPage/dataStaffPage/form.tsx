@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
-import { convertStartEndYear, Toast } from "../../../../utils/myFunctions";
 import { useNavigate, useParams } from "react-router-dom";
 import { HeaderTitlePage } from "../../../../components/headerTitlePage";
-import AuthService from "../../../../services/authService";
 import { optionsGender, optionsStartYear } from "../../../../utils/optionsData";
+import StaffService from "../../../../services/staffService";
+import { Toast } from "../../../../utils/myFunctions";
+import CourseService from "../../../../services/courseService";
+import { Course } from "../../../../interface/course.interface";
 
 interface FormState {
   id?: number;
@@ -12,57 +14,85 @@ interface FormState {
   name: string;
   birthPlace: string;
   address: string;
-  nis: string;
-  nisn: string;
-  gender: string;
   phone: string;
   email: string;
-  startYear: string;
+  gender: string;
+  mapel: string;
+  nip: string;
+  type: string;
+  position: string;
+  startDate: string;
+  endDate: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
-export const FormSiswaMangementSiswaPage: React.FC = () => {
+export const FormStaffMangementStaffPage: React.FC = () => {
   const navigate = useNavigate();
 
   const { id } = useParams<{ id: string }>();
-  const studentService = AuthService();
+  const staffService = StaffService();
+  const courseService = CourseService();
+
   const [formData, setFormData] = useState<FormState>({
-    password: "",
     name: "",
     birthPlace: "",
     address: "",
-    nis: "",
-    nisn: "",
-    gender: optionsGender[0].value,
     phone: "",
     email: "",
-    startYear: optionsStartYear[4].value,
+    gender: optionsGender[0].value,
+    mapel: "",
+    nip: "",
+    type: "",
+    position: "",
+    startDate: optionsStartYear[4].value,
+    endDate: "",
+    createdAt: "",
+    updatedAt: "",
   });
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [errorsForms, setErrorsForms] = useState<{ [key: string]: string }>({});
   const [loadingForm, setloadingForm] = useState(true);
 
+  const [dataCourse, setdataCourse] = useState<Course[]>([]);
+  const optionsCourse = [
+    {
+      value: "Tidak Ada",
+      label: "Tidak Ada",
+    },
+    ...dataCourse.map((data) => ({
+      value: data.name,
+      label: data.name,
+    })),
+  ];
+
   useEffect(() => {
-    const getDataSiswa = async () => {
+    const getDataPegawai = async () => {
       if (id) {
         try {
-          const response = await studentService.getStudentByNis(parseInt(id));
+          const response = await staffService.getStaffByNip(id);
           const data = response.data;
           setFormData({
             id: data.id,
-            password: data.user.password,
+            password: data.user?.password,
             name: data.name,
             birthPlace: data.birthPlace,
             address: data.address,
-            nis: data.nis,
-            nisn: data.nisn,
-            gender: data.gender,
             phone: data.phone,
             email: data.email,
-            startYear: convertStartEndYear(data.startYear),
+            gender: data.gender,
+            mapel: data.mapel,
+            nip: data.nip,
+            type: data.type,
+            position: data.position,
+            startDate: data.startDate,
+            endDate: data.endDate,
+            createdAt: data.createdAt,
+            updatedAt: data.updatedAt,
           });
           setImageUrl(data.photo?.url);
         } catch (error) {
-          console.error("Error fetching detail siswa data:", error);
+          console.error("Error fetching detail staff data:", error);
         } finally {
           setloadingForm(false);
         }
@@ -71,8 +101,28 @@ export const FormSiswaMangementSiswaPage: React.FC = () => {
       }
     };
 
-    getDataSiswa();
+    getDataPegawai();
   }, []);
+
+  const getCourse = async () => {
+    setloadingForm(true);
+    try {
+      const response = await courseService.getAllCourses();
+      setdataCourse(response.data);
+      if (!id) {
+        if (response.data && response.data.length > 0) {
+          setFormData((prev) => ({
+            ...prev,
+            staffId: response.data[0]?.id.toString() || "",
+          }));
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching Student data:", error);
+    } finally {
+      setloadingForm(false);
+    }
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, files } = e.target;
@@ -139,14 +189,14 @@ export const FormSiswaMangementSiswaPage: React.FC = () => {
     try {
       let response;
       if (formData.id) {
-        response = await studentService.updateStundent(formData.id, payload);
+        response = await staffService.updateUser(formData.id, payload);
       } else {
-        response = await studentService.createStundent(payload);
+        response = await staffService.createStaff(payload);
       }
       if (response.status === 201 || response.status === 200) {
         Toast.fire({
           icon: "success",
-          title: `Siswa Berhasil ${formData.id ? "Diupdate" : "Ditambah"}`,
+          title: `Staff Berhasil ${formData.id ? "Diupdate" : "Ditambah"}`,
         });
         navigate(-1);
       }
@@ -160,11 +210,15 @@ export const FormSiswaMangementSiswaPage: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    getCourse();
+  }, []);
+
   return (
     <>
       <HeaderTitlePage
-        title={`${id ? "Update" : "Tambah"} Siswa`}
-        subTitle="Siswa Web SMKN 1 Lumban Julu"
+        title={`${id ? "Update" : "Tambah"} Pegawai`}
+        subTitle="Staff Web SMKN 1 Lumban Julu"
         backDisplay={true}
         addDisplay={false}
         linkAdd=""
@@ -195,9 +249,42 @@ export const FormSiswaMangementSiswaPage: React.FC = () => {
         )}
         <form onSubmit={handleSubmit}>
           <div className="row">
-            <div className="col-12 col-lg-6 col-md-6">
+            <div className="col-12">
+              <div className="fw-bold position-relative pb-2 mb-3">
+                Lengkap Data Diri
+                <div
+                  style={{
+                    position: "absolute",
+                    left: 0,
+                    bottom: 0,
+                    width: "50px",
+                    height: "3px",
+                    backgroundColor: "var(--blue-color)",
+                  }}
+                />
+              </div>
+            </div>
+            <div className="col-6 col-lg- col-md-3">
               <div className="form-group mb-3">
-                <label className="mb-2 fw-medium">Nama Siswa *</label>
+                <label className="mb-2 fw-medium">NIP *</label>
+                <input
+                  type="text"
+                  name="nip"
+                  className={`form-control ${
+                    errorsForms.nip ? "is-invalid" : ""
+                  }`}
+                  placeholder="Masukkan NIP.."
+                  value={formData.nip}
+                  onChange={handleInputChange}
+                />
+                {errorsForms.nip && (
+                  <div className="invalid-form">NIP masih kosong!</div>
+                )}
+              </div>
+            </div>
+            <div className="col-12 col-md-6">
+              <div className="form-group mb-3">
+                <label className="mb-2 fw-medium">Nama *</label>
                 <input
                   type="text"
                   name="name"
@@ -209,126 +296,7 @@ export const FormSiswaMangementSiswaPage: React.FC = () => {
                   onChange={handleInputChange}
                 />
                 {errorsForms.name && (
-                  <div className="invalid-form">Nama Siswa masih kosong!</div>
-                )}
-              </div>
-            </div>
-            <div className="col-6 col-lg-3 col-md-3">
-              <div className="form-group mb-3">
-                <label className="mb-2 fw-medium">NIS *</label>
-                <input
-                  type="text"
-                  name="nis"
-                  className={`form-control ${
-                    errorsForms.nis ? "is-invalid" : ""
-                  }`}
-                  placeholder="Masukkan NIS.."
-                  value={formData.nis}
-                  onChange={handleInputChange}
-                />
-                {errorsForms.nis && (
-                  <div className="invalid-form">NIS masih kosong!</div>
-                )}
-              </div>
-            </div>
-            <div className="col-6 col-lg-3 col-md-3">
-              <div className="form-group mb-3">
-                <label className="mb-2 fw-medium">NISN *</label>
-                <input
-                  type="text"
-                  name="nisn"
-                  className={`form-control ${
-                    errorsForms.nisn ? "is-invalid" : ""
-                  }`}
-                  placeholder="Masukkan NISN.."
-                  value={formData.nisn}
-                  onChange={handleInputChange}
-                />
-                {errorsForms.nisn && (
-                  <div className="invalid-form">NISN masih kosong!</div>
-                )}
-              </div>
-            </div>
-            <div className="col-12 col-lg-3">
-              <div className="form-group mb-3">
-                <label className="mb-2 fw-medium">Tahun Mulai *</label>
-                <Select
-                  options={optionsStartYear}
-                  value={optionsStartYear.find((option) => {
-                    return (
-                      option.value.split("-")[0] ===
-                      formData.startYear.split("-")[0]
-                    );
-                  })}
-                  onChange={(option) => handleSelectChange("startYear", option)}
-                  placeholder="Pilih Tahun Mulai"
-                  isSearchable={false}
-                  className="form-control-lg px-0 pt-0"
-                  styles={{
-                    control: (baseStyles) => ({
-                      ...baseStyles,
-                      fontSize: "0.955rem",
-                      borderRadius: "8px",
-                    }),
-                    option: (provided) => ({
-                      ...provided,
-                      fontSize: "1rem",
-                    }),
-                  }}
-                />
-              </div>
-            </div>
-            <div className="col-12 col-lg-3">
-              <div className="form-group mb-3">
-                <label className="mb-2 fw-medium">No Telp *</label>
-                <input
-                  type="text"
-                  name="phone"
-                  className={`form-control ${
-                    errorsForms.phone ? "is-invalid" : ""
-                  }`}
-                  placeholder="No.telp.."
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                />
-                {errorsForms.phone && (
-                  <div className="invalid-form">No Telp Link masih kosong!</div>
-                )}
-              </div>
-            </div>
-            <div className="col-12 col-lg-6">
-              <div className="form-group mb-3">
-                <label className="mb-2 fw-medium">Email *</label>
-                <input
-                  type="text"
-                  name="email"
-                  className={`form-control ${
-                    errorsForms.email ? "is-invalid" : ""
-                  }`}
-                  placeholder="Email Siswa.."
-                  value={formData.email}
-                  onChange={handleInputChange}
-                />
-                {errorsForms.email && (
-                  <div className="invalid-form">Email masih kosong!</div>
-                )}
-              </div>
-            </div>
-            <div className="col-12 col-lg-9">
-              <div className="form-group mb-3">
-                <label className="mb-2 fw-medium">Tempat Tanggal Lahir</label>
-                <input
-                  type="text"
-                  name="birthPlace"
-                  className={`form-control ${
-                    errorsForms.birthPlace ? "is-invalid" : ""
-                  }`}
-                  placeholder="Tempat, Tanggal Lahir.."
-                  value={formData.birthPlace}
-                  onChange={handleInputChange}
-                />
-                {errorsForms.birthPlace && (
-                  <div className="invalid-form">No Telp Link masih kosong!</div>
+                  <div className="invalid-form">Nama Pegawai masih kosong!</div>
                 )}
               </div>
             </div>
@@ -358,6 +326,60 @@ export const FormSiswaMangementSiswaPage: React.FC = () => {
                 />
               </div>
             </div>
+            <div className="col-12 col-lg-5">
+              <div className="form-group mb-3">
+                <label className="mb-2 fw-medium">Email *</label>
+                <input
+                  type="text"
+                  name="email"
+                  className={`form-control ${
+                    errorsForms.email ? "is-invalid" : ""
+                  }`}
+                  placeholder="Email Pegawai.."
+                  value={formData.email}
+                  onChange={handleInputChange}
+                />
+                {errorsForms.email && (
+                  <div className="invalid-form">Email masih kosong!</div>
+                )}
+              </div>
+            </div>
+            <div className="col-12 col-lg-4">
+              <div className="form-group mb-3">
+                <label className="mb-2 fw-medium">Tempat Tanggal Lahir</label>
+                <input
+                  type="text"
+                  name="birthPlace"
+                  className={`form-control ${
+                    errorsForms.birthPlace ? "is-invalid" : ""
+                  }`}
+                  placeholder="Tempat, Tanggal Lahir.."
+                  value={formData.birthPlace}
+                  onChange={handleInputChange}
+                />
+                {errorsForms.birthPlace && (
+                  <div className="invalid-form">No Telp Link masih kosong!</div>
+                )}
+              </div>
+            </div>
+            <div className="col-12 col-lg-3">
+              <div className="form-group mb-3">
+                <label className="mb-2 fw-medium">No Telp *</label>
+                <input
+                  type="text"
+                  name="phone"
+                  className={`form-control ${
+                    errorsForms.phone ? "is-invalid" : ""
+                  }`}
+                  placeholder="No.telp.."
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                />
+                {errorsForms.phone && (
+                  <div className="invalid-form">No Telp Link masih kosong!</div>
+                )}
+              </div>
+            </div>
             <div className="col-12">
               <div className="form-group mb-3">
                 <label className="mb-2 fw-medium">Alamat *</label>
@@ -366,7 +388,7 @@ export const FormSiswaMangementSiswaPage: React.FC = () => {
                   className={`form-control ${
                     errorsForms.address ? "is-invalid" : ""
                   }`}
-                  placeholder="Masukkan Alamat Siswa"
+                  placeholder="Masukkan Alamat.."
                   value={formData.address}
                   onChange={handleTextareaChange}
                 />
@@ -375,29 +397,6 @@ export const FormSiswaMangementSiswaPage: React.FC = () => {
                 )}
               </div>
             </div>
-            {id && (
-              <div className="col-12 col-lg-12">
-                <div className="form-group mb-3">
-                  <label className="mb-2 fw-medium">Password *</label>
-                  <input
-                    type="text"
-                    name="password"
-                    className={`form-control ${
-                      errorsForms.password ? "is-invalid" : ""
-                    }`}
-                    placeholder="Password akun siswa.."
-                    value={formData.password}
-                    onChange={handleInputChange}
-                  />
-                  <small id="helpId" className="text-muted">
-                    *Password Dienkripsi
-                  </small>
-                  {errorsForms.password && (
-                    <div className="invalid-form">password masih kosong!</div>
-                  )}
-                </div>
-              </div>
-            )}
             <div className="col-12">
               <div className="form-group mb-3">
                 {id ? (
@@ -441,7 +440,136 @@ export const FormSiswaMangementSiswaPage: React.FC = () => {
                 )}
               </div>
             )}
+            {id && (
+              <div className="col-12 col-lg-12">
+                <div className="form-group mb-3">
+                  <label className="mb-2 fw-medium">Password *</label>
+                  <input
+                    type="text"
+                    name="password"
+                    className={`form-control ${
+                      errorsForms.password ? "is-invalid" : ""
+                    }`}
+                    placeholder="Password akun siswa.."
+                    value={formData.password}
+                    onChange={handleInputChange}
+                  />
+                  <small id="helpId" className="text-muted">
+                    *Password Dienkripsi
+                  </small>
+                  {errorsForms.password && (
+                    <div className="invalid-form">password masih kosong!</div>
+                  )}
+                </div>
+              </div>
+            )}
 
+            <div className="col-12">
+              <div className="fw-bold position-relative pb-2 my-3">
+                Lengkapi Data Akademis
+                <div
+                  style={{
+                    position: "absolute",
+                    left: 0,
+                    bottom: 0,
+                    width: "50px",
+                    height: "3px",
+                    backgroundColor: "var(--blue-color)",
+                  }}
+                />
+              </div>
+            </div>
+            <div className="col-12 col-lg-9">
+              <div className="form-group mb-3">
+                <label className="mb-2 fw-medium">Mata Pelajaran</label>
+                <Select
+                  options={optionsCourse}
+                  value={optionsCourse.find((option) => {
+                    return option.value === formData.mapel;
+                  })}
+                  onChange={(option) => handleSelectChange("course", option)}
+                  placeholder="Pilih Mapel yang Diambil"
+                  isSearchable={false}
+                  className="form-control-lg px-0 pt-0"
+                  styles={{
+                    control: (baseStyles) => ({
+                      ...baseStyles,
+                      fontSize: "0.955rem",
+                      borderRadius: "8px",
+                    }),
+                    option: (provided) => ({
+                      ...provided,
+                      fontSize: "1rem",
+                    }),
+                  }}
+                />
+              </div>
+            </div>
+            <div className="col-6 col-lg-3 col-md-3">
+              <div className="form-group mb-3">
+                <label className="mb-2 fw-medium">Status Pegawai *</label>
+                <input
+                  type="text"
+                  name="type"
+                  className={`form-control ${
+                    errorsForms.type ? "is-invalid" : ""
+                  }`}
+                  placeholder="Masukkan NISN.."
+                  value={formData.type}
+                  onChange={handleInputChange}
+                />
+                {errorsForms.type && (
+                  <div className="invalid-form">Status masih kosong!</div>
+                )}
+              </div>
+            </div>
+            <div className="col-12 col-lg-6">
+              <div className="form-group mb-3">
+                <label className="mb-2 fw-medium">Jabatan </label>
+                <input
+                  type="text"
+                  name="position"
+                  className={`form-control ${
+                    errorsForms.position ? "is-invalid" : ""
+                  }`}
+                  placeholder="Masukkan Jabatan.."
+                  value={formData.position}
+                  onChange={handleInputChange}
+                />
+                {errorsForms.position && (
+                  <div className="invalid-form">No Telp Link masih kosong!</div>
+                )}
+              </div>
+            </div>
+            <div className="col-12 col-lg-6">
+              <div className="form-group mb-3">
+                <label className="mb-2 fw-medium">Tahun Mulai *</label>
+                <Select
+                  options={optionsStartYear}
+                  value={optionsStartYear.find((option) => {
+                    return (
+                      option.value.split("-")[0] ===
+                      formData.startDate.split("-")[0]
+                    );
+                  })}
+                  onChange={(option) => handleSelectChange("startYear", option)}
+                  placeholder="Pilih Tahun Mulai"
+                  isSearchable={false}
+                  className="form-control-lg px-0 pt-0"
+                  styles={{
+                    control: (baseStyles) => ({
+                      ...baseStyles,
+                      fontSize: "0.955rem",
+                      borderRadius: "8px",
+                    }),
+                    option: (provided) => ({
+                      ...provided,
+                      fontSize: "1rem",
+                    }),
+                  }}
+                />
+              </div>
+            </div>
             {/* <div className="col-12">
               <div className="form-group mb-3">
                 <label className="mb-2 fw-medium">Status</label>

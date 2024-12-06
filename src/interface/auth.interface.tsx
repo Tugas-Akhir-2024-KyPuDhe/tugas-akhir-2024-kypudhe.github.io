@@ -165,3 +165,43 @@ export interface ResponseUpdatePhotoUser {
   status: number;
   message: string;
 }
+
+export interface ResponseUpdatePhotoUser {
+  status: number;
+  message: string;
+}
+
+interface User {
+  id: number;
+  uuid: string;
+  username: string;
+  password: string;
+  createdAt: string;
+  updatedAt: string;
+}
+interface Role {
+  id: number;
+  uuid: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+}
+export interface StaffDetailResponse {
+  status: number;
+  message: string;
+  data: {
+    user: User;
+    staff: StaffDetails;
+    roles: Role[];
+  };
+}
+
+export interface StudentDetailResponse {
+  status: number;
+  message: string;
+  data: {
+    user: User;
+    students: StudentDetails;
+    roles: Role[];
+  };
+}

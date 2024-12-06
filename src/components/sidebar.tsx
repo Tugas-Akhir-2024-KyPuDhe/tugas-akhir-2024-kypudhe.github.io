@@ -744,37 +744,7 @@ export const ListMenu = () => {
                   }}
                 />
               )}
-              Data Staff
-            </MenuItem>
-            <MenuItem
-              onClick={() => handleMenuClick("/manajemen-staff/data-guru")}
-              icon={<FaCircle style={{ fontSize: "8px" }} />}
-              style={{
-                position: "relative",
-                backgroundColor:
-                  selectedMenu === "/manajemen-staff/data-guru"
-                    ? "#E5EAF2"
-                    : "",
-              }}
-              className={`fw-medium ${
-                selectedMenu === "/manajemen-staff/data-guru"
-                  ? "text-blue"
-                  : "text-dark-soft"
-              }`}
-            >
-              {selectedMenu === "/manajemen-staff/data-guru" && (
-                <div
-                  style={{
-                    position: "absolute",
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
-                    width: "4px",
-                    backgroundColor: "var(--blue-color)",
-                  }}
-                />
-              )}
-              Data Guru
+              Data Pegawai
             </MenuItem>
           </SubMenu>
           <SubMenu

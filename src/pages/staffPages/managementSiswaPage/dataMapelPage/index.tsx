@@ -1,6 +1,6 @@
 import React from "react";
 import { HeaderTitlePage } from "../../../../components/headerTitlePage";
-import { Table } from "../../../../features/staffPages/dataKesiswaanPage/dataMapelPage/table";
+import { Table } from "../../../../features/staffPages/managementSiswaPage/dataMapelPage/table";
 
 export const DataMapelMangementSiswaPage: React.FC = () => {
   

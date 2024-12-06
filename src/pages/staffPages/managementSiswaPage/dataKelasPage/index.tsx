@@ -1,5 +1,5 @@
 import React from "react";
-import { Table } from "../../../../features/staffPages/dataKesiswaanPage/dataKelasPage/table";
+import { Table } from "../../../../features/staffPages/managementSiswaPage/dataKelasPage/table";
 import { HeaderTitlePage } from "../../../../components/headerTitlePage";
 
 export const DataKelasMangementSiswaPage: React.FC = () => {
