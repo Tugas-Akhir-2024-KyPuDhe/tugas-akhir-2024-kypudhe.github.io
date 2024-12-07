@@ -115,9 +115,17 @@ export const FormDataKelasMangementSiswaPage: React.FC = () => {
             capacity: data.capacity.toString(),
           });
         } catch (error) {
-          console.error("Error fetching detail class data:", error);
+          const axiosError = error as AxiosError;
+          if (axiosError.response?.status === 404) {
+            Toast.fire({
+              icon: "error",
+              title: `Data Tidak Ditemukan!`,
+              timer: 4000,
+            });
+            navigate("/");
+          }
         } finally {
-          // setloadingForm(false);
+          setloadingForm(false);
         }
       } else {
         setloadingForm(false);

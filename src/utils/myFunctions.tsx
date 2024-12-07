@@ -1,4 +1,5 @@
 import { FaCircle } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 export const Toast = Swal.mixin({
@@ -134,7 +135,3 @@ export const convertToRoman = (num: number): string => {
   }
   return result;
 };
-
-// Contoh penggunaan fungsi
-const angka = 2024;
-console.log(`Angka ${angka} dalam Romawi adalah: ${convertToRoman(angka)}`);

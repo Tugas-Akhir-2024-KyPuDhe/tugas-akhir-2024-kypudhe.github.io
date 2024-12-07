@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { FaCalendarDay, FaClock } from "react-icons/fa6";
 import ArtikelService from "../../services/artikelService";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import parse from "html-react-parser";
-import { formatDate, formatTime } from "../../utils/myFunctions";
+import { formatDate, formatTime, Toast } from "../../utils/myFunctions";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { AxiosError } from "axios";
 
 interface FormState {
   id?: number;
@@ -19,6 +20,7 @@ interface FormState {
 }
 
 export const DetailArticlePage: React.FC = () => {
+  const navigate = useNavigate();
   const articleService = ArtikelService();
   const { id } = useParams<{ id: string }>();
   const [dataDetail, setDataDetail] = useState<FormState>({
@@ -38,7 +40,6 @@ export const DetailArticlePage: React.FC = () => {
         try {
           const response = await articleService.getArtikelById(id);
           const data = response.data;
-          console.log(data);
 
           setDataDetail({
             id: data.id,
@@ -51,7 +52,15 @@ export const DetailArticlePage: React.FC = () => {
             createAt: data.createdAt,
           });
         } catch (error) {
-          console.error("Error fetching article data:", error);
+          const axiosError = error as AxiosError;
+          if (axiosError.response?.status === 404) {
+            Toast.fire({
+              icon: "error",
+              title: `Data Tidak Ditemukan!`,
+              timer: 4000,
+            });
+            navigate("/");
+          }
         } finally {
           setLoadingData(false);
         }

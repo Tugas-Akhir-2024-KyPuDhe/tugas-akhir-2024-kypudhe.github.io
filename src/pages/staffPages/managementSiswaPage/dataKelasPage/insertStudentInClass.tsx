@@ -8,6 +8,8 @@ import ClassStudentService from "../../../../services/classStudentService";
 import { Class } from "../../../../interface/studentClass.interface";
 import { HeaderTitlePage } from "../../../../components/headerTitlePage";
 import { SiGoogleclassroom } from "react-icons/si";
+import { AxiosError } from "axios";
+import { Toast } from "../../../../utils/myFunctions";
 
 export const InserStudentInClassMangementSiswaPage: React.FC = () => {
   const studentService = StudentService();
@@ -118,7 +120,15 @@ export const InserStudentInClassMangementSiswaPage: React.FC = () => {
           setDataClass(data);
           await getData(data.majorCode);
         } catch (error) {
-          console.error("Error fetching detail class data:", error);
+          const axiosError = error as AxiosError;
+          if (axiosError.response?.status === 404) {
+            Toast.fire({
+              icon: "error",
+              title: `Data Tidak Ditemukan!`,
+              timer: 4000,
+            });
+navigate(-1)
+          }
         } finally {
           setLoading(false);
         }

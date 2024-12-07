@@ -1,6 +1,7 @@
 // import { LoginData } from "./auth.interface";
 
 import { Media } from "./media.interface";
+import { Role } from "./role.interface";
 
 export interface StaffDetail {
   id: number;
@@ -11,7 +12,7 @@ export interface StaffDetail {
   phone: string;
   email: string;
   gender: string;
-  mapel: string;
+  mapel: string[];
   nip: string;
   type: string;
   position: string;
@@ -24,6 +25,7 @@ export interface StaffDetail {
   user?: {
     username: string;
     password: string;
+    roles: Role[];
   };
 }
 

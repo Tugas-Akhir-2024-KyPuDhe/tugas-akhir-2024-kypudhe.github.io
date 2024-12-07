@@ -80,13 +80,13 @@ export const Table: React.FC = () => {
       cell: (row: Class) => row.capacity,
       // width: "100px",
     },
-    {
-      name: "Wali Kelas",
-      selector: (row: Class) => row.homeRoomTeacher.name,
-      sortable: true,
-      cell: (row: Class) => row.homeRoomTeacher.name,
-      // width: "100px",
-    },
+    // {
+    //   name: "Wali Kelas",
+    //   selector: (row: Class) => row.homeRoomTeacher.name,
+    //   sortable: true,
+    //   cell: (row: Class) => row.homeRoomTeacher.name,
+    //   // width: "100px",
+    // },
     {
       name: "Action",
       cell: (row: Class) => (

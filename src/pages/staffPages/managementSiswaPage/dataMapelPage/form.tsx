@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { HeaderTitlePage } from "../../../../components/headerTitlePage";
 import CourseService from "../../../../services/courseService";
 import { optionsGrade, optionsStatus } from "../../../../utils/optionsData";
+import { AxiosError } from "axios";
 
 interface FormState {
   id?: number;
@@ -47,7 +48,15 @@ export const FormMapelMangementSiswaPage: React.FC = () => {
           });
           setImageUrl(data.image?.url);
         } catch (error) {
-          console.error("Error fetching detail mata pelajaran data:", error);
+          const axiosError = error as AxiosError;
+          if (axiosError.response?.status === 404) {
+            Toast.fire({
+              icon: "error",
+              title: `Data Tidak Ditemukan!`,
+              timer: 4000,
+            });
+            navigate("/");
+          }
         } finally {
           setloadingForm(false);
         }
@@ -283,14 +292,25 @@ export const FormMapelMangementSiswaPage: React.FC = () => {
             <div className="col-12">
               <div className="form-group mb-3">
                 {id ? (
-                  <label className="mb-2 fw-medium">Update Gambar *</label>
+                  <label className="mb-2 fw-medium">
+                    Update Gambar{" "}
+                    <span className="text-muted">
+                      <sup>800 x 800</sup>
+                    </span>
+                  </label>
                 ) : (
-                  <label className="mb-2 fw-medium">Gambar *</label>
+                  <label className="mb-2 fw-medium">
+                    Gambar{" "}
+                    <span className="text-muted">
+                      <sup>800 x 800</sup>
+                    </span>
+                  </label>
                 )}
                 <div className="input-group mb-3">
                   <input
                     type="file"
                     name="media"
+                    accept=".jpeg, .jpg, .png, .gif"
                     className="form-control fs-6"
                     id="inputGroupFile02"
                     onChange={handleInputChange}

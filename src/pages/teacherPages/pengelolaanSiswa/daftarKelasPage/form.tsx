@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import JurusanService from "../../../../services/jurusanService";
 import { HeaderTitlePage } from "../../../../components/headerTitlePage";
 import { optionsPrioritas } from "../../../../utils/optionsData";
+import { AxiosError } from "axios";
 
 interface FormState {
   id?: number;
@@ -13,7 +14,6 @@ interface FormState {
   prioritas: string;
   media: File | null;
 }
-
 
 export const FormDaftarKelasPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -43,7 +43,15 @@ export const FormDaftarKelasPage: React.FC = () => {
             media: null,
           });
         } catch (error) {
-          console.error("Error fetching daftar kelas data:", error);
+          const axiosError = error as AxiosError;
+          if (axiosError.response?.status === 404) {
+            Toast.fire({
+              icon: "error",
+              title: `Data Tidak Ditemukan!`,
+              timer: 4000,
+            });
+navigate(-1)
+          }
         } finally {
           setloadingForm(false);
         }
@@ -87,13 +95,15 @@ export const FormDaftarKelasPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     const requiredFields = ["name", "description"];
     const newErrors: { [key: string]: string } = {};
-  
+
     requiredFields.forEach((field) => {
       if (!formData[field as keyof typeof formData]) {
-        newErrors[field] = `${field.charAt(0).toUpperCase() + field.slice(1)} is required.`;
+        newErrors[field] = `${
+          field.charAt(0).toUpperCase() + field.slice(1)
+        } is required.`;
       }
     });
 
@@ -101,13 +111,13 @@ export const FormDaftarKelasPage: React.FC = () => {
       setErrorsForms(newErrors);
       return;
     }
-  
+
     setloadingForm(true);
     const payload = new FormData();
     Object.entries(formData).forEach(([key, value]) => {
       payload.append(key, value as string | Blob);
     });
-  
+
     try {
       let response;
       if (formData.id) {
@@ -140,7 +150,13 @@ export const FormDaftarKelasPage: React.FC = () => {
 
   return (
     <>
-      <HeaderTitlePage title={`${id ? "Update" : "Tambah"} Daftar Siswa`} subTitle="Daftar Siswa SMKN 1 Lumban Julu" backDisplay={true} addDisplay={false} linkAdd="" />
+      <HeaderTitlePage
+        title={`${id ? "Update" : "Tambah"} Daftar Siswa`}
+        subTitle="Daftar Siswa SMKN 1 Lumban Julu"
+        backDisplay={true}
+        addDisplay={false}
+        linkAdd=""
+      />
       <div
         className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
         style={{ backgroundColor: "#fff", position: "relative" }}
@@ -229,6 +245,7 @@ export const FormDaftarKelasPage: React.FC = () => {
                   <input
                     type="file"
                     name="media"
+                    accept=".jpeg, .jpg, .png, .gif"
                     className="form-control fs-6"
                     id="inputGroupFile02"
                     onChange={handleInputChange}

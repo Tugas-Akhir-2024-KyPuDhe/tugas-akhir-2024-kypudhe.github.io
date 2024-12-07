@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { HeaderTitlePage } from "../../../../components/headerTitlePage";
 import GaleriService from "../../../../services/galeriService";
 import { optionsPrioritas, optionsStatus } from "../../../../utils/optionsData";
+import { AxiosError } from "axios";
 
 interface FormState {
   id?: number;
@@ -43,7 +44,15 @@ export const FormGaleriPage: React.FC = () => {
             status: data.status,
           });
         } catch (error) {
-          console.error("Error fetching galeri data:", error);
+          const axiosError = error as AxiosError;
+          if (axiosError.response?.status === 404) {
+            Toast.fire({
+              icon: "error",
+              title: `Data Tidak Ditemukan!`,
+              timer: 4000,
+            });
+            navigate("/");
+          }
         } finally {
           setloadingForm(false);
         }

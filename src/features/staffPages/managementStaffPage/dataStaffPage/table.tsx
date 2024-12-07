@@ -26,7 +26,7 @@ export const Table: React.FC = () => {
       setLoading(false);
     }
   };
-  
+
   const columns = [
     {
       name: "No",
@@ -38,7 +38,7 @@ export const Table: React.FC = () => {
       selector: (row: StaffDetail) => row.nip,
       sortable: true,
       cell: (row: StaffDetail) => row.nip,
-      width: "100px",
+      width: "200px",
     },
     {
       name: "Nama",
@@ -46,7 +46,7 @@ export const Table: React.FC = () => {
       sortable: true,
       cell: (row: StaffDetail) => row.name,
     },
-    
+
     {
       name: "Status Pegawai",
       selector: (row: StaffDetail) => row.type,
@@ -61,13 +61,13 @@ export const Table: React.FC = () => {
       cell: (row: StaffDetail) => row.position!,
       width: "170px",
     },
-    {
-      name: "Mapel",
-      selector: (row: StaffDetail) => row.position!,
-      sortable: true,
-      cell: (row: StaffDetail) => row.position!,
-      width: "120px",
-    },
+    // {
+    //   name: "Mapel",
+    //   selector: (row: StaffDetail) => row.mapel!,
+    //   sortable: true,
+    //   cell: (row: StaffDetail) => row.mapel!,
+    //   width: "120px",
+    // },
     {
       name: "Action",
       cell: (row: StaffDetail) => (
@@ -101,7 +101,6 @@ export const Table: React.FC = () => {
     // getMajor();
   }, []);
 
-
   return (
     <>
       <div
@@ -129,7 +128,59 @@ export const Table: React.FC = () => {
           </div>
         )}
 
-        <div className="row g-3 d-flex justify-content-end">
+        <div className="row g-3 d-flex justify-content-between">
+          <div className="col-12 col-md-4 m-auto">
+            <div className="fw-bold">
+            Import Data Excel              
+              </div> 
+              <div className="text-muted">
+                Format harus sesuai <a href="#" className="text-decoration-none">seperti ini</a>
+              </div>
+            </div>
+          <div className="col-12 col-md-8">
+            <div className="input-group mb-3">
+              <input
+                type="file"
+                name="media"
+                accept=".xlsx"
+                className="form-control fs-6"
+                id="inputFileData"
+                // onChange={handleInputChange}
+              />
+              <label className="input-group-text btn btn-primary bg-blue">
+                Upload
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
+        style={{ backgroundColor: "#fff", position: "relative" }}
+      >
+        {loading && (
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: "rgba(255, 255, 255, 0.7)",
+              zIndex: 9999,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        )}
+
+        <div className="row g-3 d-flex justify-content-between">
           <div className="col-12">
             <div className="fw-bold position-relative pb-2">
               Staff
@@ -146,6 +197,11 @@ export const Table: React.FC = () => {
             </div>
           </div>
           <div className="col-6 col-lg-3 col-md-3">
+            <button className="btn border-success text-success">
+              Export to Excel
+            </button>
+          </div>
+          <div className="col-6 col-lg-3 col-md-3">
             <input
               type="text"
               className="form-control border-dark"
@@ -156,8 +212,8 @@ export const Table: React.FC = () => {
             />
           </div>
         </div>
-        <div className="row g-2">
-          <div className="col-12">
+        <div className="col-12">
+          <div className="pt-2">
             Total : <span className="fw-bold">{data.length}</span>
           </div>
         </div>

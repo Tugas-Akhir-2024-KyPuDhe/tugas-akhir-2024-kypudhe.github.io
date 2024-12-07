@@ -8,6 +8,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa6";
 import useCookie from "react-use-cookie";
 import { optionsStatusArticle } from "../../utils/optionsData";
+import { AxiosError } from "axios";
 
 const toolbarOptions = [
   [{ header: "1" }, { header: "2" }, { font: [] }],
@@ -89,7 +90,15 @@ export const FormArticlePage: React.FC = () => {
             createBy: userLoginCookie.name,
           });
         } catch (error) {
-          console.error("Error fetching article data:", error);
+          const axiosError = error as AxiosError;
+          if (axiosError.response?.status === 404) {
+            Toast.fire({
+              icon: "error",
+              title: `Data Tidak Ditemukan!`,
+              timer: 4000,
+            });
+            navigate("/");
+          }
         } finally {
           setloadingForm(false);
         }
@@ -305,6 +314,7 @@ export const FormArticlePage: React.FC = () => {
                   <input
                     type="file"
                     name="banner"
+                    accept=".jpeg, .jpg, .png, .gif"
                     className="form-control  fs-6"
                     id="inputGroupFile02"
                     onChange={handleInputChange}

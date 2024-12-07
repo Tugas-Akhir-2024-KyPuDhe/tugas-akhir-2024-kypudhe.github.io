@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import JurusanService from "../../../../services/jurusanService";
 import { HeaderTitlePage } from "../../../../components/headerTitlePage";
 import { optionsPrioritas } from "../../../../utils/optionsData";
+import { AxiosError } from "axios";
 
 interface FormState {
   id?: number;
@@ -43,7 +44,15 @@ export const FormNilaiSiswaPage: React.FC = () => {
             media: null,
           });
         } catch (error) {
-          console.error("Error fetching nilai siswa data:", error);
+          const axiosError = error as AxiosError;
+          if (axiosError.response?.status === 404) {
+            Toast.fire({
+              icon: "error",
+              title: `Data Tidak Ditemukan!`,
+              timer: 4000,
+            });
+            navigate("/");
+          }
         } finally {
           setloadingForm(false);
         }
@@ -136,7 +145,13 @@ export const FormNilaiSiswaPage: React.FC = () => {
 
   return (
     <>
-      <HeaderTitlePage title={`${id ? "Update" : "Tambah"} Nilai Siswa`} subTitle="Nilai Siswa SMKN 1 Lumban Julu" backDisplay={true} addDisplay={false} linkAdd="" />
+      <HeaderTitlePage
+        title={`${id ? "Update" : "Tambah"} Nilai Siswa`}
+        subTitle="Nilai Siswa SMKN 1 Lumban Julu"
+        backDisplay={true}
+        addDisplay={false}
+        linkAdd=""
+      />
       <div
         className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
         style={{ backgroundColor: "#fff", position: "relative" }}
@@ -225,6 +240,7 @@ export const FormNilaiSiswaPage: React.FC = () => {
                   <input
                     type="file"
                     name="media"
+                    accept=".jpeg, .jpg, .png, .gif"
                     className="form-control fs-6"
                     id="inputGroupFile02"
                     onChange={handleInputChange}

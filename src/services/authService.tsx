@@ -12,9 +12,9 @@ import {
   ResponseGetStudentDetail,
   ResponseUpdatePhotoUser,
 } from "./../interface/auth.interface";
-import { useNavigate } from "react-router-dom";
 import useCookie from "react-use-cookie";
 import { FormParentOfStudent } from "../interface/student.interface";
+import { useNavigate } from "react-router-dom";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 const AuthService = () => {
@@ -22,6 +22,11 @@ const AuthService = () => {
   const [cookieLogin, setCookieLogin] = useCookie("userLoginCookie", "");
   const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
 
+  const handleUnauthorized = (status: number) => {
+    if (status === 401) {
+      navigate("/login");
+    }
+  };
   const loginAuth = async (data: LoginData): Promise<LoginResponse> => {
     try {
       const response = await axios.post<LoginResponse>(
@@ -30,7 +35,7 @@ const AuthService = () => {
       );
       return response.data;
     } catch (error) {
-      console.error("Error during login:", error);
+      console.log("");
       throw error;
     }
   };
@@ -49,7 +54,7 @@ const AuthService = () => {
       );
       return response.data;
     } catch (error) {
-      console.error("Error validating token:", error);
+      console.log("");
       throw error;
     }
   };
@@ -66,7 +71,7 @@ const AuthService = () => {
       );
       return response.data.user;
     } catch (error) {
-      console.error("Error fetching user data:", error);
+      console.log("");
       throw error;
     }
   };
@@ -86,7 +91,7 @@ const AuthService = () => {
       );
       return response.data;
     } catch (error) {
-      console.error("Error fetching user data:", error);
+      console.log("");
       throw error;
     }
   };
@@ -107,7 +112,7 @@ const AuthService = () => {
       );
       return response.data;
     } catch (error) {
-      console.error("Error fetching user data:", error);
+      console.log("");
       throw error;
     }
   };
@@ -128,7 +133,7 @@ const AuthService = () => {
       );
       return response.data;
     } catch (error) {
-      console.error("Error fetching user data:", error);
+      console.log("");
       throw error;
     }
   };
@@ -150,7 +155,9 @@ const AuthService = () => {
       );
       return response.data;
     } catch (error) {
-      console.error("Error fetching user data:", error);
+      if (axios.isAxiosError(error)) {
+        handleUnauthorized(error.response?.status || 0);
+      }
       throw error;
     }
   };
@@ -170,7 +177,9 @@ const AuthService = () => {
       );
       return response.data;
     } catch (error) {
-      console.error("Error fetching user data:", error);
+      if (axios.isAxiosError(error)) {
+        handleUnauthorized(error.response?.status || 0);
+      }
       throw error;
     }
   };
@@ -193,15 +202,9 @@ const AuthService = () => {
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.error(
-          "Error updating photo user:",
-          error.response?.data || error.message
-        );
-        throw new Error(
-          error.response?.data?.message || "Failed to update photo user"
-        );
+        handleUnauthorized(error.response?.status || 0);
       }
-      throw new Error("An unexpected error occurred");
+      throw error;
     }
   };
 
@@ -222,15 +225,9 @@ const AuthService = () => {
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.error(
-          "Error updating photo user:",
-          error.response?.data || error.message
-        );
-        throw new Error(
-          error.response?.data?.message || "Failed to update photo user"
-        );
+        handleUnauthorized(error.response?.status || 0);
       }
-      throw new Error("An unexpected error occurred");
+      throw error;
     }
   };
 

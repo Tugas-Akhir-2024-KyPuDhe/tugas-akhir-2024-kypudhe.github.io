@@ -8,11 +8,19 @@ import {
   ResponseGetStaff,
   ResponseGetStaffDetail,
 } from "../interface/staff.interface";
+import { useNavigate } from "react-router-dom";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 const StaffService = () => {
+  const navigate = useNavigate();
   const [cookieLogin] = useCookie("userLoginCookie", "");
   const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
+
+  const handleUnauthorized = (status: number) => {
+    if (status === 401) {
+      navigate("/login");
+    }
+  };
 
   const getStaff = async (
     tipe: "STAFF" | "TEACHER" | ""
@@ -28,12 +36,14 @@ const StaffService = () => {
       );
       return response.data;
     } catch (error) {
-      console.error("Error fetching user data:", error);
+      if (axios.isAxiosError(error)) {
+        handleUnauthorized(error.response?.status || 0);
+      }
       throw error;
     }
   };
 
-  const updateUser = async (
+  const updateUserStaff = async (
     id: number,
     data: FormData
   ): Promise<UpdateUserResponse> => {
@@ -43,14 +53,16 @@ const StaffService = () => {
         data,
         {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
             authorization: `Bearer ${userLoginCookie?.token}`,
           },
         }
       );
       return response.data;
     } catch (error) {
-      console.error("Error fetching user data:", error);
+      if (axios.isAxiosError(error)) {
+        handleUnauthorized(error.response?.status || 0);
+      }
       throw error;
     }
   };
@@ -69,7 +81,9 @@ const StaffService = () => {
       );
       return response.data;
     } catch (error) {
-      console.error("Error fetching user data:", error);
+      if (axios.isAxiosError(error)) {
+        handleUnauthorized(error.response?.status || 0);
+      }
       throw error;
     }
   };
@@ -89,7 +103,9 @@ const StaffService = () => {
       );
       return response.data;
     } catch (error) {
-      console.error("Error fetching user data:", error);
+      if (axios.isAxiosError(error)) {
+        handleUnauthorized(error.response?.status || 0);
+      }
       throw error;
     }
   };
@@ -101,21 +117,23 @@ const StaffService = () => {
         data,
         {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
             authorization: `Bearer ${userLoginCookie?.token}`,
           },
         }
       );
       return response.data;
     } catch (error) {
-      console.error("Error fetching user data:", error);
+      if (axios.isAxiosError(error)) {
+        handleUnauthorized(error.response?.status || 0);
+      }
       throw error;
     }
   };
 
   return {
     getStaff,
-    updateUser,
+    updateUserStaff,
     detailUserStaff,
     getStaffByNip,
     createStaff,

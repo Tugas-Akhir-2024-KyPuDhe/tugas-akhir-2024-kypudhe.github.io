@@ -129,7 +129,7 @@ export const CardBiodata: React.FC<Biodata> = ({
               type="file"
               id="fileInput"
               style={{ display: "none" }}
-              accept="image/*"
+              accept=".jpeg, .jpg, .png, .gif"
               onChange={handleFileChange}
             />
           </div>
@@ -195,6 +195,14 @@ export const CardBiodata: React.FC<Biodata> = ({
           {statusUpdateData ? (
             <input
               name="phone"
+              onKeyPress={(event) => {
+                if (!/[0-9]/.test(event.key)) {
+                  event.preventDefault();
+                }
+                if (event.key === ' ') {
+                  event.preventDefault(); 
+                }
+              }}
               value={updatedData.phone}
               onChange={handleChange}
               className="form-control mt-2"

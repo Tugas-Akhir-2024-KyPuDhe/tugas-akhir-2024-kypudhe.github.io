@@ -250,7 +250,7 @@ export const SchoolPage: React.FC = () => {
                       type="file"
                       id="fileInputLogo"
                       style={{ display: "none" }}
-                      accept="image/*"
+                      accept=".jpeg, .jpg, .png, .gif"
                       onChange={handleFileChange}
                     />
                   </div>

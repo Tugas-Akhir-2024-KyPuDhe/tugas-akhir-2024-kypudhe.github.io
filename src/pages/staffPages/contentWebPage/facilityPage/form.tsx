@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import FacilityService from "../../../../services/facilityService";
 import { HeaderTitlePage } from "../../../../components/headerTitlePage";
 import { optionsPrioritas } from "../../../../utils/optionsData";
+import { AxiosError } from "axios";
 
 interface FormState {
   id?: number;
@@ -53,7 +54,15 @@ export const FormFacilityPage: React.FC = () => {
             }))
           );
         } catch (error) {
-          console.error("Error fetching facility data:", error);
+          const axiosError = error as AxiosError;
+          if (axiosError.response?.status === 404) {
+            Toast.fire({
+              icon: "error",
+              title: `Data Tidak Ditemukan!`,
+              timer: 4000,
+            });
+            navigate("/");
+          }
         } finally {
           setloadingForm(false);
         }
@@ -160,7 +169,13 @@ export const FormFacilityPage: React.FC = () => {
 
   return (
     <>
-      <HeaderTitlePage title={`${id ? "Update" : "Tambah"} Fasilitas`} subTitle="Fasilitas Web SMKN 1 Lumban Julu" backDisplay={true} addDisplay={false} linkAdd="" />
+      <HeaderTitlePage
+        title={`${id ? "Update" : "Tambah"} Fasilitas`}
+        subTitle="Fasilitas Web SMKN 1 Lumban Julu"
+        backDisplay={true}
+        addDisplay={false}
+        linkAdd=""
+      />
       <div
         className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
         style={{ backgroundColor: "#fff", position: "relative" }}
@@ -249,6 +264,7 @@ export const FormFacilityPage: React.FC = () => {
                   <input
                     type="file"
                     name="media"
+                    accept=".jpeg, .jpg, .png, .gif"
                     className="form-control fs-6"
                     id="inputGroupFile02"
                     onChange={handleInputChange}

@@ -130,6 +130,14 @@ export const CardDataOrangTua: React.FC<DataState> = ({
             {statusUpdateData ? (
               <input
                 name="phone"
+                onKeyPress={(event) => {
+                  if (!/[0-9]/.test(event.key)) {
+                    event.preventDefault();
+                  }
+                  if (event.key === ' ') {
+                    event.preventDefault(); 
+                  }
+                }}
                 value={updatedData.phone}
                 onChange={handleChange}
                 className="form-control mt-2"

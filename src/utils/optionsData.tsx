@@ -37,3 +37,16 @@ export const optionsStartYear = Array.from({ length: 11 }, (_, index) => {
     label: year.toString(),
   };
 });
+
+export const optionsStatusPegawai = [
+  { value: "ASN", label: "ASN" },
+  { value: "P3K", label: "P3K" },
+  { value: "GTT", label: "GTT" },
+  { value: "GH", label: "GH" },
+  { value: "PH", label: "PH" },
+];
+
+export const optionsRole = [
+  { value: "TEACHER", label: "Guru" },
+  { value: "STAFF", label: "Pegawai" },
+];

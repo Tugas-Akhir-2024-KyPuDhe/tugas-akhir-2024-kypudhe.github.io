@@ -1,5 +1,9 @@
 import axios, { AxiosResponse } from "axios";
-import { FajusekActionResponse, GetAllFajusekResponse, GetSingleFajusekResponse } from "../interface/fajusek.interfase";
+import {
+  FajusekActionResponse,
+  GetAllFajusekResponse,
+  GetSingleFajusekResponse,
+} from "../interface/fajusek.interfase";
 import { useNavigate } from "react-router-dom";
 import useCookie from "react-use-cookie";
 
@@ -12,16 +16,15 @@ interface JurusanService {
 }
 
 const JurusanService = (): JurusanService => {
-
   const navigate = useNavigate();
-  const [cookieLogin, ] = useCookie("userLoginCookie");
+  const [cookieLogin] = useCookie("userLoginCookie");
   const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
 
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const handleUnauthorized = (status: number) => {
     if (status === 401) {
-      navigate("/dashboard/login");
+      navigate("/login");
     }
   };
 
@@ -30,7 +33,7 @@ const JurusanService = (): JurusanService => {
       const response: AxiosResponse = await axios.get(
         `${apiUrl}/api/jurusan/get`
       );
-      
+
       return response.data;
     } catch (error) {
       console.error("Error fetch all:", error);
@@ -62,19 +65,19 @@ const JurusanService = (): JurusanService => {
           },
         }
       );
-      handleUnauthorized(response.status);
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.error("Error adding facility:", error.response?.data || error.message);
         handleUnauthorized(error.response?.status || 0);
-        throw new Error(error.response?.data?.message || "Failed to add facility");
       }
-      throw new Error("An unexpected error occurred");
+      throw error;
     }
   };
 
-  const update = async (id: number, formData: FormData): Promise<FajusekActionResponse> => {
+  const update = async (
+    id: number,
+    formData: FormData
+  ): Promise<FajusekActionResponse> => {
     try {
       const response: AxiosResponse<FajusekActionResponse> = await axios.put(
         `${apiUrl}/api/jurusan/update/${id}`,
@@ -86,15 +89,12 @@ const JurusanService = (): JurusanService => {
           },
         }
       );
-      handleUnauthorized(response.status);
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.error("Error updating facility:", error.response?.data || error.message);
         handleUnauthorized(error.response?.status || 0);
-        throw new Error(error.response?.data?.message || "Failed to update facility");
       }
-      throw new Error("An unexpected error occurred");
+      throw error;
     }
   };
 
@@ -108,15 +108,12 @@ const JurusanService = (): JurusanService => {
           },
         }
       );
-      handleUnauthorized(response.status);
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.error("Error deleting facility:", error.response?.data || error.message);
         handleUnauthorized(error.response?.status || 0);
-        throw new Error(error.response?.data?.message || "Failed to delete facility");
       }
-      throw new Error("An unexpected error occurred");
+      throw error;
     }
   };
 
@@ -125,7 +122,7 @@ const JurusanService = (): JurusanService => {
     single,
     store,
     update,
-    destroy
+    destroy,
   };
 };
 

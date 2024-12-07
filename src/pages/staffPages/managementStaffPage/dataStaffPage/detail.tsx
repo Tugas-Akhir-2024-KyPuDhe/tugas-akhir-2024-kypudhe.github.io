@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { HeaderTitlePage } from "../../../../components/headerTitlePage";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import AuthService from "../../../../services/authService";
-import { formatDate, formatGender } from "../../../../utils/myFunctions";
+import { formatDate, formatGender, Toast } from "../../../../utils/myFunctions";
 import { CardProfil } from "../../../../features/staffPages/managementSiswaPage/dataSiswaPage/cardProfil";
 import noPhotoFemale from "./../../../../assets/images/profile-female.jpg";
 import noPhotoMale from "./../../../../assets/images/profile-male.jpg";
 import { CardDataOrangTua } from "../../../../components/cardDataOrangTua";
 import { CardRiwayatAkademik } from "../../../../components/cardRiwayatAkademik";
 import { CardDataAkademik } from "../../../../components/cardDataAkademik";
+import { AxiosError } from "axios";
 interface DataState {
   id?: number;
   password?: string;
@@ -26,6 +27,7 @@ interface DataState {
 export const DetailSiswaMangementSiswa: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const studentService = AuthService();
+  const navigate = useNavigate()
 
   const [loading, setLoading] = useState<boolean>(true);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
@@ -69,7 +71,15 @@ export const DetailSiswaMangementSiswa: React.FC = () => {
           });
           setImageUrl(data.photo.url);
         } catch (error) {
-          console.error("Error fetching detail siswa data:", error);
+          const axiosError = error as AxiosError;
+          if (axiosError.response?.status === 404) {
+            Toast.fire({
+              icon: "error",
+              title: `Data Tidak Ditemukan!`,
+              timer: 4000,
+            });
+          navigate(-1)
+          }
         } finally {
           setLoading(false);
         }

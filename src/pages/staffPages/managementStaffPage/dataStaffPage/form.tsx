@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from "react";
-import Select from "react-select";
+import Select, { MultiValue } from "react-select";
 import { useNavigate, useParams } from "react-router-dom";
 import { HeaderTitlePage } from "../../../../components/headerTitlePage";
-import { optionsGender, optionsStartYear } from "../../../../utils/optionsData";
+import {
+  optionsGender,
+  optionsRole,
+  optionsStartYear,
+  optionsStatusPegawai,
+} from "../../../../utils/optionsData";
 import StaffService from "../../../../services/staffService";
-import { Toast } from "../../../../utils/myFunctions";
+import { showConfirmationDialog, Toast } from "../../../../utils/myFunctions";
 import CourseService from "../../../../services/courseService";
 import { Course } from "../../../../interface/course.interface";
+import { AxiosError } from "axios";
 
 interface FormState {
   id?: number;
@@ -17,12 +23,13 @@ interface FormState {
   phone: string;
   email: string;
   gender: string;
-  mapel: string;
+  mapel: string[];
   nip: string;
   type: string;
   position: string;
   startDate: string;
   endDate: string;
+  role?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -34,6 +41,18 @@ export const FormStaffMangementStaffPage: React.FC = () => {
   const staffService = StaffService();
   const courseService = CourseService();
 
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [errorsForms, setErrorsForms] = useState<{ [key: string]: string }>({});
+  const [loadingForm, setloadingForm] = useState(true);
+
+  const [dataCourse, setdataCourse] = useState<Course[]>([]);
+  const optionsCourse = [
+    ...dataCourse.map((data) => ({
+      value: data.code,
+      label: `${data.name} | ${data.grade}`,
+    })),
+  ];
+
   const [formData, setFormData] = useState<FormState>({
     name: "",
     birthPlace: "",
@@ -41,30 +60,16 @@ export const FormStaffMangementStaffPage: React.FC = () => {
     phone: "",
     email: "",
     gender: optionsGender[0].value,
-    mapel: "",
+    mapel: [],
     nip: "",
-    type: "",
+    type: optionsStatusPegawai[0].value,
     position: "",
     startDate: optionsStartYear[4].value,
     endDate: "",
+    role: optionsRole[0].value,
     createdAt: "",
     updatedAt: "",
   });
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [errorsForms, setErrorsForms] = useState<{ [key: string]: string }>({});
-  const [loadingForm, setloadingForm] = useState(true);
-
-  const [dataCourse, setdataCourse] = useState<Course[]>([]);
-  const optionsCourse = [
-    {
-      value: "Tidak Ada",
-      label: "Tidak Ada",
-    },
-    ...dataCourse.map((data) => ({
-      value: data.name,
-      label: data.name,
-    })),
-  ];
 
   useEffect(() => {
     const getDataPegawai = async () => {
@@ -86,13 +91,22 @@ export const FormStaffMangementStaffPage: React.FC = () => {
             type: data.type,
             position: data.position,
             startDate: data.startDate,
+            role: data.user?.roles[0].name,
             endDate: data.endDate,
             createdAt: data.createdAt,
             updatedAt: data.updatedAt,
           });
           setImageUrl(data.photo?.url);
         } catch (error) {
-          console.error("Error fetching detail staff data:", error);
+          const axiosError = error as AxiosError;
+          if (axiosError.response?.status === 404) {
+            Toast.fire({
+              icon: "error",
+              title: `Data Tidak Ditemukan!`,
+              timer: 4000,
+            });
+            navigate("/");
+          }
         } finally {
           setloadingForm(false);
         }
@@ -154,10 +168,20 @@ export const FormStaffMangementStaffPage: React.FC = () => {
     }));
   };
 
+  const handleSelectMultipleChange = (
+    name: string,
+    selectedOptions: MultiValue<{ value: string; label: string }>
+  ) => {
+    setFormData((prev) => ({
+      ...prev,
+      [name]: selectedOptions.map((opt) => opt.value), 
+    }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const requiredFields = ["name", "nis", "nisn"];
+    const requiredFields = ["nip", "name", "email", "phone"];
     const newErrors: { [key: string]: string } = {};
 
     requiredFields.forEach((field) => {
@@ -178,7 +202,6 @@ export const FormStaffMangementStaffPage: React.FC = () => {
       return;
     }
 
-    setloadingForm(true);
     const payload = new FormData();
     Object.entries(formData).forEach(([key, value]) => {
       if (key !== "password" || id) {
@@ -187,19 +210,28 @@ export const FormStaffMangementStaffPage: React.FC = () => {
     });
 
     try {
-      let response;
-      if (formData.id) {
-        response = await staffService.updateUser(formData.id, payload);
-      } else {
-        response = await staffService.createStaff(payload);
-      }
-      if (response.status === 201 || response.status === 200) {
-        Toast.fire({
-          icon: "success",
-          title: `Staff Berhasil ${formData.id ? "Diupdate" : "Ditambah"}`,
-        });
-        navigate(-1);
-      }
+      const result = await showConfirmationDialog({
+        title: "Apakah Data Sudah Sesuai?",
+        icon: "warning",
+        cancelButtonText: "Cek Lagi",
+        confirmButtonText: "Ya, Sesuai!",
+      });
+      if (result.isConfirmed) {
+        setloadingForm(true);
+        let response;
+        if (formData.id) {
+          response = await staffService.updateUserStaff(formData.id, payload);
+        } else {
+          response = await staffService.createStaff(payload);
+        }
+        if (response.status === 201 || response.status === 200) {
+          Toast.fire({
+            icon: "success",
+            title: `Staff Berhasil ${formData.id ? "Diupdate" : "Ditambah"}`,
+          });
+          navigate(-1);
+        }
+      } 
     } catch (error) {
       setloadingForm(false);
       Toast.fire({
@@ -275,6 +307,14 @@ export const FormStaffMangementStaffPage: React.FC = () => {
                   }`}
                   placeholder="Masukkan NIP.."
                   value={formData.nip}
+                  onKeyPress={(event) => {
+                    // if (!/[0-9]/.test(event.key)) {
+                    //   event.preventDefault();
+                    // }
+                    if (event.key === " ") {
+                      event.preventDefault();
+                    }
+                  }}
                   onChange={handleInputChange}
                 />
                 {errorsForms.nip && (
@@ -291,7 +331,7 @@ export const FormStaffMangementStaffPage: React.FC = () => {
                   className={`form-control ${
                     errorsForms.name ? "is-invalid" : ""
                   }`}
-                  placeholder="Masukkan Nama"
+                  placeholder="Masukkan Nama.."
                   value={formData.name}
                   onChange={handleInputChange}
                 />
@@ -308,7 +348,7 @@ export const FormStaffMangementStaffPage: React.FC = () => {
                   value={optionsGender.find(
                     (option) => option.value === formData.gender
                   )}
-                  onChange={(option) => handleSelectChange("prioritas", option)}
+                  onChange={(option) => handleSelectChange("gender", option)}
                   placeholder="Pilih Jenis Kelamin"
                   isSearchable={false}
                   className="form-control-lg px-0 pt-0"
@@ -326,7 +366,7 @@ export const FormStaffMangementStaffPage: React.FC = () => {
                 />
               </div>
             </div>
-            <div className="col-12 col-lg-5">
+            <div className="col-12 col-lg-6">
               <div className="form-group mb-3">
                 <label className="mb-2 fw-medium">Email *</label>
                 <input
@@ -344,7 +384,7 @@ export const FormStaffMangementStaffPage: React.FC = () => {
                 )}
               </div>
             </div>
-            <div className="col-12 col-lg-4">
+            <div className="col-12 col-lg-3">
               <div className="form-group mb-3">
                 <label className="mb-2 fw-medium">Tempat Tanggal Lahir</label>
                 <input
@@ -357,9 +397,6 @@ export const FormStaffMangementStaffPage: React.FC = () => {
                   value={formData.birthPlace}
                   onChange={handleInputChange}
                 />
-                {errorsForms.birthPlace && (
-                  <div className="invalid-form">No Telp Link masih kosong!</div>
-                )}
               </div>
             </div>
             <div className="col-12 col-lg-3">
@@ -368,6 +405,14 @@ export const FormStaffMangementStaffPage: React.FC = () => {
                 <input
                   type="text"
                   name="phone"
+                  onKeyPress={(event) => {
+                    if (!/[0-9]/.test(event.key)) {
+                      event.preventDefault();
+                    }
+                    if (event.key === " ") {
+                      event.preventDefault();
+                    }
+                  }}
                   className={`form-control ${
                     errorsForms.phone ? "is-invalid" : ""
                   }`}
@@ -376,13 +421,13 @@ export const FormStaffMangementStaffPage: React.FC = () => {
                   onChange={handleInputChange}
                 />
                 {errorsForms.phone && (
-                  <div className="invalid-form">No Telp Link masih kosong!</div>
+                  <div className="invalid-form">No Telp masih kosong!</div>
                 )}
               </div>
             </div>
             <div className="col-12">
               <div className="form-group mb-3">
-                <label className="mb-2 fw-medium">Alamat *</label>
+                <label className="mb-2 fw-medium">Alamat</label>
                 <textarea
                   name="address"
                   className={`form-control ${
@@ -392,22 +437,30 @@ export const FormStaffMangementStaffPage: React.FC = () => {
                   value={formData.address}
                   onChange={handleTextareaChange}
                 />
-                {errorsForms.address && (
-                  <div className="invalid-form">Deskripsi masih kosong!</div>
-                )}
               </div>
             </div>
             <div className="col-12">
               <div className="form-group mb-3">
                 {id ? (
-                  <label className="mb-2 fw-medium">Update Gambar *</label>
+                  <label className="mb-2 fw-medium">
+                    Update Gambar{" "}
+                    <span className="text-muted">
+                      <sup>800 x 800</sup>
+                    </span>
+                  </label>
                 ) : (
-                  <label className="mb-2 fw-medium">Gambar *</label>
+                  <label className="mb-2 fw-medium">
+                    Gambar{" "}
+                    <span className="text-muted">
+                      <sup>800 x 800</sup>
+                    </span>
+                  </label>
                 )}
-                <div className="input-group mb-3">
+                <div className="input-group">
                   <input
                     type="file"
-                    name="media"
+                    name="photo"
+                    accept=".jpeg, .jpg, .png, .gif"
                     className="form-control fs-6"
                     id="inputGroupFile02"
                     onChange={handleInputChange}
@@ -419,9 +472,6 @@ export const FormStaffMangementStaffPage: React.FC = () => {
                     Upload
                   </label>
                 </div>
-                {errorsForms.media && (
-                  <div className="invalid-form">Media masih kosong!</div>
-                )}
               </div>
             </div>
             {id && (
@@ -479,16 +529,46 @@ export const FormStaffMangementStaffPage: React.FC = () => {
                 />
               </div>
             </div>
-            <div className="col-12 col-lg-9">
+            <div className="col-12 col-lg-6">
               <div className="form-group mb-3">
-                <label className="mb-2 fw-medium">Mata Pelajaran</label>
+                <label className="mb-2 fw-medium">Tahun Mulai *</label>
                 <Select
-                  options={optionsCourse}
-                  value={optionsCourse.find((option) => {
-                    return option.value === formData.mapel;
+                  options={optionsStartYear}
+                  value={optionsStartYear.find((option) => {
+                    return (
+                      option.value.split("-")[0] ===
+                      formData.startDate.split("-")[0]
+                    );
                   })}
-                  onChange={(option) => handleSelectChange("course", option)}
-                  placeholder="Pilih Mapel yang Diambil"
+                  menuPlacement="top"
+                  onChange={(option) => handleSelectChange("startDate", option)}
+                  placeholder="Pilih Tahun Mulai"
+                  isSearchable={false}
+                  className="form-control-lg px-0 pt-0"
+                  styles={{
+                    control: (baseStyles) => ({
+                      ...baseStyles,
+                      fontSize: "0.955rem",
+                      borderRadius: "8px",
+                    }),
+                    option: (provided) => ({
+                      ...provided,
+                      fontSize: "1rem",
+                    }),
+                  }}
+                />
+              </div>
+            </div>
+            <div className="col-6 col-lg-3 col-md-3">
+              <div className="form-group mb-3">
+                <label className="mb-2 fw-medium">Peran *</label>
+                <Select
+                  options={optionsRole}
+                  value={optionsRole.find((option) => {
+                    return option.value === formData.role;
+                  })}
+                  onChange={(option) => handleSelectChange("role", option)}
+                  placeholder="Pilih Status"
                   isSearchable={false}
                   className="form-control-lg px-0 pt-0"
                   styles={{
@@ -508,19 +588,57 @@ export const FormStaffMangementStaffPage: React.FC = () => {
             <div className="col-6 col-lg-3 col-md-3">
               <div className="form-group mb-3">
                 <label className="mb-2 fw-medium">Status Pegawai *</label>
-                <input
-                  type="text"
-                  name="type"
-                  className={`form-control ${
-                    errorsForms.type ? "is-invalid" : ""
-                  }`}
-                  placeholder="Masukkan NISN.."
-                  value={formData.type}
-                  onChange={handleInputChange}
+                <Select
+                  options={optionsStatusPegawai}
+                  value={optionsStatusPegawai.find((option) => {
+                    return option.value === formData.type;
+                  })}
+                  onChange={(option) => handleSelectChange("type", option)}
+                  placeholder="Pilih Status"
+                  isSearchable={false}
+                  className="form-control-lg px-0 pt-0"
+                  styles={{
+                    control: (baseStyles) => ({
+                      ...baseStyles,
+                      fontSize: "0.955rem",
+                      borderRadius: "8px",
+                    }),
+                    option: (provided) => ({
+                      ...provided,
+                      fontSize: "1rem",
+                    }),
+                  }}
                 />
-                {errorsForms.type && (
-                  <div className="invalid-form">Status masih kosong!</div>
-                )}
+              </div>
+            </div>
+            <div className="col-12 col-lg-6">
+              <div className="form-group mb-3">
+                <label className="mb-2 fw-medium">Mata Pelajaran</label>
+                <Select
+                  options={optionsCourse}
+                  value={optionsCourse.filter((option) =>
+                    formData.mapel.includes(option.value)
+                  )}
+                  menuPlacement="top"
+                  onChange={(selectedOptions) =>
+                    handleSelectMultipleChange("mapel", selectedOptions)
+                  }
+                  placeholder="Pilih Mapel yang Diambil"
+                  // isSearchable={false}
+                  isMulti
+                  className="form-control-lg px-0 pt-0"
+                  styles={{
+                    control: (baseStyles) => ({
+                      ...baseStyles,
+                      fontSize: "0.955rem",
+                      borderRadius: "8px",
+                    }),
+                    option: (provided) => ({
+                      ...provided,
+                      fontSize: "1rem",
+                    }),
+                  }}
+                />
               </div>
             </div>
             <div className="col-12 col-lg-6">
@@ -541,61 +659,6 @@ export const FormStaffMangementStaffPage: React.FC = () => {
                 )}
               </div>
             </div>
-            <div className="col-12 col-lg-6">
-              <div className="form-group mb-3">
-                <label className="mb-2 fw-medium">Tahun Mulai *</label>
-                <Select
-                  options={optionsStartYear}
-                  value={optionsStartYear.find((option) => {
-                    return (
-                      option.value.split("-")[0] ===
-                      formData.startDate.split("-")[0]
-                    );
-                  })}
-                  onChange={(option) => handleSelectChange("startYear", option)}
-                  placeholder="Pilih Tahun Mulai"
-                  isSearchable={false}
-                  className="form-control-lg px-0 pt-0"
-                  styles={{
-                    control: (baseStyles) => ({
-                      ...baseStyles,
-                      fontSize: "0.955rem",
-                      borderRadius: "8px",
-                    }),
-                    option: (provided) => ({
-                      ...provided,
-                      fontSize: "1rem",
-                    }),
-                  }}
-                />
-              </div>
-            </div>
-            {/* <div className="col-12">
-              <div className="form-group mb-3">
-                <label className="mb-2 fw-medium">Status</label>
-                <Select
-                  options={optionsStatus}
-                  value={optionsStatus.find(
-                    (option) => option.value === formData.status
-                  )}
-                  onChange={(option) => handleSelectChange("status", option)}
-                  placeholder="Pilih Status"
-                  className="form-control-lg px-0 pt-0"
-                  styles={{
-                    control: (baseStyles) => ({
-                      ...baseStyles,
-                      fontSize: "0.955rem",
-                      minHeight: "48px",
-                      borderRadius: "8px",
-                    }),
-                    option: (provided) => ({
-                      ...provided,
-                      fontSize: "1rem",
-                    }),
-                  }}
-                />
-              </div>
-            </div> */}
           </div>
 
           <div className="col-12">

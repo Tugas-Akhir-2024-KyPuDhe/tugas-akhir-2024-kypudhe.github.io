@@ -10,6 +10,7 @@ import {
   showConfirmationDialog,
   Toast,
 } from "../../../../utils/myFunctions";
+import { AxiosError } from "axios";
 
 interface FormState {
   id?: number;
@@ -70,7 +71,14 @@ export const TableCollectionGaleri: React.FC = () => {
           }))
         );
       } catch (error) {
-        console.error("Error fetching galeri data:", error);
+        const axiosError = error as AxiosError;
+        if (axiosError.response?.status === 404) {
+          Toast.fire({
+            icon: "error",
+            title: `Data Tidak Ditemukan!`,
+            timer: 4000,
+          });
+        }
       } finally {
         setLoading(false);
       }

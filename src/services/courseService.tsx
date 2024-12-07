@@ -27,7 +27,7 @@ const CourseService = (): CourseService => {
 
   const handleUnauthorized = (status: number) => {
     if (status === 401) {
-      navigate("/dashboard/login");
+      navigate("/login");
     }
   };
 
@@ -38,16 +38,8 @@ const CourseService = (): CourseService => {
       );
       return response.data;
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.error(
-          "Error fetching courses:",
-          error.response?.data || error.message
-        );
-        throw new Error(
-          error.response?.data?.message || "Failed to fetch courses"
-        );
-      }
-      throw new Error("An unexpected error occurred");
+      console.log("");
+      throw error;
     }
   };
 
@@ -60,17 +52,8 @@ const CourseService = (): CourseService => {
       );
       return response.data;
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.error(
-          "Error fetching course details:",
-          error.response?.data || error.message
-        );
-        handleUnauthorized(error.response?.status || 0);
-        throw new Error(
-          error.response?.data?.message || "Failed to fetch course details"
-        );
-      }
-      throw new Error("An unexpected error occurred");
+     console.log("");
+      throw error;
     }
   };
 
@@ -88,20 +71,12 @@ const CourseService = (): CourseService => {
           },
         }
       );
-      handleUnauthorized(response.status);
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.error(
-          "Error adding course:",
-          error.response?.data || error.message
-        );
         handleUnauthorized(error.response?.status || 0);
-        throw new Error(
-          error.response?.data?.message || "Failed to add course"
-        );
       }
-      throw new Error("An unexpected error occurred");
+      throw error;
     }
   };
 
@@ -120,20 +95,12 @@ const CourseService = (): CourseService => {
           },
         }
       );
-      handleUnauthorized(response.status);
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.error(
-          "Error updating course:",
-          error.response?.data || error.message
-        );
         handleUnauthorized(error.response?.status || 0);
-        throw new Error(
-          error.response?.data?.message || "Failed to update course"
-        );
       }
-      throw new Error("An unexpected error occurred");
+      throw error;
     }
   };
 
@@ -147,20 +114,12 @@ const CourseService = (): CourseService => {
           },
         }
       );
-      handleUnauthorized(response.status);
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.error(
-          "Error deleting course:",
-          error.response?.data || error.message
-        );
         handleUnauthorized(error.response?.status || 0);
-        throw new Error(
-          error.response?.data?.message || "Failed to delete course"
-        );
       }
-      throw new Error("An unexpected error occurred");
+      throw error;
     }
   };
 

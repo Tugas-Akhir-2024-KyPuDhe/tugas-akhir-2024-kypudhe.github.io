@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import useCookie from "react-use-cookie";
 import { HeaderTitlePage } from "../../../../components/headerTitlePage";
 import { optionsPrioritas, optionsStatus } from "../../../../utils/optionsData";
+import { AxiosError } from "axios";
 
 interface FormState {
   id?: number;
@@ -60,7 +61,15 @@ export const FormBannerPage: React.FC = () => {
           });
           setImageUrl(data.banner.url);
         } catch (error) {
-          console.error("Error fetching banner data:", error);
+          const axiosError = error as AxiosError;
+          if (axiosError.response?.status === 404) {
+            Toast.fire({
+              icon: "error",
+              title: `Data Tidak Ditemukan!`,
+              timer: 4000,
+            });
+            navigate("/");
+          }
         } finally {
           setloadingForm(false);
         }
@@ -158,7 +167,13 @@ export const FormBannerPage: React.FC = () => {
 
   return (
     <>
-      <HeaderTitlePage title={`${id ? "Update" : "Tambah"} Banner`} subTitle="Banner Web SMKN 1 Lumban Julu" backDisplay={true} addDisplay={false} linkAdd="" />
+      <HeaderTitlePage
+        title={`${id ? "Update" : "Tambah"} Banner`}
+        subTitle="Banner Web SMKN 1 Lumban Julu"
+        backDisplay={true}
+        addDisplay={false}
+        linkAdd=""
+      />
       <div
         className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
         style={{ backgroundColor: "#fff", position: "relative" }}
@@ -289,6 +304,7 @@ export const FormBannerPage: React.FC = () => {
                   <input
                     type="file"
                     name="media"
+                    accept=".jpeg, .jpg, .png, .gif"
                     className="form-control fs-6"
                     id="inputGroupFile02"
                     onChange={handleInputChange}

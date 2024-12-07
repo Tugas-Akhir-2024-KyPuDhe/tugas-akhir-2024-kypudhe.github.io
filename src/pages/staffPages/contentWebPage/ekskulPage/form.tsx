@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import EkskulService from "../../../../services/ekskulService";
 import { HeaderTitlePage } from "../../../../components/headerTitlePage";
 import { optionsPrioritas } from "../../../../utils/optionsData";
+import { AxiosError } from "axios";
 
 interface FormState {
   id?: number;
@@ -53,7 +54,15 @@ export const FormEkskulPage: React.FC = () => {
             }))
           );
         } catch (error) {
-          console.error("Error fetching ekskul data:", error);
+          const axiosError = error as AxiosError;
+          if (axiosError.response?.status === 404) {
+            Toast.fire({
+              icon: "error",
+              title: `Data Tidak Ditemukan!`,
+              timer: 4000,
+            });
+            navigate("/");
+          }
         } finally {
           setloadingForm(false);
         }
@@ -162,7 +171,13 @@ export const FormEkskulPage: React.FC = () => {
 
   return (
     <>
-      <HeaderTitlePage title={`${id ? "Update" : "Tambah"} Ekstrakurikuler`} subTitle="Ekstrakurikuler Web SMKN 1 Lumban Julu" backDisplay={true} addDisplay={false} linkAdd="" />
+      <HeaderTitlePage
+        title={`${id ? "Update" : "Tambah"} Ekstrakurikuler`}
+        subTitle="Ekstrakurikuler Web SMKN 1 Lumban Julu"
+        backDisplay={true}
+        addDisplay={false}
+        linkAdd=""
+      />
       <div
         className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
         style={{ backgroundColor: "#fff", position: "relative" }}
@@ -251,6 +266,7 @@ export const FormEkskulPage: React.FC = () => {
                   <input
                     type="file"
                     name="media"
+                    accept=".jpeg, .jpg, .png, .gif"
                     className="form-control fs-6"
                     id="inputGroupFile02"
                     onChange={handleInputChange}
