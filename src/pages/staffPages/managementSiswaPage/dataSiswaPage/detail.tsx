@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { HeaderTitlePage } from "../../../../components/headerTitlePage";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import AuthService from "../../../../services/authService";
 import { formatDate, formatGender, Toast } from "../../../../utils/myFunctions";
 import { CardProfil } from "../../../../features/staffPages/managementSiswaPage/dataSiswaPage/cardProfil";
@@ -27,6 +27,7 @@ interface DataState {
 export const DetailSiswaMangementSiswa: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const studentService = AuthService();
+  const navigate = useNavigate()
 
   const [loading, setLoading] = useState<boolean>(true);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
@@ -77,7 +78,7 @@ export const DetailSiswaMangementSiswa: React.FC = () => {
               title: `Data Tidak Ditemukan!`,
               timer: 4000,
             });
-navigate(-1)
+            navigate("/");
           }
         } finally {
           setLoading(false);

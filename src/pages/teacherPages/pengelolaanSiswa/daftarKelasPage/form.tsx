@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import { Toast } from "../../../../utils/myFunctions";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import JurusanService from "../../../../services/jurusanService";
 import { HeaderTitlePage } from "../../../../components/headerTitlePage";
 import { optionsPrioritas } from "../../../../utils/optionsData";
@@ -17,6 +17,7 @@ interface FormState {
 
 export const FormDaftarKelasPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate()
   const jurusanService = JurusanService();
   const [formData, setFormData] = useState<FormState>({
     name: "",
@@ -50,7 +51,7 @@ export const FormDaftarKelasPage: React.FC = () => {
               title: `Data Tidak Ditemukan!`,
               timer: 4000,
             });
-navigate(-1)
+            navigate("/");
           }
         } finally {
           setloadingForm(false);

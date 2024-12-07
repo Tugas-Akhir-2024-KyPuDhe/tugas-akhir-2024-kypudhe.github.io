@@ -1,5 +1,4 @@
 import { FaCircle } from "react-icons/fa6";
-import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 export const Toast = Swal.mixin({
