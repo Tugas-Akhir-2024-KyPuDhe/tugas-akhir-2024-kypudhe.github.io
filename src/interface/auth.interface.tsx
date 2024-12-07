@@ -24,6 +24,7 @@ export interface UserDetails {
   position?: string | null;
   startDate?: string;
   endDate?: string | null;
+  mapel?: string[];
   // === STUDENT
   nis?: number;
   nisn?: number;

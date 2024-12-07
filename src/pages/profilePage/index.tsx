@@ -18,6 +18,8 @@ import { NavSubMenu } from "../../components/navSubmenu";
 import useCookie from "react-use-cookie";
 import { CardClassTeacher } from "../../features/profilePage/cardClassTeacher";
 import { FormParentOfStudent } from "../../interface/student.interface";
+import { Course } from "../../interface/course.interface";
+import CourseService from "../../services/courseService";
 
 const subMenuItemsStudent = [
   { label: "Data Akademik", key: "data-akademik" },
@@ -28,12 +30,14 @@ const subMenuItemsTeacher = [{ label: "Kelas", key: "kelas" }];
 
 export const ProfilePage = () => {
   const authService = AuthService();
+  const courseService = CourseService();
   const [cookieLogin] = useCookie("userLoginCookie", "");
   const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
 
   const [profileDetail, setProfileDetail] = useState<DetailUserResponse | null>(
     null
   );
+  const [allCourse, setAllCourse] = useState<Course[]>([])
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -67,8 +71,23 @@ export const ProfilePage = () => {
     }
   };
 
+  const getAllCourse = async () => {
+    setLoading(true);
+    try {
+      const response = await courseService.getAllCourses();
+      if (response.data && response.data.length > 0) {
+        setAllCourse(response.data);
+      }
+    } catch (error) {
+      console.error("Error fetching Course data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     getUser();
+    getAllCourse()
   }, []);
 
   const handleUpdateAccessIdentity = () =>
@@ -188,6 +207,8 @@ export const ProfilePage = () => {
                 position={profileDetail.details[0].position || "-"}
                 startDate={profileDetail.details[0].startDate || "-"}
                 typeStaff={profileDetail.details[0].type || "-"}
+                myCourse={profileDetail.details[0].mapel || []}
+                allCourse={allCourse}
                 //STUDENT
                 nis={profileDetail.details[0].nis || 0}
                 nisn={profileDetail.details[0].nisn || 0}

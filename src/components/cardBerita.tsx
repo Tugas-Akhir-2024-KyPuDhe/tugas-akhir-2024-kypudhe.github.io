@@ -36,7 +36,7 @@ export const CardBerita: React.FC<Artikel> = ({
 
   return (
     <article>
-      <div className="card border-0">
+      <div className="card border-0 efect-hover-smooth">
         <Link to={`/berita/${uuidArtikel}`} className="rounded">
           <div className="position-absolute p-2 text-light fw-bold rounded-top bg-blue">
             <FaCalendarDay />

@@ -41,3 +41,17 @@
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
 }
+
+.efect-hover-smooth {
+  /* cursor: pointer; */
+  transition: all 0.3s ease-in-out; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 3px 6px rgba(0, 0, 0, 0.05); 
+  transform: translateY(0); 
+  opacity: 0.9; 
+}
+
+.efect-hover-smooth:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2), 0 12px 24px rgba(0, 0, 0, 0.15); 
+  transform: translateY(-8px); 
+  opacity: 1; 
+}

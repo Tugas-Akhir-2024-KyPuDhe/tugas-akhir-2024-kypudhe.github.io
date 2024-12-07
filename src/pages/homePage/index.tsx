@@ -169,7 +169,7 @@ export const HomePage = () => {
       <div className="m-1 m-lg-4 m-md-4 my-4">
         <div className="d-flex justify-content-between mb-3">
           <span className="fw-bold fs-5 text-dark-soft">Berita/Artikel</span>
-          <Link to="/berita" className="fw-medium fs-5 text-primary">
+          <Link to="/berita" className="fw-medium text-blue text-decoration-none">
             Lainnya <FaCaretRight/>
           </Link>
         </div>

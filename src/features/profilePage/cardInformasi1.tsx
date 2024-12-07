@@ -1,6 +1,7 @@
 import React from "react";
 import useCookie from "react-use-cookie";
 import { formatDate } from "../../utils/myFunctions";
+import { Course } from "../../interface/course.interface";
 
 interface dataInformasi {
   // STAFF OR TEACHER
@@ -8,6 +9,8 @@ interface dataInformasi {
   position: string;
   startDate: string;
   typeStaff: string;
+  myCourse: string[];
+  allCourse: Course[];
   // STUDENT
   nis: number;
   nisn: number;
@@ -18,6 +21,8 @@ export const CardInformasi1: React.FC<dataInformasi> = ({
   position,
   startDate,
   typeStaff,
+  myCourse,
+  allCourse,
   nis,
   nisn,
 }) => {
@@ -118,7 +123,15 @@ export const CardInformasi1: React.FC<dataInformasi> = ({
                       <label className="fw-bold text-dark-soft">
                         Mata Pelajaran
                       </label>
-                      <div>-</div>
+                      {allCourse.map((course) => {
+                        const isCourseInMyList = myCourse.includes(course.code);
+
+                        return (
+                          <div key={course.code}>
+                            {isCourseInMyList && <div>- {course.name}</div>}
+                          </div>
+                        );
+                      })}
                     </div>
                   )}
                   <div className="col-12 mb-3">
