@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { useNavigate } from "react-router-dom";
-import { FaPen, FaUserPlus } from "react-icons/fa6";
+import { FaEye, FaPen } from "react-icons/fa6";
 import ClassStudentService from "../../../../services/classStudentService";
 import { Class } from "../../../../interface/studentClass.interface";
 
@@ -34,23 +34,6 @@ export const Table: React.FC = () => {
       width: "50px",
     },
     {
-      name: "Baru",
-      selector: (row: Class) => row.academicYear,
-      sortable: true,
-      cell: (row: Class) => (
-        <div>
-          <button
-            className="btn btn-success btn-sm text me-2 text-light"
-            onClick={() => navigate(`detail/${row.id}`)}
-            disabled={loading}
-          >
-            <FaUserPlus />
-          </button>
-        </div>
-      ),
-      width: "80px",
-    },
-    {
       name: "Jumlah Siswa",
       selector: (row: Class) => row.student.length,
       sortable: true,
@@ -64,37 +47,44 @@ export const Table: React.FC = () => {
       selector: (row: Class) => row.academicYear,
       sortable: true,
       cell: (row: Class) => row.academicYear,
-      width: "300px",
+      width: "150px",
     },
     {
       name: "Kelas",
       selector: (row: Class) => row.name,
       sortable: true,
       cell: (row: Class) => row.name,
-      // width: "100px",
+      width: "100px",
     },
     {
       name: "Kapasitas",
       selector: (row: Class) => row.capacity,
       sortable: true,
       cell: (row: Class) => row.capacity,
+      width: "150px",
+    },
+    {
+      name: "Wali Kelas",
+      selector: (row: Class) => row.homeRoomTeacher.name,
+      sortable: true,
+      cell: (row: Class) => row.homeRoomTeacher.name,
       // width: "100px",
     },
-    // {
-    //   name: "Wali Kelas",
-    //   selector: (row: Class) => row.homeRoomTeacher.name,
-    //   sortable: true,
-    //   cell: (row: Class) => row.homeRoomTeacher.name,
-    //   // width: "100px",
-    // },
     {
       name: "Action",
       cell: (row: Class) => (
         <>
           <button
+            className="btn btn-info btn-sm text me-2 text-light"
+            onClick={() => navigate(`detail/${row.id}`)}
+            disabled={loading}
+          >
+            <FaEye />
+          </button>
+          <button
             className="btn btn-warning btn-sm text me-2 text-light"
             onClick={() =>
-              navigate(`manajemen-siswa/data-siswa-baru/detail/${row.id}`)
+              navigate(`/manajemen-siswa/data-siswa-baru/detail/${row.id}`)
             }
             disabled={loading}
           >

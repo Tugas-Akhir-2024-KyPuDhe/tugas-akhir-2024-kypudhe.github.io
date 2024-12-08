@@ -39,7 +39,7 @@ import {
   UpdateGaleriColletion,
   DataKelasMangementSiswaPage,
   FormDataKelasMangementSiswaPage,
-  InserStudentInClassMangementSiswaPage,
+  DetailKelasMangementSiswaPage,
   DataMapelMangementSiswaPage,
   FormMapelMangementSiswaPage,
   DataStaffMangementStaffPage,
@@ -191,8 +191,8 @@ function App() {
               element={<PrivateRoute Component={FormDataKelasMangementSiswaPage} />}
             />
             <Route
-              path="/manajemen-siswa/data-mapel/detail/:id"
-              element={<PrivateRoute Component={InserStudentInClassMangementSiswaPage} />}
+              path="/manajemen-siswa/data-kelas/detail/:id"
+              element={<PrivateRoute Component={DetailKelasMangementSiswaPage} />}
             />
             <Route
               path="/manajemen-siswa/data-mapel"

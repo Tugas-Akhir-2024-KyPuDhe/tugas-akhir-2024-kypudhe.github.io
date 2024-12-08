@@ -235,108 +235,166 @@ export const TableCollectionGaleri: React.FC = () => {
   }, [formData.mediaIdsToDelete]);
 
   return (
-    <div
-      className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
-      style={{ backgroundColor: "#fff", position: "relative" }}
-    >
-      {loading && (
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(255, 255, 255, 0.7)",
-            zIndex: 9999,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div className="spinner-border text-primary" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </div>
-        </div>
-      )}
-      <div className="row">
-        <div className="col-12">
-          <div className="row mb-3">
-            <div className="col-2 fw-bold">Nama</div>
-            <div className="col-auto">:</div>
-            <div className="col-9 fw-medium">{formData.name}</div>
-          </div>
-          <div className="row mb-3">
-            <div className="col-2 fw-bold">Deskripsi</div>
-            <div className="col-auto">:</div>
-            <div className="col-9 fw-medium">{formData.description}</div>
-          </div>
-          <div className="row mb-3">
-            <div className="col-2 fw-bold">Prioritas</div>
-            <div className="col-auto">:</div>
-            <div className="col-9 fw-medium">{formData.prioritas}</div>
-          </div>
-          <div className="row mb-3">
-            <div className="col-2 fw-bold">Status </div>
-            <div className="col-auto">:</div>
-            <div className="col-9 fw-medium">
-              {convertStatus(formData.status)}
-            </div>
-          </div>
-        </div>
-      </div>
-      <hr />
-      <div className="col-12">
-        <div className="form-group mb-3">
-          <label className="mb-2 fw-medium">Foto Galeri</label>
-          {[1, 2, 3, 4].map((index) => (
-            <div className="input-group mb-3" key={`media${index}`}>
-              <input
-                type="file"
-                name={`media${index}`}
-                className="form-control fs-6"
-                id={`inputFileGaleri${index}`}
-                accept=".jpeg, .jpg, .png, .gif"
-                onChange={handleInputChange}
-              />
-              <label
-                className="input-group-text"
-                htmlFor={`inputFileGaleri${index}`}
-              >
-                Upload
-              </label>
-            </div>
-          ))}
-        </div>
-      </div>
-      <div className="col-12">
-        <div className="form-group mb-3">
-          <button
-            className="btn btn-primary bg-blue border-0"
-            onClick={() => handleSubmit()}
+    <>
+      <div
+        className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
+        style={{ backgroundColor: "#fff", position: "relative" }}
+      >
+        {loading && (
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: "rgba(255, 255, 255, 0.7)",
+              zIndex: 9999,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
           >
-            Tambah
-          </button>
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        )}
+        <div className="row g-3">
+          <div className="col-12">
+            <div className="fw-bold position-relative pb-2">
+              Detail Galeri
+              <div
+                style={{
+                  position: "absolute",
+                  left: 0,
+                  bottom: 0,
+                  width: "50px",
+                  height: "3px",
+                  backgroundColor: "var(--blue-color)",
+                }}
+              />
+            </div>
+          </div>
+          <div className="col-12">
+            <div className="row mb-3">
+              <div className="col-2 fw-medium">Nama</div>
+              <div className="col-auto">:</div>
+              <div className="col-9 fw-medium">{formData.name}</div>
+            </div>
+            <div className="row mb-3">
+              <div className="col-2 fw-medium">Deskripsi</div>
+              <div className="col-auto">:</div>
+              <div className="col-9 fw-medium">{formData.description}</div>
+            </div>
+            <div className="row mb-3">
+              <div className="col-2 fw-medium">Prioritas</div>
+              <div className="col-auto">:</div>
+              <div className="col-9 fw-medium">{formData.prioritas}</div>
+            </div>
+            <div className="row mb-3">
+              <div className="col-2 fw-medium">Status </div>
+              <div className="col-auto">:</div>
+              <div className="col-9 fw-medium">
+                {convertStatus(formData.status)}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <StyleSheetManager>
-        <DataTable
-          columns={columns}
-          data={mediaList}
-          pagination
-          highlightOnHover
-          customStyles={{
-            rows: {
-              style: {
-                "&:hover": {
-                  backgroundColor: "#f5f5f5",
-                  color: "#007bff",
+
+      <div
+        className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
+        style={{ backgroundColor: "#fff", position: "relative" }}
+      >
+        {loading && (
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: "rgba(255, 255, 255, 0.7)",
+              zIndex: 9999,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        )}
+        <div className="row g-3">
+        <div className="col-12">
+            <div className="fw-bold position-relative pb-2">
+              Tambah Galeri
+              <div
+                style={{
+                  position: "absolute",
+                  left: 0,
+                  bottom: 0,
+                  width: "50px",
+                  height: "3px",
+                  backgroundColor: "var(--blue-color)",
+                }}
+              />
+            </div>
+          </div>
+          <div className="col-12">
+            <div className="form-group mb-3">
+              {[1, 2, 3, 4].map((index) => (
+                <div className="input-group mb-3" key={`media${index}`}>
+                  <input
+                    type="file"
+                    name={`media${index}`}
+                    className="form-control fs-6"
+                    id={`inputFileGaleri${index}`}
+                    accept=".jpeg, .jpg, .png, .gif"
+                    onChange={handleInputChange}
+                  />
+                  <label
+                    className="input-group-text"
+                    htmlFor={`inputFileGaleri${index}`}
+                  >
+                    Upload
+                  </label>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="col-12">
+            <div className="form-group mb-3">
+              <button
+                className="btn btn-primary bg-blue border-0"
+                onClick={() => handleSubmit()}
+              >
+                Tambah
+              </button>
+            </div>
+          </div>
+          <StyleSheetManager>
+            <DataTable
+              columns={columns}
+              data={mediaList}
+              pagination
+              highlightOnHover
+              customStyles={{
+                rows: {
+                  style: {
+                    "&:hover": {
+                      backgroundColor: "#f5f5f5",
+                      color: "#007bff",
+                    },
+                  },
                 },
-              },
-            },
-          }}
-        />
-      </StyleSheetManager>
-    </div>
+              }}
+            />
+          </StyleSheetManager>
+        </div>
+      </div>
+    </>
   );
 };
