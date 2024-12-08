@@ -174,7 +174,7 @@ export const Table: React.FC = () => {
         />
       </div>
 
-      {/* MODAL DATA RIWAYAT */}
+      {/* MODAL DETAIL DATA */}
       <div
         className="modal fade modal-lg p-0"
         id="modalDetailData"
