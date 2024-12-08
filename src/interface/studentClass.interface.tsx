@@ -1,4 +1,5 @@
 import { StaffDetails } from "./auth.interface";
+import { CourseInClass } from "./courseInClass.interface";
 import { StudentDetail } from "./student.interface";
 
 export interface ResponseAction {
@@ -31,6 +32,7 @@ export interface Class {
   updatedAt: string;
   homeRoomTeacher: StaffDetails;
   student: StudentDetail[]
+  CourseInClass?: CourseInClass[]
 }
 
 export interface GetAllClassResponse {
