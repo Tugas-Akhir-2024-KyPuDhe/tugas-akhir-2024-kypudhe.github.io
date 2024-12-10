@@ -1,5 +1,6 @@
 // import { LoginData } from "./auth.interface";
 
+import { CourseInClass } from "./courseInClass.interface";
 import { Media } from "./media.interface";
 import { Role } from "./role.interface";
 
@@ -21,7 +22,7 @@ export interface StaffDetail {
   mediaId: string;
   createdAt: string;
   updatedAt: string;
-  photo: Media
+  photo: Media;
   user?: {
     username: string;
     password: string;
@@ -39,4 +40,16 @@ export interface ResponseGetStaffDetail {
   status: number;
   message: string;
   data: StaffDetail;
+}
+export interface DataClassOfteacher {
+  id: string;
+  uuid: string;
+  name: string;
+  CourseInClass: CourseInClass[];
+}
+
+export interface GetClassOfTeacher {
+  status: number;
+  message: string;
+  data: DataClassOfteacher;
 }

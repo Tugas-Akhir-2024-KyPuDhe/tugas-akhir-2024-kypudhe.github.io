@@ -5,6 +5,7 @@ import {
 } from "./../interface/auth.interface";
 import useCookie from "react-use-cookie";
 import {
+  GetClassOfTeacher,
   ResponseGetStaff,
   ResponseGetStaffDetail,
 } from "../interface/staff.interface";
@@ -110,6 +111,28 @@ const StaffService = () => {
     }
   };
 
+  const getClassOfTeacher = async (
+    nip: string
+  ): Promise<GetClassOfTeacher> => {
+    try {
+      const response = await axios.get<GetClassOfTeacher>(
+        `${apiUrl}/api/staff/get/class/${nip}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${userLoginCookie?.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        handleUnauthorized(error.response?.status || 0);
+      }
+      throw error;
+    }
+  };
+
   const createStaff = async (data: FormData): Promise<UpdateUserResponse> => {
     try {
       const response = await axios.post<UpdateUserResponse>(
@@ -137,6 +160,7 @@ const StaffService = () => {
     detailUserStaff,
     getStaffByNip,
     createStaff,
+    getClassOfTeacher,
   };
 };
 

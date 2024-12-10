@@ -1,122 +1,121 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { StyleSheetManager } from "styled-components";
-import { formatDateTime, showConfirmationDialog, Toast } from "../../../../utils/myFunctions";
-import { FaTrash } from "react-icons/fa";
-import Swal from "sweetalert2";
-import { FaPen } from "react-icons/fa6";
-
-interface Kelas {
-  name: string,
-  jurusan: string,
-  createdAt: string;
-}
+import StaffService from "../../../../services/staffService";
+import { CourseInClass } from "../../../../interface/courseInClass.interface";
+import { FaEye, FaListCheck, FaPenClip } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 
 export const Table: React.FC = () => {
-  const [data, setData] = useState<Kelas[]>([]);
+  const navigate = useNavigate()
+  const teacherService = StaffService()
+  const [data, setData] = useState<CourseInClass[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false); // Add loading state
 
   const getData = async () => {
-    try {
-      // const response = await jurusanService.all();
-      // setData(response.data);
-
-      setData([
-        {
-          name: 'X TKJ 1',
-          jurusan: 'Teknik Komputer Jaringan',
-          createdAt: new Date().toString(),
-        },
-        {
-          name: 'XI TKJ 1',
-          jurusan: 'Teknik Komputer Jaringan',
-          createdAt: new Date().toString(),
-        },
-      ])
+    try { 
+      setLoading(true)
+      const response = await teacherService.getClassOfTeacher("198311182008042001");
+      setData(response.data.CourseInClass);
     } catch (error) {
       console.error("Error fetching data:", error);
+    }finally{
+      setLoading(false)
     }
   };
 
-  const handleDelete = async (kelas: Kelas) => {
-    const result = await showConfirmationDialog({
-      title: "Ingin menghapus kelas ini?",
-      icon: "warning",
-      confirmButtonText: "Ya, Hapus!",
-      cancelButtonText: "Batal",
-    });
+  // const handleDelete = async (kelas: Kelas) => {
+  //   const result = await showConfirmationDialog({
+  //     title: "Ingin menghapus kelas ini?",
+  //     icon: "warning",
+  //     confirmButtonText: "Ya, Hapus!",
+  //     cancelButtonText: "Batal",
+  //   });
 
-    console.log(kelas)
-
-    if (result.isConfirmed) {
-      setLoading(true); // Set loading to true when deletion starts
-      try {
-        // const response = await jurusanService.destroy(id);
-        // if (response.status === 200) {
-        //   getData();
-          Toast.fire({
-            icon: "success",
-            title: "kelas berhasil dihapus",
-            timer: 4000,
-          });
-        // }
-      } catch (error) {
-        console.error("Error deleting kelas:", error);
-        Swal.fire("Gagal", "Terjadi kesalahan saat menghapus kelas", "error");
-      } finally {
-        setLoading(false); // Set loading to false once the operation is complete
-      }
-    }
-  };
+  //   if (result.isConfirmed) {
+  //     setLoading(true); // Set loading to true when deletion starts
+  //     try {
+  //       // const response = await jurusanService.destroy(id);
+  //       // if (response.status === 200) {
+  //       //   getData();
+  //         Toast.fire({
+  //           icon: "success",
+  //           title: "kelas berhasil dihapus",
+  //           timer: 4000,
+  //         });
+  //       // }
+  //     } catch (error) {
+  //       console.error("Error deleting kelas:", error);
+  //       Swal.fire("Gagal", "Terjadi kesalahan saat menghapus kelas", "error");
+  //     } finally {
+  //       setLoading(false); // Set loading to false once the operation is complete
+  //     }
+  //   }
+  // };
 
   const columns = [
     {
       name: "No",
-      cell: (_row: Kelas, index: number) => index + 1,
+      cell: (_row: CourseInClass, index: number) => index + 1,
       width: "50px",
     },
     {
-      name: "Nama",
-      selector: (row: Kelas) => row.name,
+      name: "Kelas",
+      selector: (row: CourseInClass) => row.class.name,
+      width: "100px"
     },
     {
-      name: "Jurusan",
-      selector: (row: Kelas) => row.jurusan,
+      name: "Mata Pelajaran",
+      selector: (row: CourseInClass) => row.courseDetail.name,
     },
     {
-      name: "Dibuat Pada",
-      selector: (row: Kelas) => formatDateTime(row.createdAt),
-      sortable: true,
+      name: "Hari",
+      selector: (row: CourseInClass) => row.day,
+      width: "100px"
+    },
+    {
+      name: "Jam Mulai",
+      selector: (row: CourseInClass) => row.timeStart,
+      width: "100px"
+    },
+    {
+      name: "Jam Selesai",
+      selector: (row: CourseInClass) => row.timeEnd,
+      width: "100px"
     },
     {
       name: "Action",
-      selector: (row: Kelas) => row.name,
-      cell: (row: Kelas) => (
+      cell: (row: CourseInClass) => (
         <>
-         
           <button
-            className="btn btn-warning btn-sm text me-2 text-light"
+            className="btn btn-info btn-sm border-info me-2 text-light"
+            onClick={() => navigate(`update/${row.id}`)}
+            disabled={loading} 
+          >
+              <FaEye className="" style={{ fontSize: "0.8rem" }}/>
+          </button>
+          <button
+            className="btn btn-success btn-sm me-2 text-light"
             // onClick={() => navigate(`update/${row.id}`)}
             disabled={loading} 
           >
-              <FaPen />
+              <FaListCheck className="" style={{ fontSize: "0.8rem" }}/>
           </button>
           <button
-            className="btn btn-danger btn-sm"
-            onClick={() => handleDelete(row)}
+            className="btn btn-primary btn-sm me-2 text-light"
+            // onClick={() => navigate(`update/${row.id}`)}
             disabled={loading} 
           >
-              <FaTrash />
+              <FaPenClip className="" style={{ fontSize: "0.8rem" }}/>
           </button>
         </>
       ),
-      width: "150px",
     },
   ];
 
-  const filteredData = data.filter((dt) =>
-    dt.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredData = data?.filter((dt) =>
+    dt.courseDetail.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   useEffect(() => {
