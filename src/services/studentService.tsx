@@ -35,8 +35,32 @@ const StudentService = () => {
     }
   };
 
+  const getAllStudent = async (
+    status: string = "",
+    major_code: string = "",
+    grade: string = ""
+  ): Promise<ResponseGetStudentDetail> => {
+    try {
+      const response = await axios.get<ResponseGetStudentDetail>(
+        `${apiUrl}/api/student/get?status=${status}&major_code=${major_code}&grade=${grade}`,
+        {
+          headers: {
+            authorization: `Bearer ${userLoginCookie?.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        handleUnauthorized(error.response?.status || 0);
+      }
+      throw error;
+    }
+  };
+
   return {
     getNewStudent,
+    getAllStudent,
   };
 };
 

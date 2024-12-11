@@ -33,6 +33,7 @@ export const DetailKelasMangementSiswaPage: React.FC = () => {
   const [dataStudentsInClass, setDataStudentsInClass] = useState<
     StudentDetail[]
   >([]);
+  const [dataAllStudents, setDataAllStudents] = useState<StudentDetail[]>([]);
   const [dataCourseInClass, setDataCourseInClass] = useState<CourseInClass[]>(
     []
   );
@@ -120,11 +121,15 @@ export const DetailKelasMangementSiswaPage: React.FC = () => {
     }
   };
 
-  const getNewStudents = async (majorCode: string) => {
+  const getAllStudents = async (majorCode: string) => {
     try {
-      const response = await studentService.getNewStudent(majorCode);
+      const response = await studentService.getAllStudent(
+        "not_registered",
+        majorCode,
+        dataClass?.name.split("-")[0]
+      );
       if (response.data && response.data.length > 0) {
-        // setDataStudentsInClass(response.data);
+        setDataAllStudents(response.data);
       }
     } catch (error) {
       console.error("Error fetching Student data:", error);
@@ -134,6 +139,7 @@ export const DetailKelasMangementSiswaPage: React.FC = () => {
   const getDataClass = async () => {
     if (id) {
       try {
+        setLoading(true);
         const response = await classService.getClassById(parseInt(id));
         const data = response.data;
         setDataClass(data);
@@ -142,7 +148,7 @@ export const DetailKelasMangementSiswaPage: React.FC = () => {
         setFormCourse({ ...formCourse, classId: data.id });
         await getCourse();
         await getTeacher();
-        await getNewStudents(data.majorCode);
+        await getAllStudents(data.majorCode);
       } catch (error) {
         const axiosError = error as AxiosError;
         if (axiosError.response?.status === 404) {
@@ -182,7 +188,7 @@ export const DetailKelasMangementSiswaPage: React.FC = () => {
           await getDataClass();
         }
       } catch (error) {
-        console.error("Error deleting mapel:", error);
+        console.error(error)
         Toast.fire({
           icon: "error",
           title: "Terjadi Kesalahan saat mengghapus mapel di kelas",
@@ -220,8 +226,6 @@ export const DetailKelasMangementSiswaPage: React.FC = () => {
         } is required.`;
       }
     });
-    console.log(newErrors);
-
     if (Object.keys(newErrors).length > 0) {
       setErrorsForms(newErrors);
       return;
@@ -229,6 +233,16 @@ export const DetailKelasMangementSiswaPage: React.FC = () => {
 
     try {
       setLoadingFormMapel(true);
+      const modalElement = document.getElementById(
+        "modalAddMatkul"
+      ) as HTMLDivElement | null;
+      if (modalElement) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const modalInstance = (window as any).bootstrap.Modal.getInstance(
+          modalElement
+        );
+        if (modalInstance) modalInstance.hide();
+      }
       const response = await courseInClassService.addCourse(formCourse);
       if (response.status === 201) {
         Toast.fire({
@@ -257,30 +271,27 @@ export const DetailKelasMangementSiswaPage: React.FC = () => {
         linkAdd=""
       />
 
-      {dataClass && (
-        <>
-          <CardInformasiDetailkelas dataClass={dataClass} loading={loading} />
-          <CardMatkulDetailKelas
-            data={dataCourseInClass}
-            loading={loading}
-            submitCourse={handleSubmitCourse}
-            deleteCourse={deleteCourseInclass}
-            loadingFormMapel={loadingFormMapel}
-            optionsCourse={optionsCourse}
-            optionsTeachers={optionsTeachers}
-            formCourse={formCourse}
-            errorsForms={errorsForms}
-            handleSelectChangeMapel={handleSelectChangeMapel}
-            handleInputChangeMapel={handleInputChangeMapel}
-          />
-          <CardDaftarSiswaDetailKelas
-            data={dataStudentsInClass}
-            searchTerm={searchTerm}
-            onChangeSearchTerm={changeSearchTerm}
-            loading={loading}
-          />
-        </>
-      )}
+      <CardInformasiDetailkelas dataClass={dataClass} loading={loading} />
+      <CardMatkulDetailKelas
+        data={dataCourseInClass}
+        loading={loading}
+        submitCourse={handleSubmitCourse}
+        deleteCourse={deleteCourseInclass}
+        loadingFormMapel={loadingFormMapel}
+        optionsCourse={optionsCourse}
+        optionsTeachers={optionsTeachers}
+        formCourse={formCourse}
+        errorsForms={errorsForms}
+        handleSelectChangeMapel={handleSelectChangeMapel}
+        handleInputChangeMapel={handleInputChangeMapel}
+      />
+      <CardDaftarSiswaDetailKelas
+        dataStudentsInClass={dataStudentsInClass}
+        dataAllStudents={dataAllStudents}
+        searchTerm={searchTerm}
+        onChangeSearchTerm={changeSearchTerm}
+        loading={loading}
+      />
     </>
   );
 };

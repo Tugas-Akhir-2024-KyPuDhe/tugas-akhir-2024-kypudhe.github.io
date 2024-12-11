@@ -190,6 +190,8 @@ export const CardMatkulDetailKelas: React.FC<CardMatkulProps> = ({
         id="modalAddMatkul"
         tabIndex={-1}
         aria-hidden="true"
+        data-bs-backdrop="static" 
+        data-bs-keyboard="false"
       >
         <div className="modal-dialog">
           <div className="modal-content">
@@ -354,7 +356,6 @@ export const CardMatkulDetailKelas: React.FC<CardMatkulProps> = ({
                   <button
                     className={`btn btn-primary border-0 bg-blue`}
                     type="button"
-                    data-bs-dismiss="modal"
                     onClick={() => submitCourse(formCourse)}
                     disabled={loadingFormMapel}
                   >
