@@ -111,7 +111,7 @@ export const Table: React.FC = () => {
           </button>
           <button
             className="btn btn-primary btn-sm me-2 text-light"
-            // onClick={() => navigate(`update/${row.id}`)}
+            onClick={() => navigate(`nilai/${row.id}`)}
             disabled={loading}
             id="tooltip-nilai"
           >

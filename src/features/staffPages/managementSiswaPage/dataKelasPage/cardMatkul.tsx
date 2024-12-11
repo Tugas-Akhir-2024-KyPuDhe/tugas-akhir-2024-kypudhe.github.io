@@ -6,7 +6,7 @@ import {
   CourseInClass,
   FormState,
 } from "../../../../interface/courseInClass.interface";
-import { FaPen, FaTrash } from "react-icons/fa6";
+import { FaPen, FaPlus, FaTrash } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { optionsDays } from "../../../../utils/optionsData";
 
@@ -154,137 +154,16 @@ export const CardMatkulDetailKelas: React.FC<CardMatkulProps> = ({
               />
             </div>
           </div>
-          <div className="col-12 col-lg-6">
-            <div className="form-group mb-3">
-              <label className="mb-2 fw-medium">Mata Pelajaran *</label>
-              <Select
-                options={optionsCourse}
-                value={optionsCourse.find(
-                  (option) => option.value === formCourse.courseCode
-                )}
-                onChange={(option) =>
-                  handleSelectChangeMapel("courseCode", option)
-                }
-                placeholder="Pilih Mapel yang Ditambah"
-                className="form-control-lg px-0 pt-0"
-                styles={{
-                  control: (baseStyles) => ({
-                    ...baseStyles,
-                    fontSize: "0.955rem",
-                    borderRadius: "8px",
-                  }),
-                  option: (provided) => ({
-                    ...provided,
-                    fontSize: "1rem",
-                  }),
-                }}
-              />
-              {errorsForms.courseCode && (
-                <div className="invalid-form">Mapel Masih kosong!</div>
-              )}
-            </div>
-          </div>
-          <div className="col-12 col-lg-6">
-            <div className="form-group mb-3">
-              <label className="mb-2 fw-medium">Guru Pengajar *</label>
-              <Select
-                options={optionsTeachers}
-                value={optionsTeachers.find(
-                  (option) =>
-                    option.value.toString() === formCourse.teacherId.toString()
-                )}
-                onChange={(option) =>
-                  handleSelectChangeMapel("teacherId", option)
-                }
-                placeholder="Pilih Guru Pengajar"
-                className="form-control-lg px-0 pt-0"
-                styles={{
-                  control: (baseStyles) => ({
-                    ...baseStyles,
-                    fontSize: "0.955rem",
-                    borderRadius: "8px",
-                  }),
-                  option: (provided) => ({
-                    ...provided,
-                    fontSize: "1rem",
-                  }),
-                }}
-              />
-              {errorsForms.teacherId && (
-                <div className="invalid-form">Guru Masih kosong!</div>
-              )}
-            </div>
-          </div>
-          <div className="col-12 col-lg-6">
-            <div className="form-group mb-3">
-              <label className="mb-2 fw-medium">Jadwal Hari *</label>
-              <Select
-                options={optionsDays}
-                value={optionsDays.find(
-                  (option) => option.value === formCourse.day
-                )}
-                onChange={(option) => handleSelectChangeMapel("day", option)}
-                placeholder="Pilih Jadwal Mengajar"
-                className="form-control-lg px-0 pt-0"
-                styles={{
-                  control: (baseStyles) => ({
-                    ...baseStyles,
-                    fontSize: "0.955rem",
-                    borderRadius: "8px",
-                  }),
-                  option: (provided) => ({
-                    ...provided,
-                    fontSize: "1rem",
-                  }),
-                }}
-              />
-              {errorsForms.day && (
-                <div className="invalid-form">Jadwa Hari Masih kosong!</div>
-              )}
-            </div>
-          </div>
-          <div className="col-6 col-lg-3">
-            <div className="form-group mb-3">
-              <label className="mb-2 fw-medium">Jam Mulai *</label>
-              <input
-                type="time"
-                name="timeStart"
-                className={`form-control`}
-                placeholder="Waktu Mulai.."
-                value={formCourse.timeStart}
-                onChange={handleInputChangeMapel}
-              />
-              {errorsForms.timeStart && (
-                <div className="invalid-form">Waktu Mulai Masih kosong!</div>
-              )}
-            </div>
-          </div>
-          <div className="col-6 col-lg-3">
-            <div className="form-group mb-3">
-              <label className="mb-2 fw-medium">Jam Mulai *</label>
-              <input
-                type="time"
-                name="timeEnd"
-                className={`form-control`}
-                placeholder="Waktu Selesai.."
-                value={formCourse.timeEnd}
-                onChange={handleInputChangeMapel}
-              />
-              {errorsForms.timeEnd && (
-                <div className="invalid-form">Waktu Selesai Masih kosong!</div>
-              )}
-            </div>
-          </div>
-          <div className="col-12 d-flex">
-            <button
-              className={`btn btn-primary border-0 bg-blue`}
-              type="button"
-              onClick={() => submitCourse(formCourse)}
-              disabled={loadingFormMapel}
-            >
-              {formCourse.id ? "Update" : "Tambah"}
-            </button>
-          </div>
+        </div>
+        <div className="col-12">
+          <button
+            type="button"
+            className="btn border-blue text-blue"
+            data-bs-toggle="modal"
+            data-bs-target="#modalAddMatkul"
+          >
+            <FaPlus className="me-2 fs-5" /> Tambah Matkul
+          </button>
         </div>
       </form>
       <StyleSheetManager>
@@ -304,6 +183,189 @@ export const CardMatkulDetailKelas: React.FC<CardMatkulProps> = ({
           }}
         />
       </StyleSheetManager>
+
+      {/* MODAL DETAIL DATA */}
+      <div
+        className="modal fade modal-lg p-0"
+        id="modalAddMatkul"
+        tabIndex={-1}
+        aria-hidden="true"
+      >
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="row mx-0 pb-4">
+              <div className="col p-2 text-start py-3 px-3">
+                <div className="fw-bold position-relative pb-2 fs-5">
+                  Tambah Mata Pelajaran
+                  <div
+                    style={{
+                      position: "absolute",
+                      left: 0,
+                      bottom: 0,
+                      width: "50px",
+                      height: "3px",
+                      backgroundColor: "var(--blue-color)",
+                    }}
+                  />
+                </div>
+              </div>
+              <div className="col-auto p-2 text-start py-3 px-3">
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+            </div>
+            <div className="modal-body py-0 pb-4">
+              <div className="row">
+                <div className="col-12 col-lg-6">
+                  <div className="form-group mb-3">
+                    <label className="mb-2 fw-medium">Mata Pelajaran *</label>
+                    <Select
+                      options={optionsCourse}
+                      value={optionsCourse.find(
+                        (option) => option.value === formCourse.courseCode
+                      )}
+                      onChange={(option) =>
+                        handleSelectChangeMapel("courseCode", option)
+                      }
+                      placeholder="Pilih Mapel yang Ditambah"
+                      className="form-control-lg px-0 pt-0"
+                      styles={{
+                        control: (baseStyles) => ({
+                          ...baseStyles,
+                          fontSize: "0.955rem",
+                          borderRadius: "8px",
+                        }),
+                        option: (provided) => ({
+                          ...provided,
+                          fontSize: "1rem",
+                        }),
+                      }}
+                    />
+                    {errorsForms.courseCode && (
+                      <div className="invalid-form">Mapel Masih kosong!</div>
+                    )}
+                  </div>
+                </div>
+                <div className="col-12 col-lg-6">
+                  <div className="form-group mb-3">
+                    <label className="mb-2 fw-medium">Guru Pengajar *</label>
+                    <Select
+                      options={optionsTeachers}
+                      value={optionsTeachers.find(
+                        (option) =>
+                          option.value.toString() ===
+                          formCourse.teacherId.toString()
+                      )}
+                      onChange={(option) =>
+                        handleSelectChangeMapel("teacherId", option)
+                      }
+                      placeholder="Pilih Guru Pengajar"
+                      className="form-control-lg px-0 pt-0"
+                      styles={{
+                        control: (baseStyles) => ({
+                          ...baseStyles,
+                          fontSize: "0.955rem",
+                          borderRadius: "8px",
+                        }),
+                        option: (provided) => ({
+                          ...provided,
+                          fontSize: "1rem",
+                        }),
+                      }}
+                    />
+                    {errorsForms.teacherId && (
+                      <div className="invalid-form">Guru Masih kosong!</div>
+                    )}
+                  </div>
+                </div>
+                <div className="col-12 col-lg-6">
+                  <div className="form-group mb-3">
+                    <label className="mb-2 fw-medium">Jadwal Hari *</label>
+                    <Select
+                      options={optionsDays}
+                      value={optionsDays.find(
+                        (option) => option.value === formCourse.day
+                      )}
+                      onChange={(option) =>
+                        handleSelectChangeMapel("day", option)
+                      }
+                      placeholder="Pilih Jadwal Mengajar"
+                      className="form-control-lg px-0 pt-0"
+                      styles={{
+                        control: (baseStyles) => ({
+                          ...baseStyles,
+                          fontSize: "0.955rem",
+                          borderRadius: "8px",
+                        }),
+                        option: (provided) => ({
+                          ...provided,
+                          fontSize: "1rem",
+                        }),
+                      }}
+                    />
+                    {errorsForms.day && (
+                      <div className="invalid-form">
+                        Jadwa Hari Masih kosong!
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div className="col-6 col-lg-3">
+                  <div className="form-group mb-3">
+                    <label className="mb-2 fw-medium">Jam Mulai *</label>
+                    <input
+                      type="time"
+                      name="timeStart"
+                      className={`form-control`}
+                      placeholder="Waktu Mulai.."
+                      value={formCourse.timeStart}
+                      onChange={handleInputChangeMapel}
+                    />
+                    {errorsForms.timeStart && (
+                      <div className="invalid-form">
+                        Waktu Mulai Masih kosong!
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div className="col-6 col-lg-3">
+                  <div className="form-group mb-3">
+                    <label className="mb-2 fw-medium">Jam Mulai *</label>
+                    <input
+                      type="time"
+                      name="timeEnd"
+                      className={`form-control`}
+                      placeholder="Waktu Selesai.."
+                      value={formCourse.timeEnd}
+                      onChange={handleInputChangeMapel}
+                    />
+                    {errorsForms.timeEnd && (
+                      <div className="invalid-form">
+                        Waktu Selesai Masih kosong!
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div className="col-12 d-flex">
+                  <button
+                    className={`btn btn-primary border-0 bg-blue`}
+                    type="button"
+                    data-bs-dismiss="modal"
+                    onClick={() => submitCourse(formCourse)}
+                    disabled={loadingFormMapel}
+                  >
+                    {formCourse.id ? "Update" : "Tambah"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

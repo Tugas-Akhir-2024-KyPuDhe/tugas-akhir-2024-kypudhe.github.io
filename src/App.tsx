@@ -44,6 +44,7 @@ import {
   FormMapelMangementSiswaPage,
   DataStaffMangementStaffPage,
   FormStaffMangementStaffPage,
+  DaftarKelasNilaiSiswaPage,
 } from "./pages";
 import { SideBar } from "./components/sidebar";
 import PrivateRoute from "./components/privateRoute";
@@ -65,7 +66,7 @@ function App() {
       ) : (
         <SideBar>
           <Routes>
-            {/* === Global */}
+            {/* #region | Global */}
             <Route path="*" element={<NotFoundPage />} />
             <Route path="/" element={<PrivateRoute Component={HomePage} />} />
             <Route
@@ -84,8 +85,9 @@ function App() {
               path="/berita/:id"
               element={<PrivateRoute Component={DetailArticlePage} />}
             />
+            {/* #endregion */}
 
-            {/* === Staff */}
+            {/* #region | Staff */}
             <Route
               path="/berita/tambah"
               element={<PrivateRoute Component={FormArticlePage} />}
@@ -222,8 +224,9 @@ function App() {
               path="/manajemen-staff/data-staff/update/:id"
               element={<PrivateRoute Component={FormStaffMangementStaffPage} />}
             />
+            {/* === #endregion */}
 
-            {/* === Teacher */}
+            {/* #region | Teacher */}
             <Route
               path="/guru/mata-pelajaran"
               element={<PrivateRoute Component={GuruMapelPage} />}
@@ -280,6 +283,11 @@ function App() {
               path="/pengelolaan-siswa/absensi-siswa/:id"
               element={<PrivateRoute Component={DetailAbsensiSiswaPage} />}
             />
+            <Route
+              path="/pengelolaan-siswa/daftar-kelas/nilai/:id"
+              element={<PrivateRoute Component={DaftarKelasNilaiSiswaPage} />}
+            />
+            {/* #endregion */}
 
             {/* #region | Student  */}
             <Route
