@@ -5,23 +5,26 @@ import StaffService from "../../../../services/staffService";
 import { CourseInClass } from "../../../../interface/courseInClass.interface";
 import { FaEye, FaListCheck, FaPenClip } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
+import { Tooltip } from "react-tooltip";
 
 export const Table: React.FC = () => {
-  const navigate = useNavigate()
-  const teacherService = StaffService()
+  const navigate = useNavigate();
+  const teacherService = StaffService();
   const [data, setData] = useState<CourseInClass[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false); // Add loading state
 
   const getData = async () => {
-    try { 
-      setLoading(true)
-      const response = await teacherService.getClassOfTeacher("198311182008042001");
+    try {
+      setLoading(true);
+      const response = await teacherService.getClassOfTeacher(
+        "198311182008042001"
+      );
       setData(response.data.CourseInClass);
     } catch (error) {
       console.error("Error fetching data:", error);
-    }finally{
-      setLoading(false)
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -63,7 +66,7 @@ export const Table: React.FC = () => {
     {
       name: "Kelas",
       selector: (row: CourseInClass) => row.class.name,
-      width: "100px"
+      width: "120px",
     },
     {
       name: "Mata Pelajaran",
@@ -72,17 +75,17 @@ export const Table: React.FC = () => {
     {
       name: "Hari",
       selector: (row: CourseInClass) => row.day,
-      width: "100px"
+      width: "120px",
     },
     {
       name: "Jam Mulai",
       selector: (row: CourseInClass) => row.timeStart,
-      width: "100px"
+      width: "120px",
     },
     {
       name: "Jam Selesai",
       selector: (row: CourseInClass) => row.timeEnd,
-      width: "100px"
+      width: "120px",
     },
     {
       name: "Action",
@@ -91,26 +94,33 @@ export const Table: React.FC = () => {
           <button
             className="btn btn-info btn-sm border-info me-2 text-light"
             onClick={() => navigate(`update/${row.id}`)}
-            disabled={loading} 
+            disabled={loading}
+            id="tooltip-detail"
           >
-              <FaEye className="" style={{ fontSize: "0.8rem" }}/>
+            <FaEye className="" style={{ fontSize: "0.8rem" }} />
+            <Tooltip anchorSelect="#tooltip-detail" className="text-light" style={{ backgroundColor: "var(--blue-color)" }} content="Detail" />
           </button>
           <button
             className="btn btn-success btn-sm me-2 text-light"
             // onClick={() => navigate(`update/${row.id}`)}
-            disabled={loading} 
+            disabled={loading}
+            id="tooltip-absensi"
           >
-              <FaListCheck className="" style={{ fontSize: "0.8rem" }}/>
+            <FaListCheck className="" style={{ fontSize: "0.8rem" }} />
+            <Tooltip anchorSelect="#tooltip-absensi" className="text-light" style={{ backgroundColor: "var(--blue-color)" }} content="Absensi" />
           </button>
           <button
             className="btn btn-primary btn-sm me-2 text-light"
             // onClick={() => navigate(`update/${row.id}`)}
-            disabled={loading} 
+            disabled={loading}
+            id="tooltip-nilai"
           >
-              <FaPenClip className="" style={{ fontSize: "0.8rem" }}/>
+            <FaPenClip className="" style={{ fontSize: "0.8rem" }} />
+            <Tooltip anchorSelect="#tooltip-nilai" className="text-light" style={{ backgroundColor: "var(--blue-color)" }} content="Nilai Siswa" />
           </button>
         </>
       ),
+      width: "150px",
     },
   ];
 
