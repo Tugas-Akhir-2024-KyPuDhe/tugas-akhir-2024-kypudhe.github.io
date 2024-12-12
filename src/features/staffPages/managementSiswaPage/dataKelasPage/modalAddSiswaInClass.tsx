@@ -16,6 +16,9 @@ export const ModalAddStudentInClass: React.FC<ModalAddStudentInClassProps> = ({
   dataClass,
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedStudents, setSelectedStudents] = useState<StudentDetail[]>([]);
+
+  // Filter data based on search term
   const filterDataStudent = dataAllStudents.filter((student) =>
     student.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -63,13 +66,30 @@ export const ModalAddStudentInClass: React.FC<ModalAddStudentInClassProps> = ({
             style={{ width: "1.1rem", height: "1.1rem" }}
             className="form-check-input"
             type="checkbox"
-            value={row.id}
+            checked={selectedStudents.some((student) => student.nis === row.nis)}
+            onChange={() => handleSelectStudent(row)}
           />
         </div>
       ),
       width: "80px",
     },
   ];
+
+  const handleSelectStudent = (student: StudentDetail) => {
+    setSelectedStudents((prevSelected) => {
+      const isSelected = prevSelected.some((s) => s.nis === student.nis);
+      if (isSelected) {
+        return prevSelected.filter((s) => s.nis !== student.nis);
+      } else {
+        return [...prevSelected, student];
+      }
+    });
+  };
+
+  const handleSubmit = () => {
+    const selectedNIS = selectedStudents.map((student) => student.nis);
+    console.log(selectedNIS);
+  };
 
   return (
     <div
@@ -115,7 +135,8 @@ export const ModalAddStudentInClass: React.FC<ModalAddStudentInClassProps> = ({
                       <span className="fw-bold">{dataAllStudents.length}</span>
                     </div>
                     <div className="">
-                      Dipilih : <span className="fw-bold">0</span>
+                      Dipilih :{" "}
+                      <span className="fw-bold">{selectedStudents.length}</span>
                     </div>
                   </div>
                   <div className="col-6 col-lg-5">
@@ -188,7 +209,10 @@ export const ModalAddStudentInClass: React.FC<ModalAddStudentInClassProps> = ({
                     </div>
                     <div className="row mb-3">
                       <div className="col-12">
-                        <button className="btn btn-primary border-0 bg-blue w-100">
+                        <button
+                          className="btn btn-primary border-0 bg-blue w-100"
+                          onClick={handleSubmit}
+                        >
                           Submit
                         </button>
                       </div>

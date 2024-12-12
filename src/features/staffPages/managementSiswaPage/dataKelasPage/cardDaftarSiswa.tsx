@@ -137,7 +137,7 @@ export const CardDaftarSiswaDetailKelas: React.FC<DaftarSiswaProps> = ({
             />
           </div>
         </div>
-        <div className="col-6 col-lg-9 col-md-3">
+        <div className="col-12 col-lg-9">
           <button className="btn border-success text-success me-3">
             Export to Excel
           </button>
@@ -155,7 +155,7 @@ export const CardDaftarSiswaDetailKelas: React.FC<DaftarSiswaProps> = ({
             keySearch=""
           />
         </div>
-        <div className="col-6 col-lg-3 col-md-3">
+        <div className="col-12 col-lg-3">
           <input
             type="text"
             className="form-control border-dark"
