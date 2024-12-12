@@ -41,7 +41,6 @@ export const DetailKelasMangementSiswaPage: React.FC = () => {
   const [dataTeachers, setdataTeachers] = useState<StaffDetail[]>([]);
   const [dataClass, setDataClass] = useState<Class>();
 
-  const [searchTerm, setSearchTerm] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [loadingFormMapel, setLoadingFormMapel] = useState<boolean>(false);
   const [errorsForms, setErrorsForms] = useState<{ [key: string]: string }>({});
@@ -188,7 +187,7 @@ export const DetailKelasMangementSiswaPage: React.FC = () => {
           await getDataClass();
         }
       } catch (error) {
-        console.error(error)
+        console.error(error);
         Toast.fire({
           icon: "error",
           title: "Terjadi Kesalahan saat mengghapus mapel di kelas",
@@ -198,10 +197,6 @@ export const DetailKelasMangementSiswaPage: React.FC = () => {
         setLoadingFormMapel(false);
       }
     }
-  };
-
-  const changeSearchTerm = (data: string) => {
-    setSearchTerm(data);
   };
 
   useEffect(() => {
@@ -288,8 +283,7 @@ export const DetailKelasMangementSiswaPage: React.FC = () => {
       <CardDaftarSiswaDetailKelas
         dataStudentsInClass={dataStudentsInClass}
         dataAllStudents={dataAllStudents}
-        searchTerm={searchTerm}
-        onChangeSearchTerm={changeSearchTerm}
+        dataClass={dataClass!}
         loading={loading}
       />
     </>
