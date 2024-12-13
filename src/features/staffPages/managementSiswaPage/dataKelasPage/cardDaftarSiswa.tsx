@@ -7,6 +7,7 @@ import { ModalAddStudentInClass } from "./modalAddSiswaInClass";
 import { useNavigate } from "react-router-dom";
 
 interface DaftarSiswaProps {
+  onRefreshData: () => void;
   dataStudentsInClass: StudentDetail[];
   dataAllStudents: StudentDetail[];
   dataClass: Class;
@@ -14,6 +15,7 @@ interface DaftarSiswaProps {
 }
 
 export const CardDaftarSiswaDetailKelas: React.FC<DaftarSiswaProps> = ({
+  onRefreshData,
   dataStudentsInClass,
   dataAllStudents,
   dataClass,
@@ -149,6 +151,7 @@ export const CardDaftarSiswaDetailKelas: React.FC<DaftarSiswaProps> = ({
             <FaPlus className="me-2 fs-5" /> Tambah Siswa
           </button>
           <ModalAddStudentInClass
+            onRefreshData={onRefreshData}
             dataAllStudents={dataAllStudents}
             dataStudentsInClass={dataStudentsInClass}
             dataClass={dataClass}
@@ -174,6 +177,7 @@ export const CardDaftarSiswaDetailKelas: React.FC<DaftarSiswaProps> = ({
       <DataTable
         columns={columnsStudentInClass}
         data={filterDataStudentInClass}
+        selectableRows
         pagination
         highlightOnHover
         customStyles={{

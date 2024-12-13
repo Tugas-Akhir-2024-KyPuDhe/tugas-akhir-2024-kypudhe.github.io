@@ -7,6 +7,7 @@ import {
   ResponseAction,
 } from "../interface/studentClass.interface";
 import { useNavigate } from "react-router-dom";
+import { PayloadInsertStundets } from "../interface/student.interface";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 const ClassStudentService = () => {
@@ -100,11 +101,34 @@ const ClassStudentService = () => {
     }
   };
 
+  const insertStudentInClass = async (
+    data: PayloadInsertStundets
+  ): Promise<ResponseAction> => {
+    try {
+      const response = await axios.put<ResponseAction>(
+        `${apiUrl}/api/class/insert-stundent-inclass/`,
+        data,
+        {
+          headers: {
+            authorization: `Bearer ${userLoginCookie?.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        handleUnauthorized(error.response?.status || 0);
+      }
+      throw error;
+    }
+  };
+
   return {
     createClass,
     updateClass,
     getAllClass,
     getClassById,
+    insertStudentInClass,
   };
 };
 

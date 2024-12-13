@@ -281,6 +281,7 @@ export const DetailKelasMangementSiswaPage: React.FC = () => {
         handleInputChangeMapel={handleInputChangeMapel}
       />
       <CardDaftarSiswaDetailKelas
+        onRefreshData={getDataClass}
         dataStudentsInClass={dataStudentsInClass}
         dataAllStudents={dataAllStudents}
         dataClass={dataClass!}

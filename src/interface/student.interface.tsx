@@ -50,3 +50,8 @@ export interface ParentOfStudent {
     message: string;
     data: StudentDetail[];
   }
+
+  export interface PayloadInsertStundets {
+    id: number;
+    collectionNis: string[];
+  }

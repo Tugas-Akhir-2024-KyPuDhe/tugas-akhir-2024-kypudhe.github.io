@@ -1,23 +1,37 @@
 import React, { useState } from "react";
 import DataTable from "react-data-table-component";
-import { StudentDetail } from "../../../../interface/student.interface";
+import {
+  PayloadInsertStundets,
+  StudentDetail,
+} from "../../../../interface/student.interface";
 import { Class } from "../../../../interface/studentClass.interface";
+import ClassStudentService from "../../../../services/classStudentService";
+import { showConfirmationDialog, Toast } from "../../../../utils/myFunctions";
 
 interface ModalAddStudentInClassProps {
+  onRefreshData: () => void;
   dataAllStudents: StudentDetail[];
   dataStudentsInClass: StudentDetail[];
   dataClass: Class;
   keySearch: string;
 }
 
+interface selectedData {
+  allSelected: boolean;
+  selectedCount: number;
+  selectedRows: StudentDetail[];
+}
+
 export const ModalAddStudentInClass: React.FC<ModalAddStudentInClassProps> = ({
+  onRefreshData,
   dataAllStudents,
   dataStudentsInClass,
   dataClass,
 }) => {
+  const classService = ClassStudentService();
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedStudents, setSelectedStudents] = useState<StudentDetail[]>([]);
-
+  const [selectedData, setSelectedData] = useState<StudentDetail[]>([]);
+  const [loadingSubmit, setLoadingSubmit] = useState(false);
   // Filter data based on search term
   const filterDataStudent = dataAllStudents.filter((student) =>
     student.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -58,37 +72,67 @@ export const ModalAddStudentInClass: React.FC<ModalAddStudentInClassProps> = ({
       sortable: true,
       width: "120px",
     },
-    {
-      name: "Pilih",
-      cell: (row: StudentDetail) => (
-        <div className="form-check">
-          <input
-            style={{ width: "1.1rem", height: "1.1rem" }}
-            className="form-check-input"
-            type="checkbox"
-            checked={selectedStudents.some((student) => student.nis === row.nis)}
-            onChange={() => handleSelectStudent(row)}
-          />
-        </div>
-      ),
-      width: "80px",
-    },
   ];
 
-  const handleSelectStudent = (student: StudentDetail) => {
-    setSelectedStudents((prevSelected) => {
-      const isSelected = prevSelected.some((s) => s.nis === student.nis);
-      if (isSelected) {
-        return prevSelected.filter((s) => s.nis !== student.nis);
-      } else {
-        return [...prevSelected, student];
-      }
-    });
+  const handleChange = (selectedRows: selectedData) => {
+    setSelectedData(selectedRows.selectedRows);
   };
 
-  const handleSubmit = () => {
-    const selectedNIS = selectedStudents.map((student) => student.nis);
-    console.log(selectedNIS);
+  const handleSubmit = async () => {
+    const collectionNis: string[] = [];
+    selectedData.forEach((data) => {
+      collectionNis.push(data.nis);
+    });
+
+    console.log(collectionNis);
+
+    if (collectionNis.length < 1) {
+      return Toast.fire({
+        icon: "error",
+        title: `Silahkan pilih siswa minimal 1`,
+        timer: 3000,
+      });
+    }
+
+    const payload: PayloadInsertStundets = {
+      id: dataClass.id,
+      collectionNis: collectionNis,
+    };
+    try {
+      setLoadingSubmit(true);
+      const result = await showConfirmationDialog({
+        title: "Apakah data siswa yang dipilih sudah sesuai?",
+        icon: "warning",
+        confirmButtonText: "Ya, Sesuai!",
+        cancelButtonText: "Cek Lagi",
+      });
+
+      if (result.isConfirmed) {
+        const response = await classService.insertStudentInClass(payload);
+        if (response.status === 201) {
+          const modalElement = document.getElementById(
+            "modalAddStudentInClass"
+          ) as HTMLDivElement | null;
+          if (modalElement) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const modalInstance = (window as any).bootstrap.Modal.getInstance(
+              modalElement
+            );
+            if (modalInstance) modalInstance.hide();
+          }
+          onRefreshData();
+          Toast.fire({
+            icon: "success",
+            title: `Siswa berhasil ditambah kedalam kelas`,
+            timer: 4500,
+          });
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoadingSubmit(false);
+    }
   };
 
   return (
@@ -99,7 +143,27 @@ export const ModalAddStudentInClass: React.FC<ModalAddStudentInClassProps> = ({
       aria-hidden="true"
     >
       <div className="modal-dialog">
-        <div className="modal-content">
+        <div className="modal-content position-relative">
+          {loadingSubmit && (
+            <div
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                backgroundColor: "rgba(255, 255, 255, 0.7)",
+                zIndex: 9999,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+            </div>
+          )}
           <div className="row mx-0 pb-4">
             <div className="col p-2 text-start py-3 px-3">
               <div className="fw-bold position-relative pb-2 fs-5">
@@ -135,8 +199,8 @@ export const ModalAddStudentInClass: React.FC<ModalAddStudentInClassProps> = ({
                       <span className="fw-bold">{dataAllStudents.length}</span>
                     </div>
                     <div className="">
-                      Dipilih :{" "}
-                      <span className="fw-bold">{selectedStudents.length}</span>
+                      Diplih :{" "}
+                      <span className="fw-bold">{selectedData.length}</span>
                     </div>
                   </div>
                   <div className="col-6 col-lg-5">
@@ -154,6 +218,8 @@ export const ModalAddStudentInClass: React.FC<ModalAddStudentInClassProps> = ({
                   columns={columnsStudent}
                   data={filterDataStudent}
                   pagination
+                  selectableRows
+                  onSelectedRowsChange={handleChange}
                   highlightOnHover
                   customStyles={{
                     rows: {
