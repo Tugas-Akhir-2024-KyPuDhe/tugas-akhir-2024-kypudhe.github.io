@@ -3,20 +3,31 @@ import DataTable from "react-data-table-component";
 import { StyleSheetManager } from "styled-components";
 import StaffService from "../../../../../services/staffService";
 import { CourseInClass } from "../../../../../interface/courseInClass.interface";
+import { decodeToken } from "../../../../../utils/myFunctions";
+import useCookie from "react-use-cookie";
+import { useParams } from "react-router-dom";
+import { StudentDetail } from "../../../../../interface/student.interface";
 
 export const Table: React.FC = () => {
   const teacherService = StaffService();
-  const [data, setData] = useState<CourseInClass[]>([]);
+  const [data, setData] = useState<CourseInClass>();
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false); // Add loading state
+  const [cookieLogin] = useCookie("userLoginCookie");
+  const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
+  const { id } = useParams<{ id: string }>();
 
   const getData = async () => {
+    const dtoken = decodeToken(userLoginCookie.token);
     try {
       setLoading(true);
       const response = await teacherService.getClassOfTeacher(
-        "198311182008042001"
+        dtoken.username,
+        id
       );
-      setData(response.data.CourseInClass);
+      console.log(response);
+
+      setData(response.data.CourseInClass[0]);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -56,103 +67,66 @@ export const Table: React.FC = () => {
   const columns = [
     {
       name: "No",
-      cell: (_row: CourseInClass, index: number) => index + 1,
+      cell: (_row: StudentDetail, index: number) => index + 1,
       width: "50px",
     },
     {
       name: "Nim",
-      selector: (row: CourseInClass) => row.class.name,
+      selector: (row: StudentDetail) => row.nis,
       width: "120px",
     },
     {
       name: "Nama",
-      selector: (row: CourseInClass) => row.courseDetail.name,
+      selector: (row: StudentDetail) => row.name,
     },
     {
       name: "Tugas",
-      selector: (row: CourseInClass) => row.day,
-      cell: (row: CourseInClass) => (
+      selector: (row: StudentDetail) => row.id,
+      cell: (row: StudentDetail) => (
         <>
-          <input type="text" className="form-control text-center" value={row.id} />
+          <input
+            type="text"
+            className="form-control text-center"
+            value={row.id}
+          />
         </>
       ),
       width: "100px",
     },
     {
       name: "UTS",
-      selector: (row: CourseInClass) => row.timeStart,
-      cell: (row: CourseInClass) => (
+      selector: (row: StudentDetail) => row.id,
+      cell: (row: StudentDetail) => (
         <>
-          <input type="text" className="form-control text-center" value={row.id} />
+          <input
+            type="text"
+            className="form-control text-center"
+            value={row.id}
+          />
         </>
       ),
       width: "100px",
     },
     {
       name: "UAS",
-      selector: (row: CourseInClass) => row.timeEnd,
-      cell: (row: CourseInClass) => (
+      selector: (row: StudentDetail) => row.id,
+      cell: (row: StudentDetail) => (
         <>
-          <input type="text" className="form-control text-center" value={row.id} />
+          <input
+            type="text"
+            className="form-control text-center"
+            value={row.id}
+          />
         </>
       ),
       width: "100px",
     },
-    // {
-    //   name: "Action",
-    //   cell: (row: CourseInClass) => (
-    //     <>
-    //       <button
-    //         className="btn btn-info btn-sm border-info me-2 text-light"
-    //         onClick={() => navigate(`update/${row.id}`)}
-    //         disabled={loading}
-    //         id="tooltip-detail"
-    //       >
-    //         <FaEye className="" style={{ fontSize: "0.8rem" }} />
-    //         <Tooltip
-    //           anchorSelect="#tooltip-detail"
-    //           className="text-light"
-    //           style={{ backgroundColor: "var(--blue-color)" }}
-    //           content="Detail"
-    //         />
-    //       </button>
-    //       <button
-    //         className="btn btn-success btn-sm me-2 text-light"
-    //         // onClick={() => navigate(`update/${row.id}`)}
-    //         disabled={loading}
-    //         id="tooltip-absensi"
-    //       >
-    //         <FaListCheck className="" style={{ fontSize: "0.8rem" }} />
-    //         <Tooltip
-    //           anchorSelect="#tooltip-absensi"
-    //           className="text-light"
-    //           style={{ backgroundColor: "var(--blue-color)" }}
-    //           content="Absensi"
-    //         />
-    //       </button>
-    //       <button
-    //         className="btn btn-primary btn-sm me-2 text-light"
-    //         onClick={() => navigate(`nilai/${row.id}`)}
-    //         disabled={loading}
-    //         id="tooltip-nilai"
-    //       >
-    //         <FaPenClip className="" style={{ fontSize: "0.8rem" }} />
-    //         <Tooltip
-    //           anchorSelect="#tooltip-nilai"
-    //           className="text-light"
-    //           style={{ backgroundColor: "var(--blue-color)" }}
-    //           content="Nilai Siswa"
-    //         />
-    //       </button>
-    //     </>
-    //   ),
-    //   width: "150px",
-    // },
   ];
 
-  const filteredData = data?.filter((dt) =>
-    dt.courseDetail.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredData =
+    data?.class.student.filter((dt) =>
+      dt.name.toLowerCase().includes(searchTerm.toLowerCase())
+    ) || [];
 
   useEffect(() => {
     getData();
@@ -204,20 +178,23 @@ export const Table: React.FC = () => {
             <div className="row mb-3">
               <div className="col-2 fw-medium">Nama Kelas</div>
               <div className="col-auto">:</div>
-              {/* <div className="col-9 fw-medium">{formData.name}</div> */}
-              <div className="col-9 fw-medium">X-RPL-1</div>
+              <div className="col-9 fw-medium">{data && data.class.name}</div>
             </div>
             <div className="row mb-3">
               <div className="col-2 fw-medium">Mata Pelajaran</div>
               <div className="col-auto">:</div>
-              {/* <div className="col-9 fw-medium">{formData.description}</div> */}
-              <div className="col-9 fw-medium">Matematika</div>
+              <div className="col-9 fw-medium">
+                {data && data.courseDetail.name}
+              </div>
             </div>
             <div className="row mb-3">
               <div className="col-2 fw-medium">Jadwal</div>
               <div className="col-auto">:</div>
               {/* <div className="col-9 fw-medium">{formData.prioritas}</div> */}
-              <div className="col-9 fw-medium">Senin, 09.00-10.00</div>
+              <div className="col-9 fw-medium">
+                {data && data.day}, {data && data.timeStart} -{" "}
+                {data && data.timeEnd}
+              </div>
             </div>
           </div>
         </div>
@@ -270,7 +247,7 @@ export const Table: React.FC = () => {
             </button>
           </div>
           <div className="col-6 col-lg-3 col-md-3">
-            <input  
+            <input
               type="text"
               className="form-control border-dark"
               placeholder="Search.."
@@ -282,14 +259,14 @@ export const Table: React.FC = () => {
         </div>
         <div className="col-12">
           <div className="pt-2">
-            Total : <span className="fw-bold">{data.length}</span>
+            {/* Total : <span className="fw-bold">{data.length}</span> */}
           </div>
         </div>
 
         <StyleSheetManager>
           <DataTable
             columns={columns}
-            data={searchTerm ? filteredData : data}
+            data={searchTerm ? filteredData : data?.class.student || []}
             pagination
             highlightOnHover
             customStyles={{

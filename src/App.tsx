@@ -252,15 +252,15 @@ function App() {
               element={<PrivateRoute Component={FormDaftarSiswaPage} />}
             />
             <Route
-              path="/pengelolaan-siswa/daftar-kelas"
+              path="/guru/kelas-saya"
               element={<PrivateRoute Component={DaftarKelasPage} />}
             />
             <Route
-              path="/pengelolaan-siswa/daftar-kelas/tambah"
+              path="/guru/kelas-saya/tambah"
               element={<PrivateRoute Component={FormDaftarKelasPage} />}
             />
             <Route
-              path="/pengelolaan-siswa/daftar-kelas/update/:id"
+              path="/guru/kelas-saya/update/:id"
               element={<PrivateRoute Component={FormDaftarKelasPage} />}
             />
             <Route
@@ -284,7 +284,7 @@ function App() {
               element={<PrivateRoute Component={DetailAbsensiSiswaPage} />}
             />
             <Route
-              path="/pengelolaan-siswa/daftar-kelas/nilai/:id"
+              path="/guru/kelas-saya/nilai/:id"
               element={<PrivateRoute Component={DaftarKelasNilaiSiswaPage} />}
             />
             {/* #endregion */}

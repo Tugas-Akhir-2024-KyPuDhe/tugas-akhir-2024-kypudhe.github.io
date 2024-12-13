@@ -2,6 +2,7 @@ import React, { ReactNode, useState, useLayoutEffect, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
   FaBars,
+  FaBookOpenReader,
   FaCircle,
   FaFileLines,
   FaGlobe,
@@ -435,6 +436,37 @@ export const ListMenu = () => {
             Mata Pelajaran
           </MenuItem>
 
+          <MenuItem
+              onClick={() => handleMenuClick("/guru/kelas-saya")}
+              icon={<FaBookOpenReader />}
+              style={{
+                position: "relative",
+                backgroundColor:
+                  selectedMenu === "/guru/kelas-saya"
+                    ? "#E5EAF2"
+                    : "",
+              }}
+              className={`fw-medium ${
+                selectedMenu === "/guru/kelas-saya"
+                  ? "text-blue"
+                  : "text-dark-soft"
+              }`}
+            >
+              {selectedMenu === "/guru/kelas-saya" && (
+                <div
+                  style={{
+                    position: "absolute",
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                    width: "4px",
+                    backgroundColor: "var(--blue-color)",
+                  }}
+                />
+              )}
+              Kelas Saya
+            </MenuItem>
+
           <SubMenu
             icon={<FaFileLines />}
             label="Pengelolaan Siswa"
@@ -508,22 +540,22 @@ export const ListMenu = () => {
               Daftar Siswa
             </MenuItem>
             <MenuItem
-              onClick={() => handleMenuClick("/pengelolaan-siswa/daftar-kelas")}
+              onClick={() => handleMenuClick("/guru/kelas-saya")}
               icon={<FaCircle style={{ fontSize: "8px" }} />}
               style={{
                 position: "relative",
                 backgroundColor:
-                  selectedMenu === "/pengelolaan-siswa/daftar-kelas"
+                  selectedMenu === "/guru/kelas-saya"
                     ? "#E5EAF2"
                     : "",
               }}
               className={`fw-medium ${
-                selectedMenu === "/pengelolaan-siswa/daftar-kelas"
+                selectedMenu === "/guru/kelas-saya"
                   ? "text-blue"
                   : "text-dark-soft"
               }`}
             >
-              {selectedMenu === "/pengelolaan-siswa/daftar-kelas" && (
+              {selectedMenu === "/guru/kelas-saya" && (
                 <div
                   style={{
                     position: "absolute",

@@ -6,6 +6,8 @@ import { CourseInClass } from "../../../../interface/courseInClass.interface";
 import { FaEye, FaListCheck, FaPenClip } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { Tooltip } from "react-tooltip";
+import useCookie from "react-use-cookie";
+import { decodeToken } from "../../../../utils/myFunctions";
 
 export const Table: React.FC = () => {
   const navigate = useNavigate();
@@ -13,13 +15,15 @@ export const Table: React.FC = () => {
   const [data, setData] = useState<CourseInClass[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false); // Add loading state
+  const [cookieLogin] = useCookie("userLoginCookie");
+  const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
 
   const getData = async () => {
+    const dtoken = decodeToken(userLoginCookie.token);
+
     try {
       setLoading(true);
-      const response = await teacherService.getClassOfTeacher(
-        "198311182008042001"
-      );
+      const response = await teacherService.getClassOfTeacher(dtoken.username);
       setData(response.data.CourseInClass);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -98,7 +102,12 @@ export const Table: React.FC = () => {
             id="tooltip-detail"
           >
             <FaEye className="" style={{ fontSize: "0.8rem" }} />
-            <Tooltip anchorSelect="#tooltip-detail" className="text-light" style={{ backgroundColor: "var(--blue-color)" }} content="Detail" />
+            <Tooltip
+              anchorSelect="#tooltip-detail"
+              className="text-light"
+              style={{ backgroundColor: "var(--blue-color)" }}
+              content="Detail"
+            />
           </button>
           <button
             className="btn btn-success btn-sm me-2 text-light"
@@ -107,7 +116,12 @@ export const Table: React.FC = () => {
             id="tooltip-absensi"
           >
             <FaListCheck className="" style={{ fontSize: "0.8rem" }} />
-            <Tooltip anchorSelect="#tooltip-absensi" className="text-light" style={{ backgroundColor: "var(--blue-color)" }} content="Absensi" />
+            <Tooltip
+              anchorSelect="#tooltip-absensi"
+              className="text-light"
+              style={{ backgroundColor: "var(--blue-color)" }}
+              content="Absensi"
+            />
           </button>
           <button
             className="btn btn-primary btn-sm me-2 text-light"
@@ -116,7 +130,12 @@ export const Table: React.FC = () => {
             id="tooltip-nilai"
           >
             <FaPenClip className="" style={{ fontSize: "0.8rem" }} />
-            <Tooltip anchorSelect="#tooltip-nilai" className="text-light" style={{ backgroundColor: "var(--blue-color)" }} content="Nilai Siswa" />
+            <Tooltip
+              anchorSelect="#tooltip-nilai"
+              className="text-light"
+              style={{ backgroundColor: "var(--blue-color)" }}
+              content="Nilai Siswa"
+            />
           </button>
         </>
       ),

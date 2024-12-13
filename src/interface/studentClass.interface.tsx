@@ -31,26 +31,17 @@ export interface Class {
   createdAt: string;
   updatedAt: string;
   homeRoomTeacher: StaffDetails;
-  student: StudentDetail[]
-  CourseInClass?: CourseInClass[]
+  student: StudentDetail[];
+  CourseInClass?: CourseInClass[];
 }
 
 export interface GetAllClassResponse {
-  status: number,
+  status: number;
   message: string;
   data: Class[];
 }
 export interface GetClassDetailResponse {
-  status: number,
+  status: number;
   message: string;
   data: Class;
 }
-
-
-
-
-
-
-
-
-

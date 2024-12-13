@@ -5,7 +5,6 @@ import { Class } from "./studentClass.interface";
 export interface CourseInClass {
   id: number;
   uuid: string;
-  course: Course;
   teacher: StaffDetail;
   class: Class;
   day: string;
