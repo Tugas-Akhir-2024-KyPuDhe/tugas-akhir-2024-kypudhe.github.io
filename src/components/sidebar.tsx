@@ -96,6 +96,11 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
         <div style={{ display: "flex", height: "100%", minHeight: "400px" }}>
           {isMobile ? (
             <Sidebar
+              rootStyles={{
+                position: "sticky",
+                top: 0,
+                height: "100vh",
+              }}
               backgroundColor="#fff"
               transitionDuration={600}
               onBackdropClick={() => setMobileToggled(false)}
@@ -112,6 +117,9 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
               transitionDuration={600}
               style={{ minHeight: "100vh" }}
               rootStyles={{
+                position: "sticky",
+                top: 0,
+                height: "100vh",
                 [`.${sidebarClasses.container}`]: {
                   fixed: "top",
                   height: "100vh",
@@ -124,7 +132,7 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
           )}
           <main style={{ width: "100%" }}>
             <nav
-              className="navbar py-3 pe-4 shadow-sm"
+              className="navbar py-3 pe-4 sticky-top shadow-sm"
               style={{ backgroundColor: "#fff" }}
             >
               <div className="container-fluid">
@@ -437,35 +445,33 @@ export const ListMenu = () => {
           </MenuItem>
 
           <MenuItem
-              onClick={() => handleMenuClick("/guru/kelas-saya")}
-              icon={<FaBookOpenReader />}
-              style={{
-                position: "relative",
-                backgroundColor:
-                  selectedMenu === "/guru/kelas-saya"
-                    ? "#E5EAF2"
-                    : "",
-              }}
-              className={`fw-medium ${
-                selectedMenu === "/guru/kelas-saya"
-                  ? "text-blue"
-                  : "text-dark-soft"
-              }`}
-            >
-              {selectedMenu === "/guru/kelas-saya" && (
-                <div
-                  style={{
-                    position: "absolute",
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
-                    width: "4px",
-                    backgroundColor: "var(--blue-color)",
-                  }}
-                />
-              )}
-              Kelas Saya
-            </MenuItem>
+            onClick={() => handleMenuClick("/guru/kelas-saya")}
+            icon={<FaBookOpenReader />}
+            style={{
+              position: "relative",
+              backgroundColor:
+                selectedMenu === "/guru/kelas-saya" ? "#E5EAF2" : "",
+            }}
+            className={`fw-medium ${
+              selectedMenu === "/guru/kelas-saya"
+                ? "text-blue"
+                : "text-dark-soft"
+            }`}
+          >
+            {selectedMenu === "/guru/kelas-saya" && (
+              <div
+                style={{
+                  position: "absolute",
+                  right: 0,
+                  top: 0,
+                  bottom: 0,
+                  width: "4px",
+                  backgroundColor: "var(--blue-color)",
+                }}
+              />
+            )}
+            Kelas Saya
+          </MenuItem>
 
           <SubMenu
             icon={<FaFileLines />}
@@ -545,9 +551,7 @@ export const ListMenu = () => {
               style={{
                 position: "relative",
                 backgroundColor:
-                  selectedMenu === "/guru/kelas-saya"
-                    ? "#E5EAF2"
-                    : "",
+                  selectedMenu === "/guru/kelas-saya" ? "#E5EAF2" : "",
               }}
               className={`fw-medium ${
                 selectedMenu === "/guru/kelas-saya"
