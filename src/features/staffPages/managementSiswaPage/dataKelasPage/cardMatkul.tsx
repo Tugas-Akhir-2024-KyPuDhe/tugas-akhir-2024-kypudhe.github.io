@@ -336,7 +336,7 @@ export const CardMatkulDetailKelas: React.FC<CardMatkulProps> = ({
                 </div>
                 <div className="col-6 col-lg-3">
                   <div className="form-group mb-3">
-                    <label className="mb-2 fw-medium">Jam Mulai *</label>
+                    <label className="mb-2 fw-medium">Jam Selesai *</label>
                     <input
                       type="time"
                       name="timeEnd"

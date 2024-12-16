@@ -1,4 +1,4 @@
-import { FaCircle } from "react-icons/fa6";
+// import { FaCircle } from "react-icons/fa6";
 import Swal from "sweetalert2";
 
 export const Toast = Swal.mixin({
@@ -89,13 +89,11 @@ export const convertStartEndYear = (startYear: Date): string => {
 export const convertStatus = (status: string): JSX.Element => {
   return status === "Active" ? (
     <>
-      <FaCircle className="text-success me-2" style={{ fontSize: "0.5rem" }} />
-      Aktif
+      <span className="badge text-bg-success">Aktif</span>
     </>
   ) : (
     <>
-      <FaCircle className="text-danger me-2" style={{ fontSize: "0.5rem" }} />
-      Non Aktif
+      <span className="badge text-bg-danger">Non Aktif</span>
     </>
   );
 };
