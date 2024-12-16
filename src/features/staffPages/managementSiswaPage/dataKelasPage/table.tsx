@@ -84,7 +84,7 @@ export const Table: React.FC = () => {
           <button
             className="btn btn-warning btn-sm text me-2 text-light"
             onClick={() =>
-              navigate(`/manajemen-siswa/data-siswa-baru/detail/${row.id}`)
+              navigate(`/manajemen-siswa/daftar-siswa/detail/${row.id}`)
             }
             disabled={loading}
           >

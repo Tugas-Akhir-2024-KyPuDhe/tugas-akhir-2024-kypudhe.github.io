@@ -165,19 +165,19 @@ function App() {
               element={<PrivateRoute Component={UpdateGaleriColletion} />}
             />
             <Route
-              path="/manajemen-siswa/data-siswa-baru"
+              path="/manajemen-siswa/daftar-siswa"
               element={<PrivateRoute Component={DataSiswaMangementSiswaPage} />}
             />
             <Route
-              path="/manajemen-siswa/data-siswa-baru/tambah"
+              path="/manajemen-siswa/daftar-siswa/tambah"
               element={<PrivateRoute Component={FormSiswaMangementSiswaPage} />}
             />
             <Route
-              path="/manajemen-siswa/data-siswa-baru/update/:id"
+              path="/manajemen-siswa/daftar-siswa/update/:id"
               element={<PrivateRoute Component={FormSiswaMangementSiswaPage} />}
             />
             <Route
-              path="/manajemen-siswa/data-siswa-baru/detail/:id"
+              path="/manajemen-siswa/daftar-siswa/detail/:id"
               element={<PrivateRoute Component={DetailSiswaMangementSiswa} />}
             />
             <Route

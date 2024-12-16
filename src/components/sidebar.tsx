@@ -619,25 +619,25 @@ export const ListMenu = () => {
             }}
             className="fw-medium"
           >
-            <MenuItem
+            {/* <MenuItem
               onClick={() =>
-                handleMenuClick("/manajemen-siswa/data-siswa-baru")
+                handleMenuClick("/manajemen-siswa/daftar-siswa")
               }
               icon={<FaCircle style={{ fontSize: "8px" }} />}
               style={{
                 position: "relative",
                 backgroundColor:
-                  selectedMenu === "/manajemen-siswa/data-siswa-baru"
+                  selectedMenu === "/manajemen-siswa/daftar-siswa"
                     ? "#E5EAF2"
                     : "",
               }}
               className={`fw-medium ${
-                selectedMenu === "/manajemen-siswa/data-siswa-baru"
+                selectedMenu === "/manajemen-siswa/daftar-siswa"
                   ? "text-blue"
                   : "text-dark-soft"
               }`}
             >
-              {selectedMenu === "/manajemen-siswa/data-siswa-baru" && (
+              {selectedMenu === "/manajemen-siswa/daftar-siswa" && (
                 <div
                   style={{
                     position: "absolute",
@@ -650,9 +650,9 @@ export const ListMenu = () => {
                 />
               )}
               Data Siswa Baru
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem
-              onClick={() => handleMenuClick("/manajemen-siswa/data-siswa")}
+              onClick={() => handleMenuClick("/manajemen-siswa/daftar-siswa")}
               icon={<FaCircle style={{ fontSize: "8px" }} />}
               style={{
                 position: "relative",
