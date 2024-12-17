@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import DataTable from "react-data-table-component";
 import { StudentDetail } from "../../../../interface/student.interface";
 import { Class } from "../../../../interface/studentClass.interface";
-import { FaEye, FaPen, FaPlus } from "react-icons/fa6";
+import { FaEye, FaPlus } from "react-icons/fa6";
 import { ModalAddStudentInClass } from "./modalAddSiswaInClass";
 import { useNavigate } from "react-router-dom";
 
@@ -84,16 +84,10 @@ export const CardDaftarSiswaDetailKelas: React.FC<DaftarSiswaProps> = ({
           >
             <FaEye />
           </button>
-          <button
-            className="btn btn-warning btn-sm text me-2 text-light"
-            onClick={() => navigate(`update/${row.nis}`)}
-            disabled={loading}
-          >
-            <FaPen />
-          </button>
+          
         </>
       ),
-      width: "150px",
+      width: "80px",
     },
   ];
 
@@ -177,7 +171,6 @@ export const CardDaftarSiswaDetailKelas: React.FC<DaftarSiswaProps> = ({
       <DataTable
         columns={columnsStudentInClass}
         data={filterDataStudentInClass}
-        selectableRows
         pagination
         highlightOnHover
         customStyles={{

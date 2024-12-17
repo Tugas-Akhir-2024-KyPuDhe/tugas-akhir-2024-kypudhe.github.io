@@ -1,5 +1,6 @@
 import { Fajusek } from "./fajusek.interfase"
 import { Media } from "./media.interface"
+import { Class } from "./studentClass.interface"
 
 export interface ParentOfStudent {
     id: number
@@ -39,6 +40,7 @@ export interface ParentOfStudent {
     nis: string;
     nisn: string;
     Major: Fajusek
+    class: Class
     // user: {
     //   username: string;
     //   password: string;

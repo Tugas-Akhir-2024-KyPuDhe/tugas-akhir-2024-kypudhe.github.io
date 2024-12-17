@@ -162,7 +162,7 @@ export const CardMatkulDetailKelas: React.FC<CardMatkulProps> = ({
             data-bs-toggle="modal"
             data-bs-target="#modalAddMatkul"
           >
-            <FaPlus className="me-2 fs-5" /> Tambah Matkul
+            <FaPlus className="me-2 fs-5" /> Tambah Mapel
           </button>
         </div>
       </form>
