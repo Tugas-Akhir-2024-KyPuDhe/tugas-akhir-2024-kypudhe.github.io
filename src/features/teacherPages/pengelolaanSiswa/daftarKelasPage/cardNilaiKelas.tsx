@@ -3,6 +3,9 @@ import { StudentDetail } from "../../../../interface/student.interface";
 import { CourseInClass } from "../../../../interface/courseInClass.interface";
 import DataTable from "react-data-table-component";
 import { FaSave } from "react-icons/fa";
+import StudentGradeService from "../../../../services/studentGradeService";
+import { Toast } from "../../../../utils/myFunctions";
+import { FormStateStudentGrade } from "../../../../interface/studentGrade.interface";
 
 interface CardProps {
   loading: boolean;
@@ -10,7 +13,56 @@ interface CardProps {
 }
 
 export const CardNilaiKelas: React.FC<CardProps> = ({ loading, data }) => {
+  const studentGradeService = StudentGradeService();
+
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [grades, setGrades] = useState<Record<string, FormStateStudentGrade>>(
+    {}
+  );
+
+  const handleInputChange = (
+    studentId: string,
+    field: string,
+    value: string
+  ) => {
+    setGrades((prev) => ({
+      ...prev,
+      [studentId]: {
+        ...prev[studentId],
+        [field]: value,
+      },
+    }));
+  };
+
+  const handleSaveGarde = async (studentName: string, studentId: string) => {
+    if (!grades[studentId]) return;
+
+    try {
+      const payload: FormStateStudentGrade = {
+        ...grades[studentId],
+        nis: studentId,
+        teacherId: data.class.staffId,
+        classId: data.class.id,
+        courseCode: data.courseDetail.code,
+      };
+
+      const response = await studentGradeService.insertGrade(payload);
+      if (response.status === 201) {
+        Toast.fire({
+          icon: "success",
+          timer: 5000,
+          title: `Nilai ${studentName} Berhasil Diupdate`,
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      Toast.fire({
+        icon: "error",
+        timer: 5000,
+        title: `Nilai ${studentName} Gagal Diupdate`,
+      });
+    }
+  };
 
   const columns = [
     {
@@ -21,7 +73,7 @@ export const CardNilaiKelas: React.FC<CardProps> = ({ loading, data }) => {
     {
       name: "Nim",
       selector: (row: StudentDetail) => row.nis,
-      width: "120px",
+      width: "100px",
     },
     {
       name: "Nama",
@@ -29,45 +81,114 @@ export const CardNilaiKelas: React.FC<CardProps> = ({ loading, data }) => {
     },
     {
       name: "Tugas",
-      selector: (row: StudentDetail) => row.id,
+      selector: (row: StudentDetail) =>
+        row.StudentsGrades[0] && (row.StudentsGrades[0].task || "-"),
       cell: (row: StudentDetail) => (
         <>
           <input
             type="text"
-            className="form-control text-center"
-            value={row.id}
+            className="form-control text-center fw-medium px-0"
+            value={
+              grades[row.nis]?.task ||
+              (row.StudentsGrades[0] && (row.StudentsGrades[0].task || "-"))
+            }
+            onChange={(e) => handleInputChange(row.nis, "task", e.target.value)}
+            onKeyPress={(event) => {
+              if (!/[0-9]/.test(event.key)) {
+                event.preventDefault();
+              }
+            }}
           />
         </>
       ),
-      width: "100px",
+      width: "80px",
     },
     {
-      name: "UTS",
-      selector: (row: StudentDetail) => row.id,
+      name: "UH",
+      selector: (row: StudentDetail) =>
+        row.StudentsGrades[0] && (row.StudentsGrades[0].UH || "-"),
       cell: (row: StudentDetail) => (
         <>
           <input
             type="text"
-            className="form-control text-center"
-            value={row.id}
+            className="form-control text-center fw-medium px-0"
+            value={
+              grades[row.nis]?.UH ||
+              (row.StudentsGrades[0] && (row.StudentsGrades[0].UH || "-"))
+            }
+            onChange={(e) => handleInputChange(row.nis, "UH", e.target.value)}
+            onKeyPress={(event) => {
+              if (!/[0-9]/.test(event.key)) {
+                event.preventDefault();
+              }
+            }}
           />
         </>
       ),
-      width: "100px",
+      width: "80px",
     },
     {
-      name: "UAS",
-      selector: (row: StudentDetail) => row.id,
+      name: "PTS",
+      selector: (row: StudentDetail) =>
+        row.StudentsGrades[0] && (row.StudentsGrades[0].PTS || "-"),
       cell: (row: StudentDetail) => (
         <>
           <input
             type="text"
-            className="form-control text-center"
-            value={row.id}
+            className="form-control text-center fw-medium px-0"
+            value={
+              grades[row.nis]?.PTS ||
+              (row.StudentsGrades[0] && (row.StudentsGrades[0].PTS || "-"))
+            }
+            onChange={(e) => handleInputChange(row.nis, "PTS", e.target.value)}
+            onKeyPress={(event) => {
+              if (!/[0-9]/.test(event.key)) {
+                event.preventDefault();
+              }
+            }}
           />
         </>
       ),
-      width: "100px",
+      width: "80px",
+    },
+    {
+      name: "PAS",
+      selector: (row: StudentDetail) =>
+        row.StudentsGrades[0] && (row.StudentsGrades[0].PAS || "-"),
+      cell: (row: StudentDetail) => (
+        <>
+          <input
+            type="text"
+            className="form-control text-center fw-medium px-0"
+            value={
+              grades[row.nis]?.PAS ||
+              (row.StudentsGrades[0] && (row.StudentsGrades[0].PAS || "-"))
+            }
+            onChange={(e) => handleInputChange(row.nis, "PAS", e.target.value)}
+            onKeyPress={(event) => {
+              if (!/[0-9]/.test(event.key)) {
+                event.preventDefault();
+              }
+            }}
+          />
+        </>
+      ),
+      width: "80px",
+    },
+    {
+      name: "Action",
+      cell: (row: StudentDetail) => (
+        <div className="text-center w-100">
+          <button
+            className="btn btn-info bg-blue btn-sm border-0 me-2 text-light"
+            onClick={() => handleSaveGarde(row.name, row.nis)}
+            disabled={loading}
+          >
+            <FaSave className="me-1" /> Simpan
+          </button>
+        </div>
+      ),
+      width: "140px",
     },
   ];
 
@@ -166,9 +287,6 @@ export const CardNilaiKelas: React.FC<CardProps> = ({ loading, data }) => {
             },
           }}
         />
-      </div>
-      <div className="col-12">
-        <button className="btn btn-success"> <FaSave className="me-2"/> Simpan</button>
       </div>
     </div>
   );

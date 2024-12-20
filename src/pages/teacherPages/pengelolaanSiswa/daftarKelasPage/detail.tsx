@@ -21,17 +21,16 @@ export const DetailKelasPage: React.FC = () => {
 
   const [activeMenu, setActiveMenu] = useState("absensi");
   const handleMenuClick = (menu: string) => {
-    setActiveMenu(menu);
+    if (!loading) {  // Only allow menu click if not loading
+      setActiveMenu(menu);
+    }
   };
 
   const getData = async () => {
     const dtoken = decodeToken(userLoginCookie.token);
     try {
       setLoading(true);
-      const response = await teacherService.getClassOfTeacher(
-        dtoken.username,
-        id
-      );
+      const response = await teacherService.getClassOfTeacher(dtoken.username, id);
       setTeacherName(response.data.name);
       setData(response.data.CourseInClass[0]);
     } catch (error) {
@@ -68,9 +67,10 @@ export const DetailKelasPage: React.FC = () => {
         >
           <li className="nav-item" style={{ cursor: "pointer" }}>
             <a
-              className={`nav-link ${
+              className={`nav-link ${loading ? "disabled" : ""} ${
                 activeMenu === "#" ? "active text-blue" : "text-dark"
               }`}
+              aria-disabled="true"
               onClick={() => handleMenuClick("#")}
             >
               Daftar Siswa
@@ -78,7 +78,7 @@ export const DetailKelasPage: React.FC = () => {
           </li>
           <li className="nav-item" style={{ cursor: "pointer" }}>
             <a
-              className={`nav-link ${
+              className={`nav-link ${loading ? "disabled" : ""} ${
                 activeMenu === "absensi" ? "active text-blue" : "text-dark"
               }`}
               onClick={() => handleMenuClick("absensi")}
@@ -88,7 +88,7 @@ export const DetailKelasPage: React.FC = () => {
           </li>
           <li className="nav-item" style={{ cursor: "pointer" }}>
             <a
-              className={`nav-link ${
+              className={`nav-link ${loading ? "disabled" : ""} ${
                 activeMenu === "nilai" ? "active text-blue" : "text-dark"
               }`}
               onClick={() => handleMenuClick("nilai")}
