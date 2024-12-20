@@ -171,6 +171,7 @@ export const CardMatkulDetailKelas: React.FC<CardMatkulProps> = ({
           columns={columns}
           data={data}
           highlightOnHover
+          className="mt-3"
           customStyles={{
             rows: {
               style: {
@@ -178,6 +179,15 @@ export const CardMatkulDetailKelas: React.FC<CardMatkulProps> = ({
                   backgroundColor: "#f5f5f5",
                   color: "#007bff",
                 },
+              },
+            },
+            headCells: {
+              style: {
+                backgroundColor: "var(--blue-color)",
+                color: "#ffffff",
+                fontWeight: "bold",
+                textAlign: "center",
+                border: "0.1px solid #ddd",
               },
             },
           }}
@@ -190,7 +200,7 @@ export const CardMatkulDetailKelas: React.FC<CardMatkulProps> = ({
         id="modalAddMatkul"
         tabIndex={-1}
         aria-hidden="true"
-        data-bs-backdrop="static" 
+        data-bs-backdrop="static"
         data-bs-keyboard="false"
       >
         <div className="modal-dialog">

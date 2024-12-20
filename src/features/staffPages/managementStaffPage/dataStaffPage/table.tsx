@@ -130,13 +130,14 @@ export const Table: React.FC = () => {
 
         <div className="row g-3 d-flex justify-content-between">
           <div className="col-12 col-md-4 m-auto">
-            <div className="fw-bold">
-            Import Data Excel              
-              </div> 
-              <div className="text-muted">
-                Format harus sesuai <a href="#" className="text-decoration-none">seperti ini</a>
-              </div>
+            <div className="fw-bold">Import Data Excel</div>
+            <div className="text-muted">
+              Format harus sesuai{" "}
+              <a href="#" className="text-decoration-none">
+                seperti ini
+              </a>
             </div>
+          </div>
           <div className="col-12 col-md-8">
             <div className="input-group mb-3">
               <input
@@ -222,6 +223,7 @@ export const Table: React.FC = () => {
           data={filterData}
           pagination
           highlightOnHover
+          className="mt-3"
           customStyles={{
             rows: {
               style: {
@@ -229,6 +231,15 @@ export const Table: React.FC = () => {
                   backgroundColor: "#f5f5f5",
                   color: "#007bff",
                 },
+              },
+            },
+            headCells: {
+              style: {
+                backgroundColor: "var(--blue-color)",
+                color: "#ffffff",
+                fontWeight: "bold",
+                textAlign: "center",
+                border: "0.1px solid #ddd",
               },
             },
           }}

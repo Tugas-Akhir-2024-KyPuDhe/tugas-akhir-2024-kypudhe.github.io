@@ -221,6 +221,7 @@ export const ModalAddStudentInClass: React.FC<ModalAddStudentInClassProps> = ({
                   selectableRows
                   onSelectedRowsChange={handleChange}
                   highlightOnHover
+                  className="mt-3"
                   customStyles={{
                     rows: {
                       style: {
@@ -228,6 +229,15 @@ export const ModalAddStudentInClass: React.FC<ModalAddStudentInClassProps> = ({
                           backgroundColor: "#f5f5f5",
                           color: "#007bff",
                         },
+                      },
+                    },
+                    headCells: {
+                      style: {
+                        backgroundColor: "var(--blue-color)",
+                        color: "#ffffff",
+                        fontWeight: "bold",
+                        textAlign: "center",
+                        border: "0.1px solid #ddd",
                       },
                     },
                   }}

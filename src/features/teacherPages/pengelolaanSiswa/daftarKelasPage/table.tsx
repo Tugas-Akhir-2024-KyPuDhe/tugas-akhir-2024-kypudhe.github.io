@@ -3,7 +3,7 @@ import DataTable from "react-data-table-component";
 import { StyleSheetManager } from "styled-components";
 import StaffService from "../../../../services/staffService";
 import { CourseInClass } from "../../../../interface/courseInClass.interface";
-import { FaEye, FaListCheck, FaPenClip } from "react-icons/fa6";
+import { FaEye } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { Tooltip } from "react-tooltip";
 import useCookie from "react-use-cookie";
@@ -32,35 +32,6 @@ export const Table: React.FC = () => {
     }
   };
 
-  // const handleDelete = async (kelas: Kelas) => {
-  //   const result = await showConfirmationDialog({
-  //     title: "Ingin menghapus kelas ini?",
-  //     icon: "warning",
-  //     confirmButtonText: "Ya, Hapus!",
-  //     cancelButtonText: "Batal",
-  //   });
-
-  //   if (result.isConfirmed) {
-  //     setLoading(true); // Set loading to true when deletion starts
-  //     try {
-  //       // const response = await jurusanService.destroy(id);
-  //       // if (response.status === 200) {
-  //       //   getData();
-  //         Toast.fire({
-  //           icon: "success",
-  //           title: "kelas berhasil dihapus",
-  //           timer: 4000,
-  //         });
-  //       // }
-  //     } catch (error) {
-  //       console.error("Error deleting kelas:", error);
-  //       Swal.fire("Gagal", "Terjadi kesalahan saat menghapus kelas", "error");
-  //     } finally {
-  //       setLoading(false); // Set loading to false once the operation is complete
-  //     }
-  //   }
-  // };
-
   const columns = [
     {
       name: "No",
@@ -68,36 +39,63 @@ export const Table: React.FC = () => {
       width: "50px",
     },
     {
+      name: "TA",
+      selector: (row: CourseInClass) => row.class.academicYear,
+      sortable: true,
+      width: "115px",
+    },
+    {
       name: "Kelas",
       selector: (row: CourseInClass) => row.class.name,
-      width: "120px",
+      sortable: true,
+      width: "90px",
     },
     {
       name: "Mata Pelajaran",
       selector: (row: CourseInClass) => row.courseDetail.name,
+      sortable: true,
     },
     {
       name: "Hari",
       selector: (row: CourseInClass) => row.day,
-      width: "120px",
+      sortable: true,
+      width: "100px",
     },
     {
-      name: "Jam Mulai",
+      name: "Mulai",
       selector: (row: CourseInClass) => row.timeStart,
-      width: "120px",
+      sortable: true,
+      width: "95px",
     },
     {
-      name: "Jam Selesai",
+      name: "Selesai",
       selector: (row: CourseInClass) => row.timeEnd,
-      width: "120px",
+      sortable: true,
+      width: "95px",
+    },
+    {
+      name: (
+        <>
+          Total <br />
+          Siswa
+        </>
+      ),
+      selector: (row: CourseInClass) => row.class.student.length,
+      cell: (row: CourseInClass) => (
+        <>
+          <div className="text-center w-100">{row.class.student.length}</div>
+        </>
+      ),
+      sortable: true,
+      width: "90px",
     },
     {
       name: "Action",
       cell: (row: CourseInClass) => (
         <>
           <button
-            className="btn btn-info btn-sm border-info me-2 text-light"
-            onClick={() => navigate(`update/${row.id}`)}
+            className="btn btn-info bg-blue border-0 me-2 text-light"
+            onClick={() => navigate(`detail/${row.id}`)}
             disabled={loading}
             id="tooltip-detail"
           >
@@ -109,7 +107,7 @@ export const Table: React.FC = () => {
               content="Detail"
             />
           </button>
-          <button
+          {/* <button
             className="btn btn-success btn-sm me-2 text-light"
             // onClick={() => navigate(`update/${row.id}`)}
             disabled={loading}
@@ -136,10 +134,10 @@ export const Table: React.FC = () => {
               style={{ backgroundColor: "var(--blue-color)" }}
               content="Nilai Siswa"
             />
-          </button>
+          </button> */}
         </>
       ),
-      width: "150px",
+      width: "80px",
     },
   ];
 
@@ -197,6 +195,7 @@ export const Table: React.FC = () => {
           data={searchTerm ? filteredData : data}
           pagination
           highlightOnHover
+          className="mt-3"
           customStyles={{
             rows: {
               style: {
@@ -204,6 +203,15 @@ export const Table: React.FC = () => {
                   backgroundColor: "#f5f5f5",
                   color: "#007bff",
                 },
+              },
+            },
+            headCells: {
+              style: {
+                backgroundColor: "var(--blue-color)",
+                color: "#ffffff",
+                fontWeight: "bold",
+                textAlign: "center",
+                border: "0.1px solid #ddd",
               },
             },
           }}

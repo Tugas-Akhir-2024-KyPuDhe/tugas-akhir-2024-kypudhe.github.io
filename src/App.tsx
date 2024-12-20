@@ -45,6 +45,7 @@ import {
   DataStaffMangementStaffPage,
   FormStaffMangementStaffPage,
   DaftarKelasNilaiSiswaPage,
+  DetailKelasPage,
 } from "./pages";
 import { SideBar } from "./components/sidebar";
 import PrivateRoute from "./components/privateRoute";
@@ -252,16 +253,24 @@ function App() {
               element={<PrivateRoute Component={FormDaftarSiswaPage} />}
             />
             <Route
-              path="/guru/kelas-saya"
+              path="/guru/jadwal-mengajar"
               element={<PrivateRoute Component={DaftarKelasPage} />}
             />
             <Route
-              path="/guru/kelas-saya/tambah"
+              path="/guru/jadwal-mengajar/tambah"
               element={<PrivateRoute Component={FormDaftarKelasPage} />}
             />
             <Route
-              path="/guru/kelas-saya/update/:id"
+              path="/guru/jadwal-mengajar/update/:id"
               element={<PrivateRoute Component={FormDaftarKelasPage} />}
+            />
+            <Route
+              path="/guru/jadwal-mengajar/nilai/:id"
+              element={<PrivateRoute Component={DaftarKelasNilaiSiswaPage} />}
+            />
+            <Route
+              path="/guru/jadwal-mengajar/detail/:id"
+              element={<PrivateRoute Component={DetailKelasPage} />}
             />
             <Route
               path="/pengelolaan-siswa/nilai-siswa"
@@ -283,10 +292,7 @@ function App() {
               path="/pengelolaan-siswa/absensi-siswa/:id"
               element={<PrivateRoute Component={DetailAbsensiSiswaPage} />}
             />
-            <Route
-              path="/guru/kelas-saya/nilai/:id"
-              element={<PrivateRoute Component={DaftarKelasNilaiSiswaPage} />}
-            />
+            
             {/* #endregion */}
 
             {/* #region | Student  */}

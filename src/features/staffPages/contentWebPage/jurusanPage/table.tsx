@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { StyleSheetManager } from "styled-components";
-import { formatDateTime, showConfirmationDialog, Toast } from "../../../../utils/myFunctions";
+import {
+  formatDateTime,
+  showConfirmationDialog,
+  Toast,
+} from "../../../../utils/myFunctions";
 import { FaTrash } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { FaPen } from "react-icons/fa6";
@@ -83,20 +87,19 @@ export const Table: React.FC = () => {
       selector: (row: Fajusek) => row.name,
       cell: (row: Fajusek) => (
         <>
-         
           <button
             className="btn btn-warning btn-sm text me-2 text-light"
             onClick={() => navigate(`update/${row.id}`)}
-            disabled={loading} 
+            disabled={loading}
           >
-              <FaPen />
+            <FaPen />
           </button>
           <button
             className="btn btn-danger btn-sm"
             onClick={() => handleDelete(row.id)}
-            disabled={loading} 
+            disabled={loading}
           >
-              <FaTrash />
+            <FaTrash />
           </button>
         </>
       ),
@@ -158,6 +161,7 @@ export const Table: React.FC = () => {
           data={searchTerm ? filteredData : data}
           pagination
           highlightOnHover
+          className="mt-3"
           customStyles={{
             rows: {
               style: {
@@ -165,6 +169,15 @@ export const Table: React.FC = () => {
                   backgroundColor: "#f5f5f5",
                   color: "#007bff",
                 },
+              },
+            },
+            headCells: {
+              style: {
+                backgroundColor: "var(--blue-color)",
+                color: "#ffffff",
+                fontWeight: "bold",
+                textAlign: "center",
+                border: "0.1px solid #ddd",
               },
             },
           }}

@@ -1,6 +1,7 @@
 import { Fajusek } from "./fajusek.interfase";
 import { Media } from "./media.interface";
 import { ParentOfStudent } from "./student.interface";
+import { Class } from "./studentClass.interface";
 
 export interface UserDetails {
   // === GENERAL
@@ -139,6 +140,7 @@ export interface StudentDetail {
   birthPlace: string;
   address: string;
   phone: string;
+  status: string;
   email: string;
   startYear: Date;
   endYear: string | null;
@@ -150,6 +152,8 @@ export interface StudentDetail {
   nis: string;
   nisn: string;
   Major: Fajusek
+  class: Class
+  ParentOfStudent: ParentOfStudent
   user: {
     username: string;
     password: string;

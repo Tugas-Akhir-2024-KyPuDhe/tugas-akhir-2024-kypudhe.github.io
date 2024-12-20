@@ -173,8 +173,8 @@ export const SchoolPage: React.FC = () => {
       <div className="row g-0">
         <div className="col-12 col-md-4">
           <div
-            className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded position-relative"
-            style={{ backgroundColor: "#fff" }}
+            className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded sticky-lg-top"
+            style={{ backgroundColor: "#fff", marginTop: "40px", top: "130px", }}
           >
             {loading && (
               <div

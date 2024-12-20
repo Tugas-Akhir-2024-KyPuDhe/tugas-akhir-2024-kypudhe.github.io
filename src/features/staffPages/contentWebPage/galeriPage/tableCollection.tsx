@@ -289,18 +289,16 @@ export const TableCollectionGaleri: React.FC = () => {
             >
               <FaPlus className="me-2 fs-5" /> Tambah
             </button>
-            {
-              formData.id && (
-                <ModalAddGaleri 
+            {formData.id && (
+              <ModalAddGaleri
                 id={formData.id}
                 name={formData.name}
                 description={formData.description}
                 prioritas={formData.prioritas}
                 status={formData.status}
-                handleGetDataGaleri={getData} />
-              )
-            }
-            
+                handleGetDataGaleri={getData}
+              />
+            )}
           </div>
           <StyleSheetManager>
             <DataTable
@@ -308,6 +306,7 @@ export const TableCollectionGaleri: React.FC = () => {
               data={mediaList}
               pagination
               highlightOnHover
+              className="mt-3"
               customStyles={{
                 rows: {
                   style: {
@@ -315,6 +314,15 @@ export const TableCollectionGaleri: React.FC = () => {
                       backgroundColor: "#f5f5f5",
                       color: "#007bff",
                     },
+                  },
+                },
+                headCells: {
+                  style: {
+                    backgroundColor: "var(--blue-color)",
+                    color: "#ffffff",
+                    fontWeight: "bold",
+                    textAlign: "center",
+                    border: "0.1px solid #ddd",
                   },
                 },
               }}

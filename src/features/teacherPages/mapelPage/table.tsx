@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { StyleSheetManager } from "styled-components";
-import { formatDateTime, showConfirmationDialog, Toast } from "../../../utils/myFunctions";
+import {
+  formatDateTime,
+  showConfirmationDialog,
+  Toast,
+} from "../../../utils/myFunctions";
 import { FaTrash } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { FaPen } from "react-icons/fa6";
 
 interface Mapel {
-  name: string,
-  hari: string,
-  jam_mulai: string,
-  jam_selesai: string,
+  name: string;
+  hari: string;
+  jam_mulai: string;
+  jam_selesai: string;
   createdAt: string;
 }
 
@@ -26,20 +30,20 @@ export const Table: React.FC = () => {
 
       setData([
         {
-          name: 'Matematika',
-          hari: 'Senin',
-          jam_mulai: '10:00',
-          jam_selesai: '12:00',
-          createdAt: new Date().toString()
+          name: "Matematika",
+          hari: "Senin",
+          jam_mulai: "10:00",
+          jam_selesai: "12:00",
+          createdAt: new Date().toString(),
         },
         {
-          name: 'Bahasa',
-          hari: 'Selasa',
-          jam_mulai: '10:00',
-          jam_selesai: '12:00',
-          createdAt: new Date().toString()
+          name: "Bahasa",
+          hari: "Selasa",
+          jam_mulai: "10:00",
+          jam_selesai: "12:00",
+          createdAt: new Date().toString(),
         },
-      ])
+      ]);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -53,7 +57,7 @@ export const Table: React.FC = () => {
       cancelButtonText: "Batal",
     });
 
-    console.log(mapel)
+    console.log(mapel);
 
     if (result.isConfirmed) {
       setLoading(true); // Set loading to true when deletion starts
@@ -61,15 +65,19 @@ export const Table: React.FC = () => {
         // const response = await jurusanService.destroy(id);
         // if (response.status === 200) {
         //   getData();
-          Toast.fire({
-            icon: "success",
-            title: "Mata Pelajaran berhasil dihapus",
-            timer: 4000,
-          });
+        Toast.fire({
+          icon: "success",
+          title: "Mata Pelajaran berhasil dihapus",
+          timer: 4000,
+        });
         // }
       } catch (error) {
         console.error("Error deleting Mata Pelajaran:", error);
-        Swal.fire("Gagal", "Terjadi kesalahan saat menghapus Mata Pelajaran", "error");
+        Swal.fire(
+          "Gagal",
+          "Terjadi kesalahan saat menghapus Mata Pelajaran",
+          "error"
+        );
       } finally {
         setLoading(false); // Set loading to false once the operation is complete
       }
@@ -111,20 +119,19 @@ export const Table: React.FC = () => {
       selector: (row: Mapel) => row.name,
       cell: (row: Mapel) => (
         <>
-         
           <button
             className="btn btn-warning btn-sm text me-2 text-light"
             // onClick={() => navigate(`update/${row.id}`)}
-            disabled={loading} 
+            disabled={loading}
           >
-              <FaPen />
+            <FaPen />
           </button>
           <button
             className="btn btn-danger btn-sm"
             onClick={() => handleDelete(row)}
-            disabled={loading} 
+            disabled={loading}
           >
-              <FaTrash />
+            <FaTrash />
           </button>
         </>
       ),
@@ -185,6 +192,7 @@ export const Table: React.FC = () => {
           data={searchTerm ? filteredData : data}
           pagination
           highlightOnHover
+          className="mt-3"
           customStyles={{
             rows: {
               style: {
@@ -192,6 +200,15 @@ export const Table: React.FC = () => {
                   backgroundColor: "#f5f5f5",
                   color: "#007bff",
                 },
+              },
+            },
+            headCells: {
+              style: {
+                backgroundColor: "var(--blue-color)",
+                color: "#ffffff",
+                fontWeight: "bold",
+                textAlign: "center",
+                border: "0.1px solid #ddd",
               },
             },
           }}

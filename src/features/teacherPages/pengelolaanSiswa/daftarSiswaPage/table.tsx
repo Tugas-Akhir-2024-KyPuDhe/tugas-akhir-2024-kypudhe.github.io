@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { StyleSheetManager } from "styled-components";
-import { formatDateTime, showConfirmationDialog, Toast } from "../../../../utils/myFunctions";
+import {
+  formatDateTime,
+  showConfirmationDialog,
+  Toast,
+} from "../../../../utils/myFunctions";
 import { FaTrash } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { FaPen } from "react-icons/fa6";
 import Select from "react-select";
-
 
 const optionKelas = [
   { value: "X TKJ 1", label: "X TKJ 1" },
@@ -14,18 +17,18 @@ const optionKelas = [
 ];
 
 interface Siswa {
-  name: string,
-  tempat_lahir: string,
-  tanggal_lahir: string,
-  alamat: string,
-  NIS: string,
-  NISN: string,
-  telepon: string,
-  email: string,
-  tahun_mulai: string,
-  tahun_selesai: string,
+  name: string;
+  tempat_lahir: string;
+  tanggal_lahir: string;
+  alamat: string;
+  NIS: string;
+  NISN: string;
+  telepon: string;
+  email: string;
+  tahun_mulai: string;
+  tahun_selesai: string;
   createdAt: string;
-  photo?: string,
+  photo?: string;
 }
 
 export const Table: React.FC = () => {
@@ -40,34 +43,34 @@ export const Table: React.FC = () => {
 
       setData([
         {
-          name: 'Rizky Fadillah',
-          tempat_lahir: 'Medan',
-          tanggal_lahir: '18 November 2002',
-          alamat: 'Medan',
-          NIS: '12345657',
-          NISN: '123412341',
-          telepon: '082222222222',
-          email: 'rizky@mail.com',
-          tahun_mulai: '2021',
-          tahun_selesai: '2024',
+          name: "Rizky Fadillah",
+          tempat_lahir: "Medan",
+          tanggal_lahir: "18 November 2002",
+          alamat: "Medan",
+          NIS: "12345657",
+          NISN: "123412341",
+          telepon: "082222222222",
+          email: "rizky@mail.com",
+          tahun_mulai: "2021",
+          tahun_selesai: "2024",
           createdAt: new Date().toString(),
-          photo: 'tes',
+          photo: "tes",
         },
         {
-          name: 'Rizky Fadillah 2',
-          tempat_lahir: 'Medan',
-          tanggal_lahir: '18 November 2002',
-          alamat: 'Medan',
-          NIS: '12345657',
-          NISN: '123412341',
-          telepon: '082222222222',
-          email: 'rizky@mail.com',
-          tahun_mulai: '2021',
-          tahun_selesai: '2024',
+          name: "Rizky Fadillah 2",
+          tempat_lahir: "Medan",
+          tanggal_lahir: "18 November 2002",
+          alamat: "Medan",
+          NIS: "12345657",
+          NISN: "123412341",
+          telepon: "082222222222",
+          email: "rizky@mail.com",
+          tahun_mulai: "2021",
+          tahun_selesai: "2024",
           createdAt: new Date().toString(),
-          photo: 'tes',
+          photo: "tes",
         },
-      ])
+      ]);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -81,7 +84,7 @@ export const Table: React.FC = () => {
       cancelButtonText: "Batal",
     });
 
-    console.log(siswa)
+    console.log(siswa);
 
     if (result.isConfirmed) {
       setLoading(true); // Set loading to true when deletion starts
@@ -89,11 +92,11 @@ export const Table: React.FC = () => {
         // const response = await jurusanService.destroy(id);
         // if (response.status === 200) {
         //   getData();
-          Toast.fire({
-            icon: "success",
-            title: "Siswa berhasil dihapus",
-            timer: 4000,
-          });
+        Toast.fire({
+          icon: "success",
+          title: "Siswa berhasil dihapus",
+          timer: 4000,
+        });
         // }
       } catch (error) {
         console.error("Error deleting Siswa:", error);
@@ -132,20 +135,19 @@ export const Table: React.FC = () => {
       selector: (row: Siswa) => row.name,
       cell: (row: Siswa) => (
         <>
-         
           <button
             className="btn btn-warning btn-sm text me-2 text-light"
             // onClick={() => navigate(`update/${row.id}`)}
-            disabled={loading} 
+            disabled={loading}
           >
-              <FaPen />
+            <FaPen />
           </button>
           <button
             className="btn btn-danger btn-sm"
             onClick={() => handleDelete(row)}
-            disabled={loading} 
+            disabled={loading}
           >
-              <FaTrash />
+            <FaTrash />
           </button>
         </>
       ),
@@ -165,7 +167,7 @@ export const Table: React.FC = () => {
     name: string,
     selectedOption: { value: string } | null
   ) => {
-    console.log(name, selectedOption)
+    console.log(name, selectedOption);
   };
 
   return (
@@ -196,7 +198,6 @@ export const Table: React.FC = () => {
       )}
 
       <div className="row d-flex justify-content-end">
-
         <div className="col-12 col-lg-4 col-md-3">
           <Select
             options={optionKelas}
@@ -235,6 +236,7 @@ export const Table: React.FC = () => {
           data={searchTerm ? filteredData : data}
           pagination
           highlightOnHover
+          className="mt-3"
           customStyles={{
             rows: {
               style: {
@@ -242,6 +244,15 @@ export const Table: React.FC = () => {
                   backgroundColor: "#f5f5f5",
                   color: "#007bff",
                 },
+              },
+            },
+            headCells: {
+              style: {
+                backgroundColor: "var(--blue-color)",
+                color: "#ffffff",
+                fontWeight: "bold",
+                textAlign: "center",
+                border: "0.1px solid #ddd",
               },
             },
           }}

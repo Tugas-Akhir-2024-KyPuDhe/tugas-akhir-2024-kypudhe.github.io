@@ -6,42 +6,42 @@ import { FaEye } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 
 interface Absensi {
-  name: string,
-  mata_pelajaran: string,
-  hari: string,
-  createdAt: string
+  name: string;
+  mata_pelajaran: string;
+  hari: string;
+  createdAt: string;
 }
 
 export const Table: React.FC = () => {
   const [data, setData] = useState<Absensi[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false); // Add loading state
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const getData = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
       // const response = await jurusanService.all();
       // setData(response.data);
 
       setData([
         {
-          name: 'X TKJ 1',
-          mata_pelajaran: 'Matematika',
-          hari: 'Senin',
+          name: "X TKJ 1",
+          mata_pelajaran: "Matematika",
+          hari: "Senin",
           createdAt: new Date().toString(),
         },
         {
-          name: 'XI TKJ 1',
-          mata_pelajaran: 'Bahasa',
-          hari: 'Selasa',
+          name: "XI TKJ 1",
+          mata_pelajaran: "Bahasa",
+          hari: "Selasa",
           createdAt: new Date().toString(),
         },
-      ])
+      ]);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-    setLoading(false)
+    setLoading(false);
   };
 
   const columns = [
@@ -78,9 +78,9 @@ export const Table: React.FC = () => {
           <button
             className="btn btn-info"
             onClick={() => navigate(`${row.name}`)}
-            disabled={loading} 
+            disabled={loading}
           >
-              <FaEye />
+            <FaEye />
           </button>
         </>
       ),
@@ -142,6 +142,7 @@ export const Table: React.FC = () => {
           data={searchTerm ? filteredData : data}
           pagination
           highlightOnHover
+          className="mt-3"
           customStyles={{
             rows: {
               style: {
@@ -149,6 +150,15 @@ export const Table: React.FC = () => {
                   backgroundColor: "#f5f5f5",
                   color: "#007bff",
                 },
+              },
+            },
+            headCells: {
+              style: {
+                backgroundColor: "var(--blue-color)",
+                color: "#ffffff",
+                fontWeight: "bold",
+                textAlign: "center",
+                border: "0.1px solid #ddd",
               },
             },
           }}

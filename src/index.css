@@ -16,7 +16,7 @@
 }
 
 .text-blue {
-  color: var(--blue-color);
+  color: var(--blue-color) !important;
 }
 .text-green {
   color: var(--green-color);
@@ -42,6 +42,11 @@
 }
 .border-yellow:hover {
   border: 1px solid var(--yellow-color);
+}
+
+.btn-info {
+  background-color: var(--blue-color) !important;
+  border: var(--blue-color);
 }
 
 .text-dark-soft {

@@ -29,10 +29,11 @@ export const Table: React.FC = () => {
     setLoading(true);
     try {
       const response = await studentService.getAllStudent(
-        selectedGrade?.value,
-        selectedMajor?.value
+        selectedMajor?.value,
+        selectedGrade?.value
       );
-      if (response.data && response.data.length > 0) {
+
+      if (response.data) {
         setData(response.data);
       }
     } catch (error) {
@@ -63,7 +64,7 @@ export const Table: React.FC = () => {
   ];
 
   const optionsGrades = [
-    { value: "Semua Kelas", label: "Semua Kelas" },
+    { value: "", label: "Semua Kelas" },
     ...optionsGrade.map((data) => ({
       value: data.value,
       label: data.label,
@@ -103,13 +104,15 @@ export const Table: React.FC = () => {
       cell: (row: StudentDetail) => row.Major.majorCode,
       width: "100px",
     },
-    // {
-    //   name: "Kelas",
-    //   selector: (row: StudentDetail) => row.class.name.split("-")[0] || "",
-    //   sortable: true,
-    //   cell: (row: StudentDetail) => row.class.name.split("-")[0] || "",
-    //   width: "100px",
-    // },
+    {
+      name: "Kelas",
+      selector: (row: StudentDetail) =>
+        row.class ? row.class.name.split("-")[0] : "Belum Masuk",
+      sortable: true,
+      cell: (row: StudentDetail) =>
+        row.class ? row.class.name.split("-")[0] : "Belum Masuk",
+      width: "100px",
+    },
     {
       name: "No.Telp",
       selector: (row: StudentDetail) => row.phone,
@@ -168,7 +171,7 @@ export const Table: React.FC = () => {
   useEffect(() => {
     getData();
   }, [selectedMajor]);
-  
+
   useEffect(() => {
     getMajor();
   }, []);
@@ -282,7 +285,10 @@ export const Table: React.FC = () => {
           columns={columns}
           data={filterData}
           pagination
+          paginationRowsPerPageOptions={[80, 100, 150]}
+          paginationPerPage={80}
           highlightOnHover
+          className="mt-3"
           customStyles={{
             rows: {
               style: {
@@ -290,6 +296,15 @@ export const Table: React.FC = () => {
                   backgroundColor: "#f5f5f5",
                   color: "#007bff",
                 },
+              },
+            },
+            headCells: {
+              style: {
+                backgroundColor: "var(--blue-color)",
+                color: "#ffffff",
+                fontWeight: "bold",
+                textAlign: "center",
+                border: "0.1px solid #ddd",
               },
             },
           }}

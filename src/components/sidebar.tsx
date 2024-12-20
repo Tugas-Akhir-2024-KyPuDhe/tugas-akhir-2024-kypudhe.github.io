@@ -445,20 +445,20 @@ export const ListMenu = () => {
           </MenuItem>
 
           <MenuItem
-            onClick={() => handleMenuClick("/guru/kelas-saya")}
+            onClick={() => handleMenuClick("/guru/jadwal-mengajar")}
             icon={<FaBookOpenReader />}
             style={{
               position: "relative",
               backgroundColor:
-                selectedMenu === "/guru/kelas-saya" ? "#E5EAF2" : "",
+                selectedMenu === "/guru/jadwal-mengajar" ? "#E5EAF2" : "",
             }}
             className={`fw-medium ${
-              selectedMenu === "/guru/kelas-saya"
+              selectedMenu === "/guru/jadwal-mengajar"
                 ? "text-blue"
                 : "text-dark-soft"
             }`}
           >
-            {selectedMenu === "/guru/kelas-saya" && (
+            {selectedMenu === "/guru/jadwal-mengajar" && (
               <div
                 style={{
                   position: "absolute",
@@ -470,7 +470,7 @@ export const ListMenu = () => {
                 }}
               />
             )}
-            Kelas Saya
+            Jadwal Mengajar
           </MenuItem>
 
           <SubMenu
@@ -546,20 +546,20 @@ export const ListMenu = () => {
               Daftar Siswa
             </MenuItem>
             <MenuItem
-              onClick={() => handleMenuClick("/guru/kelas-saya")}
+              onClick={() => handleMenuClick("/guru/jadwal-mengajar")}
               icon={<FaCircle style={{ fontSize: "8px" }} />}
               style={{
                 position: "relative",
                 backgroundColor:
-                  selectedMenu === "/guru/kelas-saya" ? "#E5EAF2" : "",
+                  selectedMenu === "/guru/jadwal-mengajar" ? "#E5EAF2" : "",
               }}
               className={`fw-medium ${
-                selectedMenu === "/guru/kelas-saya"
+                selectedMenu === "/guru/jadwal-mengajar"
                   ? "text-blue"
                   : "text-dark-soft"
               }`}
             >
-              {selectedMenu === "/guru/kelas-saya" && (
+              {selectedMenu === "/guru/jadwal-mengajar" && (
                 <div
                   style={{
                     position: "absolute",

@@ -36,9 +36,9 @@ const StudentService = () => {
   };
 
   const getAllStudent = async (
-    status: string = "",
     major_code: string = "",
-    grade: string = ""
+    grade: string = "",
+    status: string = "all"
   ): Promise<ResponseGetStudentDetail> => {
     try {
       const response = await axios.get<ResponseGetStudentDetail>(
@@ -49,6 +49,10 @@ const StudentService = () => {
           },
         }
       );
+      console.log(
+        `${apiUrl}/api/student/get?status=${status}&major_code=${major_code}&grade=${grade}`
+      );
+
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
