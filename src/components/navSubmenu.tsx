@@ -24,8 +24,8 @@ export const NavSubMenu: React.FC<NavMenuProps> = ({
       {menuItems.map((item) => (
         <li className="nav-item" style={{ cursor: "pointer" }} key={item.key}>
           <a
-            className={`nav-link text-blue ${
-              activeMenu === item.key ? "active" : ""
+            className={`nav-link ${
+              activeMenu === item.key ? "active text-blue" : "text-dark"
             }`}
             onClick={() => onMenuClick(item.key)}
           >

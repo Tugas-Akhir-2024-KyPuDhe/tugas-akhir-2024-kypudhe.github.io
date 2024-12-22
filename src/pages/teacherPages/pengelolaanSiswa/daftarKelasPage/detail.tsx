@@ -102,7 +102,7 @@ export const DetailKelasPage: React.FC = () => {
       {activeMenu === "absensi" ? (
         <CardAbsensiKelas loading={loading} />
       ) : (
-        <CardNilaiKelas loading={loading} data={data!} />
+        <CardNilaiKelas refreshData={getData} loading={loading} data={data!} />
       )}
     </>
   );

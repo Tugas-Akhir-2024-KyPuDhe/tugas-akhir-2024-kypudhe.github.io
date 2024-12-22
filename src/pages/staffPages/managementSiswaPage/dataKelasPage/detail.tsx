@@ -123,9 +123,9 @@ export const DetailKelasMangementSiswaPage: React.FC = () => {
   const getAllStudents = async (majorCode: string) => {
     try {
       const response = await studentService.getAllStudent(
-        "not_registered",
         majorCode,
-        dataClass?.name.split("-")[0]
+        "",
+        "not_registered"
       );
       if (response.data && response.data.length > 0) {
         setDataAllStudents(response.data);

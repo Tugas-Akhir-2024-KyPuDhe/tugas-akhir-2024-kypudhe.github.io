@@ -20,6 +20,9 @@ import { CardClassTeacher } from "../../features/profilePage/cardClassTeacher";
 import { FormParentOfStudent } from "../../interface/student.interface";
 import { Course } from "../../interface/course.interface";
 import CourseService from "../../services/courseService";
+import StudentGradeService from "../../services/studentGradeService";
+import { StudentsGradesByClass } from "../../interface/studentGrade.interface";
+import moment from "moment";
 
 const subMenuItemsStudent = [
   { label: "Data Akademik", key: "data-akademik" },
@@ -31,13 +34,18 @@ const subMenuItemsTeacher = [{ label: "Kelas", key: "kelas" }];
 export const ProfilePage = () => {
   const authService = AuthService();
   const courseService = CourseService();
+  const studentGrade = StudentGradeService();
+
   const [cookieLogin] = useCookie("userLoginCookie", "");
   const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
 
   const [profileDetail, setProfileDetail] = useState<DetailUserResponse | null>(
     null
   );
-  const [allCourse, setAllCourse] = useState<Course[]>([])
+  const [allCourse, setAllCourse] = useState<Course[]>([]);
+  const [studentGrades, setStudentGrades] = useState<StudentsGradesByClass[]>(
+    []
+  );
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -63,9 +71,26 @@ export const ProfilePage = () => {
     try {
       const user = await authService.getUser();
       setProfileDetail(user);
+      if (user.details[0].nis) {
+        await getStudentGrade(user.details[0].nis.toString());
+      }
+      console.log(user);
+
       setLoading(false);
     } catch (err) {
-      console.log(err);
+      console.error(err);
+      setError("Failed to fetch user data");
+      setLoading(false);
+    }
+  };
+
+  const getStudentGrade = async (nis: string) => {
+    try {
+      const response = await studentGrade.getStudentGrade(nis);
+      setStudentGrades(response.data);
+      setLoading(false);
+    } catch (err) {
+      console.error(err);
       setError("Failed to fetch user data");
       setLoading(false);
     }
@@ -87,7 +112,7 @@ export const ProfilePage = () => {
 
   useEffect(() => {
     getUser();
-    getAllCourse()
+    getAllCourse();
   }, []);
 
   const handleUpdateAccessIdentity = () =>
@@ -267,10 +292,16 @@ export const ProfilePage = () => {
                     {/* === STUDENT */}
                     {activeMenu === "data-akademik" && (
                       <CardDataAkademik
-                        kelas={"XII"}
-                        major={"Rekayasa Perangkat Lunak"}
-                        startYear={"2023"}
-                        studentStatus={"Aktif"}
+                        kelas={profileDetail?.details?.[0]?.class?.name || "-"}
+                        major={profileDetail?.details?.[0]?.Major?.name || "-"}
+                        startYear={
+                          moment(profileDetail?.details?.[0]?.startYear)
+                            .year()
+                            .toString() || "-"
+                        }
+                        studentStatus={
+                          profileDetail?.details?.[0]?.status || "-"
+                        }
                       />
                     )}
                     {activeMenu === "data-orang-tua" && (
@@ -303,7 +334,7 @@ export const ProfilePage = () => {
                       />
                     )}
                     {activeMenu === "riwayat-akademik" && (
-                      <CardRiwayatAkademik />
+                      <CardRiwayatAkademik data={studentGrades} />
                     )}
 
                     {/* === TEACHER */}

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import {
   FormStateStudentGrade,
   ResponseActionStudentGrade,
+  ResponseGetStudentGrade,
 } from "../interface/studentGrade.interface";
 
 const apiUrl = import.meta.env.VITE_API_URL;
@@ -40,8 +41,30 @@ const StudentGradeService = () => {
     }
   };
 
+  const getStudentGrade = async (
+    nis: string
+  ): Promise<ResponseGetStudentGrade> => {
+    try {
+      const response = await axios.get<ResponseGetStudentGrade>(
+        `${apiUrl}/api/student-grade/get/${nis}`,
+        {
+          headers: {
+            authorization: `Bearer ${userLoginCookie?.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        handleUnauthorized(error.response?.status || 0);
+      }
+      throw error;
+    }
+  };
+
   return {
     insertGrade,
+    getStudentGrade,
   };
 };
 

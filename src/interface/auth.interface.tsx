@@ -13,6 +13,7 @@ export interface UserDetails {
   phone: string;
   email: string;
   startYear: string;
+  status: string;
   endYear: string | null;
   mediaId: string | null;
   createdAt: string;
@@ -30,6 +31,8 @@ export interface UserDetails {
   nis?: number;
   nisn?: number;
   ParentOfStudent?: ParentOfStudent[];
+  class?: Class;
+  Major?: Fajusek;
 
   // === SENSITIF
   password?: string;
@@ -153,7 +156,7 @@ export interface StudentDetail {
   nisn: string;
   Major: Fajusek
   class: Class
-  ParentOfStudent: ParentOfStudent
+  ParentOfStudent: ParentOfStudent[]
   user: {
     username: string;
     password: string;

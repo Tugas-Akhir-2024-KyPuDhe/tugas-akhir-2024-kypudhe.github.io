@@ -12,12 +12,18 @@ import { CardDataAkademik } from "../../../../components/cardDataAkademik";
 import { AxiosError } from "axios";
 import { StudentDetail } from "../../../../interface/auth.interface";
 import moment from "moment";
+import { StudentsGradesByClass } from "../../../../interface/studentGrade.interface";
+import StudentGradeService from "../../../../services/studentGradeService";
 
 export const DetailSiswaMangementSiswa: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const studentGrade = StudentGradeService();
   const studentService = AuthService();
   const navigate = useNavigate();
 
+  const [studentGrades, setStudentGrades] = useState<StudentsGradesByClass[]>(
+    []
+  );
   const [loading, setLoading] = useState<boolean>(true);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [activeMenu, setActiveMenu] = useState("data-akademik");
@@ -36,6 +42,7 @@ export const DetailSiswaMangementSiswa: React.FC = () => {
           const data = response.data;
           setData(response.data);
           setImageUrl(data.photo.url);
+          await getStudentGrade(data.nis)
         } catch (error) {
           const axiosError = error as AxiosError;
           if (axiosError.response?.status === 404) {
@@ -56,6 +63,17 @@ export const DetailSiswaMangementSiswa: React.FC = () => {
 
     getDataSiswa();
   }, []);
+
+  const getStudentGrade = async (nis: string) => {
+    try {
+      const response = await studentGrade.getStudentGrade(nis);
+      setStudentGrades(response.data);
+      setLoading(false);
+    } catch (err) {
+      console.error(err);
+      setLoading(false);
+    }
+  };
   return (
     <>
       <HeaderTitlePage
@@ -187,15 +205,15 @@ export const DetailSiswaMangementSiswa: React.FC = () => {
           />
         ) : activeMenu === "data-orang-tua" ? (
           <CardDataOrangTua
-            nis={112233}
-            fatherName={data?.ParentOfStudent.fatherName || "-"}
-            motherName={data?.ParentOfStudent.motherName || "-"}
-            phone={data?.ParentOfStudent.phone || "-"}
-            parentJob={data?.ParentOfStudent.parentJob || ""}
-            parentAddress={data?.ParentOfStudent.parentAddress || "-"}
+            nis={parseInt(data!.nis)}
+            fatherName={data?.ParentOfStudent[0] && data?.ParentOfStudent[0].fatherName || "-"}
+            motherName={data?.ParentOfStudent[0] && data?.ParentOfStudent[0].motherName || "-"}
+            phone={data?.ParentOfStudent[0] && data?.ParentOfStudent[0].phone || "-"}
+            parentJob={data?.ParentOfStudent[0] && data?.ParentOfStudent[0].parentJob || ""}
+            parentAddress={data?.ParentOfStudent[0] && data?.ParentOfStudent[0].parentAddress || "-"}
           />
         ) : activeMenu === "riwayat-akademik" ? (
-          <CardRiwayatAkademik />
+          <CardRiwayatAkademik data={studentGrades} />
         ) : (
           <div>Halaman tidak ditemukan</div>
         )}
