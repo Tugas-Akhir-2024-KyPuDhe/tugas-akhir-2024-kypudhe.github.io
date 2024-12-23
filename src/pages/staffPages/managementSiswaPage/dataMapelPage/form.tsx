@@ -251,7 +251,7 @@ export const FormMapelMangementSiswaPage: React.FC = () => {
             </div>
             <div className="col-12">
               <div className="form-group mb-3">
-                <label className="mb-2 fw-medium">Deskripsi *</label>
+                <label className="mb-2 fw-medium">Deskripsi</label>
                 <textarea
                   name="description"
                   className={`form-control ${
