@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import useCookie from "react-use-cookie";
 
 interface BannerService {
-  getAllBanners: () => Promise<GetAllBannerResponse>;
+  getAllBanners: (status?: string) => Promise<GetAllBannerResponse>;
   getBannerById: (id: number) => Promise<GetDetailBannerResponse>;
   addBanner: (formData: FormData) => Promise<ResponseActionBanner>;
   updateBanner: (
@@ -31,10 +31,10 @@ const BannerService = (): BannerService => {
     }
   };
 
-  const getAllBanners = async (): Promise<GetAllBannerResponse> => {
+  const getAllBanners = async (status: string = "Active"): Promise<GetAllBannerResponse> => {
     try {
       const response: AxiosResponse<GetAllBannerResponse> = await axios.get(
-        `${apiUrl}/api/banner/get`
+        `${apiUrl}/api/banner/get?status=${status}`
       );
       return response.data;
     } catch (error) {

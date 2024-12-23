@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import useCookie from "react-use-cookie";
 
 interface CourseService {
-  getAllCourses: (grade?: string) => Promise<GetAllCourseResponse>;
+  getAllCourses: (grade?: string, sttaus?: string) => Promise<GetAllCourseResponse>;
   getCourseById: (id: number) => Promise<GetDetailCourseResponse>;
   addCourse: (formData: FormData) => Promise<ResponseActionCourse>;
   updateCourse: (
@@ -31,10 +31,10 @@ const CourseService = (): CourseService => {
     }
   };
 
-  const getAllCourses = async (grade = ""): Promise<GetAllCourseResponse> => {
+  const getAllCourses = async (grade = "", status = "Active"): Promise<GetAllCourseResponse> => {
     try {
       const response: AxiosResponse<GetAllCourseResponse> = await axios.get(
-        `${apiUrl}/api/course/get?grade=${grade}`
+        `${apiUrl}/api/course/get?grade=${grade}&status=${status}`
       );
       return response.data;
     } catch (error) {

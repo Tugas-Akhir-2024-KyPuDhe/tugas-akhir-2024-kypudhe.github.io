@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import useCookie from "react-use-cookie";
 
 interface GaleriService {
-  getAllGaleri: () => Promise<GetAllGaleriResponse>;
+  getAllGaleri: (status?: string) => Promise<GetAllGaleriResponse>;
   getGaleriById: (id: number) => Promise<GetDetailGaleriResponse>;
   addGaleri: (formData: FormData) => Promise<ResponseActionGaleri>;
   updateGaleri: (
@@ -31,10 +31,10 @@ const GaleriService = (): GaleriService => {
     }
   };
 
-  const getAllGaleri = async (): Promise<GetAllGaleriResponse> => {
+  const getAllGaleri = async (status: string = "Active"): Promise<GetAllGaleriResponse> => {
     try {
       const response: AxiosResponse<GetAllGaleriResponse> = await axios.get(
-        `${apiUrl}/api/galeri/get`
+        `${apiUrl}/api/galeri/get?status=${status}`
       );
       return response.data;
     } catch (error) {

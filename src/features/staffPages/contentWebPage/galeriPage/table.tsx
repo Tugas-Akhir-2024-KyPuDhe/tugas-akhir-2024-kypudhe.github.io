@@ -26,7 +26,7 @@ export const Table: React.FC = () => {
   const getData = async () => {
     setLoading(true);
     try {
-      const response = await galeriService.getAllGaleri();
+      const response = await galeriService.getAllGaleri("All");
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);

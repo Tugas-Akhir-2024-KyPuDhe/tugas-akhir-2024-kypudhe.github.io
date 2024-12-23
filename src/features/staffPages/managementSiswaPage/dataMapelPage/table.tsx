@@ -19,7 +19,7 @@ export const Table: React.FC = () => {
   const getData = async () => {
     setLoading(true);
     try {
-      const response = await courseService.getAllCourses();
+      const response = await courseService.getAllCourses("", "All");
       if (response.data && response.data.length > 0) {
         setData(response.data);
       }

@@ -60,12 +60,10 @@ export const CardRiwayatAkademik: React.FC<GradeProps> = ({ data }) => {
                       <FaEye className="me-2 fs-5" /> Detail
                     </button>
 
-                    {selectedClass && selectedGrades && (
-                      <ModalDetail
-                        dataGrades={selectedGrades && selectedGrades}
-                        dataClass={selectedClass! && selectedClass!}
-                      />
-                    )}
+                    <ModalDetail
+                      dataGrades={selectedGrades && selectedGrades}
+                      dataClass={selectedClass! && selectedClass!}
+                    />
                   </span>
                 </li>
               </>
@@ -128,14 +126,14 @@ export const ModalDetail: React.FC<ModalProps> = ({
                     <div className="col-3 col-md-2 fw-medium">Tahun Ajaran</div>
                     <div className="col-auto">:</div>
                     <div className="col-9 col-md-9 fw-medium">
-                      {dataClass.academicYear}
+                      {dataClass && dataClass.academicYear}
                     </div>
                   </div>
                   <div className="row mb-3">
                     <div className="col-3 col-md-2 fw-medium">Kelas</div>
                     <div className="col-auto">:</div>
                     <div className="col-9 col-md-9 fw-medium">
-                      {dataClass.name}
+                      {dataClass && dataClass.name}
                     </div>
                   </div>
                   <div className="row mb-3">
@@ -144,7 +142,7 @@ export const ModalDetail: React.FC<ModalProps> = ({
                     </div>
                     <div className="col-auto">:</div>
                     <div className="col-9 col-md-9 fw-medium">
-                      {dataClass.teacher.name}
+                      {dataClass && dataClass.teacher.name}
                     </div>
                   </div>
                 </div>
@@ -174,17 +172,18 @@ export const ModalDetail: React.FC<ModalProps> = ({
                       </tr>
                     </thead>
                     <tbody>
-                      {dataGrades.map((dataGrade, index) => (
-                        <tr key={index}>
-                          <td className="bg-light text-start">
-                            {dataGrade.course.name}
-                          </td>
-                          <td>{dataGrade.task}</td>
-                          <td>{dataGrade.PAS}</td>
-                          <td>{dataGrade.PTS}</td>
-                          <td>{dataGrade.UH}</td>
-                        </tr>
-                      ))}
+                      {dataGrades &&
+                        dataGrades.map((dataGrade, index) => (
+                          <tr key={index}>
+                            <td className="bg-light text-start">
+                              {dataGrade.course.name}
+                            </td>
+                            <td>{dataGrade.task}</td>
+                            <td>{dataGrade.PAS}</td>
+                            <td>{dataGrade.PTS}</td>
+                            <td>{dataGrade.UH}</td>
+                          </tr>
+                        ))}
                     </tbody>
                   </table>
                 </div>

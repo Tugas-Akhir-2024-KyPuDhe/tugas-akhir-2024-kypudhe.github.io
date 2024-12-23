@@ -20,7 +20,7 @@ export const TableBanner: React.FC = () => {
   const getData = async () => {
     setLoading(true);
     try {
-      const response = await bannerService.getAllBanners();
+      const response = await bannerService.getAllBanners("All");
       setListBanner(response.data);
     } catch (error) {
       console.error(error)
