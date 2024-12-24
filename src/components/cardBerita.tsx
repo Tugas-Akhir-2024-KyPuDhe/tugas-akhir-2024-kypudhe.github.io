@@ -1,9 +1,8 @@
 import React from "react";
-import { FaCalendarDay, FaCircle, FaPen, FaTrash } from "react-icons/fa6";
+import { FaCalendarDay } from "react-icons/fa6";
 import { formatDate } from "../utils/myFunctions";
 import parse from "html-react-parser";
-import { Link, useNavigate } from "react-router-dom";
-import useCookie from "react-use-cookie";
+import { Link } from "react-router-dom";
 
 interface Artikel {
   idArtikel: number;
@@ -19,21 +18,13 @@ interface Artikel {
 }
 
 export const CardBerita: React.FC<Artikel> = ({
-  idArtikel,
   uuidArtikel,
   imageArtikel,
   tipeArtikel,
   dateArtikel,
-  statusArtikel,
   titleArtikel,
   descArtikel,
-  handleDeleteBerita,
-  loadingDeleteBerita,
 }) => {
-  const navigate = useNavigate()
-  const [cookieLogin] = useCookie("userLoginCookie");
-  const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
-
   return (
     <article>
       <div className="card border-0 efect-hover-smooth">
@@ -56,7 +47,7 @@ export const CardBerita: React.FC<Artikel> = ({
           <div className="entry-header mb-3">
             <ul className="entry-meta list-unstyled d-flex mb-2">
               <li>
-                <a className="text-decoration-none text-blue fw-bold" href="#">
+                <a className="text-decoration-none text-blue fw-medium" href="#">
                   {tipeArtikel}
                 </a>
               </li>
@@ -65,6 +56,7 @@ export const CardBerita: React.FC<Artikel> = ({
               <Link
                 to={`/berita/${uuidArtikel}`}
                 className="link-dark text-decoration-none text-2line"
+                style={{ fontSize: "1.2rem" }}
               >
                 {titleArtikel}
               </Link>
@@ -73,61 +65,6 @@ export const CardBerita: React.FC<Artikel> = ({
           <p className="card-text entry-summary text-secondary text-4line">
             {parse(descArtikel)}
           </p>
-          {userLoginCookie.role === "STAFF" && (
-            <>
-              <hr />
-              <div className="row">
-                <div className="col-6 m-auto">
-                  <span
-                    className={`fw-medium text-${
-                      statusArtikel === "PUBLISH"
-                        ? "success"
-                        : statusArtikel === "DRAFT"
-                        ? "warning"
-                        : "secondary"
-                    }`}
-                  >
-                    <FaCircle
-                      className={`me-2 ${
-                        statusArtikel === "PUBLISH"
-                          ? "text-success"
-                          : statusArtikel === "DRAFT"
-                          ? "text-warning"
-                          : "text-dark"
-                      }`}
-                      style={{ fontSize: "8px" }}
-                    />
-                    {statusArtikel}
-                  </span>
-                </div>
-                <div className="col-6 text-end">
-                  <button
-                    className="btn btn-warning btn-sm me-2 text-light"
-                    onClick={() => navigate(`update/${uuidArtikel}`)}
-                    disabled={loadingDeleteBerita}
-                  >
-                      <FaPen />
-                  </button>
-                  <button
-                    className="btn btn-danger btn-sm"
-                    onClick={() => handleDeleteBerita(idArtikel)}
-                    disabled={loadingDeleteBerita}
-                  >
-                    {loadingDeleteBerita ? (
-                      <div
-                        className="spinner-border spinner-border-sm text-light"
-                        role="status"
-                      >
-                        <span className="visually-hidden">Loading...</span>
-                      </div>
-                    ) : (
-                      <FaTrash />
-                    )}
-                  </button>
-                </div>
-              </div>
-            </>
-          )}
         </div>
       </div>
     </article>

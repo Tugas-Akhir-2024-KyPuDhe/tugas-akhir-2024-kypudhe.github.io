@@ -11,6 +11,7 @@ export const optionsGrade = [
 
 export const optionsStatusArticle = [
   { value: "PUBLISH", label: "PUBLISH" },
+  { value: "NONACTIVE", label: "NONACTIVE" },
   { value: "DRAFT", label: "DRAFT" },
 ];
 

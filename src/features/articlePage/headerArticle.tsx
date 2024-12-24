@@ -28,7 +28,7 @@ export const HeaderArticle: React.FC<HeaderArticleProps> = ({
         <div className="row d-flex">
           {userLoginCookie.role === "STAFF" && (
             <div className="col-auto">
-              <Link to="/berita/tambah" className="btn btn-primary border-0 bg-blue">
+              <Link to="/content-web/berita/tambah" className="btn btn-primary border-0 bg-blue">
                 <MdAdd className="display-6" />
               </Link>
             </div>

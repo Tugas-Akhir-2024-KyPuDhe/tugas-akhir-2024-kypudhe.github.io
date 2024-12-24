@@ -487,7 +487,7 @@ export const ListMenu = () => {
               onClick={() =>
                 handleMenuClick("/pengelolaan-siswa/absensi-siswa")
               }
-              icon={<FaCircle style={{ fontSize: "8px" }} />}
+              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
               style={{
                 position: "relative",
                 backgroundColor:
@@ -517,7 +517,7 @@ export const ListMenu = () => {
             </MenuItem>
             <MenuItem
               onClick={() => handleMenuClick("/pengelolaan-siswa/daftar-siswa")}
-              icon={<FaCircle style={{ fontSize: "8px" }} />}
+              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
               style={{
                 position: "relative",
                 backgroundColor:
@@ -547,7 +547,7 @@ export const ListMenu = () => {
             </MenuItem>
             <MenuItem
               onClick={() => handleMenuClick("/guru/jadwal-mengajar")}
-              icon={<FaCircle style={{ fontSize: "8px" }} />}
+              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
               style={{
                 position: "relative",
                 backgroundColor:
@@ -575,7 +575,7 @@ export const ListMenu = () => {
             </MenuItem>
             <MenuItem
               onClick={() => handleMenuClick("/pengelolaan-siswa/nilai-siswa")}
-              icon={<FaCircle style={{ fontSize: "8px" }} />}
+              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
               style={{
                 position: "relative",
                 backgroundColor:
@@ -623,7 +623,7 @@ export const ListMenu = () => {
               onClick={() =>
                 handleMenuClick("/manajemen-siswa/daftar-siswa")
               }
-              icon={<FaCircle style={{ fontSize: "8px" }} />}
+              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
               style={{
                 position: "relative",
                 backgroundColor:
@@ -653,7 +653,7 @@ export const ListMenu = () => {
             </MenuItem> */}
             <MenuItem
               onClick={() => handleMenuClick("/manajemen-siswa/daftar-siswa")}
-              icon={<FaCircle style={{ fontSize: "8px" }} />}
+              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
               style={{
                 position: "relative",
                 backgroundColor:
@@ -683,7 +683,7 @@ export const ListMenu = () => {
             </MenuItem>
             <MenuItem
               onClick={() => handleMenuClick("/manajemen-siswa/data-kelas")}
-              icon={<FaCircle style={{ fontSize: "8px" }} />}
+              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
               style={{
                 position: "relative",
                 backgroundColor:
@@ -713,7 +713,7 @@ export const ListMenu = () => {
             </MenuItem>
             <MenuItem
               onClick={() => handleMenuClick("/manajemen-siswa/data-mapel")}
-              icon={<FaCircle style={{ fontSize: "8px" }} />}
+              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
               style={{
                 position: "relative",
                 backgroundColor:
@@ -754,7 +754,7 @@ export const ListMenu = () => {
           >
             <MenuItem
               onClick={() => handleMenuClick("/manajemen-staff/data-staff")}
-              icon={<FaCircle style={{ fontSize: "8px" }} />}
+              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
               style={{
                 position: "relative",
                 backgroundColor:
@@ -794,8 +794,36 @@ export const ListMenu = () => {
             className="fw-medium"
           >
             <MenuItem
+              onClick={() => handleMenuClick("/content-web/berita")}
+              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
+              style={{
+                position: "relative",
+                backgroundColor:
+                  selectedMenu === "/content-web/berita" ? "#E5EAF2" : "",
+              }}
+              className={`fw-medium ${
+                selectedMenu === "/content-web/berita"
+                  ? "text-blue"
+                  : "text-dark-soft"
+              }`}
+            >
+              {selectedMenu === "/content-web/berita" && (
+                <div
+                  style={{
+                    position: "absolute",
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                    width: "4px",
+                    backgroundColor: "var(--blue-color)",
+                  }}
+                />
+              )}
+              Berita
+            </MenuItem>
+            <MenuItem
               onClick={() => handleMenuClick("/content-web/banner")}
-              icon={<FaCircle style={{ fontSize: "8px" }} />}
+              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
               style={{
                 position: "relative",
                 backgroundColor:
@@ -823,7 +851,7 @@ export const ListMenu = () => {
             </MenuItem>
             <MenuItem
               onClick={() => handleMenuClick("/content-web/sekolah")}
-              icon={<FaCircle style={{ fontSize: "8px" }} />}
+              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
               style={{
                 position: "relative",
                 backgroundColor:
@@ -851,7 +879,7 @@ export const ListMenu = () => {
             </MenuItem>
             <MenuItem
               onClick={() => handleMenuClick("/content-web/jurusan")}
-              icon={<FaCircle style={{ fontSize: "8px" }} />}
+              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
               style={{
                 position: "relative",
                 backgroundColor:
@@ -879,7 +907,7 @@ export const ListMenu = () => {
             </MenuItem>
             <MenuItem
               onClick={() => handleMenuClick("/content-web/fasilitas")}
-              icon={<FaCircle style={{ fontSize: "8px" }} />}
+              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
               style={{
                 position: "relative",
                 backgroundColor:
@@ -907,7 +935,7 @@ export const ListMenu = () => {
             </MenuItem>
             <MenuItem
               onClick={() => handleMenuClick("/content-web/ekstra-kurikuler")}
-              icon={<FaCircle style={{ fontSize: "8px" }} />}
+              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
               style={{
                 position: "relative",
                 backgroundColor:
@@ -937,7 +965,7 @@ export const ListMenu = () => {
             </MenuItem>
             <MenuItem
               onClick={() => handleMenuClick("/content-web/galeri")}
-              icon={<FaCircle style={{ fontSize: "8px" }} />}
+              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
               style={{
                 position: "relative",
                 backgroundColor:

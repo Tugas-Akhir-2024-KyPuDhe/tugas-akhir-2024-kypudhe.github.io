@@ -7,6 +7,7 @@ import { formatDate, formatTime, Toast } from "../../utils/myFunctions";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { AxiosError } from "axios";
+import { HeaderTitlePage } from "../../components/headerTitlePage";
 
 interface FormState {
   id?: number;
@@ -74,6 +75,7 @@ export const DetailArticlePage: React.FC = () => {
 
   return (
     <>
+      <HeaderTitlePage title="Detail Berita" subTitle={"Kategori: "+dataDetail.category || "No Category"} backDisplay={true} addDisplay={false} linkAdd=""/>
       <div
         className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
         style={{ backgroundColor: "#fff" }}

@@ -98,6 +98,28 @@ export const convertStatus = (status: string): JSX.Element => {
   );
 };
 
+export const convertStatusBerita = (status: string): JSX.Element => {
+  if (status === "PUBLISH") {
+    return (
+      <>
+        <span className="badge text-bg-success">Aktif</span>
+      </>
+    );
+  } else if (status === "DRAFT") {
+    return (
+      <>
+        <span className="badge text-bg-warning">Draft</span>
+      </>
+    );
+  } else {
+    return (
+      <>
+        <span className="badge text-bg-danger">Non Aktif</span>
+      </>
+    );
+  }
+};
+
 export const convertRole = (role: string): string => {
   return role === "STAFF" ? "Pegawai" : role == "TEACHER" ? "Guru" : "Siswa/i";
 };

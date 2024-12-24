@@ -47,6 +47,7 @@ import {
   DaftarKelasNilaiSiswaPage,
   DetailKelasPage,
   DetailKelasSiswaPage,
+  BeritaPage,
 } from "./pages";
 import { SideBar } from "./components/sidebar";
 import PrivateRoute from "./components/privateRoute";
@@ -91,11 +92,11 @@ function App() {
 
             {/* #region | Staff */}
             <Route
-              path="/berita/tambah"
+              path="/content-web/berita/tambah"
               element={<PrivateRoute Component={FormArticlePage} />}
             />
             <Route
-              path="/berita/update/:id"
+              path="/content-web/berita/update/:id"
               element={<PrivateRoute Component={FormArticlePage} />}
             />
             <Route
@@ -165,6 +166,10 @@ function App() {
             <Route
               path="/content-web/galeri/koleksi/:id"
               element={<PrivateRoute Component={UpdateGaleriColletion} />}
+            />
+            <Route
+              path="/content-web/berita"
+              element={<PrivateRoute Component={BeritaPage} />}
             />
             <Route
               path="/manajemen-siswa/daftar-siswa"

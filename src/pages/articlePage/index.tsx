@@ -21,7 +21,7 @@ export const ArticlePage: React.FC = () => {
     setLoading(true);
     try {
       const response = await articleService.getAllArtikels(
-        page,
+        page.toString(),
         itemsPerPage,
         keyword
       );

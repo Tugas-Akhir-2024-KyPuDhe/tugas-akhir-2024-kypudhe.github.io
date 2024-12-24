@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import Select from "react-select";
-import ArtikelService from "../../services/artikelService";
-import { Toast } from "../../utils/myFunctions";
+import ArtikelService from "../../../../services/artikelService";
+import { Toast } from "../../../../utils/myFunctions";
 import { useNavigate, useParams } from "react-router-dom";
-import { FaArrowLeft } from "react-icons/fa6";
 import useCookie from "react-use-cookie";
-import { optionsStatusArticle } from "../../utils/optionsData";
+import { optionsStatusArticle } from "../../../../utils/optionsData";
 import { AxiosError } from "axios";
+import { HeaderTitlePage } from "../../../../components/headerTitlePage";
 
 const toolbarOptions = [
   [{ header: "1" }, { header: "2" }, { font: [] }],
@@ -76,7 +76,7 @@ export const FormArticlePage: React.FC = () => {
     const getData = async () => {
       if (id) {
         try {
-          const response = await articleService.getArtikelById(id);
+          const response = await articleService.getArtikelById(id, "id");
           const data = response.data;
 
           setFormData({
@@ -187,32 +187,13 @@ export const FormArticlePage: React.FC = () => {
 
   return (
     <>
-      <div className="m-1 m-lg-4 m-md-4 my-4">
-        <div className="row g-4 d-flex justify-content-between mb-3">
-          <div className="col-12 col-lg-6 col-md-6">
-            <div className="row d-flex">
-              <div className="col-auto">
-                <button
-                  onClick={() => navigate(-1)}
-                  className="btn btn-lg btn-danger"
-                >
-                  <FaArrowLeft />
-                </button>
-              </div>
-              <div className="col">
-                <div className="">
-                  <div className="fw-bold fs-5 text-dark-soft">
-                    Tambah Berita/Artikel
-                  </div>
-                  <div className="">
-                    Tambah Berita dan artikel SMKN 1 Lumban Julu
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <HeaderTitlePage
+        title={`${id ? "Update" : "Tambah"} Berita/Artikel`}
+        subTitle="Berita/Artikel Web SMKN 1 Lumban Julu"
+        backDisplay={true}
+        addDisplay={false}
+        linkAdd=""
+      />
       <div
         className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
         style={{ backgroundColor: "#fff", position: "relative" }}
