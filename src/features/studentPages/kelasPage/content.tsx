@@ -38,7 +38,7 @@ export const Content: React.FC = () => {
       style={{
         backgroundColor: "#fff",
         position: "relative",
-        minHeight: "40vh",
+        minHeight: "70vh",
       }}
     >
       {loading && (
@@ -68,15 +68,15 @@ export const Content: React.FC = () => {
               <div className="card card-body">
                 <span
                   className={`badge mb-2 ${
-                    data.statusNaik === "Aktif"
+                    data.status === "Aktif"
                       ? "text-bg-success"
-                      : data.statusNaik === "Naik"
+                      : data.status === "Naik"
                       ? "text-bg-primary"
                       : "text-bg-danger"
                   }`}
                   style={{ maxWidth: "fit-content" }}
                 >
-                  {data.statusNaik}
+                  {data.status}
                 </span>
                 <h4>{data.currentClass.name}</h4>
                 <h6>Wali Kelas : {data.currentClass.homeRoomTeacher.name}</h6>

@@ -6,7 +6,7 @@
 }
 
 .bg-blue {
-  background-color: var(--blue-color);
+  background-color: var(--blue-color) !important;
 }
 .bg-green {
   background-color: var(--green-color);

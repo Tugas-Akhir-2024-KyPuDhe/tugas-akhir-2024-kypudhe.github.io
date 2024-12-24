@@ -1,3 +1,4 @@
+import { CourseInClass } from "./courseInClass.interface";
 import { StaffDetail } from "./staff.interface";
 import { StudentsGrades } from "./studentGrade.interface";
 
@@ -19,6 +20,7 @@ export interface CurrentClass {
   updatedAt: string;
   homeRoomTeacher: StaffDetail;
   StudentsGrades: StudentsGrades[];
+  CourseInClass: CourseInClass[]
 }
 
 export interface StudentHistory {
@@ -27,7 +29,7 @@ export interface StudentHistory {
   oldClassId: string;
   currentClassId: string;
   academicYear: string;
-  statusNaik: string;
+  status: string;
   createdAt: string;
   updatedAt: string;
   currentClass: CurrentClass;
