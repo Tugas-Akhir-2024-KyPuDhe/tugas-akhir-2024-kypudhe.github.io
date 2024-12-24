@@ -133,6 +133,7 @@ export const LoginPage: React.FC = () => {
                   <input
                     type="text"
                     name="username"
+                    autoFocus
                     className={`form-control form-control-lg ${
                       errorFormLogin.username ? "is-invalid" : ""
                     }`}

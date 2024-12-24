@@ -1,14 +1,19 @@
 import React from "react";
+import { StudentHistory } from "../../../interface/studentHistory.interface";
 
 interface CardProps {
   loading: boolean;
+  data: StudentHistory;
 }
 
-export const CardAbsensiKelas: React.FC<CardProps> = ({ loading }) => {
+export const CardAbsensiDetailKelas: React.FC<CardProps> = ({ loading }) => {
   return (
     <div
       className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
-      style={{ backgroundColor: "#fff", position: "relative" }}
+      style={{
+        backgroundColor: "#fff",
+        position: "relative",
+      }}
     >
       {loading && (
         <div
@@ -32,10 +37,19 @@ export const CardAbsensiKelas: React.FC<CardProps> = ({ loading }) => {
       )}
       <div className="row g-3">
         <div className="col-12">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi
-          rerum, modi fugiat nam sint ratione vero doloribus temporibus
-          reiciendis repellat provident beatae nemo delectus, officiis autem
-          ipsam asperiores deleniti ad.
+          <div className="fw-bold position-relative pb-2">
+            Absensi Siswa
+            <div
+              style={{
+                position: "absolute",
+                left: 0,
+                bottom: 0,
+                width: "50px",
+                height: "3px",
+                backgroundColor: "var(--blue-color)",
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>

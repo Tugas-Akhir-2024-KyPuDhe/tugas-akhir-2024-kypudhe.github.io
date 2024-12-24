@@ -1,4 +1,5 @@
 import { Media } from "./media.interface";
+import { StudentsGrades } from "./studentGrade.interface";
 
   export interface Course {
     id: number;
@@ -11,6 +12,7 @@ import { Media } from "./media.interface";
     createdAt: string;
     updatedAt: string;
     image: Media;
+    StudentsGrades?: StudentsGrades[]
   }
   
   export interface GetAllCourseResponse {

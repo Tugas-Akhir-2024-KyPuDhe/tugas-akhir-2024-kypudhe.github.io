@@ -1,7 +1,7 @@
 import axios from "axios";
 import useCookie from "react-use-cookie";
 import { useNavigate } from "react-router-dom";
-import { ResponseGetStudenHistory } from "../interface/studentHistory.interface";
+import { ResponseGetStudenHistory, ResponseGetStudenHistoryDetail } from "../interface/studentHistory.interface";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 const StudentHistoryService = () => {
@@ -36,8 +36,30 @@ const StudentHistoryService = () => {
     }
   };
 
+  const getStudentHistoryDetail = async (
+    id: string
+  ): Promise<ResponseGetStudenHistoryDetail> => {
+    try {
+      const response = await axios.get<ResponseGetStudenHistoryDetail>(
+        `${apiUrl}/api/student-history/get/${id}`,
+        {
+          headers: {
+            authorization: `Bearer ${userLoginCookie?.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        handleUnauthorized(error.response?.status || 0);
+      }
+      throw error;
+    }
+  };
+
   return {
     getStudentHistory,
+    getStudentHistoryDetail,
   };
 };
 

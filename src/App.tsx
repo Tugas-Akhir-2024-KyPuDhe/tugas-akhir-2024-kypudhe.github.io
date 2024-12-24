@@ -46,6 +46,7 @@ import {
   FormStaffMangementStaffPage,
   DaftarKelasNilaiSiswaPage,
   DetailKelasPage,
+  DetailKelasSiswaPage,
 } from "./pages";
 import { SideBar } from "./components/sidebar";
 import PrivateRoute from "./components/privateRoute";
@@ -303,6 +304,10 @@ function App() {
             <Route
               path="/kelas"
               element={<PrivateRoute Component={KelasPage} />}
+            />
+            <Route
+              path="/kelas/detail/:id"
+              element={<PrivateRoute Component={DetailKelasSiswaPage} />}
             />
             <Route
               path="/mata-pelajaran"

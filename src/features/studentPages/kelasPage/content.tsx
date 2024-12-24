@@ -4,6 +4,7 @@ import { decodeToken } from "../../../utils/myFunctions";
 import useCookie from "react-use-cookie";
 import { StudentHistory } from "../../../interface/studentHistory.interface";
 import { FaArrowRight } from "react-icons/fa6";
+import { Link } from "react-router-dom";
 
 export const Content: React.FC = () => {
   const [cookieLogin] = useCookie("userLoginCookie");
@@ -38,7 +39,6 @@ export const Content: React.FC = () => {
       style={{
         backgroundColor: "#fff",
         position: "relative",
-        minHeight: "70vh",
       }}
     >
       {loading && (
@@ -50,7 +50,7 @@ export const Content: React.FC = () => {
             right: 0,
             bottom: 0,
             backgroundColor: "rgba(255, 255, 255, 0.7)",
-            zIndex: 9999,
+            zIndex: 20,
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
@@ -83,9 +83,9 @@ export const Content: React.FC = () => {
                 <hr />
                 <div className="d-flex justify-content-between">
                   <div className="my-auto text-start fw-medium">{data.academicYear}</div>
-                  <button className="btn btn-primary bg-blue w-auto px-3">
+                  <Link to={`detail/${data.uuid}`} className="btn btn-primary bg-blue w-auto px-3">
                     <FaArrowRight className="fs-5"/>{" "}
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>

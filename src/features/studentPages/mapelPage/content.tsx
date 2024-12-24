@@ -18,6 +18,11 @@ export const Content: React.FC = () => {
     value: "",
     label: "",
   });
+  const [summary, setSummary] = useState({
+    waliKelas: "",
+    kelas: "",
+    status: "",
+  });
 
   const getData = async () => {
     try {
@@ -44,6 +49,21 @@ export const Content: React.FC = () => {
     getData();
   }, []);
 
+  useEffect(() => {
+    const selectedClass = data.find(
+      (dt) => dt.currentClass.name === selectedOption.value
+    );
+
+    if (selectedClass) {
+      setSummary({
+        waliKelas:
+          selectedClass.currentClass.homeRoomTeacher?.name || "Tidak Ada",
+        kelas: selectedClass.currentClass.name || "Tidak Ada",
+        status: selectedClass.status,
+      });
+    }
+  }, [selectedOption, data]);
+
   const handleSelectChange = (
     selectedOption: { value: string; label: string } | null
   ) => {
@@ -57,113 +77,187 @@ export const Content: React.FC = () => {
   )?.currentClass.CourseInClass;
 
   return (
-    <div
-      className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
-      style={{
-        backgroundColor: "#fff",
-        position: "relative",
-        minHeight: "70vh",
-      }}
-    >
-      {loading && (
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(255, 255, 255, 0.7)",
-            zIndex: 9999,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div className="spinner-border text-primary" role="status">
-            <span className="visually-hidden">Loading...</span>
+    <>
+      <div
+        className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
+        style={{
+          backgroundColor: "#fff",
+          position: "relative",
+        }}
+      >
+        {loading && (
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: "rgba(255, 255, 255, 0.7)",
+              zIndex: 20,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        )}
+        <div className="row mb-3 g-3">
+          <div className="col-12 col-lg-4 col-md-3">
+            <Select
+              options={data.map((dt) => ({
+                value: dt.currentClass.name,
+                label: dt.currentClass.name,
+              }))}
+              onChange={handleSelectChange}
+              value={selectedOption}
+              isSearchable={false}
+              placeholder="Pilih Kelas"
+              className="form-control-lg px-0 pt-0"
+              styles={{
+                control: (baseStyles) => ({
+                  ...baseStyles,
+                  fontSize: "0.955rem",
+                  minHeight: "48px",
+                  borderRadius: "8px",
+                }),
+                option: (provided) => ({
+                  ...provided,
+                  fontSize: "1rem",
+                }),
+              }}
+            />
+          </div>
+          <div className="col-12">
+            <div className="row mb-3">
+              <div className="col-2 fw-medium">Wali Kelas</div>
+              <div className="col-auto">:</div>
+              <div className="col-9 fw-medium">{summary.waliKelas}</div>
+            </div>
+            <div className="row mb-3">
+              <div className="col-2 fw-medium">Kelas</div>
+              <div className="col-auto">:</div>
+              <div className="col-9 fw-medium">{summary.kelas}</div>
+            </div>
+            <div className="row mb-3">
+              <div className="col-2 fw-medium">Status </div>
+              <div className="col-auto">:</div>
+              <div className="col-9 fw-medium">{summary.status}</div>
+            </div>
           </div>
         </div>
-      )}
-      <div className="row mb-3">
-        <div className="col-12 col-lg-4 col-md-3">
-          <Select
-            options={data.map((dt) => ({
-              value: dt.currentClass.name,
-              label: dt.currentClass.name,
-            }))}
-            onChange={handleSelectChange}
-            value={selectedOption}
-            isSearchable={false}
-            placeholder="Pilih Kelas"
-            className="form-control-lg px-0 pt-0"
-            styles={{
-              control: (baseStyles) => ({
-                ...baseStyles,
-                fontSize: "0.955rem",
-                minHeight: "48px",
-                borderRadius: "8px",
-              }),
-              option: (provided) => ({
-                ...provided,
-                fontSize: "1rem",
-              }),
+      </div>
+
+      <div
+        className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
+        style={{
+          backgroundColor: "#fff",
+          position: "relative",
+        }}
+      >
+        {loading && (
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: "rgba(255, 255, 255, 0.7)",
+              zIndex: 20,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
             }}
-          />
+          >
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        )}
+        <div className="row mb-3 g-3">
+          <div className="col-12">
+            <div className="fw-bold position-relative pb-2">
+              Jadwal Mata Pelajaran
+              <div
+                style={{
+                  position: "absolute",
+                  left: 0,
+                  bottom: 0,
+                  width: "50px",
+                  height: "3px",
+                  backgroundColor: "var(--blue-color)",
+                }}
+              />
+            </div>
+          </div>
+          <div className="col-12">
+            <div className="table-responsive">
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th
+                      className="py-3 bg-blue border-start text-light text-center"
+                      scope="col"
+                      style={{ width: "50px" }}
+                    >
+                      No
+                    </th>
+                    <th className="py-3 bg-blue border-start text-light" scope="col" style={{ width: "280px" }}>
+                      Mata Pelajaran
+                    </th>
+                    <th className="py-3 bg-blue border-start text-light" scope="col">
+                      Guru Pengajar
+                    </th>
+                    <th className="py-3 bg-blue border-start text-light text-center" scope="col">
+                      Hari
+                    </th>
+                    <th
+                      className="py-3 bg-blue border-start text-light text-center"
+                      scope="col"
+                    >
+                      Jam Mulai
+                    </th>
+                    <th
+                      className="py-3 bg-blue border-start text-light text-center"
+                      scope="col"
+                    >
+                      Jam Selesai
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredCourses?.map((mapel, index) => (
+                    <tr key={index}>
+                      <td className="py-3 text-center" scope="row">
+                        {index + 1}
+                      </td>
+                      <td className="py-3">{mapel.courseDetail.name}</td>
+                      <td className="py-3">{mapel.teacher.name}</td>
+                      <td className="py-3">{mapel.day}</td>
+                      <td className="py-3 text-center" style={{ width: "140px" }}>
+                        {mapel.timeStart}
+                      </td>
+                      <td className="py-3 text-center" style={{ width: "140px" }}>
+                        {mapel.timeEnd}
+                      </td>
+                    </tr>
+                  )) || (
+                    <tr>
+                      <td colSpan={5} className="py-3 text-center">
+                        Tidak ada data mata pelajaran untuk kelas ini.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
-      <div className="row">
-        <div className="col-12">
-          <table className="table">
-            <thead>
-              <tr>
-                <th
-                  className="py-3 bg-blue text-light text-center"
-                  scope="col"
-                  style={{ width: "50px" }}
-                >
-                  No
-                </th>
-                <th className="py-3 bg-blue text-light" scope="col">
-                  Mata Pelajaran
-                </th>
-                <th className="py-3 bg-blue text-light" scope="col">
-                  Guru Pengajar
-                </th>
-                <th className="py-3 bg-blue text-light text-center" scope="col">
-                  Jam Mulai
-                </th>
-                <th className="py-3 bg-blue text-light text-center" scope="col">
-                  Jam Selesai
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredCourses?.map((mapel, index) => (
-                <tr key={index}>
-                  <td className="py-3 text-center" scope="row">
-                    {index + 1}
-                  </td>
-                  <td className="py-3">{mapel.courseDetail.name}</td>
-                  <td className="py-3">{mapel.teacher.name}</td>
-                  <td className="py-3 text-center" style={{ width: "140px" }}>
-                    {mapel.timeStart}
-                  </td>
-                  <td className="py-3 text-center" style={{ width: "140px" }}>
-                    {mapel.timeEnd}
-                  </td>
-                </tr>
-              )) || (
-                <tr>
-                  <td colSpan={5} className="py-3 text-center">
-                    Tidak ada data mata pelajaran untuk kelas ini.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+    </>
   );
 };

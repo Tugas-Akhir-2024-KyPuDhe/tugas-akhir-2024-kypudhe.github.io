@@ -79,7 +79,7 @@ export const CardDaftarSiswaDetailKelas: React.FC<DaftarSiswaProps> = ({
         <>
           <button
             className="btn btn-info btn-sm text me-2 text-light"
-            onClick={() => navigate(`detail/${row.nis}`)}
+            onClick={() => navigate(`/manajemen-siswa/daftar-siswa/detail/${row.nis}`)}
             disabled={loading}
           >
             <FaEye />
@@ -104,7 +104,7 @@ export const CardDaftarSiswaDetailKelas: React.FC<DaftarSiswaProps> = ({
             right: 0,
             bottom: 0,
             backgroundColor: "rgba(255, 255, 255, 0.7)",
-            zIndex: 9999,
+            zIndex: 20,
             display: "flex",
             justifyContent: "center",
             alignItems: "center",

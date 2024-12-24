@@ -147,45 +147,59 @@ export const ModalDetail: React.FC<ModalProps> = ({
                   </div>
                 </div>
                 <div className="col-12">
-                  <table className="table text-center">
-                    <thead>
-                      <tr>
-                        <th
-                          scope="col"
-                          className="bg-light"
-                          style={{ width: "60px" }}
-                        >
-                          Mata Pelajaran
-                        </th>
-                        <th scope="col" style={{ width: "20px" }}>
-                          Tugas
-                        </th>
-                        <th scope="col" style={{ width: "20px" }}>
-                          PAS
-                        </th>
-                        <th scope="col" style={{ width: "20px" }}>
-                          PTS
-                        </th>
-                        <th scope="col" style={{ width: "20px" }}>
-                          UH
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {dataGrades &&
-                        dataGrades.map((dataGrade, index) => (
-                          <tr key={index}>
-                            <td className="bg-light text-start">
-                              {dataGrade.course.name}
-                            </td>
-                            <td>{dataGrade.task}</td>
-                            <td>{dataGrade.PAS}</td>
-                            <td>{dataGrade.PTS}</td>
-                            <td>{dataGrade.UH}</td>
-                          </tr>
-                        ))}
-                    </tbody>
-                  </table>
+                  <div className="table-responsive">
+                    <table className="table text-center">
+                      <thead>
+                        <tr>
+                          <th
+                            scope="col"
+                            className="bg-light"
+                            style={{ width: "60px" }}
+                          >
+                            Mata Pelajaran
+                          </th>
+                          <th scope="col" style={{ width: "20px" }}>
+                            Tugas
+                          </th>
+                          <th scope="col" style={{ width: "20px" }}>
+                            UH
+                          </th>
+                          <th scope="col" style={{ width: "20px" }}>
+                            PTS
+                          </th>
+                          <th scope="col" style={{ width: "20px" }}>
+                            PAS
+                          </th>
+                          <th scope="col" style={{ width: "20px" }}>
+                            Portofolio
+                          </th>
+                          <th scope="col" style={{ width: "20px" }}>
+                            Proyek
+                          </th>
+                          <th scope="col" style={{ width: "20px" }}>
+                            KET
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {dataGrades &&
+                          dataGrades.map((dataGrade, index) => (
+                            <tr key={index}>
+                              <td className="bg-light text-start">
+                                {dataGrade.course.name}
+                              </td>
+                              <td>{dataGrade.task}</td>
+                              <td>{dataGrade.UH}</td>
+                              <td>{dataGrade.PTS}</td>
+                              <td>{dataGrade.PAS}</td>
+                              <td>{dataGrade.portofolio}</td>
+                              <td>{dataGrade.proyek}</td>
+                              <td>{dataGrade.description}</td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             </div>

@@ -25,6 +25,7 @@ export interface CurrentClass {
 
 export interface StudentHistory {
   id: number;
+  uuid: string;
   studentId: string;
   oldClassId: string;
   currentClassId: string;
@@ -39,4 +40,9 @@ export interface ResponseGetStudenHistory {
   status: number;
   message: string;
   data: StudentHistory[];
+}
+export interface ResponseGetStudenHistoryDetail {
+  status: number;
+  message: string;
+  data: StudentHistory;
 }
