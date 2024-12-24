@@ -61,7 +61,7 @@ export const HomePage = () => {
   const [loadingDeleteBerita, setLoadingDeleteBerita] = useState(false);
 
   const getAllArtikel = async () => {
-    const response = await articleService.getAllArtikels(1, 8);
+    const response = await articleService.getAllArtikels("1", 8);
     setDataArtikel(response.data);
   };
 
