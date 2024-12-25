@@ -9,10 +9,10 @@ import {
   Toast,
 } from "../../../../utils/myFunctions";
 import { FaTrash } from "react-icons/fa";
-import Swal from "sweetalert2";
 import { FaPen } from "react-icons/fa6";
 import ArtikelService from "../../../../services/artikelService";
 import { Artikel } from "../../../../interface/artikel.interface";
+import { AxiosError } from "axios";
 
 export const Table: React.FC = () => {
   const beritaService = ArtikelService();
@@ -57,10 +57,17 @@ export const Table: React.FC = () => {
           });
         }
       } catch (error) {
-        console.error("Error deleting berita:", error);
-        Swal.fire("Gagal", "Terjadi kesalahan saat menghapus berita", "error");
+        const axiosError = error as AxiosError;
+        if (axiosError.response?.status === 403) {
+          Toast.fire({
+            icon: "error",
+            title: `Hanya bisa menghapus berita yang tidak aktif saja!`,
+            timer: 5000,
+          });
+        }
+        console.error(error);
       } finally {
-        setLoading(false); 
+        setLoading(false);
       }
     }
   };

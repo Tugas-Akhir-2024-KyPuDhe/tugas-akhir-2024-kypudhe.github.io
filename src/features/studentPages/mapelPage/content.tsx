@@ -202,28 +202,42 @@ export const Content: React.FC = () => {
                     <th
                       className="py-3 bg-blue border-start text-light text-center"
                       scope="col"
-                      style={{ width: "50px" }}
+                      style={{ width: "50px", fontSize: "0.9rem" }}
                     >
                       No
                     </th>
-                    <th className="py-3 bg-blue border-start text-light" scope="col" style={{ width: "280px" }}>
+                    <th
+                      className="py-3 bg-blue border-start text-light"
+                      scope="col"
+                      style={{ width: "280px", fontSize: "0.9rem" }}
+                    >
                       Mata Pelajaran
                     </th>
-                    <th className="py-3 bg-blue border-start text-light" scope="col">
+                    <th
+                      className="py-3 bg-blue border-start text-light"
+                      scope="col"
+                      style={{ fontSize: "0.9rem" }}
+                    >
                       Guru Pengajar
                     </th>
-                    <th className="py-3 bg-blue border-start text-light text-center" scope="col">
+                    <th
+                      className="py-3 bg-blue border-start text-light text-center"
+                      scope="col"
+                      style={{ fontSize: "0.9rem" }}
+                    >
                       Hari
                     </th>
                     <th
                       className="py-3 bg-blue border-start text-light text-center"
                       scope="col"
+                      style={{ fontSize: "0.9rem" }}
                     >
                       Jam Mulai
                     </th>
                     <th
                       className="py-3 bg-blue border-start text-light text-center"
                       scope="col"
+                      style={{ fontSize: "0.9rem" }}
                     >
                       Jam Selesai
                     </th>
@@ -238,10 +252,16 @@ export const Content: React.FC = () => {
                       <td className="py-3">{mapel.courseDetail.name}</td>
                       <td className="py-3">{mapel.teacher.name}</td>
                       <td className="py-3">{mapel.day}</td>
-                      <td className="py-3 text-center" style={{ width: "140px" }}>
+                      <td
+                        className="py-3 text-center"
+                        style={{ width: "140px" }}
+                      >
                         {mapel.timeStart}
                       </td>
-                      <td className="py-3 text-center" style={{ width: "140px" }}>
+                      <td
+                        className="py-3 text-center"
+                        style={{ width: "140px" }}
+                      >
                         {mapel.timeEnd}
                       </td>
                     </tr>

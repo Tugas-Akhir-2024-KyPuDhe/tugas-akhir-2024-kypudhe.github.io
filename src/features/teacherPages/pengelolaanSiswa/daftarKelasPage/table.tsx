@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
-import { StyleSheetManager } from "styled-components";
 import StaffService from "../../../../services/staffService";
 import { CourseInClass } from "../../../../interface/courseInClass.interface";
 import { FaEye } from "react-icons/fa6";
@@ -41,35 +40,41 @@ export const Table: React.FC = () => {
     {
       name: "TA",
       selector: (row: CourseInClass) => row.class.academicYear,
+      cell: (row: CourseInClass) => row.class.academicYear,
       sortable: true,
       width: "115px",
     },
     {
       name: "Kelas",
       selector: (row: CourseInClass) => row.class.name,
+      cell: (row: CourseInClass) => row.class.name,
       sortable: true,
       width: "90px",
     },
     {
       name: "Mata Pelajaran",
       selector: (row: CourseInClass) => row.courseDetail.name,
+      cell: (row: CourseInClass) => row.courseDetail.name,
       sortable: true,
     },
     {
       name: "Hari",
       selector: (row: CourseInClass) => row.day,
+      cell: (row: CourseInClass) => row.day,
       sortable: true,
       width: "100px",
     },
     {
       name: "Mulai",
       selector: (row: CourseInClass) => row.timeStart,
+      cell: (row: CourseInClass) => row.timeStart,
       sortable: true,
       width: "95px",
     },
     {
       name: "Selesai",
       selector: (row: CourseInClass) => row.timeEnd,
+      cell: (row: CourseInClass) => row.timeEnd,
       sortable: true,
       width: "95px",
     },
@@ -107,34 +112,6 @@ export const Table: React.FC = () => {
               content="Detail"
             />
           </button>
-          {/* <button
-            className="btn btn-success btn-sm me-2 text-light"
-            // onClick={() => navigate(`update/${row.id}`)}
-            disabled={loading}
-            id="tooltip-absensi"
-          >
-            <FaListCheck className="" style={{ fontSize: "0.8rem" }} />
-            <Tooltip
-              anchorSelect="#tooltip-absensi"
-              className="text-light"
-              style={{ backgroundColor: "var(--blue-color)" }}
-              content="Absensi"
-            />
-          </button>
-          <button
-            className="btn btn-primary btn-sm me-2 text-light"
-            onClick={() => navigate(`nilai/${row.id}`)}
-            disabled={loading}
-            id="tooltip-nilai"
-          >
-            <FaPenClip className="" style={{ fontSize: "0.8rem" }} />
-            <Tooltip
-              anchorSelect="#tooltip-nilai"
-              className="text-light"
-              style={{ backgroundColor: "var(--blue-color)" }}
-              content="Nilai Siswa"
-            />
-          </button> */}
         </>
       ),
       width: "80px",
@@ -189,34 +166,32 @@ export const Table: React.FC = () => {
         </div>
       </div>
 
-      <StyleSheetManager>
-        <DataTable
-          columns={columns}
-          data={searchTerm ? filteredData : data}
-          pagination
-          highlightOnHover
-          className="mt-3"
-          customStyles={{
-            rows: {
-              style: {
-                "&:hover": {
-                  backgroundColor: "#f5f5f5",
-                  color: "#007bff",
-                },
+      <DataTable
+        columns={columns}
+        data={searchTerm ? filteredData : data}
+        pagination
+        highlightOnHover
+        className="mt-3"
+        customStyles={{
+          rows: {
+            style: {
+              "&:hover": {
+                backgroundColor: "#f5f5f5",
+                color: "#007bff",
               },
             },
-            headCells: {
-              style: {
-                backgroundColor: "var(--blue-color)",
-                color: "#ffffff",
-                fontWeight: "bold",
-                textAlign: "center",
-                border: "0.1px solid #ddd",
-              },
+          },
+          headCells: {
+            style: {
+              backgroundColor: "var(--blue-color)",
+              color: "#ffffff",
+              fontWeight: "bold",
+              textAlign: "center",
+              border: "0.1px solid #ddd",
             },
-          }}
-        />
-      </StyleSheetManager>
+          },
+        }}
+      />
     </div>
   );
 };

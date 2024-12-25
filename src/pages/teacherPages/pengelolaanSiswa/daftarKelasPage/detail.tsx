@@ -8,6 +8,7 @@ import { CourseInClass } from "../../../../interface/courseInClass.interface";
 import { CardDetailKelas } from "../../../../features/teacherPages/pengelolaanSiswa/daftarKelasPage/cardDetailKelas";
 import { CardAbsensiKelas } from "../../../../features/teacherPages/pengelolaanSiswa/daftarKelasPage/cardAbsensiKelas";
 import { CardNilaiKelas } from "../../../../features/teacherPages/pengelolaanSiswa/daftarKelasPage/cardNilaiKelas";
+import { CardDaftarSiswaKelas } from "../../../../features/teacherPages/pengelolaanSiswa/daftarKelasPage/cardDaftarSiswaKelas";
 
 export const DetailKelasPage: React.FC = () => {
   const teacherService = StaffService();
@@ -19,9 +20,10 @@ export const DetailKelasPage: React.FC = () => {
   const [data, setData] = useState<CourseInClass>();
   const [teacherName, setTeacherName] = useState("");
 
-  const [activeMenu, setActiveMenu] = useState("absensi");
+  const [activeMenu, setActiveMenu] = useState("daftar-siswa");
   const handleMenuClick = (menu: string) => {
-    if (!loading) {  // Only allow menu click if not loading
+    if (!loading) {
+      // Only allow menu click if not loading
       setActiveMenu(menu);
     }
   };
@@ -30,7 +32,10 @@ export const DetailKelasPage: React.FC = () => {
     const dtoken = decodeToken(userLoginCookie.token);
     try {
       setLoading(true);
-      const response = await teacherService.getClassOfTeacher(dtoken.username, id);
+      const response = await teacherService.getClassOfTeacher(
+        dtoken.username,
+        id
+      );
       setTeacherName(response.data.name);
       setData(response.data.CourseInClass[0]);
     } catch (error) {
@@ -68,10 +73,10 @@ export const DetailKelasPage: React.FC = () => {
           <li className="nav-item" style={{ cursor: "pointer" }}>
             <a
               className={`nav-link ${loading ? "disabled" : ""} ${
-                activeMenu === "#" ? "active text-blue" : "text-dark"
+                activeMenu === "daftar-siswa" ? "active text-blue" : "text-dark"
               }`}
               aria-disabled="true"
-              onClick={() => handleMenuClick("#")}
+              onClick={() => handleMenuClick("daftar-siswa")}
             >
               Daftar Siswa
             </a>
@@ -99,11 +104,22 @@ export const DetailKelasPage: React.FC = () => {
         </ul>
       </div>
 
-      {activeMenu === "absensi" ? (
-        <CardAbsensiKelas loading={loading} />
-      ) : (
-        <CardNilaiKelas refreshData={getData} loading={loading} data={data!} />
-      )}
+      {data &&
+        (activeMenu === "daftar-siswa" ? (
+          <CardDaftarSiswaKelas
+            refreshData={getData}
+            loading={loading}
+            data={data!}
+          />
+        ) : activeMenu === "absensi" ? (
+          <CardAbsensiKelas loading={loading} />
+        ) : (
+          <CardNilaiKelas
+            refreshData={getData}
+            loading={loading}
+            data={data!}
+          />
+        ))}
     </>
   );
 };

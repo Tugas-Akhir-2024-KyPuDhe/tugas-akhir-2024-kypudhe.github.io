@@ -42,6 +42,8 @@ export interface ParentOfStudent {
     nisn: string;
     Major: Fajusek
     class: Class
+    status: string;
+    ParentOfStudent: ParentOfStudent[];
     StudentsGrades: StudentsGrades[]
     // user: {
     //   username: string;

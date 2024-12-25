@@ -13,12 +13,19 @@ interface CardProps {
   refreshData: () => void;
 }
 
-export const CardNilaiKelas: React.FC<CardProps> = ({ loading, data, refreshData }) => {
+export const CardNilaiKelas: React.FC<CardProps> = ({
+  loading,
+  data,
+  refreshData,
+}) => {
   const studentGradeService = StudentGradeService();
 
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [grades, setGrades] = useState<Record<string, FormStateStudentGrade>>(
     {}
+  );
+  const [selectedStudent, setSelectedStudent] = useState<StudentDetail | null>(
+    null
   );
   const [loadingButton, setLoadingButton] = useState<Record<string, boolean>>(
     {}
@@ -41,6 +48,7 @@ export const CardNilaiKelas: React.FC<CardProps> = ({ loading, data, refreshData
           portofolio: studentGrade.portofolio || "",
           proyek: studentGrade.proyek || "",
           attitude: studentGrade.attitude || "",
+          description: studentGrade.description || "",
         };
       });
       setGrades(initialGrades);
@@ -73,6 +81,7 @@ export const CardNilaiKelas: React.FC<CardProps> = ({ loading, data, refreshData
       portofolio: currentGrade.portofolio || "",
       proyek: currentGrade.proyek || "",
       attitude: currentGrade.attitude || "",
+      description: currentGrade.description || "",
       nis: studentId,
       teacherId: data.teacher.id,
       classId: data.class.id,
@@ -81,7 +90,7 @@ export const CardNilaiKelas: React.FC<CardProps> = ({ loading, data, refreshData
 
     try {
       const response = await studentGradeService.insertGrade(payload);
-      refreshData()
+      refreshData();
       if (response.status === 201) {
         Toast.fire({
           icon: "success",
@@ -199,6 +208,74 @@ export const CardNilaiKelas: React.FC<CardProps> = ({ loading, data, refreshData
         </>
       ),
       width: "80px",
+    },
+    {
+      name: "Portofolio",
+      selector: (row: StudentDetail) =>
+        row.StudentsGrades[0] && (row.StudentsGrades[0].portofolio || "-"),
+      cell: (row: StudentDetail) => (
+        <>
+          <input
+            type="text"
+            className="form-control text-center fw-medium px-0"
+            value={
+              grades[row.nis]?.portofolio ??
+              (row.StudentsGrades[0]?.portofolio || "")
+            }
+            onChange={(e) =>
+              handleInputChange(row.nis, "portofolio", e.target.value)
+            }
+            onKeyPress={(event) => {
+              if (!/[0-9]/.test(event.key)) {
+                event.preventDefault();
+              }
+            }}
+          />
+        </>
+      ),
+      width: "80px",
+    },
+    {
+      name: "Proyek",
+      selector: (row: StudentDetail) =>
+        row.StudentsGrades[0] && (row.StudentsGrades[0].proyek || "-"),
+      cell: (row: StudentDetail) => (
+        <>
+          <input
+            type="text"
+            className="form-control text-center fw-medium px-0"
+            value={
+              grades[row.nis]?.proyek ?? (row.StudentsGrades[0]?.proyek || "")
+            }
+            onChange={(e) =>
+              handleInputChange(row.nis, "proyek", e.target.value)
+            }
+            onKeyPress={(event) => {
+              if (!/[0-9]/.test(event.key)) {
+                event.preventDefault();
+              }
+            }}
+          />
+        </>
+      ),
+      width: "80px",
+    },
+    {
+      name: "Ket",
+      cell: (row: StudentDetail) => (
+        <>
+          <button
+            className="btn btn-link"
+            data-bs-toggle="modal"
+            data-bs-target="#modalDetailDesk"
+            onClick={() => setSelectedStudent(row)}
+            style={{ fontSize: "0.9rem" }}
+          >
+            Lihat
+          </button>
+        </>
+      ),
+      width: "95px",
     },
     {
       name: "Action",
@@ -323,6 +400,66 @@ export const CardNilaiKelas: React.FC<CardProps> = ({ loading, data, refreshData
             },
           }}
         />
+      </div>
+      {/* Modal */}
+      <div
+        className="modal fade"
+        id="modalDetailDesk"
+        tabIndex={-1}
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Detail Keterangan Siswa</h5>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="modal-body">
+              <div className="row g-3">
+                <div className="col-12">
+                  <div className="row mb-3">
+                    <div className="col-2 fw-medium">Nama</div>
+                    <div className="col-auto">:</div>
+                    <div className="col-9 fw-medium">
+                      {(selectedStudent && selectedStudent.name) || ""}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="row g-3">
+                <div className="col-12">
+                  <div className="row mb-3">
+                    <div className="col-2 fw-medium">NIS</div>
+                    <div className="col-auto">:</div>
+                    <div className="col-9 fw-medium">
+                    {(selectedStudent && selectedStudent.nis) || ""}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <textarea
+                className="form-control"
+                placeholder="Masukkan Catatan..."
+                value={
+                  grades[(selectedStudent && selectedStudent.nis) || ""]
+                    ?.description || ""
+                }
+                onChange={(e) =>
+                  handleInputChange(
+                    (selectedStudent && selectedStudent.nis) || "",
+                    "description",
+                    e.target.value
+                  )
+                }
+              ></textarea>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

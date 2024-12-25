@@ -129,7 +129,7 @@ export const Table: React.FC = () => {
     {
       name: "Action",
       cell: (row: StudentDetail) => (
-        <>
+        <div className="w-100 text-center">
           <button
             className="btn btn-info btn-sm text me-2 text-light"
             onClick={() => navigate(`detail/${row.nis}`)}
@@ -144,9 +144,9 @@ export const Table: React.FC = () => {
           >
             <FaPen />
           </button>
-        </>
+        </div>
       ),
-      width: "150px",
+      width: "120px",
     },
   ];
 
@@ -206,7 +206,7 @@ export const Table: React.FC = () => {
         <div className="row g-3 d-flex justify-content-between">
           <div className="col-12">
             <div className="fw-bold position-relative pb-2">
-              Siswa Baru
+              Daftar Siswa
               <div
                 style={{
                   position: "absolute",

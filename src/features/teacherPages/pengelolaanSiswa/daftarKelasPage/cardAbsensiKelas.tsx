@@ -31,6 +31,21 @@ export const CardAbsensiKelas: React.FC<CardProps> = ({ loading }) => {
         </div>
       )}
       <div className="row g-3">
+      <div className="col-12">
+          <div className="fw-bold position-relative pb-2">
+            Absensi Siswa
+            <div
+              style={{
+                position: "absolute",
+                left: 0,
+                bottom: 0,
+                width: "50px",
+                height: "3px",
+                backgroundColor: "var(--blue-color)",
+              }}
+            />
+          </div>
+        </div>
         <div className="col-12">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi
           rerum, modi fugiat nam sint ratione vero doloribus temporibus

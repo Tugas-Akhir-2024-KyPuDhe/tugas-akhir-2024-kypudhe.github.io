@@ -4,7 +4,6 @@ import {
   FaBars,
   FaBookOpenReader,
   FaCircle,
-  FaFileLines,
   FaGlobe,
   FaNewspaper,
 } from "react-icons/fa6";
@@ -171,7 +170,7 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
                             <FaUserCircle className="me-3 fs-2" />
                           )}
                         </div>
-                        <div className="col-auto text-start px-0">
+                        <div className="d-none d-md-block col-auto text-start px-0">
                           <div className="fw-medium">
                             {userLoginCookie?.name} <MdKeyboardArrowDown />{" "}
                           </div>
@@ -473,12 +472,12 @@ export const ListMenu = () => {
             Jadwal Mengajar
           </MenuItem>
 
-          <SubMenu
+          {/* <SubMenu
             icon={<FaFileLines />}
             label="Pengelolaan Siswa"
             rootStyles={{
               ["." + menuClasses.subMenuContent]: {
-                backgroundColor: "#fff",
+                backgroundColor: "#f0f0f0",
               },
             }}
             className="fw-medium"
@@ -603,7 +602,7 @@ export const ListMenu = () => {
               )}
               Nilai Siswa
             </MenuItem>
-          </SubMenu>
+          </SubMenu> */}
         </>
       )}
       {/* Config | STAFF */}
@@ -614,7 +613,7 @@ export const ListMenu = () => {
             label="Manajemen Siswa"
             rootStyles={{
               ["." + menuClasses.subMenuContent]: {
-                backgroundColor: "#fff",
+                backgroundColor: "#f0f0f0",
               },
             }}
             className="fw-medium"
@@ -657,17 +656,17 @@ export const ListMenu = () => {
               style={{
                 position: "relative",
                 backgroundColor:
-                  selectedMenu === "/manajemen-siswa/data-siswa"
+                  selectedMenu === "/manajemen-siswa/daftar-siswa"
                     ? "#E5EAF2"
                     : "",
               }}
               className={`fw-medium ${
-                selectedMenu === "/manajemen-siswa/data-siswa"
+                selectedMenu === "/manajemen-siswa/daftar-siswa"
                   ? "text-blue"
                   : "text-dark-soft"
               }`}
             >
-              {selectedMenu === "/manajemen-siswa/data-siswa" && (
+              {selectedMenu === "/manajemen-siswa/daftar-siswa" && (
                 <div
                   style={{
                     position: "absolute",
@@ -747,7 +746,7 @@ export const ListMenu = () => {
             label="Manajemen Staff"
             rootStyles={{
               ["." + menuClasses.subMenuContent]: {
-                backgroundColor: "#fff",
+                backgroundColor: "#f0f0f0",
               },
             }}
             className="fw-medium"
@@ -788,7 +787,7 @@ export const ListMenu = () => {
             label="Content Web"
             rootStyles={{
               ["." + menuClasses.subMenuContent]: {
-                backgroundColor: "#fff",
+                backgroundColor: "#f0f0f0",
               },
             }}
             className="fw-medium"
