@@ -6,9 +6,10 @@ import { Toast } from "../utils/myFunctions";
 
 interface PrivateRouteProps {
   Component: React.ComponentType;
+  Role: string[];
 }
 
-const PrivateRoute: React.FC<PrivateRouteProps> = ({ Component }) => {
+const PrivateRoute: React.FC<PrivateRouteProps> = ({ Component, Role }) => {
   const [isValid, setIsValid] = useState<boolean | null>(null);
   const [cookieLogin, setCookieLogin] = useCookie("userLoginCookie");
   const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
@@ -22,15 +23,23 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ Component }) => {
             userLoginCookie.token
           );
           if (response.valid) {
-            setIsValid(response.valid);
+            if (Role.includes(response.role)) {
+              setIsValid(response.valid);
+            } else {
+              Toast.fire({
+                icon: "error",
+                title: `Anda Tidak Berhak Akses Kehalaman Tersebut!`,
+                timer: 4000,
+              });
+              setIsValid(false);
+            }
           } else {
             setCookieLogin("");
             setIsValid(false);
           }
         } catch (error) {
           setCookieLogin("");
-          console.log(error);
-          setIsValid(false);
+          console.error(error);
           Toast.fire({
             icon: "error",
             title: `Sesi Anda Telah Habis, Silahkan Login Kembali`,
@@ -38,7 +47,11 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ Component }) => {
           });
         }
       } else {
-        console.log("Token not found or user is not logged in.");
+        Toast.fire({
+          icon: "error",
+          title: `Harap Login Terlebih Dahulu!`,
+          timer: 4000,
+        });
         setIsValid(false);
       }
     };

@@ -63,7 +63,9 @@ export interface LoginData {
 
 export interface TokenValidationResponse {
   valid: boolean;
-  user?: DetailUserResponse;
+  status: number;
+  role: string;
+  
 }
 
 export interface UpdatedBiodata {
