@@ -8,7 +8,7 @@ import {
   DetailUserResponse,
   UpdatedBiodata,
 } from "../../interface/auth.interface";
-import { formatGender, Toast } from "../../utils/myFunctions";
+import { decodeToken, formatGender, Toast } from "../../utils/myFunctions";
 import noPhotoFemale from "./../../assets/images/profile-female.jpg";
 import noPhotoMale from "./../../assets/images/profile-male.jpg";
 import { CardDataOrangTua } from "../../components/cardDataOrangTua";
@@ -20,9 +20,9 @@ import { CardClassTeacher } from "../../features/profilePage/cardClassTeacher";
 import { FormParentOfStudent } from "../../interface/student.interface";
 import { Course } from "../../interface/course.interface";
 import CourseService from "../../services/courseService";
-import StudentGradeService from "../../services/studentGradeService";
-import { StudentsGradesByClass } from "../../interface/studentGrade.interface";
 import moment from "moment";
+import StudentHistoryService from "../../services/studentHistoryService";
+import { StudentHistory } from "../../interface/studentHistory.interface";
 
 const subMenuItemsStudent = [
   { label: "Data Akademik", key: "data-akademik" },
@@ -34,16 +34,17 @@ const subMenuItemsTeacher = [{ label: "Kelas", key: "kelas" }];
 export const ProfilePage = () => {
   const authService = AuthService();
   const courseService = CourseService();
-  const studentGrade = StudentGradeService();
+  const studentHistory = StudentHistoryService();
 
   const [cookieLogin] = useCookie("userLoginCookie", "");
   const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
+    const dtoken = decodeToken(userLoginCookie.token);
 
   const [profileDetail, setProfileDetail] = useState<DetailUserResponse | null>(
     null
   );
   const [allCourse, setAllCourse] = useState<Course[]>([]);
-  const [studentGrades, setStudentGrades] = useState<StudentsGradesByClass[]>(
+  const [DataStudentHistory, setDataStudentHistory] = useState<StudentHistory[]>(
     []
   );
   const [loading, setLoading] = useState<boolean>(true);
@@ -72,7 +73,7 @@ export const ProfilePage = () => {
       const user = await authService.getUser();
       setProfileDetail(user);
       if (user.details[0].nis) {
-        await getStudentGrade(user.details[0].nis.toString());
+        await getStudentHistory();
       }
       console.log(user);
 
@@ -83,15 +84,17 @@ export const ProfilePage = () => {
       setLoading(false);
     }
   };
-
-  const getStudentGrade = async (nis: string) => {
+  
+  const getStudentHistory = async () => {
     try {
-      const response = await studentGrade.getStudentGrade(nis);
-      setStudentGrades(response.data);
-      setLoading(false);
-    } catch (err) {
-      console.error(err);
-      setError("Failed to fetch user data");
+      setLoading(true);
+      const response = await studentHistory.getStudentHistory(
+        dtoken.student_id
+      );
+      setDataStudentHistory(response.data);
+    } catch (error) {
+      console.error(error);
+    } finally {
       setLoading(false);
     }
   };
@@ -334,7 +337,7 @@ export const ProfilePage = () => {
                       />
                     )}
                     {activeMenu === "riwayat-akademik" && (
-                      <CardRiwayatAkademik data={studentGrades} />
+                      <CardRiwayatAkademik data={DataStudentHistory} />
                     )}
 
                     {/* === TEACHER */}

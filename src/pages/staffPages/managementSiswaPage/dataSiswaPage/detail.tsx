@@ -12,18 +12,18 @@ import { CardDataAkademik } from "../../../../components/cardDataAkademik";
 import { AxiosError } from "axios";
 import { StudentDetail } from "../../../../interface/auth.interface";
 import moment from "moment";
-import { StudentsGradesByClass } from "../../../../interface/studentGrade.interface";
-import StudentGradeService from "../../../../services/studentGradeService";
+import StudentHistoryService from "../../../../services/studentHistoryService";
+import { StudentHistory } from "../../../../interface/studentHistory.interface";
 
 export const DetailSiswaMangementSiswa: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const studentGrade = StudentGradeService();
   const studentService = AuthService();
+  const studentHistory = StudentHistoryService();
   const navigate = useNavigate();
 
-  const [studentGrades, setStudentGrades] = useState<StudentsGradesByClass[]>(
-    []
-  );
+  const [DataStudentHistory, setDataStudentHistory] = useState<
+    StudentHistory[]
+  >([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [activeMenu, setActiveMenu] = useState("data-akademik");
@@ -42,7 +42,7 @@ export const DetailSiswaMangementSiswa: React.FC = () => {
           const data = response.data;
           setData(response.data);
           setImageUrl(data.photo.url);
-          await getStudentGrade(data.nis)
+          await getStudentHistory(data.id.toString());
         } catch (error) {
           const axiosError = error as AxiosError;
           if (axiosError.response?.status === 404) {
@@ -64,16 +64,28 @@ export const DetailSiswaMangementSiswa: React.FC = () => {
     getDataSiswa();
   }, []);
 
-  const getStudentGrade = async (nis: string) => {
+  const getStudentHistory = async (id: string) => {
     try {
-      const response = await studentGrade.getStudentGrade(nis);
-      setStudentGrades(response.data);
-      setLoading(false);
-    } catch (err) {
-      console.error(err);
+      setLoading(true);
+      const response = await studentHistory.getStudentHistory(id);
+      setDataStudentHistory(response.data);
+    } catch (error) {
+      console.error(error);
+    } finally {
       setLoading(false);
     }
   };
+
+  // const getStudentGrade = async (nis: string) => {
+  //   try {
+  //     const response = await studentGrade.getStudentGrade(nis);
+  //     setStudentGrades(response.data);
+  //     setLoading(false);
+  //   } catch (err) {
+  //     console.error(err);
+  //     setLoading(false);
+  //   }
+  // };
   return (
     <>
       <HeaderTitlePage
@@ -206,14 +218,33 @@ export const DetailSiswaMangementSiswa: React.FC = () => {
         ) : activeMenu === "data-orang-tua" ? (
           <CardDataOrangTua
             nis={parseInt(data!.nis)}
-            fatherName={data?.ParentOfStudent[0] && data?.ParentOfStudent[0].fatherName || "-"}
-            motherName={data?.ParentOfStudent[0] && data?.ParentOfStudent[0].motherName || "-"}
-            phone={data?.ParentOfStudent[0] && data?.ParentOfStudent[0].phone || "-"}
-            parentJob={data?.ParentOfStudent[0] && data?.ParentOfStudent[0].parentJob || ""}
-            parentAddress={data?.ParentOfStudent[0] && data?.ParentOfStudent[0].parentAddress || "-"}
+            fatherName={
+              (data?.ParentOfStudent[0] &&
+                data?.ParentOfStudent[0].fatherName) ||
+              "-"
+            }
+            motherName={
+              (data?.ParentOfStudent[0] &&
+                data?.ParentOfStudent[0].motherName) ||
+              "-"
+            }
+            phone={
+              (data?.ParentOfStudent[0] && data?.ParentOfStudent[0].phone) ||
+              "-"
+            }
+            parentJob={
+              (data?.ParentOfStudent[0] &&
+                data?.ParentOfStudent[0].parentJob) ||
+              ""
+            }
+            parentAddress={
+              (data?.ParentOfStudent[0] &&
+                data?.ParentOfStudent[0].parentAddress) ||
+              "-"
+            }
           />
         ) : activeMenu === "riwayat-akademik" ? (
-          <CardRiwayatAkademik data={studentGrades} />
+          <CardRiwayatAkademik data={DataStudentHistory} />
         ) : (
           <div>Halaman tidak ditemukan</div>
         )}

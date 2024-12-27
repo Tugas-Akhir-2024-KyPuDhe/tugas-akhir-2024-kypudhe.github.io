@@ -1,24 +1,17 @@
 import React, { useState } from "react";
-import {
-  StudentsGrades,
-  StudentsGradesByClass,
-} from "../interface/studentGrade.interface";
 import { FaEye } from "react-icons/fa6";
+import { StudentHistory } from "../interface/studentHistory.interface";
 
 interface GradeProps {
-  data: StudentsGradesByClass[];
+  data: StudentHistory[];
 }
 
 export const CardRiwayatAkademik: React.FC<GradeProps> = ({ data }) => {
-  const [selectedGrades, setSelectedGrades] = useState<StudentsGrades[]>([]);
-  const [selectedClass, setSelectedClass] = useState<StudentsGradesByClass>();
+  const [selectedClass, setSelectedClass] = useState<StudentHistory>();
+  
 
-  const handleSelected = (
-    dataClass: StudentsGradesByClass,
-    dataGrades: StudentsGrades[]
-  ) => {
+  const handleSelected = (dataClass: StudentHistory) => {
     setSelectedClass(dataClass);
-    setSelectedGrades(dataGrades);
   };
 
   return (
@@ -46,24 +39,21 @@ export const CardRiwayatAkademik: React.FC<GradeProps> = ({ data }) => {
                   className="list-group-item d-flex justify-content-between align-items-start py-3 mb-3 bg-light border-0"
                 >
                   <div className="ms-2 me-auto m-auto">
-                    <div className="fw-medium">{dataClass.name}</div>
+                    <div className="fw-medium">
+                      {dataClass.currentClass.name}
+                    </div>
                   </div>
                   <span className="">
                     <button
                       className="btn border-blue text-blue btn-sm"
                       data-bs-toggle="modal"
                       data-bs-target="#modalDetailGrades"
-                      onClick={() =>
-                        handleSelected(dataClass, dataClass.studentsGrades)
-                      }
+                      onClick={() => handleSelected(dataClass)}
                     >
                       <FaEye className="me-2 fs-5" /> Detail
                     </button>
 
-                    <ModalDetail
-                      dataGrades={selectedGrades && selectedGrades}
-                      dataClass={selectedClass! && selectedClass!}
-                    />
+                    <ModalDetail dataClass={selectedClass! && selectedClass!} />
                   </span>
                 </li>
               </>
@@ -76,14 +66,12 @@ export const CardRiwayatAkademik: React.FC<GradeProps> = ({ data }) => {
 };
 
 interface ModalProps {
-  dataGrades: StudentsGrades[];
-  dataClass: StudentsGradesByClass;
+  dataClass: StudentHistory;
 }
 
-export const ModalDetail: React.FC<ModalProps> = ({
-  dataGrades,
-  dataClass,
-}) => {
+export const ModalDetail: React.FC<ModalProps> = ({ dataClass }) => {
+  const [selectedDescription, setSelectedDescription] = useState("");
+  
   return (
     <>
       <div
@@ -126,14 +114,14 @@ export const ModalDetail: React.FC<ModalProps> = ({
                     <div className="col-3 col-md-2 fw-medium">Tahun Ajaran</div>
                     <div className="col-auto">:</div>
                     <div className="col-9 col-md-9 fw-medium">
-                      {dataClass && dataClass.academicYear}
+                      {dataClass && dataClass.currentClass.academicYear}
                     </div>
                   </div>
                   <div className="row mb-3">
                     <div className="col-3 col-md-2 fw-medium">Kelas</div>
                     <div className="col-auto">:</div>
                     <div className="col-9 col-md-9 fw-medium">
-                      {dataClass && dataClass.name}
+                      {dataClass && dataClass.currentClass.name}
                     </div>
                   </div>
                   <div className="row mb-3">
@@ -142,7 +130,7 @@ export const ModalDetail: React.FC<ModalProps> = ({
                     </div>
                     <div className="col-auto">:</div>
                     <div className="col-9 col-md-9 fw-medium">
-                      {dataClass && dataClass.teacher.name}
+                      {dataClass && dataClass.currentClass.homeRoomTeacher.name}
                     </div>
                   </div>
                 </div>
@@ -152,56 +140,172 @@ export const ModalDetail: React.FC<ModalProps> = ({
                       <thead>
                         <tr>
                           <th
+                            className="py-3 bg-blue text-light text-center"
                             scope="col"
-                            className="bg-light"
-                            style={{ width: "60px" }}
+                            style={{ width: "50px", fontSize: "0.9rem" }}
+                          >
+                            No
+                          </th>
+                          <th
+                            className="border-start py-3 bg-blue text-light"
+                            scope="col"
+                            style={{ fontSize: "0.9rem" }}
                           >
                             Mata Pelajaran
                           </th>
-                          <th scope="col" style={{ width: "20px" }}>
+                          <th
+                            className="border-start py-3 bg-blue text-light"
+                            scope="col"
+                            style={{ fontSize: "0.9rem" }}
+                          >
+                            Guru Pengajar
+                          </th>
+                          <th
+                            className="border-start text-center py-3 bg-blue text-light"
+                            scope="col"
+                            style={{ width: "70px", fontSize: "0.9rem" }}
+                          >
                             Tugas
                           </th>
-                          <th scope="col" style={{ width: "20px" }}>
+                          <th
+                            className="border-start text-center py-3 bg-blue text-light text-center"
+                            scope="col"
+                            style={{ width: "70px", fontSize: "0.9rem" }}
+                          >
                             UH
                           </th>
-                          <th scope="col" style={{ width: "20px" }}>
+                          <th
+                            className="border-start text-center py-3 bg-blue text-light text-center"
+                            scope="col"
+                            style={{ width: "70px", fontSize: "0.9rem" }}
+                          >
                             PTS
                           </th>
-                          <th scope="col" style={{ width: "20px" }}>
+                          <th
+                            className="border-start text-center py-3 bg-blue text-light text-center"
+                            scope="col"
+                            style={{ width: "70px", fontSize: "0.9rem" }}
+                          >
                             PAS
                           </th>
-                          <th scope="col" style={{ width: "20px" }}>
+                          <th
+                            className="border-start text-center py-3 bg-blue text-light text-center"
+                            scope="col"
+                            style={{ width: "70px", fontSize: "0.9rem" }}
+                          >
                             Portofolio
                           </th>
-                          <th scope="col" style={{ width: "20px" }}>
+                          <th
+                            className="border-start text-center py-3 bg-blue text-light text-center"
+                            scope="col"
+                            style={{ width: "70px", fontSize: "0.9rem" }}
+                          >
                             Proyek
                           </th>
-                          <th scope="col" style={{ width: "20px" }}>
+                          <th
+                            className="border-start py-3 bg-blue text-light text-center"
+                            scope="col"
+                            style={{ fontSize: "0.9rem" }}
+                          >
                             KET
                           </th>
                         </tr>
                       </thead>
                       <tbody>
-                        {dataGrades &&
-                          dataGrades.map((dataGrade, index) => (
-                            <tr key={index}>
-                              <td className="bg-light text-start">
-                                {dataGrade.course.name}
-                              </td>
-                              <td>{dataGrade.task}</td>
-                              <td>{dataGrade.UH}</td>
-                              <td>{dataGrade.PTS}</td>
-                              <td>{dataGrade.PAS}</td>
-                              <td>{dataGrade.portofolio}</td>
-                              <td>{dataGrade.proyek}</td>
-                              <td>{dataGrade.description}</td>
-                            </tr>
-                          ))}
-                      </tbody>
+                {(dataClass &&
+                  dataClass.currentClass.CourseInClass?.map((mapel, index) => (
+                    <tr key={index}>
+                      <td className="py-3 text-center" scope="row">
+                        {index + 1}
+                      </td>
+                      <td className="py-3">{mapel.courseDetail.name}</td>
+                      <td className="py-3">{mapel.teacher.name}</td>
+                      <td className="py-3 text-center">
+                        {mapel.courseDetail.StudentsGrades![0]
+                          ? mapel.courseDetail.StudentsGrades![0].task || "-"
+                          : "-"}
+                      </td>
+                      <td className="py-3 text-center">
+                        {mapel.courseDetail.StudentsGrades![0]
+                          ? mapel.courseDetail.StudentsGrades![0].UH || "-"
+                          : "-"}
+                      </td>
+                      <td className="py-3 text-center">
+                        {mapel.courseDetail.StudentsGrades![0]
+                          ? mapel.courseDetail.StudentsGrades![0].PTS || "-"
+                          : "-"}
+                      </td>
+                      <td className="py-3 text-center">
+                        {mapel.courseDetail.StudentsGrades![0]
+                          ? mapel.courseDetail.StudentsGrades![0].PAS || "-"
+                          : "-"}
+                      </td>
+                      <td className="py-3 text-center">
+                        {mapel.courseDetail.StudentsGrades![0]
+                          ? mapel.courseDetail.StudentsGrades![0].portofolio ||
+                            "-"
+                          : "-"}
+                      </td>
+                      <td className="py-3 text-center">
+                        {mapel.courseDetail.StudentsGrades![0]
+                          ? mapel.courseDetail.StudentsGrades![0].proyek || "-"
+                          : "-"}
+                      </td>
+                      <td className="py-3 text-center">
+                        <button
+                          className="btn btn-link"
+                          data-bs-toggle="modal"
+                          data-bs-target="#modalDeskripsi"
+                          onClick={() =>
+                            setSelectedDescription(
+                              mapel.courseDetail.StudentsGrades![0]
+                                ? mapel.courseDetail.StudentsGrades![0]
+                                    .description || "-"
+                                : "-"
+                            )
+                          }
+                          style={{ fontSize: "0.9rem" }}
+                        >
+                          Lihat
+                        </button>
+                      </td>
+                    </tr>
+                  ))) || (
+                  <tr>
+                    <td colSpan={10} className="py-3 text-center">
+                      Tidak ada data mata pelajaran untuk kelas ini.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
                     </table>
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* Modal */}
+      <div
+        className="modal fade"
+        id="modalDeskripsi"
+        tabIndex={-1}
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Keterangan</h5>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="modal-body">
+              <p>{selectedDescription}</p>
             </div>
           </div>
         </div>
