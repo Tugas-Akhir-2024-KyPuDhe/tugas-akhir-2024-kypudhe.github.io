@@ -250,7 +250,7 @@ export const DetailKelasMangementSiswaPage: React.FC = () => {
         await getDataClass();
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setLoadingFormMapel(false);
     }

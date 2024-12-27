@@ -25,8 +25,6 @@ export const Table: React.FC = () => {
         dtoken.username,
         id
       );
-      console.log(response);
-
       setData(response.data.CourseInClass[0]);
     } catch (error) {
       console.error("Error fetching data:", error);

@@ -27,6 +27,7 @@ import { TbBooks, TbUserScreen } from "react-icons/tb";
 import { Link } from "react-router-dom";
 import { IoIosPeople } from "react-icons/io";
 import { convertRole } from "../utils/myFunctions";
+import { BsPersonSquare } from "react-icons/bs";
 
 interface SideBarAdminProps {
   children: ReactNode;
@@ -415,20 +416,20 @@ export const ListMenu = () => {
       {userLoginCookie?.role === "TEACHER" && (
         <>
           <MenuItem
-            onClick={() => handleMenuClick("/guru/mata-pelajaran")}
-            icon={<TbBooks />}
+            onClick={() => handleMenuClick("/guru/kelas-wali")}
+            icon={<BsPersonSquare />}
             style={{
               position: "relative",
               backgroundColor:
-                selectedMenu === "/guru/mata-pelajaran" ? "#E5EAF2" : "",
+                selectedMenu === "/guru/kelas-wali" ? "#E5EAF2" : "",
             }}
             className={`fw-medium ${
-              selectedMenu === "/guru/mata-pelajaran"
+              selectedMenu === "/guru/kelas-wali"
                 ? "text-blue"
                 : "text-dark-soft"
             }`}
           >
-            {selectedMenu === "/guru/mata-pelajaran" && (
+            {selectedMenu === "/guru/kelas-wali" && (
               <div
                 style={{
                   position: "absolute",
@@ -440,7 +441,7 @@ export const ListMenu = () => {
                 }}
               />
             )}
-            Mata Pelajaran
+            Kelas Wali
           </MenuItem>
 
           <MenuItem

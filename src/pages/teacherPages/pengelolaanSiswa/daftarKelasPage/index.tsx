@@ -6,7 +6,7 @@ export const DaftarKelasPage: React.FC = () => {
   
   return (
     <>
-      <HeaderTitlePage title="Daftar Kelas Guru" subTitle="Daftar Ajaran Kelas Guru SMKN 1 Lumban Julu" backDisplay={false} addDisplay={false} linkAdd="tambah"/>
+      <HeaderTitlePage title="Jadwal Mengajar Guru" subTitle="Jadwal Mengajar Guru SMKN 1 Lumban Julu" backDisplay={false} addDisplay={false} linkAdd="tambah"/>
       <Table />
     </>
   );

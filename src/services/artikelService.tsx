@@ -46,7 +46,7 @@ const ArtikelService = (): ArtikelService => {
       );
       return response.data;
     } catch (error) {
-      console.log("");
+      console.error(error);
       throw error;
     }
   };
@@ -61,7 +61,7 @@ const ArtikelService = (): ArtikelService => {
       );
       return response.data;
     } catch (error) {
-      console.log("");
+      console.error(error);
       throw error;
     }
   };

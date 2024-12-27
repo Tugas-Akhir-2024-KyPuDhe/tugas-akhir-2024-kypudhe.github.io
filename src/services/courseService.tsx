@@ -38,7 +38,7 @@ const CourseService = (): CourseService => {
       );
       return response.data;
     } catch (error) {
-      console.log("");
+      console.error(error);
       throw error;
     }
   };
@@ -52,7 +52,7 @@ const CourseService = (): CourseService => {
       );
       return response.data;
     } catch (error) {
-     console.log("");
+     console.error(error);
       throw error;
     }
   };

@@ -43,7 +43,7 @@ const ConfigSchoolService = (): ConfigSchoolService => {
       );
       return response.data;
     } catch (error) {
-      console.log("");
+      console.error(error);
       throw error;
     }
   };

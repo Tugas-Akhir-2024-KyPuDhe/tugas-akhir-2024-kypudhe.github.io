@@ -49,10 +49,6 @@ const StudentService = () => {
           },
         }
       );
-      console.log(
-        `${apiUrl}/api/student/get?status=${status}&major_code=${major_code}&grade=${grade}`
-      );
-
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {

@@ -68,9 +68,6 @@ export const DetailSiswaMangementSiswa: React.FC = () => {
     try {
       setLoading(true);
       const response = await studentHistory.getStudentHistory(id);
-      console.log(response);
-      console.log("asd");
-
       setDataStudentHistory(response.data);
     } catch (error) {
       console.error(error);
@@ -78,17 +75,6 @@ export const DetailSiswaMangementSiswa: React.FC = () => {
       setLoading(false);
     }
   };
-
-  // const getStudentGrade = async (nis: string) => {
-  //   try {
-  //     const response = await studentGrade.getStudentGrade(nis);
-  //     setStudentGrades(response.data);
-  //     setLoading(false);
-  //   } catch (err) {
-  //     console.error(err);
-  //     setLoading(false);
-  //   }
-  // };
   return (
     <>
       <HeaderTitlePage
@@ -111,7 +97,7 @@ export const DetailSiswaMangementSiswa: React.FC = () => {
               right: 0,
               bottom: 0,
               backgroundColor: "rgba(255, 255, 255, 0.7)",
-              zIndex: 9999,
+              zIndex: 20,
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
@@ -200,7 +186,7 @@ export const DetailSiswaMangementSiswa: React.FC = () => {
               right: 0,
               bottom: 0,
               backgroundColor: "rgba(255, 255, 255, 0.7)",
-              zIndex: 9999,
+              zIndex: 20,
               display: "flex",
               justifyContent: "center",
               alignItems: "center",

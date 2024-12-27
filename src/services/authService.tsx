@@ -35,7 +35,7 @@ const AuthService = () => {
       );
       return response.data;
     } catch (error) {
-      console.log("");
+      console.error(error);
       throw error;
     }
   };
@@ -54,7 +54,7 @@ const AuthService = () => {
       );
       return response.data;
     } catch (error) {
-      console.log("");
+      console.error(error);
       throw error;
     }
   };
@@ -71,7 +71,7 @@ const AuthService = () => {
       );
       return response.data.user;
     } catch (error) {
-      console.log("");
+      console.error(error);
       throw error;
     }
   };
@@ -91,7 +91,7 @@ const AuthService = () => {
       );
       return response.data;
     } catch (error) {
-      console.log("");
+      console.error(error);
       throw error;
     }
   };
@@ -112,7 +112,7 @@ const AuthService = () => {
       );
       return response.data;
     } catch (error) {
-      console.log("");
+      console.error(error);
       throw error;
     }
   };
@@ -133,7 +133,7 @@ const AuthService = () => {
       );
       return response.data;
     } catch (error) {
-      console.log("");
+      console.error(error);
       throw error;
     }
   };

@@ -84,8 +84,6 @@ export const ModalAddStudentInClass: React.FC<ModalAddStudentInClassProps> = ({
       collectionNis.push(data.nis);
     });
 
-    console.log(collectionNis);
-
     if (collectionNis.length < 1) {
       return Toast.fire({
         icon: "error",

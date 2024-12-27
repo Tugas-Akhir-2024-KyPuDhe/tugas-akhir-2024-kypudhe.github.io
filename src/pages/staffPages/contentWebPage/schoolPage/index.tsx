@@ -55,7 +55,6 @@ export const SchoolPage: React.FC = () => {
       [name]: files ? files[0] : value,
     }));
     setErrorsForms((prevErrors) => ({ ...prevErrors, [name]: "" }));
-    console.log(data);
   };
 
   const handleQuillChange = (key: string, value: string) => {

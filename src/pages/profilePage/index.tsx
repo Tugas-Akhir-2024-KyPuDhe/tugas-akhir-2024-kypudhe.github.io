@@ -75,8 +75,6 @@ export const ProfilePage = () => {
       if (user.details[0].nis) {
         await getStudentHistory();
       }
-      console.log(user);
-
       setLoading(false);
     } catch (err) {
       console.error(err);

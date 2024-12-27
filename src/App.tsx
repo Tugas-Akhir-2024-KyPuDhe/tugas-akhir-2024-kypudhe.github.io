@@ -18,8 +18,6 @@ import {
   FormJurusanPage,
   EkskulPage,
   FormEkskulPage,
-  GuruMapelPage,
-  FormGuruMapelPage,
   DaftarSiswaPage,
   FormDaftarSiswaPage,
   DaftarKelasPage,
@@ -48,6 +46,7 @@ import {
   DetailKelasPage,
   DetailKelasSiswaPage,
   BeritaPage,
+  DetailStaffMangementSiswa,
 } from "./pages";
 import { SideBar } from "./components/sidebar";
 import PrivateRoute from "./components/privateRoute";
@@ -353,7 +352,7 @@ function App() {
               path="/manajemen-staff/data-staff/detail/:id"
               element={
                 <PrivateRoute
-                  Component={FormStaffMangementStaffPage}
+                  Component={DetailStaffMangementSiswa}
                   Role={["STAFF"]}
                 />
               }
@@ -370,30 +369,6 @@ function App() {
             {/* === #endregion */}
 
             {/* #region | Teacher */}
-            <Route
-              path="/guru/mata-pelajaran"
-              element={
-                <PrivateRoute Component={GuruMapelPage} Role={["TEACHER"]} />
-              }
-            />
-            <Route
-              path="/guru/mata-pelajaran/tambah"
-              element={
-                <PrivateRoute
-                  Component={FormGuruMapelPage}
-                  Role={["TEACHER"]}
-                />
-              }
-            />
-            <Route
-              path="/guru/mata-pelajaran/update/:id"
-              element={
-                <PrivateRoute
-                  Component={FormGuruMapelPage}
-                  Role={["TEACHER"]}
-                />
-              }
-            />
             <Route
               path="/pengelolaan-siswa/daftar-siswa"
               element={
