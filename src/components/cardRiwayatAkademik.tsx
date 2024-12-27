@@ -8,7 +8,6 @@ interface GradeProps {
 
 export const CardRiwayatAkademik: React.FC<GradeProps> = ({ data }) => {
   const [selectedClass, setSelectedClass] = useState<StudentHistory>();
-  
 
   const handleSelected = (dataClass: StudentHistory) => {
     setSelectedClass(dataClass);
@@ -71,7 +70,6 @@ interface ModalProps {
 
 export const ModalDetail: React.FC<ModalProps> = ({ dataClass }) => {
   const [selectedDescription, setSelectedDescription] = useState("");
-  
   return (
     <>
       <div
@@ -212,72 +210,84 @@ export const ModalDetail: React.FC<ModalProps> = ({ dataClass }) => {
                         </tr>
                       </thead>
                       <tbody>
-                {(dataClass &&
-                  dataClass.currentClass.CourseInClass?.map((mapel, index) => (
-                    <tr key={index}>
-                      <td className="py-3 text-center" scope="row">
-                        {index + 1}
-                      </td>
-                      <td className="py-3">{mapel.courseDetail.name}</td>
-                      <td className="py-3">{mapel.teacher.name}</td>
-                      <td className="py-3 text-center">
-                        {mapel.courseDetail.StudentsGrades![0]
-                          ? mapel.courseDetail.StudentsGrades![0].task || "-"
-                          : "-"}
-                      </td>
-                      <td className="py-3 text-center">
-                        {mapel.courseDetail.StudentsGrades![0]
-                          ? mapel.courseDetail.StudentsGrades![0].UH || "-"
-                          : "-"}
-                      </td>
-                      <td className="py-3 text-center">
-                        {mapel.courseDetail.StudentsGrades![0]
-                          ? mapel.courseDetail.StudentsGrades![0].PTS || "-"
-                          : "-"}
-                      </td>
-                      <td className="py-3 text-center">
-                        {mapel.courseDetail.StudentsGrades![0]
-                          ? mapel.courseDetail.StudentsGrades![0].PAS || "-"
-                          : "-"}
-                      </td>
-                      <td className="py-3 text-center">
-                        {mapel.courseDetail.StudentsGrades![0]
-                          ? mapel.courseDetail.StudentsGrades![0].portofolio ||
-                            "-"
-                          : "-"}
-                      </td>
-                      <td className="py-3 text-center">
-                        {mapel.courseDetail.StudentsGrades![0]
-                          ? mapel.courseDetail.StudentsGrades![0].proyek || "-"
-                          : "-"}
-                      </td>
-                      <td className="py-3 text-center">
-                        <button
-                          className="btn btn-link"
-                          data-bs-toggle="modal"
-                          data-bs-target="#modalDeskripsi"
-                          onClick={() =>
-                            setSelectedDescription(
-                              mapel.courseDetail.StudentsGrades![0]
-                                ? mapel.courseDetail.StudentsGrades![0]
-                                    .description || "-"
-                                : "-"
+                        {(dataClass &&
+                          dataClass.currentClass.CourseInClass?.map(
+                            (mapel, index) => (
+                              <tr key={index}>
+                                <td className="py-3 text-center" scope="row">
+                                  {index + 1}
+                                </td>
+                                <td className="py-3 text-start">
+                                  {mapel.courseDetail.name}
+                                </td>
+                                <td className="py-3 text-start">
+                                  {mapel.teacher.name}
+                                </td>
+                                <td className="py-3 text-center">
+                                  {mapel.courseDetail.StudentsGrades![0]
+                                    ? mapel.courseDetail.StudentsGrades![0]
+                                        .task || "-"
+                                    : "-"}
+                                </td>
+                                <td className="py-3 text-center">
+                                  {mapel.courseDetail.StudentsGrades![0]
+                                    ? mapel.courseDetail.StudentsGrades![0]
+                                        .UH || "-"
+                                    : "-"}
+                                </td>
+                                <td className="py-3 text-center">
+                                  {mapel.courseDetail.StudentsGrades![0]
+                                    ? mapel.courseDetail.StudentsGrades![0]
+                                        .PTS || "-"
+                                    : "-"}
+                                </td>
+                                <td className="py-3 text-center">
+                                  {mapel.courseDetail.StudentsGrades![0]
+                                    ? mapel.courseDetail.StudentsGrades![0]
+                                        .PAS || "-"
+                                    : "-"}
+                                </td>
+                                <td className="py-3 text-center">
+                                  {mapel.courseDetail.StudentsGrades![0]
+                                    ? mapel.courseDetail.StudentsGrades![0]
+                                        .portofolio || "-"
+                                    : "-"}
+                                </td>
+                                <td className="py-3 text-center">
+                                  {mapel.courseDetail.StudentsGrades![0]
+                                    ? mapel.courseDetail.StudentsGrades![0]
+                                        .proyek || "-"
+                                    : "-"}
+                                </td>
+                                <td className="py-3 text-center">
+                                  <button
+                                    className="btn btn-link"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#modalDeskripsi"
+                                    onClick={() =>
+                                      setSelectedDescription(
+                                        mapel.courseDetail.StudentsGrades![0]
+                                          ? mapel.courseDetail
+                                              .StudentsGrades![0].description ||
+                                              "-"
+                                          : "-"
+                                      )
+                                    }
+                                    style={{ fontSize: "0.9rem" }}
+                                  >
+                                    Lihat
+                                  </button>
+                                </td>
+                              </tr>
                             )
-                          }
-                          style={{ fontSize: "0.9rem" }}
-                        >
-                          Lihat
-                        </button>
-                      </td>
-                    </tr>
-                  ))) || (
-                  <tr>
-                    <td colSpan={10} className="py-3 text-center">
-                      Tidak ada data mata pelajaran untuk kelas ini.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
+                          )) || (
+                          <tr>
+                            <td colSpan={10} className="py-3 text-center">
+                              Tidak ada data mata pelajaran untuk kelas ini.
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
                     </table>
                   </div>
                 </div>
