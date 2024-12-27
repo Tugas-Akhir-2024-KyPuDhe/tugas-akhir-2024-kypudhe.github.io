@@ -40,9 +40,9 @@ export const DetailSiswaMangementSiswa: React.FC = () => {
         try {
           const response = await studentService.getStudentByNis(parseFloat(id));
           const data = response.data;
+          await getStudentHistory(response.data.id.toString());
           setData(response.data);
           setImageUrl(data.photo.url);
-          await getStudentHistory(data.id.toString());
         } catch (error) {
           const axiosError = error as AxiosError;
           if (axiosError.response?.status === 404) {
@@ -68,6 +68,9 @@ export const DetailSiswaMangementSiswa: React.FC = () => {
     try {
       setLoading(true);
       const response = await studentHistory.getStudentHistory(id);
+      console.log(response);
+      console.log("asd");
+
       setDataStudentHistory(response.data);
     } catch (error) {
       console.error(error);
