@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { StudentDetail } from "../../../../interface/student.interface";
-import { CourseInClass } from "../../../../interface/courseInClass.interface";
+import { StudentDetail } from "../../../interface/student.interface";
+import { CourseInClass } from "../../../interface/courseInClass.interface";
 import DataTable from "react-data-table-component";
 import { FaSave } from "react-icons/fa";
-import StudentGradeService from "../../../../services/studentGradeService";
-import { Toast } from "../../../../utils/myFunctions";
-import { FormStateStudentGrade } from "../../../../interface/studentGrade.interface";
+import StudentGradeService from "../../../services/studentGradeService";
+import { Toast } from "../../../utils/myFunctions";
+import { FormStateStudentGrade } from "../../../interface/studentGrade.interface";
 
 interface CardProps {
   loading: boolean;
   data: CourseInClass;
-  refreshData: () => void;
+  refreshData?: () => void;
 }
 
 export const CardNilaiKelas: React.FC<CardProps> = ({
@@ -90,7 +90,7 @@ export const CardNilaiKelas: React.FC<CardProps> = ({
 
     try {
       const response = await studentGradeService.insertGrade(payload);
-      refreshData();
+      refreshData!();
       if (response.status === 201) {
         Toast.fire({
           icon: "success",

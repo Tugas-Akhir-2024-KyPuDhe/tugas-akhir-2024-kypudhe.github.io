@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import { StudentDetail } from "../../../../interface/student.interface";
-import { CourseInClass } from "../../../../interface/courseInClass.interface";
+import { StudentDetail } from "../../../interface/student.interface";
+import { CourseInClass } from "../../../interface/courseInClass.interface";
 import DataTable from "react-data-table-component";
 import { FaEye } from "react-icons/fa6";
-import { formatGender } from "../../../../utils/myFunctions";
-import { CardProfil } from "../../../staffPages/managementSiswaPage/dataSiswaPage/cardProfil";
-import noPhotoFemale from "./../../../../assets/images/profile-female.jpg";
-import noPhotoMale from "./../../../../assets/images/profile-male.jpg";
-import { CardDataAkademik } from "../../../../components/cardDataAkademik";
-import { CardDataOrangTua } from "../../../../components/cardDataOrangTua";
+import { formatGender } from "../../../utils/myFunctions";
+import { CardProfil } from "../../staffPages/managementSiswaPage/dataSiswaPage/cardProfil";
+import noPhotoFemale from "./../../../assets/images/profile-female.jpg";
+import noPhotoMale from "./../../../assets/images/profile-male.jpg";
+import { CardDataAkademik } from "../../../components/cardDataAkademik";
+import { CardDataOrangTua } from "../../../components/cardDataOrangTua";
 import moment from "moment";
 
 interface CardProps {

@@ -1,5 +1,5 @@
 import React from "react";
-import { CourseInClass } from "../../../../interface/courseInClass.interface";
+import { CourseInClass } from "../../../interface/courseInClass.interface";
 
 interface CardProps {
   loading: boolean;
@@ -54,6 +54,11 @@ export const CardDetailKelas: React.FC<CardProps> = ({
           </div>
         </div>
         <div className="col-12">
+          <div className="row mb-3">
+            <div className="col-2 fw-medium">Tahun Ajaran</div>
+            <div className="col-auto">:</div>
+            <div className="col-9 fw-medium">{data && data.class.academicYear}</div>
+          </div>
           <div className="row mb-3">
             <div className="col-2 fw-medium">Guru Pengajar</div>
             <div className="col-auto">:</div>

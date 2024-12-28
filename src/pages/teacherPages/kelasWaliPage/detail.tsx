@@ -1,24 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { HeaderTitlePage } from "../../../../components/headerTitlePage";
-import { useParams } from "react-router-dom";
-import { decodeToken } from "../../../../utils/myFunctions";
-import StaffService from "../../../../services/staffService";
-import useCookie from "react-use-cookie";
-import { CourseInClass } from "../../../../interface/courseInClass.interface";
-import { CardDetailKelas } from "../../../../features/teacherPages/pengelolaanSiswa/daftarKelasPage/cardDetailKelas";
-import { CardAbsensiKelas } from "../../../../features/teacherPages/pengelolaanSiswa/daftarKelasPage/cardAbsensiKelas";
-import { CardNilaiKelas } from "../../../../features/teacherPages/pengelolaanSiswa/daftarKelasPage/cardNilaiKelas";
-import { CardDaftarSiswaKelas } from "../../../../features/teacherPages/pengelolaanSiswa/daftarKelasPage/cardDaftarSiswaKelas";
+import { HeaderTitlePage } from "../../../components/headerTitlePage";
+import { useNavigate, useParams } from "react-router-dom";
+import { CardDetailKelas } from "../../../features/teacherPages/kelasWaliPage/cardDetailKelas";
+import { CardAbsensiKelas } from "../../../features/teacherPages/jadwalMengajarPage/cardAbsensiKelas";
+import { AxiosError } from "axios";
+import ClassStudentService from "../../../services/classStudentService";
+import { Class } from "../../../interface/studentClass.interface";
+import { CardDaftarSiswaKelas } from "../../../features/teacherPages/kelasWaliPage/cardDaftarSiswaKelas";
+import { Toast } from "../../../utils/myFunctions";
 
-export const DetailKelasPage: React.FC = () => {
-  const teacherService = StaffService();
-  const [cookieLogin] = useCookie("userLoginCookie");
-  const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
+export const DetailKelasWaliPage: React.FC = () => {
+  const navigate = useNavigate();
+  const classService = ClassStudentService();
   const { id } = useParams<{ id: string }>();
 
   const [loading, setLoading] = useState<boolean>(false);
-  const [data, setData] = useState<CourseInClass>();
-  const [teacherName, setTeacherName] = useState("");
+  const [data, setData] = useState<Class>();
 
   const [activeMenu, setActiveMenu] = useState("daftar-siswa");
   const handleMenuClick = (menu: string) => {
@@ -29,19 +26,30 @@ export const DetailKelasPage: React.FC = () => {
   };
 
   const getData = async () => {
-    const dtoken = decodeToken(userLoginCookie.token);
-    try {
-      setLoading(true);
-      const response = await teacherService.getClassOfTeacher(
-        dtoken.username,
-        id
-      );
-      setTeacherName(response.data.name);
-      setData(response.data.CourseInClass[0]);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setLoading(false);
+    if (id) {
+      try {
+        setLoading(true);
+        const response = await classService.getClassById(parseInt(id));
+        setData(response.data);
+      } catch (error) {
+        const axiosError = error as AxiosError;
+        if (axiosError.response?.status === 404) {
+          Toast.fire({
+            icon: "error",
+            title: `Data Tidak Ditemukan!`,
+            timer: 4000,
+          });
+          navigate("/");
+          return;
+        }
+        Toast.fire({
+          icon: "error",
+          title: `Terjadi Kesalahan Mengambil Data!`,
+          timer: 4000,
+        });
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -52,18 +60,14 @@ export const DetailKelasPage: React.FC = () => {
   return (
     <>
       <HeaderTitlePage
-        title="Detail Kelas Guru"
-        subTitle="Detail Kelas Guru SMKN 1 Lumban Julu"
+        title="Detail Kelas Wali Guru"
+        subTitle="Detail Kelas Wali Guru"
         backDisplay={true}
         addDisplay={false}
         linkAdd="tambah"
       />
 
-      <CardDetailKelas
-        loading={loading}
-        data={data!}
-        teacherName={teacherName}
-      />
+      <CardDetailKelas loading={loading} data={data!} />
 
       <div className="m-lg-4 m-md-4 my-4 rounded">
         <ul
@@ -114,11 +118,12 @@ export const DetailKelasPage: React.FC = () => {
         ) : activeMenu === "absensi" ? (
           <CardAbsensiKelas loading={loading} />
         ) : (
-          <CardNilaiKelas
-            refreshData={getData}
-            loading={loading}
-            data={data!}
-          />
+          <p></p>
+          // <CardNilaiKelas
+          //   refreshData={getData}
+          //   loading={loading}
+          //   data={data!}
+          // />
         ))}
     </>
   );

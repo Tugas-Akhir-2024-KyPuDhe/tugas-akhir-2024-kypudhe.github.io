@@ -1,5 +1,6 @@
 import { StaffDetails } from "./auth.interface";
 import { CourseInClass } from "./courseInClass.interface";
+import { Fajusek } from "./fajusek.interfase";
 import { StudentDetail } from "./student.interface";
 
 export interface ResponseAction {
@@ -33,6 +34,8 @@ export interface Class {
   homeRoomTeacher: StaffDetails;
   student: StudentDetail[];
   CourseInClass?: CourseInClass[];
+  major: Fajusek  
+  totalStudent: number
 }
 
 export interface GetAllClassResponse {

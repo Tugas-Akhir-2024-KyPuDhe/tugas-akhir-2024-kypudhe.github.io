@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
-import StaffService from "../../../../services/staffService";
-import { CourseInClass } from "../../../../interface/courseInClass.interface";
+import StaffService from "../../../services/staffService";
+import { CourseInClass } from "../../../interface/courseInClass.interface";
 import { FaEye } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { Tooltip } from "react-tooltip";
 import useCookie from "react-use-cookie";
-import { decodeToken } from "../../../../utils/myFunctions";
+import { decodeToken } from "../../../utils/myFunctions";
 
 export const Table: React.FC = () => {
   const navigate = useNavigate();

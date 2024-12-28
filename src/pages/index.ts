@@ -1,14 +1,20 @@
 // TEACHER
-import { DetailAbsensiSiswaPage } from './teacherPages/pengelolaanSiswa/absensiSiswaPage/detail';
-import { AbsensiSiswaPage } from './teacherPages/pengelolaanSiswa/absensiSiswaPage/index';
-import { FormNilaiSiswaPage } from './teacherPages/pengelolaanSiswa/nilaiSiswaPage/form';
-import { NilaiSiswaPage } from './teacherPages/pengelolaanSiswa/nilaiSiswaPage/index';
-import { FormDaftarKelasPage } from './teacherPages/pengelolaanSiswa/daftarKelasPage/form';
-import { DaftarKelasPage } from './teacherPages/pengelolaanSiswa/daftarKelasPage/index';
-import { FormDaftarSiswaPage } from './teacherPages/pengelolaanSiswa/daftarSiswaPage/form';
-import { DaftarSiswaPage } from './teacherPages/pengelolaanSiswa/daftarSiswaPage/index';
-import { DaftarKelasNilaiSiswaPage } from './teacherPages/pengelolaanSiswa/daftarKelasPage/nilaiSiswaPage';
-import { DetailKelasPage } from './teacherPages/pengelolaanSiswa/daftarKelasPage/detail';
+import { JadwalMengajarPage } from './teacherPages/jadwalMengajarPage';
+import { DetailJadwalMengajarPage } from './teacherPages/jadwalMengajarPage/detail';
+import { KelasWaliPage } from './teacherPages/kelasWaliPage';
+import { DetailKelasWaliPage } from './teacherPages/kelasWaliPage/detail';
+
+// import { DetailAbsensiSiswaPage } from './teacherPages/jadwalMengajarPage/absensiSiswaPage/detail';
+// import { AbsensiSiswaPage } from './teacherPages/jadwalMengajarPage/absensiSiswaPage/index';
+// import { FormNilaiSiswaPage } from './teacherPages/jadwalMengajarPage/nilaiSiswaPage/form';
+// import { NilaiSiswaPage } from './teacherPages/jadwalMengajarPage/nilaiSiswaPage/index';
+// import { FormDaftarKelasPage } from './teacherPages/jadwalMengajarPage/daftarKelasPage/form';
+// import { DaftarKelasPage } from './teacherPages/jadwalMengajarPage/daftarKelasPage/index';
+// import { FormDaftarSiswaPage } from './teacherPages/jadwalMengajarPage/daftarSiswaPage/form';
+// import { DaftarSiswaPage } from './teacherPages/jadwalMengajarPage/daftarSiswaPage/index';
+// import { DaftarKelasNilaiSiswaPage } from './teacherPages/jadwalMengajarPage/daftarKelasPage/nilaiSiswaPage';
+// import { DetailKelasPage } from './teacherPages/jadwalMengajarPage/daftarKelasPage/detail';
+
 
 //STAFF
 import { FormJurusanPage } from './staffPages/contentWebPage/jurusanPage/form';
@@ -54,4 +60,5 @@ import { ProfilePage } from './profilePage';
 import { NotFoundPage } from './notFoundPage';
 
 
-export { NotFoundPage, HomePage, LoginPage, ArticlePage, FormArticlePage, DetailArticlePage, BannerPage, FormBannerPage, NilaiPage, KelasPage, MapelPage, AbsensiPage, SchoolPage, FacilityPage, FormFacilityPage, JurusanPage, FormJurusanPage, EkskulPage, FormEkskulPage, DaftarSiswaPage, FormDaftarSiswaPage, DaftarKelasPage, FormDaftarKelasPage, NilaiSiswaPage, FormNilaiSiswaPage, ProfilePage, AbsensiSiswaPage, DetailAbsensiSiswaPage, DataSiswaMangementSiswaPage, FormSiswaMangementSiswaPage, DetailSiswaMangementSiswa, GaleriPage, FormGaleriPage, UpdateGaleriColletion, DataKelasMangementSiswaPage,FormDataKelasMangementSiswaPage, DetailKelasMangementSiswaPage, DataMapelMangementSiswaPage, FormMapelMangementSiswaPage, DataStaffMangementStaffPage,FormStaffMangementStaffPage, DaftarKelasNilaiSiswaPage,DetailKelasPage, DetailKelasSiswaPage, BeritaPage, DetailStaffMangementSiswa }
+
+export { NotFoundPage, HomePage, LoginPage, ArticlePage, FormArticlePage, DetailArticlePage, BannerPage, FormBannerPage, NilaiPage, KelasPage, MapelPage, AbsensiPage, SchoolPage, FacilityPage, FormFacilityPage, JurusanPage, FormJurusanPage, EkskulPage, FormEkskulPage, ProfilePage, DataSiswaMangementSiswaPage, FormSiswaMangementSiswaPage, DetailSiswaMangementSiswa, GaleriPage, FormGaleriPage, UpdateGaleriColletion, DataKelasMangementSiswaPage,FormDataKelasMangementSiswaPage, DetailKelasMangementSiswaPage, DataMapelMangementSiswaPage, FormMapelMangementSiswaPage, DataStaffMangementStaffPage,FormStaffMangementStaffPage, DetailKelasSiswaPage, BeritaPage, DetailStaffMangementSiswa, JadwalMengajarPage, DetailJadwalMengajarPage, KelasWaliPage, DetailKelasWaliPage }

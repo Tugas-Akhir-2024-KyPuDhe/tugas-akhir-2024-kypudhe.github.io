@@ -18,16 +18,8 @@ import {
   FormJurusanPage,
   EkskulPage,
   FormEkskulPage,
-  DaftarSiswaPage,
-  FormDaftarSiswaPage,
-  DaftarKelasPage,
-  FormDaftarKelasPage,
-  NilaiSiswaPage,
-  FormNilaiSiswaPage,
   FormArticlePage,
   ProfilePage,
-  AbsensiSiswaPage,
-  DetailAbsensiSiswaPage,
   DataSiswaMangementSiswaPage,
   FormSiswaMangementSiswaPage,
   DetailSiswaMangementSiswa,
@@ -42,11 +34,13 @@ import {
   FormMapelMangementSiswaPage,
   DataStaffMangementStaffPage,
   FormStaffMangementStaffPage,
-  DaftarKelasNilaiSiswaPage,
-  DetailKelasPage,
   DetailKelasSiswaPage,
   BeritaPage,
   DetailStaffMangementSiswa,
+  DetailJadwalMengajarPage,
+  JadwalMengajarPage,
+  KelasWaliPage,
+  DetailKelasWaliPage,
 } from "./pages";
 import { SideBar } from "./components/sidebar";
 import PrivateRoute from "./components/privateRoute";
@@ -370,105 +364,27 @@ function App() {
 
             {/* #region | Teacher */}
             <Route
-              path="/pengelolaan-siswa/daftar-siswa"
+              path="/guru/kelas-wali"
               element={
-                <PrivateRoute Component={DaftarSiswaPage} Role={["TEACHER"]} />
+                <PrivateRoute Component={KelasWaliPage} Role={["TEACHER"]} />
               }
             />
             <Route
-              path="/pengelolaan-siswa/daftar-siswa/tambah"
+              path="/guru/kelas-wali/detail/:id"
               element={
-                <PrivateRoute
-                  Component={FormDaftarSiswaPage}
-                  Role={["TEACHER"]}
-                />
-              }
-            />
-            <Route
-              path="/pengelolaan-siswa/daftar-siswa/update/:id"
-              element={
-                <PrivateRoute
-                  Component={FormDaftarSiswaPage}
-                  Role={["TEACHER"]}
-                />
+                <PrivateRoute Component={DetailKelasWaliPage} Role={["TEACHER"]} />
               }
             />
             <Route
               path="/guru/jadwal-mengajar"
               element={
-                <PrivateRoute Component={DaftarKelasPage} Role={["TEACHER"]} />
-              }
-            />
-            <Route
-              path="/guru/jadwal-mengajar/tambah"
-              element={
-                <PrivateRoute
-                  Component={FormDaftarKelasPage}
-                  Role={["TEACHER"]}
-                />
-              }
-            />
-            <Route
-              path="/guru/jadwal-mengajar/update/:id"
-              element={
-                <PrivateRoute
-                  Component={FormDaftarKelasPage}
-                  Role={["TEACHER"]}
-                />
-              }
-            />
-            <Route
-              path="/guru/jadwal-mengajar/nilai/:id"
-              element={
-                <PrivateRoute
-                  Component={DaftarKelasNilaiSiswaPage}
-                  Role={["TEACHER"]}
-                />
+                <PrivateRoute Component={JadwalMengajarPage} Role={["TEACHER"]} />
               }
             />
             <Route
               path="/guru/jadwal-mengajar/detail/:id"
               element={
-                <PrivateRoute Component={DetailKelasPage} Role={["TEACHER"]} />
-              }
-            />
-            <Route
-              path="/pengelolaan-siswa/nilai-siswa"
-              element={
-                <PrivateRoute Component={NilaiSiswaPage} Role={["TEACHER"]} />
-              }
-            />
-            <Route
-              path="/pengelolaan-siswa/nilai-siswa/tambah"
-              element={
-                <PrivateRoute
-                  Component={FormNilaiSiswaPage}
-                  Role={["TEACHER"]}
-                />
-              }
-            />
-            <Route
-              path="/pengelolaan-siswa/nilai-siswa/update/:id"
-              element={
-                <PrivateRoute
-                  Component={FormNilaiSiswaPage}
-                  Role={["TEACHER"]}
-                />
-              }
-            />
-            <Route
-              path="/pengelolaan-siswa/absensi-siswa"
-              element={
-                <PrivateRoute Component={AbsensiSiswaPage} Role={["TEACHER"]} />
-              }
-            />
-            <Route
-              path="/pengelolaan-siswa/absensi-siswa/:id"
-              element={
-                <PrivateRoute
-                  Component={DetailAbsensiSiswaPage}
-                  Role={["TEACHER"]}
-                />
+                <PrivateRoute Component={DetailJadwalMengajarPage} Role={["TEACHER"]} />
               }
             />
 
