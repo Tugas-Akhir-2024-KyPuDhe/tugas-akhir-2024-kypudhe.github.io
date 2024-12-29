@@ -98,6 +98,10 @@ export const convertStatus = (status: string): JSX.Element => {
   );
 };
 
+export const convertTextStatus = (status: string): string => {
+  return status === "Active" ? "Aktif" : "Non Aktif";
+};
+
 export const convertStatusBerita = (status: string): JSX.Element => {
   if (status === "PUBLISH") {
     return (
