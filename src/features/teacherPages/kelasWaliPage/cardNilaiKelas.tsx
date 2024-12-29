@@ -1,20 +1,31 @@
-import React, { useState } from "react";
+import React from "react";
 import { StudentDetail } from "../../../interface/student.interface";
 import DataTable from "react-data-table-component";
 import { CourseInClass } from "../../../interface/courseInClass.interface";
 import { Class } from "../../../interface/studentClass.interface";
 
 interface CardProps {
+  student: StudentDetail;
   loading: boolean;
   data: Class;
   refreshData?: () => void;
 }
 
-export const CardNilaiKelas: React.FC<CardProps> = ({ data }) => {
-  console.log("ninlai: ",data);
-  
-  const [searchTerm, setSearchTerm] = useState<string>("");
-  const [selectedStudent] = useState<StudentDetail | null>(null);
+export const CardNilaiKelas: React.FC<CardProps> = ({ data, student }) => {
+  const filteredStudentsGrades = data.CourseInClass!.map((course) => {
+    return {
+      ...course,
+      courseDetail: {
+        ...course.courseDetail,
+        StudentsGrades: course.courseDetail.StudentsGrades!.filter(
+          (grade) => grade.nis === student.nis
+        ),
+      },
+    };
+  });
+
+  // console.log("ninlai: ",data);
+  // console.log("stud: ",student);
 
   const columns = [
     {
@@ -174,27 +185,12 @@ export const CardNilaiKelas: React.FC<CardProps> = ({ data }) => {
             Export to Excel
           </button>
         </div>
-        <div className="col-6 col-lg-3 col-md-3">
-          <input
-            type="text"
-            className="form-control border-dark"
-            placeholder="Search.."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            style={{ fontSize: "1.1em" }}
-          />
-        </div>
-      </div>
-      <div className="col-12">
-        <div className="pt-2">
-          Total : <span className="fw-bold">{data.CourseInClass!.length}</span>
-        </div>
       </div>
 
       <div className="col-12">
         <DataTable
           columns={columns}
-          data={data.CourseInClass || []}
+          data={filteredStudentsGrades || []}
           pagination
           highlightOnHover
           className="mt-3"
@@ -218,60 +214,6 @@ export const CardNilaiKelas: React.FC<CardProps> = ({ data }) => {
             },
           }}
         />
-      </div>
-      {/* Modal */}
-      <div
-        className="modal fade"
-        id="modalDetailDesk"
-        tabIndex={-1}
-        aria-hidden="true"
-      >
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title">Detail Keterangan Siswa</h5>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div className="modal-body">
-              <div className="row g-3">
-                <div className="col-12">
-                  <div className="row mb-3">
-                    <div className="col-2 fw-medium">Nama</div>
-                    <div className="col-auto">:</div>
-                    <div className="col-9 fw-medium">
-                      {(selectedStudent && selectedStudent.name) || ""}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="row g-3">
-                <div className="col-12">
-                  <div className="row mb-3">
-                    <div className="col-2 fw-medium">NIS</div>
-                    <div className="col-auto">:</div>
-                    <div className="col-9 fw-medium">
-                      {(selectedStudent && selectedStudent.nis) || ""}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {/* <textarea
-                className="form-control"
-                placeholder="Masukkan Catatan..."
-                readOnly
-                value={
-                  grades[(selectedStudent && selectedStudent.nis) || ""]
-                    ?.description || ""
-                }
-              ></textarea> */}
-            </div>
-          </div>
-        </div>
       </div>
     </>
   );

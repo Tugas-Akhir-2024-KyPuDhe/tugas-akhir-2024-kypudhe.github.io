@@ -23,7 +23,7 @@ export const CardDaftarSiswaKelas: React.FC<CardProps> = ({
   data,
 }) => {
   // console.log("class",data);
-  
+
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [selectedStudent, setSelectedStudent] = useState<StudentDetail | null>(
     null
@@ -354,6 +354,7 @@ export const CardDaftarSiswaKelas: React.FC<CardProps> = ({
                       />
                     ) : activeMenu === "nilai-siswa" ? (
                       <CardNilaiKelas
+                        student={selectedStudent}
                         loading={loading}
                         data={data!}
                       />

@@ -92,17 +92,7 @@ export const DetailKelasWaliPage: React.FC = () => {
               }`}
               onClick={() => handleMenuClick("absensi")}
             >
-              Absensi
-            </a>
-          </li>
-          <li className="nav-item" style={{ cursor: "pointer" }}>
-            <a
-              className={`nav-link ${loading ? "disabled" : ""} ${
-                activeMenu === "nilai" ? "active text-blue" : "text-dark"
-              }`}
-              onClick={() => handleMenuClick("nilai")}
-            >
-              Nilai
+              Mata Pelajaran Dikelas
             </a>
           </li>
         </ul>
