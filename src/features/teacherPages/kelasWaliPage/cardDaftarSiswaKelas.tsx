@@ -13,6 +13,8 @@ import { CardNilaiKelas } from "./cardNilaiKelas";
 import { Class } from "../../../interface/studentClass.interface";
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import PDFDaftarSiswa from "../../../utils/documentPDF/PDFSiswa";
 
 interface CardProps {
   loading: boolean;
@@ -248,12 +250,45 @@ export const CardDaftarSiswaKelas: React.FC<CardProps> = ({
           </div>
         </div>
         <div className="col-6 col-lg-3 col-md-3">
-          <button
-            className="btn border-success text-success"
-            onClick={() => exportToExcel()}
-          >
-            Export to Excel
-          </button>
+          <div className="btn-group" role="group"></div>
+          <div className="btn-group">
+            <div className="dropdown">
+              <button
+                className="btn border-success text-success dropdown-toggle"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Export Data
+              </button>
+              <ul className="dropdown-menu">
+                <li>
+                  <button
+                    className="dropdown-item"
+                    onClick={() => exportToExcel()}
+                  >
+                    Excel
+                  </button>
+                </li>
+                <li>
+                  <PDFDownloadLink
+                    className="dropdown-item"
+                    document={
+                      <PDFDaftarSiswa
+                        waliKelas={data.homeRoomTeacher.name}
+                        kelas={data.name}
+                        jurusan={data.major.name}
+                        siswa={data.student}
+                      />
+                    }
+                    fileName={`Daftar Siswa Kelas ${data.name} TA ${data.academicYear}.pdf`}
+                  >
+                    PDF
+                  </PDFDownloadLink>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
         <div className="col-6 col-lg-3 col-md-3">
           <input
