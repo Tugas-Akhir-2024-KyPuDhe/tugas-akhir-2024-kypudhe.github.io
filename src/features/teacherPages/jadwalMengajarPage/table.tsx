@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { Tooltip } from "react-tooltip";
 import useCookie from "react-use-cookie";
 import { decodeToken } from "../../../utils/myFunctions";
+import { exportToExcelDaftarMengajarGuru } from "../../../utils/printDocument/daftarMengajarGuru/ExcelDaftarSiswaInClass";
+import { exportToPDFDaftarMengajarGuru } from "../../../utils/printDocument/daftarMengajarGuru/PDFDaftarSiswaInClass";
 
 export const Table: React.FC = () => {
   const navigate = useNavigate();
@@ -153,8 +155,52 @@ export const Table: React.FC = () => {
         </div>
       )}
 
-      <div className="row d-flex justify-content-end">
-        <div className="col-12 col-lg-4 col-md-3">
+      <div className="row g-3 d-flex justify-content-between">
+        <div className="col-6 col-lg-3 col-md-3">
+          <div className="btn-group">
+            <div className="dropdown">
+              <button
+                className="btn border-success text-success dropdown-toggle"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Export Data
+              </button>
+              <ul className="dropdown-menu">
+                <li>
+                  <button
+                    className="dropdown-item"
+                    onClick={() =>
+                      exportToExcelDaftarMengajarGuru(
+                        data,
+                        data[0].class.academicYear,
+                        data[0].teacher.name
+                      )
+                    }
+                  >
+                    Excel
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() =>
+                      exportToPDFDaftarMengajarGuru(
+                        data,
+                        data[0].class.academicYear,
+                        data[0].teacher.name
+                      )
+                    }
+                    className="dropdown-item"
+                  >
+                    PDF
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div className="col-6 col-lg-3 col-md-3">
           <input
             type="text"
             className="form-control border-dark"
@@ -163,6 +209,11 @@ export const Table: React.FC = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
             style={{ fontSize: "1.1em" }}
           />
+        </div>
+        <div className="col-12">
+          <div className="">
+            Total : <span className="fw-bold">{data.length}</span>
+          </div>
         </div>
       </div>
 

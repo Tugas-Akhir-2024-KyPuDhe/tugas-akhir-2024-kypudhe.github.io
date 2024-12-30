@@ -4,14 +4,20 @@ import { useNavigate } from "react-router-dom";
 import { FaEye, FaPen } from "react-icons/fa6";
 import StaffService from "../../../../services/staffService";
 import { StaffDetail } from "../../../../interface/staff.interface";
+import { exportToPDFDaftarPegawai } from "../../../../utils/printDocument/daftarPegawai/PDFDaftarPegawai";
+import CourseService from "../../../../services/courseService";
+import { Course } from "../../../../interface/course.interface";
+import { exportToExcelDaftarPegawai } from "../../../../utils/printDocument/daftarPegawai/ExcelDaftarPegawai";
 
 export const Table: React.FC = () => {
   const staffService = StaffService();
+  const courseService = CourseService();
   const navigate = useNavigate();
 
   const [data, setData] = useState<StaffDetail[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [allCourse, setAllCourse] = useState<Course[]>([]);
 
   const getData = async () => {
     setLoading(true);
@@ -20,8 +26,23 @@ export const Table: React.FC = () => {
       if (response.data && response.data.length > 0) {
         setData(response.data);
       }
+      getAllCourse();
     } catch (error) {
       console.error("Error fetching Staff data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getAllCourse = async () => {
+    setLoading(true);
+    try {
+      const response = await courseService.getAllCourses();
+      if (response.data && response.data.length > 0) {
+        setAllCourse(response.data);
+      }
+    } catch (error) {
+      console.error("Error fetching Course data:", error);
     } finally {
       setLoading(false);
     }
@@ -198,9 +219,36 @@ export const Table: React.FC = () => {
             </div>
           </div>
           <div className="col-6 col-lg-3 col-md-3">
-            <button className="btn border-success text-success">
-              Export to Excel
-            </button>
+            <div className="btn-group">
+              <div className="dropdown">
+                <button
+                  className="btn border-success text-success dropdown-toggle"
+                  type="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Export Data
+                </button>
+                <ul className="dropdown-menu">
+                  <li>
+                    <button
+                      className="dropdown-item"
+                      onClick={() => exportToExcelDaftarPegawai(data, "data")}
+                    >
+                      Excel
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => exportToPDFDaftarPegawai(data, allCourse)}
+                      className="dropdown-item"
+                    >
+                      PDF
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
           <div className="col-6 col-lg-3 col-md-3">
             <input
@@ -212,10 +260,10 @@ export const Table: React.FC = () => {
               style={{ fontSize: "1.1em" }}
             />
           </div>
-        </div>
-        <div className="col-12">
-          <div className="pt-2">
-            Total : <span className="fw-bold">{data.length}</span>
+          <div className="col-12">
+            <div className="">
+              Total : <span className="fw-bold">{data.length}</span>
+            </div>
           </div>
         </div>
         <DataTable

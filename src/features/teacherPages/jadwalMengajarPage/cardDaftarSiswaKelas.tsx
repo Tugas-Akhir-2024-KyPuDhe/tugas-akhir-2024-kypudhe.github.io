@@ -10,6 +10,8 @@ import noPhotoMale from "./../../../assets/images/profile-male.jpg";
 import { CardDataAkademik } from "../../../components/cardDataAkademik";
 import { CardDataOrangTua } from "../../../components/cardDataOrangTua";
 import moment from "moment";
+import { exportToPDFDaftarSiswaInClass } from "../../../utils/printDocument/daftarSiswaInClass/PDFDaftarSiswaInClass";
+import { exportToExcelDaftarSiswaInClass } from "../../../utils/printDocument/daftarSiswaInClass/ExcelDaftarSiswaInClass";
 
 interface CardProps {
   loading: boolean;
@@ -129,9 +131,52 @@ export const CardDaftarSiswaKelas: React.FC<CardProps> = ({
           </div>
         </div>
         <div className="col-6 col-lg-3 col-md-3">
-          <button className="btn border-success text-success">
-            Export to Excel
-          </button>
+          <div className="btn-group">
+            <div className="dropdown">
+              <button
+                className="btn border-success text-success dropdown-toggle"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Export Data
+              </button>
+              <ul className="dropdown-menu">
+                <li>
+                  <button
+                    className="dropdown-item"
+                    onClick={() =>
+                      exportToExcelDaftarSiswaInClass(
+                        data?.class.student,
+                        data.class.name,
+                        data.class.major.name,
+                        data.class.academicYear,
+                        data.class.homeRoomTeacher.name,
+                      )
+                    }
+                  >
+                    Excel
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() =>
+                      exportToPDFDaftarSiswaInClass(
+                        data?.class.student,
+                        data.class.name,
+                        data.class.major.name,
+                        data.class.academicYear,
+                        data.class.homeRoomTeacher.name,
+                      )
+                    }
+                    className="dropdown-item"
+                  >
+                    PDF
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
         <div className="col-6 col-lg-3 col-md-3">
           <input
@@ -143,10 +188,10 @@ export const CardDaftarSiswaKelas: React.FC<CardProps> = ({
             style={{ fontSize: "1.1em" }}
           />
         </div>
-      </div>
-      <div className="col-12">
-        <div className="pt-2">
-          Total : <span className="fw-bold">{data.class.student.length}</span>
+        <div className="col-12">
+          <div className="">
+            Total : <span className="fw-bold">{data.class.student.length}</span>
+          </div>
         </div>
       </div>
 
@@ -277,7 +322,9 @@ export const CardDaftarSiswaKelas: React.FC<CardProps> = ({
                         kelas={selectedStudent?.class.name || "-"}
                         major={selectedStudent?.Major.name || "-"}
                         startYear={
-                          moment(selectedStudent?.startYear).year().toString() || ""
+                          moment(selectedStudent?.startYear)
+                            .year()
+                            .toString() || ""
                         }
                         studentStatus={selectedStudent?.status || ""}
                       />
@@ -306,7 +353,8 @@ export const CardDaftarSiswaKelas: React.FC<CardProps> = ({
                         }
                         parentAddress={
                           (selectedStudent?.ParentOfStudent[0] &&
-                            selectedStudent?.ParentOfStudent[0].parentAddress) ||
+                            selectedStudent?.ParentOfStudent[0]
+                              .parentAddress) ||
                           "-"
                         }
                       />

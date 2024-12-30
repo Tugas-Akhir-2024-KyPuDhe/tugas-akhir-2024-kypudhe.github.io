@@ -219,9 +219,9 @@ export const Table: React.FC = () => {
               />
             </div>
           </div>
-          <div className="col-6 col-lg-6">
+          <div className="col-12 col-lg-6">
             <div className="row">
-              <div className="col-4">
+              <div className="col-12 col-md-5">
                 <Select
                   options={optionsMajor}
                   value={selectedMajor}
@@ -243,7 +243,7 @@ export const Table: React.FC = () => {
                   }}
                 />
               </div>
-              <div className="col-4">
+              <div className="col-12 col-md-5">
                 <Select
                   options={optionsGrades}
                   value={selectedGrade}
@@ -267,7 +267,7 @@ export const Table: React.FC = () => {
               </div>
             </div>
           </div>
-          <div className="col-6 col-lg-3 col-md-3">
+          <div className="col-12 col-lg-3 col-md-3">
             <input
               type="text"
               className="form-control border-dark"

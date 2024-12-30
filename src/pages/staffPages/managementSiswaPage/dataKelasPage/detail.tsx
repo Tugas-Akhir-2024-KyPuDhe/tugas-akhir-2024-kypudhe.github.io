@@ -47,7 +47,7 @@ export const DetailKelasMangementSiswaPage: React.FC = () => {
   const optionsCourse = [
     ...dataCourse.map((data) => ({
       value: data.code,
-      label: `${data.name} | ${data.grade}`,
+      label: `${data.name} (${data.grade})`,
     })),
   ];
   const optionsTeachers = [

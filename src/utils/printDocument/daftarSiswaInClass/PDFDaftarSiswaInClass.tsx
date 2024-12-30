@@ -6,9 +6,31 @@ import {
   View,
   StyleSheet,
   Font,
+  pdf,
 } from "@react-pdf/renderer";
-import { StudentDetail } from "../../interface/student.interface";
-import { convertTextStatus } from "../myFunctions";
+import { StudentDetail } from "../../../interface/student.interface";
+import { convertTextStatus } from "../../myFunctions";
+
+export const exportToPDFDaftarSiswaInClass = async (
+  siswa: StudentDetail[],
+  kelas: string,
+  jurusan: string,
+  TA: string,
+  waliKelas: string
+) => {
+  const MyDocument = (
+    <PDFDaftarSiswa
+      siswa={siswa}
+      TA={TA}
+      jurusan={jurusan}
+      kelas={kelas}
+      waliKelas={waliKelas}
+    />
+  );
+  const blob = await pdf(MyDocument).toBlob();
+  const url = URL.createObjectURL(blob);
+  window.open(url, "_blank");
+};
 
 // Font Styles
 Font.register({
@@ -184,6 +206,7 @@ interface PDFProps {
   waliKelas: string;
   kelas: string;
   jurusan: string;
+  TA: string;
   siswa: StudentDetail[];
 }
 
@@ -192,12 +215,13 @@ const PDFDaftarSiswa: React.FC<PDFProps> = ({
   kelas,
   jurusan,
   siswa,
+  TA,
 }) => (
   <Document>
     <Page size="A3" style={styles.page} orientation="landscape">
       {/* Title */}
 
-      <Text style={styles.title}>Daftar Siswa TA 2024/2025</Text>
+      <Text style={styles.title}>Daftar Siswa - TA {TA}</Text>
       <Text style={styles.title}>SMK Negeri 1 Lumban Julu</Text>
 
       {/* Info */}
