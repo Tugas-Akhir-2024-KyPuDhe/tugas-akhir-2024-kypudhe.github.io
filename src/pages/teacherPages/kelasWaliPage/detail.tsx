@@ -13,6 +13,7 @@ import { NavSubMenu } from "../../../components/navSubmenu";
 const subMenuItemsDetailKelasWaliGuru = [
   { label: "Daftar Siswa", key: "daftar-siswa" },
   { label: "Mata Pelajaran Dikelas", key: "mata-pelajaran-dikelas" },
+  { label: "Nilai Akhir Siswa", key: "nilai-akhir-siswa" },
 ];
 
 export const DetailKelasWaliPage: React.FC = () => {

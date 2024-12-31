@@ -236,13 +236,18 @@ export const ListMenu = () => {
   const [cookieLogin] = useCookie("userLoginCookie");
   const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
   const [selectedMenu, setSelectedMenu] = useState("");
-
+  const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
+  
   useEffect(() => {
     setSelectedMenu(location.pathname);
   }, [location.pathname]);
 
   const handleMenuClick = (path: string) => {
     navigate(path);
+  };
+
+  const handleSubmenuToggle = (submenu: string) => {
+    setOpenSubmenu((prev) => (prev === submenu ? null : submenu));
   };
 
   return (
@@ -472,144 +477,14 @@ export const ListMenu = () => {
             )}
             Jadwal Mengajar
           </MenuItem>
-
-          {/* <SubMenu
-            icon={<FaFileLines />}
-            label="Pengelolaan Siswa"
-            rootStyles={{
-              ["." + menuClasses.subMenuContent]: {
-                backgroundColor: "#f0f0f0",
-              },
-            }}
-            className="fw-medium"
-          >
-            <MenuItem
-              onClick={() =>
-                handleMenuClick("/pengelolaan-siswa/absensi-siswa")
-              }
-              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
-              style={{
-                position: "relative",
-                backgroundColor:
-                  selectedMenu === "/pengelolaan-siswa/absensi-siswa"
-                    ? "#E5EAF2"
-                    : "",
-              }}
-              className={`fw-medium ${
-                selectedMenu === "/pengelolaan-siswa/absensi-siswa"
-                  ? "text-blue"
-                  : "text-dark-soft"
-              }`}
-            >
-              {selectedMenu === "/pengelolaan-siswa/absensi-siswa" && (
-                <div
-                  style={{
-                    position: "absolute",
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
-                    width: "4px",
-                    backgroundColor: "var(--blue-color)",
-                  }}
-                />
-              )}
-              Absensi
-            </MenuItem>
-            <MenuItem
-              onClick={() => handleMenuClick("/pengelolaan-siswa/daftar-siswa")}
-              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
-              style={{
-                position: "relative",
-                backgroundColor:
-                  selectedMenu === "/pengelolaan-siswa/daftar-siswa"
-                    ? "#E5EAF2"
-                    : "",
-              }}
-              className={`fw-medium ${
-                selectedMenu === "/pengelolaan-siswa/daftar-siswa"
-                  ? "text-blue"
-                  : "text-dark-soft"
-              }`}
-            >
-              {selectedMenu === "/pengelolaan-siswa/daftar-siswa" && (
-                <div
-                  style={{
-                    position: "absolute",
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
-                    width: "4px",
-                    backgroundColor: "var(--blue-color)",
-                  }}
-                />
-              )}
-              Daftar Siswa
-            </MenuItem>
-            <MenuItem
-              onClick={() => handleMenuClick("/guru/jadwal-mengajar")}
-              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
-              style={{
-                position: "relative",
-                backgroundColor:
-                  selectedMenu === "/guru/jadwal-mengajar" ? "#E5EAF2" : "",
-              }}
-              className={`fw-medium ${
-                selectedMenu === "/guru/jadwal-mengajar"
-                  ? "text-blue"
-                  : "text-dark-soft"
-              }`}
-            >
-              {selectedMenu === "/guru/jadwal-mengajar" && (
-                <div
-                  style={{
-                    position: "absolute",
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
-                    width: "4px",
-                    backgroundColor: "var(--blue-color)",
-                  }}
-                />
-              )}
-              Data Kelas
-            </MenuItem>
-            <MenuItem
-              onClick={() => handleMenuClick("/pengelolaan-siswa/nilai-siswa")}
-              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
-              style={{
-                position: "relative",
-                backgroundColor:
-                  selectedMenu === "/pengelolaan-siswa/nilai-siswa"
-                    ? "#E5EAF2"
-                    : "",
-              }}
-              className={`fw-medium ${
-                selectedMenu === "/pengelolaan-siswa/nilai-siswa"
-                  ? "text-blue"
-                  : "text-dark-soft"
-              }`}
-            >
-              {selectedMenu === "/pengelolaan-siswa/nilai-siswa" && (
-                <div
-                  style={{
-                    position: "absolute",
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
-                    width: "4px",
-                    backgroundColor: "var(--blue-color)",
-                  }}
-                />
-              )}
-              Nilai Siswa
-            </MenuItem>
-          </SubMenu> */}
         </>
       )}
       {/* Config | STAFF */}
       {userLoginCookie?.role === "STAFF" && (
         <>
           <SubMenu
+            open={openSubmenu === "manajemenSiswa"}
+            onOpenChange={() => handleSubmenuToggle("manajemenSiswa")}
             icon={<TbUserScreen />}
             label="Manajemen Siswa"
             rootStyles={{
@@ -619,38 +494,6 @@ export const ListMenu = () => {
             }}
             className="fw-medium"
           >
-            {/* <MenuItem
-              onClick={() =>
-                handleMenuClick("/manajemen-siswa/daftar-siswa")
-              }
-              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
-              style={{
-                position: "relative",
-                backgroundColor:
-                  selectedMenu === "/manajemen-siswa/daftar-siswa"
-                    ? "#E5EAF2"
-                    : "",
-              }}
-              className={`fw-medium ${
-                selectedMenu === "/manajemen-siswa/daftar-siswa"
-                  ? "text-blue"
-                  : "text-dark-soft"
-              }`}
-            >
-              {selectedMenu === "/manajemen-siswa/daftar-siswa" && (
-                <div
-                  style={{
-                    position: "absolute",
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
-                    width: "4px",
-                    backgroundColor: "var(--blue-color)",
-                  }}
-                />
-              )}
-              Data Siswa Baru
-            </MenuItem> */}
             <MenuItem
               onClick={() => handleMenuClick("/manajemen-siswa/daftar-siswa")}
               icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
@@ -743,6 +586,8 @@ export const ListMenu = () => {
             </MenuItem>
           </SubMenu>
           <SubMenu
+          open={openSubmenu === "manajemenStaff"}
+          onOpenChange={() => handleSubmenuToggle("manajemenStaff")}
             icon={<IoIosPeople />}
             label="Manajemen Staff"
             rootStyles={{
@@ -784,6 +629,8 @@ export const ListMenu = () => {
             </MenuItem>
           </SubMenu>
           <SubMenu
+          open={openSubmenu === "contentWeb"}
+          onOpenChange={() => handleSubmenuToggle("contentWeb")}
             icon={<FaGlobe />}
             label="Content Web"
             rootStyles={{

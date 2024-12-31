@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { HeaderTitlePage } from "../../../../components/headerTitlePage";
 import { useNavigate, useParams } from "react-router-dom";
-import { formatDate, formatGender, Toast } from "../../../../utils/myFunctions";
+import { formatGender, Toast } from "../../../../utils/myFunctions";
 import noPhotoFemale from "./../../../../assets/images/profile-female.jpg";
 import noPhotoMale from "./../../../../assets/images/profile-male.jpg";
 import { AxiosError } from "axios";
@@ -10,10 +10,12 @@ import StaffService from "../../../../services/staffService";
 import { StaffDetail } from "../../../../interface/staff.interface";
 import { Course } from "../../../../interface/course.interface";
 import CourseService from "../../../../services/courseService";
-import { FaCircle } from "react-icons/fa6";
 import { CourseInClass } from "../../../../interface/courseInClass.interface";
-import DataTable from "react-data-table-component";
 import { NavSubMenu } from "../../../../components/navSubmenu";
+import { Class } from "../../../../interface/studentClass.interface";
+import { CardRiwayatMengajar } from "../../../../features/staffPages/managementStaffPage/dataStaffPage/cardRiwayatMengajar";
+import { CardDataAkademik } from "../../../../features/staffPages/managementStaffPage/dataStaffPage/cardDataAkademik";
+import { CardKelasWali } from "../../../../features/staffPages/managementStaffPage/dataStaffPage/cardKelasWali";
 
 const subMenuItems = [
   { label: "Data Akademik", key: "data-akademik" },
@@ -32,6 +34,7 @@ export const DetailStaffMangementSiswa: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [allCourse, setAllCourse] = useState<Course[]>([]);
   const [dataTeachTeacher, setDataTeachTeacher] = useState<CourseInClass[]>([]);
+  const [dataWaliTeacher, setDataWaliTeacher] = useState<Class[]>([]);
 
   const getDataTeachTeacher = async (nip: string) => {
     try {
@@ -78,6 +81,7 @@ export const DetailStaffMangementSiswa: React.FC = () => {
           setImageUrl(data.photo?.url);
           await getAllCourse();
           await getDataTeachTeacher(response.data.nip);
+          await getDataWaliTeacher(response.data.id.toString());
         } catch (error) {
           const axiosError = error as AxiosError;
           if (axiosError.response?.status === 404) {
@@ -99,6 +103,18 @@ export const DetailStaffMangementSiswa: React.FC = () => {
     getDataPegawai();
   }, []);
 
+  const getDataWaliTeacher = async (id: string) => {
+    try {
+      setLoading(true);
+      const response = await staffService.getClassRoomOfTeacher(id.toString());
+      setDataWaliTeacher(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const getAllCourse = async () => {
     setLoading(true);
     try {
@@ -113,37 +129,11 @@ export const DetailStaffMangementSiswa: React.FC = () => {
     }
   };
 
-  const columns = [
-    {
-      name: "No",
-      cell: (_row: CourseInClass, index: number) => index + 1,
-      width: "50px",
-    },
-    {
-      name: "Mata Pelajaran",
-      cell: (row: CourseInClass) => row.courseDetail.name,
-      selector: (row: CourseInClass) => row.courseDetail.name,
-      sortable: true,
-    },
-    {
-      name: "Kelas",
-      selector: (row: CourseInClass) => row.class.name,
-      cell: (row: CourseInClass) => row.class.name,
-      sortable: true,
-    },
-    {
-      name: "Tahun Ajaran",
-      selector: (row: CourseInClass) => row.class.academicYear,
-      cell: (row: CourseInClass) => row.class.academicYear,
-      sortable: true,
-    },
-  ];
-
   return (
     <>
       <HeaderTitlePage
-        title="Detail Siswa"
-        subTitle="Detail Siswa SMKN 1 Lumban Julu"
+        title="Detail Pegawai"
+        subTitle="Detail Pegawai SMKN 1 Lumban Julu"
         backDisplay={true}
         addDisplay={false}
         linkAdd=""
@@ -223,117 +213,15 @@ export const DetailStaffMangementSiswa: React.FC = () => {
           </div>
         )}
         {activeMenu === "data-akademik" ? (
-          <>
-            <div className="fw-bold fs-5 mb-4 text-dark-soft position-relative pb-2">
-              <div
-                style={{
-                  position: "absolute",
-                  left: 0,
-                  bottom: 0,
-                  width: "50px",
-                  height: "5px",
-                  backgroundColor: "var(--blue-color)",
-                }}
-              />
-              Data Akademik
-            </div>
-            <div className="row">
-              <div className="col-12 col-md-5">
-                <div className="mb-3">
-                  <label className="fw-bold">Nomor Induk Pegawai</label>
-                  <div className="fw-medium">{data?.nip}</div>
-                </div>
-                <div className="mb-3">
-                  <label className="fw-bold">Status Pegawai</label>
-                  <div className="fw-medium">{data?.type}</div>
-                </div>
-                <div className="mb-3">
-                  <label className="fw-bold">Jabatan</label>
-                  <div className="fw-medium">{data?.position}</div>
-                </div>
-                <div className="mb-3">
-                  <label className="fw-bold">Tahun Mulai</label>
-                  <div className="fw-medium">
-                    {data?.startDate && formatDate(new Date(data?.startDate))}
-                  </div>
-                </div>
-              </div>
-              <div className="col-12 col-md-5">
-                <div className="mb-3">
-                  <label className="fw-bold">Mata Pelajaran</label>
-                  <div className="fw-medium">
-                    {allCourse.map((course) => {
-                      const isCourseInMyList = data?.mapel.includes(
-                        course.code
-                      );
-                      return (
-                        <div key={course.code} className="mb-2">
-                          {isCourseInMyList && (
-                            <div>
-                              <FaCircle
-                                className="mx-2"
-                                style={{ fontSize: "0.4rem" }}
-                              />{" "}
-                              {course.name}{" "}
-                              <sup className="text-muted">
-                                Kelas: {course.grade}
-                              </sup>
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </>
+          <CardDataAkademik data={data!} allCourse={allCourse} />
         ) : activeMenu === "riwayat-mengajar" ? (
           <>
-            <div className="fw-bold fs-5 mb-4 text-dark-soft position-relative pb-2">
-              <div
-                style={{
-                  position: "absolute",
-                  left: 0,
-                  bottom: 0,
-                  width: "50px",
-                  height: "5px",
-                  backgroundColor: "var(--blue-color)",
-                }}
-              />
-              Riwayat Mengejar Guru
-            </div>
-            <DataTable
-              columns={columns}
-              data={dataTeachTeacher}
-              pagination
-              highlightOnHover
-              className="mt-3"
-              customStyles={{
-                rows: {
-                  style: {
-                    "&:hover": {
-                      backgroundColor: "#f5f5f5",
-                      color: "#007bff",
-                    },
-                  },
-                },
-                headCells: {
-                  style: {
-                    backgroundColor: "var(--blue-color)",
-                    color: "#ffffff",
-                    fontWeight: "bold",
-                    textAlign: "center",
-                    border: "0.1px solid #ddd",
-                  },
-                },
-              }}
-            />
+            <CardRiwayatMengajar data={dataTeachTeacher} />
           </>
         ) : activeMenu === "riwayat-akademik" ? (
           <p></p>
         ) : (
-          <div>Halaman tidak ditemukan</div>
+          <CardKelasWali data={dataWaliTeacher} />
         )}
       </div>
     </>
