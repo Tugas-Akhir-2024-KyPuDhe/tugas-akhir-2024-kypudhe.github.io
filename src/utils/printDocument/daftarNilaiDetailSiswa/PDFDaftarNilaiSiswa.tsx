@@ -5,22 +5,29 @@ import {
   Text,
   View,
   StyleSheet,
-  Font, 
+  Font,
   pdf,
 } from "@react-pdf/renderer";
-import { StudentDetail } from "../../../interface/student.interface";
-import { convertTextStatus } from "../../myFunctions";
+import { CourseInClass } from "../../../interface/courseInClass.interface";
 
-export const exportToPDFDaftarSiswaInClass = async (
-  siswa: StudentDetail[],
+export const exportToPDFDaftarNilaiDetailSiswa = async (
+  data: CourseInClass[],
+  nis: string,
+  nama: string,
+  nilaiAkhir: string,
+  nilaiAngka: string,
   kelas: string,
   jurusan: string,
   TA: string,
   waliKelas: string
 ) => {
   const MyDocument = (
-    <PDFDaftarSiswa
-      siswa={siswa}
+    <PDFDaftarNilaiDetailSiswa
+      nama={nama}
+      nis={nis}
+      nilaiAkhir={nilaiAkhir}
+      nilaiAngka={nilaiAngka}
+      data={data}
       TA={TA}
       jurusan={jurusan}
       kelas={kelas}
@@ -52,7 +59,7 @@ const styles = StyleSheet.create({
   },
   info: {
     marginBottom: 10,
-    fontSize: 12,
+    fontSize: 16,
   },
   table: {
     width: "100%",
@@ -70,13 +77,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#000",
     padding: 5,
-    fontSize: 10,
+    fontSize: 14,
   },
   bodyCell: {
     borderWidth: 1,
     borderColor: "#000",
     padding: 5,
-    fontSize: 9,
+    fontSize: 13
   },
   colNo: {
     width: "4%",
@@ -95,6 +102,27 @@ const styles = StyleSheet.create({
   },
   col5: {
     width: "25%",
+  },
+  col6: {
+    width: "30%",
+  },
+  col7: {
+    width: "35%",
+  },
+  col8: {
+    width: "40%",
+  },
+  col9: {
+    width: "45%",
+  },
+  col10: {
+    width: "50%",
+  },
+  col11: {
+    width: "50%",
+  },
+  col12: {
+    width: "60%",
   },
   colAuto: {
     flexGrow: 1,
@@ -203,31 +231,47 @@ const styles = StyleSheet.create({
 });
 
 interface PDFProps {
+  nama: string;
+  nis: string;
+  nilaiAkhir: string;
+  nilaiAngka: string;
   waliKelas: string;
   kelas: string;
   jurusan: string;
   TA: string;
-  siswa: StudentDetail[];
+  data: CourseInClass[];
 }
 
-const PDFDaftarSiswa: React.FC<PDFProps> = ({
+const PDFDaftarNilaiDetailSiswa: React.FC<PDFProps> = ({
+  nama,
+  nis,
   waliKelas,
   kelas,
   jurusan,
-  siswa,
+  data,
   TA,
+  nilaiAkhir,
+  nilaiAngka,
 }) => (
   <Document>
     <Page size="A3" style={styles.page} orientation="landscape">
       {/* Title */}
 
-      <Text style={styles.title}>Daftar Siswa - TA {TA}</Text>
+      <Text style={styles.title}>Daftar Nilai Siswa - TA {TA}</Text>
       <Text style={styles.title}>SMK Negeri 1 Lumban Julu</Text>
 
       {/* Info */}
       <View style={[styles.row]}>
         <Text style={[styles.info, styles.col2]}>Wali Kelas</Text>
         <Text style={[styles.info, styles.colAuto]}> : {waliKelas}</Text>
+      </View>
+      <View style={[styles.row]}>
+        <Text style={[styles.info, styles.col2]}>Nama Siswa</Text>
+        <Text style={[styles.info, styles.colAuto]}> : {nama}</Text>
+      </View>
+      <View style={[styles.row]}>
+        <Text style={[styles.info, styles.col2]}>NIS Siswa</Text>
+        <Text style={[styles.info, styles.colAuto]}> : {nis}</Text>
       </View>
       <View style={[styles.row]}>
         <Text style={[styles.info, styles.col2]}>Kelas</Text>
@@ -244,47 +288,60 @@ const PDFDaftarSiswa: React.FC<PDFProps> = ({
           <Text style={[styles.header, styles.colNo, styles.textCenter]}>
             No
           </Text>
-          <Text style={[styles.header, styles.col4]}>Nama Siswa</Text>
-          <Text style={[styles.header, styles.col2]}>NIS</Text>
-          <Text style={[styles.header, styles.col2]}>NISN</Text>
-          <Text style={[styles.header, styles.col1]}>JK</Text>
-          <Text style={[styles.header, styles.col2]}>No.Telp</Text>
-          <Text style={[styles.header, styles.col2]}>Tempat Tanggal Lahir</Text>
-          <Text style={[styles.header, styles.col2]}>Alamat</Text>
-          <Text style={[styles.header, styles.col2]}>Email</Text>
-          <Text style={[styles.header, styles.col3]}>Nama Orang Tua/Wali</Text>
-          <Text style={[styles.header, styles.col2]}>Nomor Orang Tua/Wali</Text>
-          <Text style={[styles.header, styles.col2]}>Status</Text>
+          <Text style={[styles.header, styles.col7]}>Mata Pelajaran</Text>
+          <Text style={[styles.header, styles.col2]}>Nilai{'\n'}Tugas</Text>
+          <Text style={[styles.header, styles.col2]}>nilai{'\n'}UH</Text>
+          <Text style={[styles.header, styles.col2]}>Nilai{'\n'}PTS</Text>
+          <Text style={[styles.header, styles.col2]}>Nilai{'\n'}PAS</Text>
+          <Text style={[styles.header, styles.col2]}>Nilai{'\n'}Portfolio</Text>
+          <Text style={[styles.header, styles.col2]}>Nilai{'\n'}Proyek</Text>
+          <Text style={[styles.header, styles.col2]}>Nilai{'\n'}Akhir</Text>
+          <Text style={[styles.header, styles.col2]}>Nilai{'\n'}Huruf</Text>
+          <Text style={[styles.header, styles.col3]}>Keterangan</Text>
         </View>
 
         {/* Table Body */}
-        {siswa.map((item, index) => (
+        {data.map((item, index) => (
           <View style={styles.row} key={index}>
             <Text style={[styles.bodyCell, styles.colNo, styles.textCenter]}>
               {index + 1}
             </Text>
-            <Text style={[styles.bodyCell, styles.col4]}>{item.name}</Text>
-            <Text style={[styles.bodyCell, styles.col2]}>{item.nis}</Text>
-            <Text style={[styles.bodyCell, styles.col2]}>{item.nisn}</Text>
-            <Text style={[styles.bodyCell, styles.col1, styles.textCenter]}>
-              {item.gender}
-            </Text>
-            <Text style={[styles.bodyCell, styles.col2]}>{item.phone}</Text>
-            <Text style={[styles.bodyCell, styles.col2]}>
-              {item.birthPlace}
-            </Text>
-            <Text style={[styles.bodyCell, styles.col2]}>{item.address}</Text>
-            <Text style={[styles.bodyCell, styles.col2]}>{item.email}</Text>
-            <Text style={[styles.bodyCell, styles.col3]}>
-              {item.ParentOfStudent[0]?.fatherName ||
-                item.ParentOfStudent[0]?.motherName ||
-                "-"}
-            </Text>
-            <Text style={[styles.bodyCell, styles.col2]}>
-              {item.ParentOfStudent[0]?.phone || "-"}
+            <Text style={[styles.bodyCell, styles.col7]}>
+              {item.courseDetail.name}
             </Text>
             <Text style={[styles.bodyCell, styles.col2, styles.textCenter]}>
-              {convertTextStatus(item.status)}
+              {item.courseDetail.StudentsGrades![0] &&
+                (item.courseDetail.StudentsGrades![0].task || "-") || "-"}
+            </Text>
+            <Text style={[styles.bodyCell, styles.col2, styles.textCenter]}>
+              {item.courseDetail.StudentsGrades![0] &&
+                (item.courseDetail.StudentsGrades![0].UH || "-") || "-"}
+            </Text>
+            <Text style={[styles.bodyCell, styles.col2, styles.textCenter]}>
+              {item.courseDetail.StudentsGrades![0] &&
+                (item.courseDetail.StudentsGrades![0].PTS || "-") || "-"}
+            </Text>
+            <Text style={[styles.bodyCell, styles.col2, styles.textCenter]}>
+              {item.courseDetail.StudentsGrades![0] &&
+                (item.courseDetail.StudentsGrades![0].PAS || "-") || "-"}
+            </Text>
+            <Text style={[styles.bodyCell, styles.col2, styles.textCenter]}>
+              {item.courseDetail.StudentsGrades![0] &&
+                (item.courseDetail.StudentsGrades![0].portofolio || "-") || "-"}
+            </Text>
+            <Text style={[styles.bodyCell, styles.col2, styles.textCenter]}>
+              {item.courseDetail.StudentsGrades![0] &&
+                (item.courseDetail.StudentsGrades![0].proyek || "-") || "-"}
+            </Text>
+            <Text style={[styles.bodyCell, styles.col2, styles.textCenter]}>
+              {nilaiAkhir}
+            </Text>
+            <Text style={[styles.bodyCell, styles.col2, styles.textCenter]}>
+              {nilaiAngka}
+            </Text>
+            <Text style={[styles.bodyCell, styles.col3, styles.textCenter]}>
+              {item.courseDetail.StudentsGrades![0] &&
+                (item.courseDetail.StudentsGrades![0].description || "-") || "-"}
             </Text>
           </View>
         ))}
@@ -293,4 +350,4 @@ const PDFDaftarSiswa: React.FC<PDFProps> = ({
   </Document>
 );
 
-export default PDFDaftarSiswa;
+export default PDFDaftarNilaiDetailSiswa;

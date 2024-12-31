@@ -86,32 +86,41 @@ export const Table: React.FC = () => {
           <img
             src={row.banner.url}
             alt={row.banner.url}
-            width="100"
+            width={100}
+            height={100}
+            style={{ objectFit: "contain" }}
             className="py-3"
           />
         ) : (
           <span>No Image</span>
         ),
-      width: "150px",
+      width: "100px",
     },
     {
       name: "Judul Berita",
       selector: (row: Artikel) => row.title,
-      sortable: true,
       cell: (row: Artikel) => row.title,
+      sortable: true,
+    },
+    {
+      name: "Tipe",
+      selector: (row: Artikel) => row.type,
+      sortable: true,
+      cell: (row: Artikel) => row.type,
+      width: "130px",
     },
     {
       name: "Kategori",
       selector: (row: Artikel) => row.category,
       sortable: true,
       cell: (row: Artikel) => row.category,
-      width: "120px",
+      width: "130px",
     },
     {
       name: "Dibuat Pada",
       selector: (row: Artikel) => formatDateTime(row.createdAt.toString()),
       sortable: true,
-      width: "180px",
+      width: "170px",
     },
     {
       name: "Status",
@@ -141,7 +150,7 @@ export const Table: React.FC = () => {
           </button>
         </>
       ),
-      width: "150px",
+      width: "100px",
     },
   ];
 

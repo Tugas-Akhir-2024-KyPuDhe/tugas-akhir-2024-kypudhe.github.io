@@ -3,6 +3,8 @@ import { StudentDetail } from "../../../interface/student.interface";
 import DataTable from "react-data-table-component";
 import { CourseInClass } from "../../../interface/courseInClass.interface";
 import { Class } from "../../../interface/studentClass.interface";
+import { exportToPDFDaftarNilaiDetailSiswa } from "../../../utils/printDocument/daftarNilaiDetailSiswa/PDFDaftarNilaiSiswa";
+import { exportToExcelDaftarNilaiDetailSiswa } from "../../../utils/printDocument/daftarNilaiDetailSiswa/ExcelDaftarSiswaInClass";
 
 interface CardProps {
   student: StudentDetail;
@@ -181,9 +183,60 @@ export const CardNilaiKelas: React.FC<CardProps> = ({ data, student }) => {
           </div>
         </div>
         <div className="col-6 col-lg-3 col-md-3">
-          <button className="btn border-success text-success">
-            Export to Excel
-          </button>
+          <div className="btn-group">
+            <div className="dropdown">
+              <button
+                className="btn border-success text-success dropdown-toggle"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Export Data
+              </button>
+              <ul className="dropdown-menu">
+                <li>
+                  <button
+                    className="dropdown-item"
+                    onClick={() =>
+                      exportToExcelDaftarNilaiDetailSiswa(
+                        filteredStudentsGrades || [],
+                        student.nis,
+                        student.name,
+                        "xxx",
+                        "xxx",
+                        student.class.name,
+                        data.major.name,
+                        data.academicYear,
+                        data.homeRoomTeacher.name
+                      )
+                    }
+                  >
+                    Excel
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() =>
+                      exportToPDFDaftarNilaiDetailSiswa(
+                        filteredStudentsGrades || [],
+                        student.nis,
+                        student.name,
+                        "xxx",
+                        "xxx",
+                        student.class.name,
+                        data.major.name,
+                        data.academicYear,
+                        data.homeRoomTeacher.name
+                      )
+                    }
+                    className="dropdown-item"
+                  >
+                    PDF
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
 
