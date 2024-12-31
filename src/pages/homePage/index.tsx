@@ -19,6 +19,8 @@ import useCookie from "react-use-cookie";
 import { CardInformasi } from "../../features/homePage/components/cardInformasi";
 import { showConfirmationDialog, Toast } from "../../utils/myFunctions";
 import Swal from "sweetalert2";
+import ConfigSchoolService from "../../services/sekolahConfigService";
+import { Statistik } from "../../interface/school.interface";
 
 interface MataPelajaran {
   nama: string,
@@ -30,8 +32,11 @@ interface MataPelajaran {
 
 export const HomePage = () => {
   const articleService = ArtikelService();
+  const schoolService = ConfigSchoolService();
+
   const [cookieLogin] = useCookie("userLoginCookie");
   const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
+const [dataStatistik, setDataStatistik] = useState<Statistik>()
 
   const [dataMapel] = useState<MataPelajaran[]>([
     {
@@ -65,6 +70,11 @@ export const HomePage = () => {
     setDataArtikel(response.data);
   };
 
+  const getStatistik = async () => {
+    const response = await schoolService.getStatikSchool();
+    setDataStatistik(response.data);
+  };
+
   const handleDeleteBerita = async (idArtikel: number) => {
     const result = await showConfirmationDialog({
       title: "Ingin menghapus Berita ini?",
@@ -95,6 +105,7 @@ export const HomePage = () => {
   };
 
   useEffect(() => {
+    getStatistik();
     getAllArtikel();
   }, []);
 
@@ -107,26 +118,26 @@ export const HomePage = () => {
             <div className="row">
               <CardInformasi
                 icon={<FaGraduationCap className="display-6" />}
-                title="Total Murid"
-                total={442}
+                title="Total Siswa"
+                total={dataStatistik?.student || 0}
                 bgColor="#FBD288"
               />
               <CardInformasi
                 icon={<FaPersonChalkboard className="display-6" />}
                 title="Total Guru"
-                total={29}
+                total={dataStatistik?.teacher || 0}
                 bgColor="#D4F6FF"
               />
               <CardInformasi
                 icon={<FaCodeBranch className="display-6" />}
                 title="Total Jurusan"
-                total={3}
+                total={dataStatistik?.major || 0}
                 bgColor="#F95454"
               />
               <CardInformasi
                 icon={<FaGraduationCap className="display-6" />}
-                title="Total Murid"
-                total={442}
+                title="Total Siswa"
+                total={dataStatistik?.student || 0}
                 bgColor="#A8DADC"
               />
             </div>

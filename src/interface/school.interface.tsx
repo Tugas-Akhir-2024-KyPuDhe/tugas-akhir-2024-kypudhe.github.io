@@ -28,3 +28,18 @@ export interface ResponseUpdateSchool {
     message: string,
     status: number
 }
+
+export interface Statistik {
+    id?: number,
+    name: string,
+    student: number
+    teacher: number
+    staff: number
+    major: number
+    alumni: number
+}
+export interface ResponseStatistikSchool {
+    message: string,
+    status: number
+    data: Statistik
+}
