@@ -10,6 +10,13 @@ import { CardAbsensiKelas } from "../../../features/teacherPages/jadwalMengajarP
 import { CardNilaiKelas } from "../../../features/teacherPages/jadwalMengajarPage/cardNilaiKelas";
 import { CardDaftarSiswaKelas } from "../../../features/teacherPages/jadwalMengajarPage/cardDaftarSiswaKelas";
 import { AxiosError } from "axios";
+import { NavSubMenu } from "../../../components/navSubmenu";
+
+const subMenuItemsDetailKelasGuru = [
+  { label: "Daftar Siswa", key: "daftar-siswa" },
+  { label: "Absensi", key: "absensi" },
+  { label: "Nilai", key: "nilai" },
+];
 
 export const DetailJadwalMengajarPage: React.FC = () => {
   const navigate = useNavigate();
@@ -81,44 +88,11 @@ export const DetailJadwalMengajarPage: React.FC = () => {
         teacherName={teacherName}
       />
 
-      <div className="m-lg-4 m-md-4 my-4 rounded">
-        <ul
-          className="nav nav-underline"
-          style={{ borderBottom: "0.5px solid grey" }}
-        >
-          <li className="nav-item" style={{ cursor: "pointer" }}>
-            <a
-              className={`nav-link ${loading ? "disabled" : ""} ${
-                activeMenu === "daftar-siswa" ? "active text-blue" : "text-dark"
-              }`}
-              aria-disabled="true"
-              onClick={() => handleMenuClick("daftar-siswa")}
-            >
-              Daftar Siswa
-            </a>
-          </li>
-          <li className="nav-item" style={{ cursor: "pointer" }}>
-            <a
-              className={`nav-link ${loading ? "disabled" : ""} ${
-                activeMenu === "absensi" ? "active text-blue" : "text-dark"
-              }`}
-              onClick={() => handleMenuClick("absensi")}
-            >
-              Absensi
-            </a>
-          </li>
-          <li className="nav-item" style={{ cursor: "pointer" }}>
-            <a
-              className={`nav-link ${loading ? "disabled" : ""} ${
-                activeMenu === "nilai" ? "active text-blue" : "text-dark"
-              }`}
-              onClick={() => handleMenuClick("nilai")}
-            >
-              Nilai
-            </a>
-          </li>
-        </ul>
-      </div>
+      <NavSubMenu
+        menuItems={subMenuItemsDetailKelasGuru}
+        activeMenu={activeMenu}
+        onMenuClick={handleMenuClick}
+      />
 
       {data &&
         (activeMenu === "daftar-siswa" ? (

@@ -13,6 +13,13 @@ import CourseService from "../../../../services/courseService";
 import { FaCircle } from "react-icons/fa6";
 import { CourseInClass } from "../../../../interface/courseInClass.interface";
 import DataTable from "react-data-table-component";
+import { NavSubMenu } from "../../../../components/navSubmenu";
+
+const subMenuItems = [
+  { label: "Data Akademik", key: "data-akademik" },
+  { label: "Riwayat Mengajar", key: "riwayat-mengajar" },
+  { label: "Kelas Wali", key: "kelas-wali" },
+];
 
 export const DetailStaffMangementSiswa: React.FC = () => {
   const navigate = useNavigate();
@@ -181,47 +188,11 @@ export const DetailStaffMangementSiswa: React.FC = () => {
         />
       </div>
 
-      <div className="m-lg-4 m-md-4 my-4 rounded">
-        <ul
-          className="nav nav-underline"
-          style={{ borderBottom: "0.5px solid grey" }}
-        >
-          <li className="nav-item" style={{ cursor: "pointer" }}>
-            <a
-              className={`nav-link ${
-                activeMenu === "data-akademik"
-                  ? "active text-blue"
-                  : "text-dark"
-              }`}
-              onClick={() => handleMenuClick("data-akademik")}
-            >
-              Data Akademik
-            </a>
-          </li>
-          <li className="nav-item" style={{ cursor: "pointer" }}>
-            <a
-              className={`nav-link ${
-                activeMenu === "riwayat-mengajar"
-                  ? "active text-blue"
-                  : "text-dark"
-              }`}
-              onClick={() => handleMenuClick("riwayat-mengajar")}
-            >
-              Riwayat Mengajar
-            </a>
-          </li>
-          <li className="nav-item" style={{ cursor: "pointer" }}>
-            <a
-              className={`nav-link ${
-                activeMenu === "kelas-wali" ? "active text-blue" : "text-dark"
-              }`}
-              onClick={() => handleMenuClick("kelas-wali")}
-            >
-              Kelas Wali
-            </a>
-          </li>
-        </ul>
-      </div>
+      <NavSubMenu
+        menuItems={subMenuItems}
+        activeMenu={activeMenu}
+        onMenuClick={handleMenuClick}
+      />
 
       <div
         className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"

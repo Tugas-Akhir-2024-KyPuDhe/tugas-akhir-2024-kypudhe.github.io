@@ -8,6 +8,12 @@ import ClassStudentService from "../../../services/classStudentService";
 import { Class } from "../../../interface/studentClass.interface";
 import { CardDaftarSiswaKelas } from "../../../features/teacherPages/kelasWaliPage/cardDaftarSiswaKelas";
 import { Toast } from "../../../utils/myFunctions";
+import { NavSubMenu } from "../../../components/navSubmenu";
+
+const subMenuItemsDetailKelasWaliGuru = [
+  { label: "Daftar Siswa", key: "daftar-siswa" },
+  { label: "Mata Pelajaran Dikelas", key: "mata-pelajaran-dikelas" },
+];
 
 export const DetailKelasWaliPage: React.FC = () => {
   const navigate = useNavigate();
@@ -69,34 +75,11 @@ export const DetailKelasWaliPage: React.FC = () => {
 
       <CardDetailKelas loading={loading} data={data!} />
 
-      <div className="m-lg-4 m-md-4 my-4 rounded">
-        <ul
-          className="nav nav-underline"
-          style={{ borderBottom: "0.5px solid grey" }}
-        >
-          <li className="nav-item" style={{ cursor: "pointer" }}>
-            <a
-              className={`nav-link ${loading ? "disabled" : ""} ${
-                activeMenu === "daftar-siswa" ? "active text-blue" : "text-dark"
-              }`}
-              aria-disabled="true"
-              onClick={() => handleMenuClick("daftar-siswa")}
-            >
-              Daftar Siswa
-            </a>
-          </li>
-          <li className="nav-item" style={{ cursor: "pointer" }}>
-            <a
-              className={`nav-link ${loading ? "disabled" : ""} ${
-                activeMenu === "absensi" ? "active text-blue" : "text-dark"
-              }`}
-              onClick={() => handleMenuClick("absensi")}
-            >
-              Mata Pelajaran Dikelas
-            </a>
-          </li>
-        </ul>
-      </div>
+      <NavSubMenu
+        menuItems={subMenuItemsDetailKelasWaliGuru}
+        activeMenu={activeMenu}
+        onMenuClick={handleMenuClick}
+      />
 
       {data &&
         (activeMenu === "daftar-siswa" ? (

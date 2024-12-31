@@ -38,15 +38,15 @@ export const ProfilePage = () => {
 
   const [cookieLogin] = useCookie("userLoginCookie", "");
   const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
-    const dtoken = decodeToken(userLoginCookie.token);
+  const dtoken = decodeToken(userLoginCookie.token);
 
   const [profileDetail, setProfileDetail] = useState<DetailUserResponse | null>(
     null
   );
   const [allCourse, setAllCourse] = useState<Course[]>([]);
-  const [DataStudentHistory, setDataStudentHistory] = useState<StudentHistory[]>(
-    []
-  );
+  const [DataStudentHistory, setDataStudentHistory] = useState<
+    StudentHistory[]
+  >([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -82,7 +82,7 @@ export const ProfilePage = () => {
       setLoading(false);
     }
   };
-  
+
   const getStudentHistory = async () => {
     try {
       setLoading(true);
@@ -242,17 +242,15 @@ export const ProfilePage = () => {
               {(userLoginCookie.role === "STUDENT" ||
                 userLoginCookie.role === "TEACHER") && (
                 <div className="col-12">
-                  <div className="mx-md-4 my-4 mb-0 rounded">
-                    <NavSubMenu
-                      menuItems={
-                        userLoginCookie.role === "STUDENT"
-                          ? subMenuItemsStudent
-                          : subMenuItemsTeacher
-                      }
-                      activeMenu={activeMenu}
-                      onMenuClick={handleMenuClick}
-                    />
-                  </div>
+                  <NavSubMenu
+                    menuItems={
+                      userLoginCookie.role === "STUDENT"
+                        ? subMenuItemsStudent
+                        : subMenuItemsTeacher
+                    }
+                    activeMenu={activeMenu}
+                    onMenuClick={handleMenuClick}
+                  />
                 </div>
               )}
 
@@ -260,7 +258,7 @@ export const ProfilePage = () => {
                 userLoginCookie.role == "TEACHER") && (
                 <div className="col-12">
                   <div
-                    className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
+                    className="shadow p-4 m-1 mx-md-4 rounded"
                     style={{
                       backgroundColor: "#fff",
                       position: "relative",
