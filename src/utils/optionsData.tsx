@@ -25,6 +25,13 @@ export const optionsGender = [
   { value: "P", label: "Perempuan" },
 ];
 
+export const optionsRoleStudent = [
+  { value: "Ketua Kelas", label: "Ketua Kelas" },
+  { value: "Wakil Ketua Kelas", label: "Wakil Ketua Kelas" },
+  { value: "Sekretaris", label: "Sekretaris" },
+  { value: "Bendahara", label: "Bendahara" },
+];
+
 const currentDate = new Date();
 const currentYear = currentDate.getFullYear();
 const currentMonth = String(currentDate.getMonth() + 1).padStart(2, "0");

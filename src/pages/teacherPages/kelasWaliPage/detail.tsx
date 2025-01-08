@@ -9,9 +9,12 @@ import { Class } from "../../../interface/studentClass.interface";
 import { CardDaftarSiswaKelas } from "../../../features/teacherPages/kelasWaliPage/cardDaftarSiswaKelas";
 import { Toast } from "../../../utils/myFunctions";
 import { NavSubMenu } from "../../../components/navSubmenu";
+import { CardPerangkatKelas } from "../../../features/teacherPages/kelasWaliPage/cardPerangkatKelas";
+import { StudentDetail } from "../../../interface/student.interface";
 
 const subMenuItemsDetailKelasWaliGuru = [
   { label: "Daftar Siswa", key: "daftar-siswa" },
+  { label: "Absensi Siswa", key: "absensi-siswa" },
   { label: "Mata Pelajaran Dikelas", key: "mata-pelajaran-dikelas" },
   { label: "Nilai Akhir Siswa", key: "nilai-akhir-siswa" },
 ];
@@ -23,11 +26,11 @@ export const DetailKelasWaliPage: React.FC = () => {
 
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<Class>();
+  const [students, setstudents] = useState<StudentDetail[]>([]);
 
   const [activeMenu, setActiveMenu] = useState("daftar-siswa");
   const handleMenuClick = (menu: string) => {
     if (!loading) {
-      // Only allow menu click if not loading
       setActiveMenu(menu);
     }
   };
@@ -38,6 +41,7 @@ export const DetailKelasWaliPage: React.FC = () => {
         setLoading(true);
         const response = await classService.getClassById(parseInt(id));
         setData(response.data);
+        setstudents(response.data.student);
       } catch (error) {
         const axiosError = error as AxiosError;
         if (axiosError.response?.status === 404) {
@@ -60,6 +64,13 @@ export const DetailKelasWaliPage: React.FC = () => {
     }
   };
 
+  const optionsStudents = [
+    ...students.map((data) => ({
+      value: data.nis,
+      label: data.name,
+    })),
+  ];
+
   useEffect(() => {
     getData();
   }, []);
@@ -74,7 +85,17 @@ export const DetailKelasWaliPage: React.FC = () => {
         linkAdd="tambah"
       />
 
-      <CardDetailKelas loading={loading} data={data!} />
+      {data && (
+        <>
+          <CardDetailKelas loading={loading} data={data!} />
+          <CardPerangkatKelas
+            refreshData={getData}
+            loading={loading}
+            optionsStudents={optionsStudents}
+            data={data!.StudentPositionInClass!}
+          />
+        </>
+      )}
 
       <NavSubMenu
         menuItems={subMenuItemsDetailKelasWaliGuru}
@@ -89,15 +110,14 @@ export const DetailKelasWaliPage: React.FC = () => {
             loading={loading}
             data={data!}
           />
-        ) : activeMenu === "absensi" ? (
+        ) : activeMenu === "absensi-siswa" ? (
+          <CardAbsensiKelas loading={loading} />
+        ) : activeMenu === "mata-pelajaran-dikelas" ? (
+          <CardAbsensiKelas loading={loading} />
+        ) : activeMenu === "nilai-akhir-siswa" ? (
           <CardAbsensiKelas loading={loading} />
         ) : (
-          <p></p>
-          // <CardNilaiKelas
-          //   refreshData={getData}
-          //   loading={loading}
-          //   data={data!}
-          // />
+          "lorem"
         ))}
     </>
   );

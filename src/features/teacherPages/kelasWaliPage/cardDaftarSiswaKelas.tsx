@@ -13,7 +13,6 @@ import { CardNilaiKelas } from "./cardNilaiKelas";
 import { Class } from "../../../interface/studentClass.interface";
 import { exportToPDFDaftarSiswaInClass } from "../../../utils/printDocument/daftarSiswaInClass/PDFDaftarSiswaInClass";
 import { exportToExcelDaftarSiswaInClass } from "../../../utils/printDocument/daftarSiswaInClass/ExcelDaftarSiswaInClass";
-
 interface CardProps {
   loading: boolean;
   data: Class;
@@ -224,6 +223,7 @@ export const CardDaftarSiswaKelas: React.FC<CardProps> = ({
           }}
         />
       </div>
+
       {/* Modal */}
       <div
         className="modal fade"
@@ -401,6 +401,42 @@ export const CardDaftarSiswaKelas: React.FC<CardProps> = ({
                         loading={loading}
                         data={data!}
                       />
+                    ) : activeMenu === "absensi" ? (
+                      <>
+                        <div className="fw-bold fs-5 mb-4 text-dark-soft position-relative pb-2">
+                          <div className="d-flex justify-content-between">
+                            <div className="">Absensi Siswa</div>
+                            <div
+                              style={{
+                                position: "absolute",
+                                left: 0,
+                                bottom: 0,
+                                width: "50px",
+                                height: "5px",
+                                backgroundColor: "var(--blue-color)",
+                              }}
+                            />
+                          </div>
+                        </div>
+                      </>
+                    ) : activeMenu === "hasil-raport" ? (
+                      <>
+                        <div className="fw-bold fs-5 mb-4 text-dark-soft position-relative pb-2">
+                          <div className="d-flex justify-content-between">
+                            <div className="">Hasil Rapot Siswa</div>
+                            <div
+                              style={{
+                                position: "absolute",
+                                left: 0,
+                                bottom: 0,
+                                width: "50px",
+                                height: "5px",
+                                backgroundColor: "var(--blue-color)",
+                              }}
+                            />
+                          </div>
+                        </div>
+                      </>
                     ) : (
                       <div>Halaman tidak ditemukan</div>
                     )}
