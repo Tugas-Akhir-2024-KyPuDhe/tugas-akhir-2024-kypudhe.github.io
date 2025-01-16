@@ -16,22 +16,24 @@ interface Option {
 
 interface CardProps {
   loading: boolean;
-  data: IStudentPositionInClass[];
+  data?: IStudentPositionInClass[];
   optionsStudents: Option[];
+  classId: number;
   refreshData: () => void;
 }
 
 export const CardPerangkatKelas: React.FC<CardProps> = ({
   loading,
-  data,
+  data=[],
   optionsStudents,
+  classId,
   refreshData,
 }) => {
   const studentPostionService = StudentPositionService();
   const [loadingForm, setLoadingForm] = useState<boolean>(false);
   const [formData, setformData] = useState<FormStudentPosition>({
     nis: optionsStudents[0].value,
-    classId: data[0].classId,
+    classId,
     positionName: optionsRoleStudent[0].value,
   });
 
@@ -116,8 +118,8 @@ export const CardPerangkatKelas: React.FC<CardProps> = ({
           </button>
         </div>
         <div className="col-12">
-          {data.map((dt) => (
-            <div className="row mb-3">
+          {data.map((dt, index) => (
+            <div className="row mb-3" key={index}>
               <div className="col-2 fw-medium">{dt.positionName}</div>
               <div className="col-auto">:</div>
               <div className="col-9 fw-medium">{dt.student.name}</div>

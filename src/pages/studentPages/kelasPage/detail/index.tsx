@@ -8,14 +8,21 @@ import { CardNilaiDetailKelas } from "../../../../features/studentPages/kelasPag
 import { CardAbsensiDetailKelas } from "../../../../features/studentPages/kelasPage/CardAbsensiDetailKelas";
 import { AxiosError } from "axios";
 import { Toast } from "../../../../utils/myFunctions";
+import { CardPerangkatKelas } from "../../../../features/studentPages/kelasPage/CardPerangkatKelas";
+import StudentPositionService from "../../../../services/studentPositionInClassService";
+import { IStudentPositionInClass } from "../../../../interface/studentPosition.interface";
 
 export const DetailKelasSiswaPage: React.FC = () => {
   const navigate = useNavigate();
   const studentHistory = StudentHistoryService();
+  const studentPosition = StudentPositionService();
 
   const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<StudentHistory>();
+  const [dataPosition, setDataPosition] = useState<IStudentPositionInClass[]>(
+    []
+  );
 
   useEffect(() => {
     const getDataSiswa = async () => {
@@ -24,6 +31,7 @@ export const DetailKelasSiswaPage: React.FC = () => {
           setLoading(true);
           const response = await studentHistory.getStudentHistoryDetail(id);
           setData(response.data);
+          await getPositionInClass(parseInt(response.data.currentClassId));
         } catch (error) {
           console.error(error);
           const axiosError = error as AxiosError;
@@ -46,6 +54,15 @@ export const DetailKelasSiswaPage: React.FC = () => {
     getDataSiswa();
   }, []);
 
+  const getPositionInClass = async (id: number) => {
+    try {
+      const response = await studentPosition.getAllPositionByClass(id);
+      setDataPosition(response.data!);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <>
       <HeaderTitlePage
@@ -56,6 +73,10 @@ export const DetailKelasSiswaPage: React.FC = () => {
         linkAdd=""
       />
       <CardSumaryDetailKelas loading={loading} data={data!} />
+      <CardPerangkatKelas
+        loading={loading}
+        data={dataPosition || []}
+      />
       <CardNilaiDetailKelas loading={loading} data={data!} />
       <CardAbsensiDetailKelas loading={loading} data={data!} />
     </>

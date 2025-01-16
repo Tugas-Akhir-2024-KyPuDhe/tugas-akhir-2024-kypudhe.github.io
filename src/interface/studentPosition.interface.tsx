@@ -20,4 +20,5 @@ export interface FormStudentPosition {
 export interface ResponseActionSP {
   status: number;
   message: string;
+  data?: IStudentPositionInClass[]
 }

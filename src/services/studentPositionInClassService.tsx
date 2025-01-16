@@ -39,6 +39,27 @@ const StudentPositionService = () => {
     }
   };
 
+  const getAllPositionByClass = async (
+    id: number
+  ): Promise<ResponseActionSP> => {
+    try {
+      const response = await axios.get<ResponseActionSP>(
+        `${apiUrl}/api/student-position-inclass/get-byClassId/${id}`,
+        {
+          headers: {
+            authorization: `Bearer ${userLoginCookie?.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        handleUnauthorized(error.response?.status || 0);
+      }
+      throw error;
+    }
+  };
+
   const deletePosition = async (id: number): Promise<ResponseActionSP> => {
     try {
       const response = await axios.delete<ResponseActionSP>(
@@ -60,6 +81,7 @@ const StudentPositionService = () => {
 
   return {
     createPosition,
+    getAllPositionByClass,
     deletePosition,
   };
 };

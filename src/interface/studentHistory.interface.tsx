@@ -1,6 +1,7 @@
 import { CourseInClass } from "./courseInClass.interface";
 import { StaffDetail } from "./staff.interface";
 import { StudentsGrades } from "./studentGrade.interface";
+import { IStudentPositionInClass } from "./studentPosition.interface";
 
 export interface ResponseActionStudentGrade {
   status: number;
@@ -18,6 +19,7 @@ export interface CurrentClass {
   capacity: string;
   createdAt: string;
   updatedAt: string;
+  StudentPositionInClass: IStudentPositionInClass[];
   homeRoomTeacher: StaffDetail;
   StudentsGrades: StudentsGrades[];
   CourseInClass: CourseInClass[]

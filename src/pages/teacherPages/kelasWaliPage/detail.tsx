@@ -92,7 +92,8 @@ export const DetailKelasWaliPage: React.FC = () => {
             refreshData={getData}
             loading={loading}
             optionsStudents={optionsStudents}
-            data={data!.StudentPositionInClass!}
+            classId = {data.id}
+            data={data?.StudentPositionInClass || []} // Tambahkan fallback ke array kosong jika null
           />
         </>
       )}

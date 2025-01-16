@@ -39,6 +39,21 @@ export const CardSumaryDetailKelas: React.FC<CardProps> = ({
         </div>
       )}
       <div className="row g-3">
+      <div className="col-12">
+          <div className="fw-bold position-relative pb-2">
+            Informasi Kelas
+            <div
+              style={{
+                position: "absolute",
+                left: 0,
+                bottom: 0,
+                width: "50px",
+                height: "3px",
+                backgroundColor: "var(--blue-color)",
+              }}
+            />
+          </div>
+        </div>
         <div className="col-12">
           <div className="row mb-3">
             <div className="col-2 fw-medium">Tahun Ajaran</div>

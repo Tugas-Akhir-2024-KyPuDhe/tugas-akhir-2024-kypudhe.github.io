@@ -20,6 +20,9 @@ import StaffService from "../../../../services/staffService";
 import { CardInformasiDetailkelas } from "../../../../features/staffPages/managementSiswaPage/dataKelasPage/cardInformasiKelas";
 import { CardMatkulDetailKelas } from "../../../../features/staffPages/managementSiswaPage/dataKelasPage/cardMatkul";
 import { CardDaftarSiswaDetailKelas } from "../../../../features/staffPages/managementSiswaPage/dataKelasPage/cardDaftarSiswa";
+import { CardPerangkatKelas } from "../../../../features/studentPages/kelasPage/CardPerangkatKelas";
+import { IStudentPositionInClass } from "../../../../interface/studentPosition.interface";
+import StudentPositionService from "../../../../services/studentPositionInClassService";
 
 export const DetailKelasMangementSiswaPage: React.FC = () => {
   const studentService = StudentService();
@@ -27,12 +30,16 @@ export const DetailKelasMangementSiswaPage: React.FC = () => {
   const courseService = CourseService();
   const courseInClassService = CourseInClassService();
   const teacherService = StaffService();
+  const studentPosition = StudentPositionService();
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
 
   const [dataStudentsInClass, setDataStudentsInClass] = useState<
     StudentDetail[]
   >([]);
+  const [dataPosition, setDataPosition] = useState<IStudentPositionInClass[]>(
+    []
+  );
   const [dataAllStudents, setDataAllStudents] = useState<StudentDetail[]>([]);
   const [dataCourseInClass, setDataCourseInClass] = useState<CourseInClass[]>(
     []
@@ -84,6 +91,15 @@ export const DetailKelasMangementSiswaPage: React.FC = () => {
       [name]: files ? files[0] : value,
     }));
     setErrorsForms((prevErrors) => ({ ...prevErrors, [name]: "" }));
+  };
+
+  const getPositionInClass = async (id: number) => {
+    try {
+      const response = await studentPosition.getAllPositionByClass(id);
+      setDataPosition(response.data!);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const getTeacher = async () => {
@@ -148,6 +164,7 @@ export const DetailKelasMangementSiswaPage: React.FC = () => {
         await getCourse();
         await getTeacher();
         await getAllStudents(data.majorCode);
+        await getPositionInClass(response.data.id);
       } catch (error) {
         const axiosError = error as AxiosError;
         if (axiosError.response?.status === 404) {
@@ -267,6 +284,12 @@ export const DetailKelasMangementSiswaPage: React.FC = () => {
       />
 
       <CardInformasiDetailkelas dataClass={dataClass} loading={loading} />
+
+      <CardPerangkatKelas
+        loading={loading}
+        data={dataPosition || []}
+      />
+      
       <CardMatkulDetailKelas
         data={dataCourseInClass}
         loading={loading}
