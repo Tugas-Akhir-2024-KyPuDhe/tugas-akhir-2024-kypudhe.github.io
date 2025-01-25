@@ -7,7 +7,12 @@ import { CardSumaryDetailKelas } from "../../../../features/studentPages/kelasPa
 import { CardNilaiDetailKelas } from "../../../../features/studentPages/kelasPage/CardNilaiDetailKelas";
 import { CardAbsensiDetailKelas } from "../../../../features/studentPages/kelasPage/CardAbsensiDetailKelas";
 import { AxiosError } from "axios";
-import { formatDate, Toast } from "../../../../utils/myFunctions";
+import {
+  decodeToken,
+  formatDate,
+  showConfirmationDialog,
+  Toast,
+} from "../../../../utils/myFunctions";
 import { CardPerangkatKelas } from "../../../../features/studentPages/kelasPage/CardPerangkatKelas";
 import StudentPositionService from "../../../../services/studentPositionInClassService";
 import { IStudentPositionInClass } from "../../../../interface/studentPosition.interface";
@@ -21,17 +26,18 @@ import {
   IUpdateAttendance,
 } from "../../../../interface/studentAttendance.interface";
 import useCookie from "react-use-cookie";
-
-const subMenuItemsAbsensi = [
-  { label: "Absensi Siswa", key: "absensi-siswa" },
-  { label: "Buat Absensi", key: "buat-absensi" },
-];
+import ClassStudentService from "../../../../services/classStudentService";
 
 export const DetailKelasSiswaPage: React.FC = () => {
+  const [subMenuItemsAbsensi, setSubMenuItemsAbsensi] = useState([
+    { label: "Absensi Siswa", key: "absensi-siswa" },
+  ]);
+
   const navigate = useNavigate();
   const studentHistory = StudentHistoryService();
   const studentPosition = StudentPositionService();
   const studentAttendance = StudentAttendanceService();
+  const studentClass = ClassStudentService();
 
   const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -42,8 +48,9 @@ export const DetailKelasSiswaPage: React.FC = () => {
   );
   const [dataAttendance, setDataAttendance] =
     useState<IStudentAttendanceInClass | null>();
-    const [cookieLogin] = useCookie("userLoginCookie", "");
-    const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
+  const [cookieLogin] = useCookie("userLoginCookie", "");
+  const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
+  const dtoken = decodeToken(userLoginCookie.token);
 
   const [activeMenu, setActiveMenu] = useState("absensi-siswa");
   const handleMenuClick = (menu: string) => {
@@ -61,11 +68,17 @@ export const DetailKelasSiswaPage: React.FC = () => {
           setData(response.data);
           await getPositionInClass(parseInt(response.data.currentClassId));
 
-          const today = new Date().toISOString().split("T")[0];
+          const today = new Date();
+          today.setHours(today.getHours() + 7);
+          const year = today.getFullYear();
+          const month = String(today.getMonth() + 1).padStart(2, "0");
+          const day = String(today.getDate()).padStart(2, "0");
+          const formattedDateToday = `${year}-${month}-${day}`;
           await handleGetAttendance(
             parseInt(response.data.currentClassId),
-            today
+            formattedDateToday
           );
+          getClass(parseInt(response.data.currentClassId));
         } catch (error) {
           console.error(error);
           const axiosError = error as AxiosError;
@@ -87,6 +100,35 @@ export const DetailKelasSiswaPage: React.FC = () => {
 
     getDataSiswa();
   }, []);
+
+  const getClass = async (id: number) => {
+    try {
+      setLoading(true);
+      const response = await studentClass.getClassById(id);
+      const data = response.data;
+      const havePosition = data?.StudentPositionInClass.filter(
+        (dt) => dt.student.nis == dtoken.nis
+      );
+      if (havePosition.length > 0) {
+        setSubMenuItemsAbsensi([
+          ...subMenuItemsAbsensi,
+          { label: "Buat Absensi", key: "buat-absensi" },
+        ]);
+      }
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      if (axiosError.response?.status === 404) {
+        Toast.fire({
+          icon: "error",
+          title: `Data Tidak Ditemukan!`,
+          timer: 4000,
+        });
+        navigate("/");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleGetAttendance = async (classId: number, dateAtt: string) => {
     try {
@@ -154,7 +196,8 @@ export const DetailKelasSiswaPage: React.FC = () => {
   const handleUpdateAttendance = async (
     dataUpdateAtt: UpdateStudentAttendance[],
     dateAtt: string,
-    classId: number
+    classId: number,
+    attendanceId: number
   ) => {
     try {
       setLoadingAttendance(true);
@@ -163,10 +206,10 @@ export const DetailKelasSiswaPage: React.FC = () => {
         data: dataUpdateAtt,
       };
       const response = await studentAttendance.updateStudentAttendanceInClass(
-        classId,
+        attendanceId,
         payload
       );
-      
+
       if (response.status === 200) {
         Toast.fire({
           icon: "success",
@@ -183,6 +226,52 @@ export const DetailKelasSiswaPage: React.FC = () => {
       console.error(error);
     } finally {
       setLoadingAttendance(false);
+    }
+  };
+
+  const handleUpdateFinalAttendance = async (
+    classId: number,
+    attendanceId: number,
+    dateAtt: string
+  ) => {
+    const result = await showConfirmationDialog({
+      title:
+        "<b>Apakah Absensi Sudah Final?</b> <br /> Absensi yang sudah final tidak dapat diupdate kembali",
+      icon: "warning",
+      confirmButtonText: "Ya, Sudah!",
+      cancelButtonText: "Batal",
+    });
+
+    if (result.isConfirmed) {
+      setLoadingAttendance(true);
+      try {
+        setLoadingAttendance(true);
+        const response = await studentAttendance.updateFinalAttendanceInClass(
+          attendanceId
+        );
+
+        if (response.status === 200) {
+          Toast.fire({
+            icon: "success",
+            title: `Absensi ${formatDate(new Date(dateAtt))} berhasil diupdate`,
+            timer: 4000,
+          });
+          handleGetAttendance(classId, dateAtt);
+        }
+      } catch (error) {
+        const axiosError = error as AxiosError;
+        if (axiosError.response?.status === 404) {
+          setDataAttendance(null);
+        }
+        Toast.fire({
+          icon: "error",
+          title: `Terjadi kesalah ketika update absensi`,
+          timer: 4000,
+        });
+        console.error(error);
+      } finally {
+        setLoadingAttendance(false);
+      }
     }
   };
 
@@ -225,6 +314,7 @@ export const DetailKelasSiswaPage: React.FC = () => {
             getAttendance={handleGetAttendance}
             createNewAttendace={handleCreateAttendance}
             updateStatusAttendace={handleUpdateAttendance}
+            updateFinalAttendance={handleUpdateFinalAttendance}
           />
         ) : (
           ""

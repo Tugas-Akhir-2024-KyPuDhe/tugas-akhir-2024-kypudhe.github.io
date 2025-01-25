@@ -27,7 +27,7 @@ export const showConfirmationDialog = async ({
   cancelButtonText,
 }: ConfirmationDialogOptions) => {
   return Swal.fire({
-    text: title,
+    html: title,
     icon,
     showCancelButton: true,
     confirmButtonColor: "#1D7DC1",

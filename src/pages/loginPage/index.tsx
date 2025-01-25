@@ -25,6 +25,8 @@ export const LoginPage: React.FC = () => {
   const [cookieLogin, setCookieLogin] = useCookie("userLoginCookie", "");
   const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
 
+
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormLogin((prevState) => ({

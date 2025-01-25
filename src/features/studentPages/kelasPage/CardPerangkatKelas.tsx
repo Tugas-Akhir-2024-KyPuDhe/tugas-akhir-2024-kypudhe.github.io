@@ -55,9 +55,9 @@ export const CardPerangkatKelas: React.FC<CardProps> = ({
           {data.length > 1
             ? data.map((dt, index) => (
                 <div className="row mb-3" key={index}>
-                  <div className="col-2 fw-medium">{dt.positionName}</div>
+                  <div className="col-4 col-md-2 fw-medium">{dt.positionName}</div>
                   <div className="col-auto">:</div>
-                  <div className="col-9 fw-medium">{dt.student.name}</div>
+                  <div className="col-auto fw-medium">{dt.student.name}</div>
                 </div>
               ))
             : "Perangkat kelas masih kosong"}

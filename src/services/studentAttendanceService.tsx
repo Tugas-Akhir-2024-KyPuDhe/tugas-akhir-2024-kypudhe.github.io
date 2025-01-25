@@ -85,10 +85,33 @@ const StudentAttendanceService = () => {
     }
   };
 
+  const updateFinalAttendanceInClass = async (
+    id: number
+  ): Promise<IGetAttendance> => {
+    try {
+      const response = await axios.put<IGetAttendance>(
+        `${apiUrl}/api/student-attendance/update/final/${id}`,
+        {},
+        {
+          headers: {
+            authorization: `Bearer ${userLoginCookie?.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        handleUnauthorized(error.response?.status || 0);
+      }
+      throw error;
+    }
+  };
+
   return {
     getAttendanceInClass,
     createAttendanceInClass,
     updateStudentAttendanceInClass,
+    updateFinalAttendanceInClass,
   };
 };
 

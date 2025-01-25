@@ -16,7 +16,13 @@ interface AbsensiProps {
   updateStatusAttendace: (
     dataUpdateAtt: UpdateStudentAttendance[],
     dateAtt: string,
-    classId: number
+    classId: number,
+    attendanceId: number
+  ) => void;
+  updateFinalAttendance: (
+    classId: number,
+    attendanceId: number,
+    date: string
   ) => void;
 }
 
@@ -27,17 +33,21 @@ export const InputAbsensi: React.FC<AbsensiProps> = ({
   getAttendance,
   createNewAttendace,
   updateStatusAttendace,
+  updateFinalAttendance,
 }) => {
-  const today = new Date().toISOString().split("T")[0];
-  const [selectedDate, setSelectedDate] = useState(today);
+  const today = new Date();
+  today.setHours(today.getHours() + 7);
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+  const formattedDateToday = `${year}-${month}-${day}`;
+  const [selectedDate, setSelectedDate] = useState(formattedDateToday);
 
-  // State untuk menyimpan nilai absensi dan notes
   const [attendanceData, setAttendanceData] = useState(
     data?.detailAttendanceStudents || []
   );
 
   useEffect(() => {
-    // Inisialisasi data dari API saat `data` berubah
     if (data?.detailAttendanceStudents) {
       setAttendanceData(data.detailAttendanceStudents);
     }
@@ -74,10 +84,9 @@ export const InputAbsensi: React.FC<AbsensiProps> = ({
       notes: siswa.notes || "",
       status: siswa.status,
     }));
-    updateStatusAttendace(formattedData, selectedDate, kelas.id);
+    updateStatusAttendace(formattedData, selectedDate, kelas.id, data.id);
   };
 
-  // Fungsi untuk menghitung jumlah status
   const countStatus = (
     attendanceData: IStudentAttendanceInClass["detailAttendanceStudents"]
   ) => {
@@ -145,7 +154,7 @@ export const InputAbsensi: React.FC<AbsensiProps> = ({
           </div>
           <div className="col-12">
             <div className="row mb-3">
-              <div className="col-2 fw-medium">Tanggal Pelaksanaan</div>
+              <div className="col-3 col-md-2 fw-medium">Tanggal Pelaksanaan</div>
               <div className="col-auto">:</div>
               <div className="col fw-medium">
                 <input
@@ -154,22 +163,22 @@ export const InputAbsensi: React.FC<AbsensiProps> = ({
                   className="form-control"
                   value={selectedDate}
                   onChange={handleDateChange}
-                  max={today}
+                  max={formattedDateToday}
                 />
               </div>
             </div>
             <div className="row mb-3">
-              <div className="col-2 fw-medium">Wali Kelas</div>
+              <div className="col-3 col-md-2 fw-medium">Wali Kelas</div>
               <div className="col-auto">:</div>
               <div className="col fw-medium">{kelas.homeRoomTeacher.name}</div>
             </div>
             <div className="row mb-3">
-              <div className="col-2 fw-medium">Kelas</div>
+              <div className="col-3 col-md-2 fw-medium">Kelas</div>
               <div className="col-auto">:</div>
               <div className="col fw-medium">{kelas.name}</div>
             </div>
             <div className="row mb-3">
-              <div className="col-2 fw-medium">Status</div>
+              <div className="col-3 col-md-2 fw-medium">Status</div>
               <div className="col-auto">:</div>
               <div className="col fw-medium">
                 <span
@@ -191,6 +200,11 @@ export const InputAbsensi: React.FC<AbsensiProps> = ({
             </div>
             {data && (
               <>
+                <div className="row mb-3">
+                  <div className="col-3 col-md-2 fw-medium">Dibuat Oleh</div>
+                  <div className="col-auto">:</div>
+                  <div className="col fw-medium">{data.createdBy}</div>
+                </div>
                 <hr />
                 <div className="row">
                   <div className="col-12 col-md-3 text-center border py-4 mb-4 mb-lg-0">
@@ -399,23 +413,28 @@ export const InputAbsensi: React.FC<AbsensiProps> = ({
                 </table>
               </div>
             </div>
-            <div className="col-12">
-              <div className="text-end">
-                <button
-                  type="button"
-                  onClick={saveAttendance}
-                  className="btn btn-success border-0 me-3 py-2"
-                >
-                  <FaSave className="me-2" /> Simpan
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-success border-0 bg-blue py-2"
-                >
-                  <GrSave className="me-2" /> Finalissasi
-                </button>
+            {data.status !== 1 && (
+              <div className="col-12">
+                <div className="text-end">
+                  <button
+                    type="button"
+                    onClick={() => saveAttendance()}
+                    className="btn btn-success border-0 me-3 py-2"
+                  >
+                    <FaSave className="me-2" /> Simpan
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      updateFinalAttendance(kelas.id, data.id, selectedDate)
+                    }
+                    className="btn btn-success border-0 bg-blue py-2"
+                  >
+                    <GrSave className="me-2" /> Finalissasi
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       )}

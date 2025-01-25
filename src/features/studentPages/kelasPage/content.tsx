@@ -83,7 +83,7 @@ export const Content: React.FC = () => {
                 <hr />
                 <div className="d-flex justify-content-between">
                   <div className="my-auto text-start fw-medium">{data.academicYear}</div>
-                  <Link to={`detail/${data.uuid}`} className="btn btn-primary bg-blue w-auto px-3">
+                  <Link to={`detail/${data.uuid}`} className="btn btn-primary border-0 bg-blue w-auto px-3">
                     <FaArrowRight className="fs-5"/>{" "}
                   </Link>
                 </div>
