@@ -20,7 +20,7 @@ import StaffService from "../../../../services/staffService";
 import { CardInformasiDetailkelas } from "../../../../features/staffPages/managementSiswaPage/dataKelasPage/cardInformasiKelas";
 import { CardMatkulDetailKelas } from "../../../../features/staffPages/managementSiswaPage/dataKelasPage/cardMatkul";
 import { CardDaftarSiswaDetailKelas } from "../../../../features/staffPages/managementSiswaPage/dataKelasPage/cardDaftarSiswa";
-import { CardPerangkatKelas } from "../../../../features/studentPages/kelasPage/CardPerangkatKelas";
+import { CardPerangkatKelas } from "../../../../features/studentPages/kelasPage/cardPerangkatKelas";
 import { IStudentPositionInClass } from "../../../../interface/studentPosition.interface";
 import StudentPositionService from "../../../../services/studentPositionInClassService";
 

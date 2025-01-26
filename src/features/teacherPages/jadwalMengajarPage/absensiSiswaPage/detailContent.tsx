@@ -35,13 +35,8 @@ export const InputAbsensi: React.FC<AbsensiProps> = ({
   updateStatusAttendace,
   updateFinalAttendance,
 }) => {
-  const today = new Date();
-  today.setHours(today.getHours() + 7);
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, "0");
-  const day = String(today.getDate()).padStart(2, "0");
-  const formattedDateToday = `${year}-${month}-${day}`;
-  const [selectedDate, setSelectedDate] = useState(formattedDateToday);
+  const today = new Date().toISOString().split("T")[0];
+  const [selectedDate, setSelectedDate] = useState(today);
 
   const [attendanceData, setAttendanceData] = useState(
     data?.detailAttendanceStudents || []
@@ -163,7 +158,7 @@ export const InputAbsensi: React.FC<AbsensiProps> = ({
                   className="form-control"
                   value={selectedDate}
                   onChange={handleDateChange}
-                  max={formattedDateToday}
+                  max={today}
                 />
               </div>
             </div>
@@ -306,7 +301,7 @@ export const InputAbsensi: React.FC<AbsensiProps> = ({
             </div>
             <div className="col-12">
               <div className="col-12 table-responsive">
-                <table className="table">
+                <table className="table table-striped">
                   <thead>
                     <tr>
                       <th
@@ -363,9 +358,9 @@ export const InputAbsensi: React.FC<AbsensiProps> = ({
                   <tbody>
                     {attendanceData.map((siswa, index) => (
                       <tr key={siswa.id}>
-                        <td className="text-center">{index + 1}</td>
-                        <td>{siswa.student.name}</td>
-                        <td className="text-center">
+                        <td className="text-center py-3">{index + 1}</td>
+                        <td className="py-3">{siswa.student.name}</td>
+                        <td className="text-center py-3">
                           <input
                             type="radio"
                             name={`absensi-${siswa.id}`}
@@ -373,7 +368,7 @@ export const InputAbsensi: React.FC<AbsensiProps> = ({
                             onChange={() => handleStatusChange(index, 1)}
                           />
                         </td>
-                        <td className="text-center">
+                        <td className="text-center py-3">
                           <input
                             type="radio"
                             name={`absensi-${siswa.id}`}
@@ -381,7 +376,7 @@ export const InputAbsensi: React.FC<AbsensiProps> = ({
                             onChange={() => handleStatusChange(index, 2)}
                           />
                         </td>
-                        <td className="text-center">
+                        <td className="text-center py-3 p">
                           <input
                             type="radio"
                             name={`absensi-${siswa.id}`}
@@ -389,7 +384,7 @@ export const InputAbsensi: React.FC<AbsensiProps> = ({
                             onChange={() => handleStatusChange(index, 3)}
                           />
                         </td>
-                        <td className="text-center">
+                        <td className="text-center py-3">
                           <input
                             type="radio"
                             name={`absensi-${siswa.id}`}
@@ -397,7 +392,7 @@ export const InputAbsensi: React.FC<AbsensiProps> = ({
                             onChange={() => handleStatusChange(index, 4)}
                           />
                         </td>
-                        <td>
+                        <td className="">
                           <input
                             type="text"
                             value={siswa.notes || ""}

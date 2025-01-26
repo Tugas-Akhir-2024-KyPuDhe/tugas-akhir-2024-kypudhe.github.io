@@ -97,6 +97,7 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
           {isMobile ? (
             <Sidebar
               rootStyles={{
+                zIndex: 100,
                 position: "sticky",
                 top: 0,
                 height: "100vh",
@@ -133,7 +134,7 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
           <main style={{ width: "100%" }}>
             <nav
               className="navbar py-3 pe-4 sticky-top shadow-sm"
-              style={{ backgroundColor: "#fff" }}
+              style={{ backgroundColor: "#fff", zIndex: '99' }}
             >
               <div className="container-fluid">
                 <div className="navbar-brand">

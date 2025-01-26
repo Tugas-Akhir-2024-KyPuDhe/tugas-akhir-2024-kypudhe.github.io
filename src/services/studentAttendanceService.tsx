@@ -3,6 +3,7 @@ import useCookie from "react-use-cookie";
 import { useNavigate } from "react-router-dom";
 import {
   IGetAttendance,
+  IGetSummaryAttendance,
   IPayloadAttendance,
   IUpdateAttendance,
 } from "../interface/studentAttendance.interface";
@@ -25,6 +26,27 @@ const StudentAttendanceService = () => {
     try {
       const response = await axios.get<IGetAttendance>(
         `${apiUrl}/api/student-attendance/get?classId=${classId}&date=${dateAtt}`,
+        {
+          headers: {
+            authorization: `Bearer ${userLoginCookie?.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        handleUnauthorized(error.response?.status || 0);
+      }
+      throw error;
+    }
+  };
+
+  const getAttendanceSummaryInClass = async (
+    classId: number,
+  ): Promise<IGetSummaryAttendance> => {
+    try {
+      const response = await axios.get<IGetSummaryAttendance>(
+        `${apiUrl}/api/student-attendance/get/summary/${classId}`,
         {
           headers: {
             authorization: `Bearer ${userLoginCookie?.token}`,
@@ -112,6 +134,7 @@ const StudentAttendanceService = () => {
     createAttendanceInClass,
     updateStudentAttendanceInClass,
     updateFinalAttendanceInClass,
+    getAttendanceSummaryInClass,
   };
 };
 

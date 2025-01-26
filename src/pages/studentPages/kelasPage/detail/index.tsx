@@ -3,9 +3,9 @@ import { HeaderTitlePage } from "../../../../components/headerTitlePage";
 import { useNavigate, useParams } from "react-router-dom";
 import StudentHistoryService from "../../../../services/studentHistoryService";
 import { StudentHistory } from "../../../../interface/studentHistory.interface";
-import { CardSumaryDetailKelas } from "../../../../features/studentPages/kelasPage/CardSumaryDetailKelas";
-import { CardNilaiDetailKelas } from "../../../../features/studentPages/kelasPage/CardNilaiDetailKelas";
-import { CardAbsensiDetailKelas } from "../../../../features/studentPages/kelasPage/CardAbsensiDetailKelas";
+import { CardSumaryDetailKelas } from "../../../../features/studentPages/kelasPage/cardSumaryDetailKelas";
+import { CardNilaiDetailKelas } from "../../../../features/studentPages/kelasPage/cardNilaiDetailKelas";
+import { CardAbsensiDetailKelas } from "../../../../features/studentPages/kelasPage/cardAbsensiDetailKelas";
 import { AxiosError } from "axios";
 import {
   decodeToken,
@@ -13,7 +13,7 @@ import {
   showConfirmationDialog,
   Toast,
 } from "../../../../utils/myFunctions";
-import { CardPerangkatKelas } from "../../../../features/studentPages/kelasPage/CardPerangkatKelas";
+import { CardPerangkatKelas } from "../../../../features/studentPages/kelasPage/cardPerangkatKelas";
 import StudentPositionService from "../../../../services/studentPositionInClassService";
 import { IStudentPositionInClass } from "../../../../interface/studentPosition.interface";
 import { NavSubMenu } from "../../../../components/navSubmenu";
@@ -24,9 +24,12 @@ import {
   UpdateStudentAttendance,
   IStudentAttendanceInClass,
   IUpdateAttendance,
+  IDataSummaryAttendance,
+  IDetailStudentAttendance,
 } from "../../../../interface/studentAttendance.interface";
 import useCookie from "react-use-cookie";
 import ClassStudentService from "../../../../services/classStudentService";
+import { DaftarAbsensi } from "../../../../features/teacherPages/jadwalMengajarPage/absensiSiswaPage/daftarAbsensiKelas";
 
 export const DetailKelasSiswaPage: React.FC = () => {
   const [subMenuItemsAbsensi, setSubMenuItemsAbsensi] = useState([
@@ -48,6 +51,11 @@ export const DetailKelasSiswaPage: React.FC = () => {
   );
   const [dataAttendance, setDataAttendance] =
     useState<IStudentAttendanceInClass | null>();
+  const [listAllStudentsAttendance, setListAllStudentsAttendance] = useState<
+    IDataSummaryAttendance[] | null
+  >([]);
+  const [listAllStudentsAttendanceHeader, setListAllStudentsAttendanceHeader] =
+    useState<IDetailStudentAttendance[] | null>([]);
   const [cookieLogin] = useCookie("userLoginCookie", "");
   const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
   const dtoken = decodeToken(userLoginCookie.token);
@@ -68,15 +76,13 @@ export const DetailKelasSiswaPage: React.FC = () => {
           setData(response.data);
           await getPositionInClass(parseInt(response.data.currentClassId));
 
-          const today = new Date();
-          today.setHours(today.getHours() + 7);
-          const year = today.getFullYear();
-          const month = String(today.getMonth() + 1).padStart(2, "0");
-          const day = String(today.getDate()).padStart(2, "0");
-          const formattedDateToday = `${year}-${month}-${day}`;
+          const today = new Date().toISOString().split("T")[0];
           await handleGetAttendance(
             parseInt(response.data.currentClassId),
-            formattedDateToday
+            today
+          );
+          await handleGetSummaryAttendance(
+            parseInt(response.data.currentClassId)
           );
           getClass(parseInt(response.data.currentClassId));
         } catch (error) {
@@ -113,6 +119,7 @@ export const DetailKelasSiswaPage: React.FC = () => {
         setSubMenuItemsAbsensi([
           ...subMenuItemsAbsensi,
           { label: "Buat Absensi", key: "buat-absensi" },
+          { label: "Daftar Absensi", key: "daftar-absensi" },
         ]);
       }
     } catch (error) {
@@ -155,6 +162,27 @@ export const DetailKelasSiswaPage: React.FC = () => {
     }
   };
 
+  const handleGetSummaryAttendance = async (classId: number) => {
+    try {
+      setLoadingAttendance(true);
+      const response = await studentAttendance.getAttendanceSummaryInClass(
+        classId
+      );
+      if (response.status === 200) {
+        setListAllStudentsAttendance(response.data);
+        setListAllStudentsAttendanceHeader(response.data[0].absensi);
+      }
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      if (axiosError.response?.status === 404) {
+        setListAllStudentsAttendance(null);
+      }
+      console.error(error);
+    } finally {
+      setLoadingAttendance(false);
+    }
+  };
+
   const handleCreateAttendance = async (classId: number, dateAtt: string) => {
     try {
       setLoadingAttendance(true);
@@ -174,6 +202,7 @@ export const DetailKelasSiswaPage: React.FC = () => {
           timer: 4000,
         });
         handleGetAttendance(classId, dateAtt);
+        handleGetSummaryAttendance(classId);
       }
     } catch (error) {
       const axiosError = error as AxiosError;
@@ -217,6 +246,7 @@ export const DetailKelasSiswaPage: React.FC = () => {
           timer: 4000,
         });
         handleGetAttendance(classId, dateAtt);
+        handleGetSummaryAttendance(classId);
       }
     } catch (error) {
       const axiosError = error as AxiosError;
@@ -256,7 +286,8 @@ export const DetailKelasSiswaPage: React.FC = () => {
             title: `Absensi ${formatDate(new Date(dateAtt))} berhasil diupdate`,
             timer: 4000,
           });
-          handleGetAttendance(classId, dateAtt);
+          await handleGetAttendance(classId, dateAtt);
+          await handleGetSummaryAttendance(classId);
         }
       } catch (error) {
         const axiosError = error as AxiosError;
@@ -315,6 +346,13 @@ export const DetailKelasSiswaPage: React.FC = () => {
             createNewAttendace={handleCreateAttendance}
             updateStatusAttendace={handleUpdateAttendance}
             updateFinalAttendance={handleUpdateFinalAttendance}
+          />
+        ) : activeMenu === "daftar-absensi" ? (
+          <DaftarAbsensi
+            loading={loading || loadingAttendance}
+            data={listAllStudentsAttendance!}
+            dataHeader={listAllStudentsAttendanceHeader!}
+            kelas={data.currentClass}
           />
         ) : (
           ""

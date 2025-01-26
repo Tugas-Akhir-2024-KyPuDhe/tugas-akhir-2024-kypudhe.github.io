@@ -170,3 +170,27 @@ export const decodeToken = (token: string) => {
   );
   return JSON.parse(jsonPayload);
 };
+
+export const statusAttendance = (status: number): string => {
+  return status === 1
+    ? "H"
+    : status == 2
+    ? "I"
+    : status == 3
+    ? "S"
+    : status == 4
+    ? "A"
+    : "";
+};
+
+export const bgColorAttendance = (status: number): string => {
+  return status === 1
+    ? "bg-success"
+    : status == 2
+    ? "bg-warning"
+    : status == 3
+    ? "bg-warning"
+    : status == 4
+    ? "bg-danger"
+    : "";
+};
