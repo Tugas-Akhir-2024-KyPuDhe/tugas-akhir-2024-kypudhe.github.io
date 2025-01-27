@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { FaSave } from "react-icons/fa";
 import { GrSave } from "react-icons/gr";
-import { CurrentClass } from "../../../../interface/studentHistory.interface";
 import {
   UpdateStudentAttendance,
   IStudentAttendanceInClass,
 } from "../../../../interface/studentAttendance.interface";
+import { Class } from "../../../../interface/studentClass.interface";
 
 interface AbsensiProps {
   loading: boolean;
   data: IStudentAttendanceInClass;
-  kelas: CurrentClass;
+  kelas: Class;
   getAttendance: (classId: number, date: string) => void;
   createNewAttendace: (classId: number, date: string) => void;
   updateStatusAttendace: (

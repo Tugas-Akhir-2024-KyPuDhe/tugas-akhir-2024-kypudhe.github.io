@@ -1,5 +1,6 @@
 import { CourseInClass } from "./courseInClass.interface";
 import { StaffDetail } from "./staff.interface";
+import { Class } from "./studentClass.interface";
 import { StudentsGrades } from "./studentGrade.interface";
 import { IStudentPositionInClass } from "./studentPosition.interface";
 
@@ -35,7 +36,7 @@ export interface StudentHistory {
   status: string;
   createdAt: string;
   updatedAt: string;
-  currentClass: CurrentClass;
+  currentClass: Class;
 }
 
 export interface ResponseGetStudenHistory {

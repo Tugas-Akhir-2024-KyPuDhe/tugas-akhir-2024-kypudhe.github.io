@@ -11,6 +11,9 @@ import { Toast } from "../../../utils/myFunctions";
 import { NavSubMenu } from "../../../components/navSubmenu";
 import { CardPerangkatKelas } from "../../../features/teacherPages/kelasWaliPage/cardPerangkatKelas";
 import { StudentDetail } from "../../../interface/student.interface";
+import { DaftarAbsensi } from "../../../features/teacherPages/jadwalMengajarPage/absensiSiswaPage/daftarAbsensiKelas";
+import { IDataSummaryAttendance, IDetailStudentAttendance } from "../../../interface/studentAttendance.interface";
+import StudentAttendanceService from "../../../services/studentAttendanceService";
 
 const subMenuItemsDetailKelasWaliGuru = [
   { label: "Daftar Siswa", key: "daftar-siswa" },
@@ -22,11 +25,19 @@ const subMenuItemsDetailKelasWaliGuru = [
 export const DetailKelasWaliPage: React.FC = () => {
   const navigate = useNavigate();
   const classService = ClassStudentService();
+  const studentAttendance = StudentAttendanceService();
   const { id } = useParams<{ id: string }>();
 
   const [loading, setLoading] = useState<boolean>(false);
+  const [loadingAttendance, setLoadingAttendance] = useState<boolean>(false);
+
   const [data, setData] = useState<Class>();
   const [students, setstudents] = useState<StudentDetail[]>([]);
+  const [listAllStudentsAttendanceHeader, setListAllStudentsAttendanceHeader] =
+  useState<IDetailStudentAttendance[] | null>([]);
+  const [listAllStudentsAttendance, setListAllStudentsAttendance] = useState<
+  IDataSummaryAttendance[] | null
+>([]);
 
   const [activeMenu, setActiveMenu] = useState("daftar-siswa");
   const handleMenuClick = (menu: string) => {
@@ -42,6 +53,7 @@ export const DetailKelasWaliPage: React.FC = () => {
         const response = await classService.getClassById(parseInt(id));
         setData(response.data);
         setstudents(response.data.student);
+        await handleGetSummaryAttendance(parseInt(id))
       } catch (error) {
         const axiosError = error as AxiosError;
         if (axiosError.response?.status === 404) {
@@ -61,6 +73,27 @@ export const DetailKelasWaliPage: React.FC = () => {
       } finally {
         setLoading(false);
       }
+    }
+  };
+
+  const handleGetSummaryAttendance = async (classId: number) => {
+    try {
+      setLoadingAttendance(true);
+      const response = await studentAttendance.getAttendanceSummaryInClass(
+        classId
+      );
+      if (response.status === 200) {
+        setListAllStudentsAttendance(response.data);
+        setListAllStudentsAttendanceHeader(response.data[0].absensi);
+      }
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      if (axiosError.response?.status === 404) {
+        setListAllStudentsAttendance(null);
+      }
+      console.error(error);
+    } finally {
+      setLoadingAttendance(false);
     }
   };
 
@@ -112,7 +145,11 @@ export const DetailKelasWaliPage: React.FC = () => {
             data={data!}
           />
         ) : activeMenu === "absensi-siswa" ? (
-          <CardAbsensiKelas loading={loading} />
+          <DaftarAbsensi
+            loading={loading || loadingAttendance}
+            data={listAllStudentsAttendance!}
+            dataHeader={listAllStudentsAttendanceHeader!}
+          />
         ) : activeMenu === "mata-pelajaran-dikelas" ? (
           <CardAbsensiKelas loading={loading} />
         ) : activeMenu === "nilai-akhir-siswa" ? (

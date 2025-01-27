@@ -1,5 +1,4 @@
 import React from "react";
-import { CurrentClass } from "../../../../interface/studentHistory.interface";
 import {
   IDataSummaryAttendance,
   IDetailStudentAttendance,
@@ -10,12 +9,13 @@ import {
   statusAttendance,
 } from "../../../../utils/myFunctions";
 import { Tooltip } from "react-tooltip";
+import { Class } from "../../../../interface/studentClass.interface";
 
 interface AbsensiProps {
   loading: boolean;
   data: IDataSummaryAttendance[];
   dataHeader: IDetailStudentAttendance[];
-  kelas: CurrentClass;
+  kelas?: Class;
 }
 
 export const DaftarAbsensi: React.FC<AbsensiProps> = ({
@@ -26,61 +26,65 @@ export const DaftarAbsensi: React.FC<AbsensiProps> = ({
 }) => {
   return (
     <>
-      <div
-        className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
-        style={{ backgroundColor: "#fff", position: "relative" }}
-      >
-        {loading && (
-          <div
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              backgroundColor: "rgba(255, 255, 255, 0.7)",
-              zIndex: 20,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <div className="spinner-border text-primary" role="status">
-              <span className="visually-hidden">Loading...</span>
+      {kelas && (
+        <div
+          className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
+          style={{ backgroundColor: "#fff", position: "relative" }}
+        >
+          {loading && (
+            <div
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                backgroundColor: "rgba(255, 255, 255, 0.7)",
+                zIndex: 20,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        <div className="row g-3">
-          <div className="col-12">
-            <div className="fw-bold position-relative pb-2">
-              Buat Absensi
-              <div
-                style={{
-                  position: "absolute",
-                  left: 0,
-                  bottom: 0,
-                  width: "50px",
-                  height: "3px",
-                  backgroundColor: "var(--blue-color)",
-                }}
-              />
+          <div className="row g-3">
+            <div className="col-12">
+              <div className="fw-bold position-relative pb-2">
+                Buat Absensi
+                <div
+                  style={{
+                    position: "absolute",
+                    left: 0,
+                    bottom: 0,
+                    width: "50px",
+                    height: "3px",
+                    backgroundColor: "var(--blue-color)",
+                  }}
+                />
+              </div>
             </div>
-          </div>
-          <div className="col-12">
-            <div className="row mb-3">
-              <div className="col-3 col-md-2 fw-medium">Wali Kelas</div>
-              <div className="col-auto">:</div>
-              <div className="col fw-medium">{kelas.homeRoomTeacher.name}</div>
-            </div>
-            <div className="row mb-3">
-              <div className="col-3 col-md-2 fw-medium">Kelas</div>
-              <div className="col-auto">:</div>
-              <div className="col fw-medium">{kelas.name}</div>
+            <div className="col-12">
+              <div className="row mb-3">
+                <div className="col-3 col-md-2 fw-medium">Wali Kelas</div>
+                <div className="col-auto">:</div>
+                <div className="col fw-medium">
+                  {kelas!.homeRoomTeacher.name}
+                </div>
+              </div>
+              <div className="row mb-3">
+                <div className="col-3 col-md-2 fw-medium">Kelas</div>
+                <div className="col-auto">:</div>
+                <div className="col fw-medium">{kelas!.name}</div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
       <div
         className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
         style={{ backgroundColor: "#fff", position: "relative" }}
@@ -109,7 +113,7 @@ export const DaftarAbsensi: React.FC<AbsensiProps> = ({
         <div className="row g-3">
           <div className="col-12">
             <div className="fw-bold position-relative pb-2">
-              Daftar Siswa
+              Daftar Absensi Siswa
               <div
                 style={{
                   position: "absolute",
