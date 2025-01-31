@@ -52,7 +52,7 @@ export const CardPerangkatKelas: React.FC<CardProps> = ({
           </div>
         </div>
         <div className="col-12">
-          {data.length > 1
+          {data.length > 0
             ? data.map((dt, index) => (
                 <div className="row mb-3" key={index}>
                   <div className="col-4 col-md-2 fw-medium">{dt.positionName}</div>

@@ -134,50 +134,54 @@ export const Content: React.FC = () => {
             />
           </div>
         </div>
-        {dataAttendance.map((dataMonth, index) => (
-          <div key={index} className="col-12 col-md-4">
-            <div className="card card-body">
-              <div className="fw-medium">
-                {formatMonthAndYear(dataMonth.month)}
-              </div>
-              <hr />
-              <div className="d-flex flex-wrap">
-                {dataMonth.records.map((dataRecord, index2) => {
-                  const tooltipId = `tooltip-${index}-${index2}`;
-                  const timeAtt = formatDateTime(dataRecord.date).split(" ")
-                  const timeClean = `${timeAtt[0]} ${timeAtt[1]} ${timeAtt[2]}`
-                  return (
-                    <>
-                      <div
-                        key={index2}
-                        style={{ width: 50 }}
-                        id={tooltipId}
-                        className={`
+        {dataAttendance.length > 0 ? (
+          dataAttendance.map((dataMonth, index) => (
+            <div key={index} className="col-12 col-md-4">
+              <div className="card card-body">
+                <div className="fw-medium">
+                  {formatMonthAndYear(dataMonth.month)}
+                </div>
+                <hr />
+                <div className="d-flex flex-wrap">
+                  {dataMonth.records.map((dataRecord, index2) => {
+                    const tooltipId = `tooltip-${index}-${index2}`;
+                    const timeAtt = formatDateTime(dataRecord.date).split(" ");
+                    const timeClean = `${timeAtt[0]} ${timeAtt[1]} ${timeAtt[2]}`;
+                    return (
+                      <>
+                        <div
+                          key={index2}
+                          style={{ width: 50 }}
+                          id={tooltipId}
+                          className={`
                           py-1 px-2 text-center text-light fw-medium border border-light ${bgColorAttendance(
                             dataRecord.status
                           )} 
                         `}
-                      >
-                        {dataRecord.date.split("-")[2]}
-                      </div>
-                      <Tooltip
-                        anchorId={tooltipId} 
-                        className="text-light"
-                        style={{ backgroundColor: "var(--blue-color)" }}
-                        content={
-                          timeClean +
-                          " (" +
-                          statusAttendance(dataRecord.status, 1) +
-                          ")"
-                        }
-                      />
-                    </>
-                  );
-                })}
+                        >
+                          {dataRecord.date.split("-")[2]}
+                        </div>
+                        <Tooltip
+                          anchorId={tooltipId}
+                          className="text-light"
+                          style={{ backgroundColor: "var(--blue-color)" }}
+                          content={
+                            timeClean +
+                            " (" +
+                            statusAttendance(dataRecord.status, 1) +
+                            ")"
+                          }
+                        />
+                      </>
+                    );
+                  })}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))
+        ) : (
+          <p className="text-center">Absensi masih kosong!</p>
+        )}
       </div>
     </div>
   );

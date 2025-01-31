@@ -6,8 +6,7 @@ import {
   CourseInClass,
   FormState,
 } from "../../../../interface/courseInClass.interface";
-import { FaPen, FaPlus, FaTrash } from "react-icons/fa6";
-import { useNavigate } from "react-router-dom";
+import { FaPlus, FaTrash } from "react-icons/fa6";
 import { optionsDays } from "../../../../utils/optionsData";
 
 interface Option {
@@ -45,7 +44,6 @@ export const CardMatkulDetailKelas: React.FC<CardMatkulProps> = ({
   handleSelectChangeMapel,
   handleInputChangeMapel,
 }) => {
-  const navigate = useNavigate();
 
   const columns = [
     {
@@ -89,14 +87,7 @@ export const CardMatkulDetailKelas: React.FC<CardMatkulProps> = ({
     {
       name: "Action",
       cell: (row: CourseInClass) => (
-        <>
-          <button
-            className="btn btn-warning btn-sm text me-2 text-light"
-            onClick={() => navigate(`update/${row.id}`)}
-            disabled={loading}
-          >
-            <FaPen />
-          </button>
+        <div className="text-center w-100">
           <button
             className="btn btn-danger btn-sm"
             onClick={() => deleteCourse(row.id)}
@@ -104,9 +95,9 @@ export const CardMatkulDetailKelas: React.FC<CardMatkulProps> = ({
           >
             <FaTrash />
           </button>
-        </>
+        </div>
       ),
-      width: "150px",
+      width: "120px",
     },
   ];
 
