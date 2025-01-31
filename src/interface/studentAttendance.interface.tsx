@@ -68,3 +68,29 @@ export interface IGetSummaryAttendance {
   message: string;
   data: IDataSummaryAttendance[];
 }
+// ================
+export interface AttendanceRecord {
+  id: number;
+  attendanceId: number;
+  status: number;
+  notes: string | null;
+  date: string;
+  className: string;
+}
+export interface AttendanceMonth {
+  month: string;
+  records: AttendanceRecord[];
+}
+export interface AttendanceData {
+  nis: string;
+  name: string;
+  attendances: AttendanceMonth[];
+}
+export interface IGetStudentDetailAttendance {
+  status: number;
+  message: string;
+  data: AttendanceData;
+}
+
+
+

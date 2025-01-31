@@ -1,5 +1,7 @@
 // import { FaCircle } from "react-icons/fa6";
+import moment from "moment";
 import Swal from "sweetalert2";
+import "moment/locale/id";
 
 export const Toast = Swal.mixin({
   toast: true,
@@ -171,15 +173,15 @@ export const decodeToken = (token: string) => {
   return JSON.parse(jsonPayload);
 };
 
-export const statusAttendance = (status: number): string => {
+export const statusAttendance = (status: number, complate=0): string => {
   return status === 1
-    ? "H"
+    ? complate ? "Hadir" : "H"
     : status == 2
-    ? "I"
+    ? complate ? "Izin" : "I"
     : status == 3
-    ? "S"
+    ? complate ? "Sakit" : "S"
     : status == 4
-    ? "A"
+    ? complate ? "Alpa" : "A"
     : "";
 };
 
@@ -193,4 +195,8 @@ export const bgColorAttendance = (status: number): string => {
     : status == 4
     ? "bg-danger"
     : "";
+};
+export const formatMonthAndYear = (dateString: string) => {
+  moment.locale("id");
+  return moment(dateString, "YYYY-MM").locale("id").format("MMMM YYYY");
 };

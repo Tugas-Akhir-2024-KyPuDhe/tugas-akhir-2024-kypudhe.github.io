@@ -39,6 +39,7 @@ export const Content: React.FC = () => {
       style={{
         backgroundColor: "#fff",
         position: "relative",
+        minHeight: '30vh'
       }}
     >
       {loading && (
