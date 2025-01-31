@@ -26,6 +26,7 @@ import {
   IUpdateAttendance,
   IDataSummaryAttendance,
   IDetailStudentAttendance,
+  AttendanceMonth,
 } from "../../../../interface/studentAttendance.interface";
 import useCookie from "react-use-cookie";
 import ClassStudentService from "../../../../services/classStudentService";
@@ -56,6 +57,7 @@ export const DetailKelasSiswaPage: React.FC = () => {
   >([]);
   const [listAllStudentsAttendanceHeader, setListAllStudentsAttendanceHeader] =
     useState<IDetailStudentAttendance[] | null>([]);
+    const [dataAttendanceStudent, setDataAttendanceStudent] = useState<AttendanceMonth[]>([]);
   const [cookieLogin] = useCookie("userLoginCookie", "");
   const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
   const dtoken = decodeToken(userLoginCookie.token);
@@ -84,7 +86,8 @@ export const DetailKelasSiswaPage: React.FC = () => {
           await handleGetSummaryAttendance(
             parseInt(response.data.currentClassId)
           );
-          getClass(parseInt(response.data.currentClassId));
+          await getClass(parseInt(response.data.currentClassId));
+          await getStudentDetailAttendance(dtoken.nis, parseInt(response.data.currentClassId));
         } catch (error) {
           console.error(error);
           const axiosError = error as AxiosError;
@@ -106,6 +109,17 @@ export const DetailKelasSiswaPage: React.FC = () => {
 
     getDataSiswa();
   }, []);
+
+  const getStudentDetailAttendance = async (nis: string, classId: number) => {
+    try {
+      const response =
+        await studentAttendance.getStudentDetailAttendance(nis, classId);
+      setDataAttendanceStudent(response.data.attendances);
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const getClass = async (id: number) => {
     try {
@@ -328,15 +342,17 @@ export const DetailKelasSiswaPage: React.FC = () => {
       <CardPerangkatKelas loading={loading} data={dataPosition || []} />
       <CardNilaiDetailKelas loading={loading} data={data!} />
 
-      <NavSubMenu
-        menuItems={subMenuItemsAbsensi}
-        activeMenu={activeMenu}
-        onMenuClick={handleMenuClick}
-      />
+      {subMenuItemsAbsensi.length != 1 && (
+        <NavSubMenu
+          menuItems={subMenuItemsAbsensi}
+          activeMenu={activeMenu}
+          onMenuClick={handleMenuClick}
+        />
+      )}
 
       {data &&
         (activeMenu === "absensi-siswa" ? (
-          <CardAbsensiDetailKelas loading={loading} data={data!} />
+          <CardAbsensiDetailKelas loading={loading} data={dataAttendanceStudent!} />
         ) : activeMenu === "buat-absensi" ? (
           <InputAbsensi
             loading={loading || loadingAttendance}
@@ -355,7 +371,7 @@ export const DetailKelasSiswaPage: React.FC = () => {
             kelas={data.currentClass}
           />
         ) : (
-          ""
+          "sdf"
         ))}
     </>
   );
