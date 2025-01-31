@@ -839,6 +839,34 @@ export const ListMenu = () => {
               )}
               Galeri
             </MenuItem>
+            <MenuItem
+              onClick={() => handleMenuClick("/content-web/study-tracer")}
+              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
+              style={{
+                position: "relative",
+                backgroundColor:
+                  selectedMenu === "/content-web/study-tracer" ? "#E5EAF2" : "",
+              }}
+              className={`fw-medium ${
+                selectedMenu === "/content-web/study-tracer"
+                  ? "text-blue"
+                  : "text-dark-soft"
+              }`}
+            >
+              {selectedMenu === "/content-web/study-tracer" && (
+                <div
+                  style={{
+                    position: "absolute",
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                    width: "4px",
+                    backgroundColor: "var(--blue-color)",
+                  }}
+                />
+              )}
+              Study Tracer
+            </MenuItem>
           </SubMenu>
         </>
       )}

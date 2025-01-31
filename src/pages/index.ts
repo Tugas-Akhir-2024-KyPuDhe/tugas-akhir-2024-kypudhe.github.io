@@ -42,6 +42,7 @@ import { FormMapelMangementSiswaPage } from './staffPages/managementSiswaPage/da
 import { DataStaffMangementStaffPage } from './staffPages/managementStaffPage/dataStaffPage';
 import { FormStaffMangementStaffPage } from './staffPages/managementStaffPage/dataStaffPage/form';
 import { DetailStaffMangementSiswa } from './staffPages/managementStaffPage/dataStaffPage/detail';
+import { StudyTracerPage } from './staffPages/contentWebPage/studyTracerPage';
 
 
 //STUDENT
@@ -61,4 +62,4 @@ import { NotFoundPage } from './notFoundPage';
 
 
 
-export { NotFoundPage, HomePage, LoginPage, ArticlePage, FormArticlePage, DetailArticlePage, BannerPage, FormBannerPage, NilaiPage, KelasPage, MapelPage, AbsensiPage, SchoolPage, FacilityPage, FormFacilityPage, JurusanPage, FormJurusanPage, EkskulPage, FormEkskulPage, ProfilePage, DataSiswaMangementSiswaPage, FormSiswaMangementSiswaPage, DetailSiswaMangementSiswa, GaleriPage, FormGaleriPage, UpdateGaleriColletion, DataKelasMangementSiswaPage,FormDataKelasMangementSiswaPage, DetailKelasMangementSiswaPage, DataMapelMangementSiswaPage, FormMapelMangementSiswaPage, DataStaffMangementStaffPage,FormStaffMangementStaffPage, DetailKelasSiswaPage, BeritaPage, DetailStaffMangementSiswa, JadwalMengajarPage, DetailJadwalMengajarPage, KelasWaliPage, DetailKelasWaliPage }
+export { NotFoundPage, HomePage, LoginPage, ArticlePage, FormArticlePage, DetailArticlePage, BannerPage, FormBannerPage, NilaiPage, KelasPage, MapelPage, AbsensiPage, SchoolPage, FacilityPage, FormFacilityPage, JurusanPage, FormJurusanPage, EkskulPage, FormEkskulPage, ProfilePage, DataSiswaMangementSiswaPage, FormSiswaMangementSiswaPage, DetailSiswaMangementSiswa, GaleriPage, FormGaleriPage, UpdateGaleriColletion, DataKelasMangementSiswaPage,FormDataKelasMangementSiswaPage, DetailKelasMangementSiswaPage, DataMapelMangementSiswaPage, FormMapelMangementSiswaPage, DataStaffMangementStaffPage,FormStaffMangementStaffPage, DetailKelasSiswaPage, BeritaPage, DetailStaffMangementSiswa, JadwalMengajarPage, DetailJadwalMengajarPage, KelasWaliPage, DetailKelasWaliPage, StudyTracerPage }
