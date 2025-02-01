@@ -1,7 +1,8 @@
 import axios from "axios";
 import useCookie from "react-use-cookie";
 import { useNavigate } from "react-router-dom";
-import { ResponseGetStudentDetail } from "../interface/auth.interface";
+import { ResponseGetStudent, StudentDetail } from "../interface/student.interface";
+
 const apiUrl = import.meta.env.VITE_API_URL;
 const StudentService = () => {
   const navigate = useNavigate();
@@ -16,9 +17,9 @@ const StudentService = () => {
 
   const getNewStudent = async (
     major: string = ""
-  ): Promise<ResponseGetStudentDetail> => {
+  ): Promise<ResponseGetStudent<StudentDetail[]>> => {
     try {
-      const response = await axios.get<ResponseGetStudentDetail>(
+      const response = await axios.get<ResponseGetStudent<StudentDetail[]>>(
         `${apiUrl}/api/student/newStudent?majorCode=${major}`,
         {
           headers: {
@@ -37,9 +38,9 @@ const StudentService = () => {
 
   const getStudentByNis = async (
     nis: number
-  ): Promise<ResponseGetStudentDetail> => {
+  ): Promise<ResponseGetStudent<StudentDetail>> => {
     try {
-      const response = await axios.get<ResponseGetStudentDetail>(
+      const response = await axios.get<ResponseGetStudent<StudentDetail>>(
         `${apiUrl}/api/student/get/${nis}`,
         {
           headers: {
@@ -61,9 +62,9 @@ const StudentService = () => {
     major_code: string = "",
     grade: string = "",
     status: string = "all"
-  ): Promise<ResponseGetStudentDetail> => {
+  ): Promise<ResponseGetStudent<StudentDetail[]>> => {
     try {
-      const response = await axios.get<ResponseGetStudentDetail>(
+      const response = await axios.get<ResponseGetStudent<StudentDetail[]>>(
         `${apiUrl}/api/student/get?status=${status}&major_code=${major_code}&grade=${grade}`,
         {
           headers: {

@@ -4,8 +4,6 @@ import ArtikelService from "../../services/artikelService";
 import { CardBerita } from "../../components/cardBerita";
 import { CardBeritaSkeleton } from "../../components/cardBeritaSkeleton";
 import { HeaderArticle } from "../../features/articlePage/headerArticle";
-import { showConfirmationDialog, Toast } from "../../utils/myFunctions";
-import Swal from "sweetalert2";
 
 export const ArticlePage: React.FC = () => {
   const articleService = ArtikelService();
@@ -37,36 +35,6 @@ export const ArticlePage: React.FC = () => {
       console.error("Error fetching articles:", error);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const [loadingDeleteBerita, setLoadingDeleteBerita] = useState(false);
-  const handleDeleteBerita = async (idArtikel: number) => {
-    const result = await showConfirmationDialog({
-      title: "Ingin menghapus Berita ini?",
-      icon: "warning",
-      confirmButtonText: "Ya, Hapus!",
-      cancelButtonText: "Batal",
-    });
-
-    if (result.isConfirmed) {
-      setLoadingDeleteBerita(true);
-      try {
-        const response = await articleService.deleteArtikel(idArtikel);
-        if (response.status === 200) {
-          getAllArtikel(1);
-          Toast.fire({
-            icon: "success",
-            title: "Berita/Artikel berhasil dihapus",
-            timer: 4000,
-          });
-        }
-      } catch (error) {
-        console.error("Error deleting banner:", error);
-        Swal.fire("Gagal", "Terjadi kesalahan saat menghapus banner", "error");
-      } finally {
-        setLoadingDeleteBerita(false);
-      }
     }
   };
 
@@ -113,8 +81,6 @@ export const ArticlePage: React.FC = () => {
                       statusArtikel={data.status}
                       titleArtikel={data.title}
                       descArtikel={data.description}
-                      handleDeleteBerita={handleDeleteBerita}
-                      loadingDeleteBerita={loadingDeleteBerita}
                     />
                   </div>
                 ))

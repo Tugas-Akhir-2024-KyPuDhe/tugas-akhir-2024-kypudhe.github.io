@@ -61,7 +61,6 @@ export const HomePage = () => {
           );
           setDataMapel(resCourse.data);
         }
-        console.log(response.data.name);
       } catch (error) {
         console.error(error);
       }
