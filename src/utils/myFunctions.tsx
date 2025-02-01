@@ -1,5 +1,5 @@
 // import { FaCircle } from "react-icons/fa6";
-import moment from 'moment/min/moment-with-locales';
+import moment from "moment/min/moment-with-locales";
 import Swal from "sweetalert2";
 import "moment/locale/id";
 moment.locale("id");
@@ -174,15 +174,23 @@ export const decodeToken = (token: string) => {
   return JSON.parse(jsonPayload);
 };
 
-export const statusAttendance = (status: number, complate=0): string => {
+export const statusAttendance = (status: number, complate = 0): string => {
   return status === 1
-    ? complate ? "Hadir" : "H"
+    ? complate
+      ? "Hadir"
+      : "H"
     : status == 2
-    ? complate ? "Izin" : "I"
+    ? complate
+      ? "Izin"
+      : "I"
     : status == 3
-    ? complate ? "Sakit" : "S"
+    ? complate
+      ? "Sakit"
+      : "S"
     : status == 4
-    ? complate ? "Alpa" : "A"
+    ? complate
+      ? "Alpa"
+      : "A"
     : "";
 };
 
@@ -204,6 +212,16 @@ export const formatMonthAndYear = (dateString: string) => {
 
 export const formatTanggal = (inputDate: string) => {
   const tanggal = moment(inputDate);
-  const formattedDate = tanggal.format('dddd, DD MMM YYYY');
+  const formattedDate = tanggal.format("dddd, DD MMM YYYY");
   return formattedDate;
-}
+};
+
+export const getDayNow = () => {
+  const hariIni = moment().format("dddd");
+  return hariIni;
+};
+
+export const getDayMonth = () => {
+  const hariIni = moment().format("MMMM");
+  return hariIni;
+};

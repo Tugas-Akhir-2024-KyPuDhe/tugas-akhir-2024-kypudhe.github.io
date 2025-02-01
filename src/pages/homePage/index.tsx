@@ -15,55 +15,29 @@ import {
 } from "react-icons/fa6";
 import { CardBerita } from "../../components/cardBerita";
 import { CardBeritaSkeleton } from "../../components/cardBeritaSkeleton";
-import useCookie from "react-use-cookie";
 import { CardInformasi } from "../../features/homePage/components/cardInformasi";
-import { showConfirmationDialog, Toast } from "../../utils/myFunctions";
-import Swal from "sweetalert2";
 import ConfigSchoolService from "../../services/sekolahConfigService";
 import { Statistik } from "../../interface/school.interface";
-
-interface MataPelajaran {
-  nama: string,
-  hari: string,
-  jam_mulai: string,
-  jam_selesai: string,
-  guru: string,
-}
+import StudentService from "../../services/studentService";
+import { decodeToken, getDayMonth, getDayNow } from "../../utils/myFunctions";
+import useCookie from "react-use-cookie";
+import CourseInClassService from "../../services/courseInClassService";
+import { CourseInClass } from "../../interface/courseInClass.interface";
+import weekend from "./../../../src/assets/images/weekend.svg";
 
 export const HomePage = () => {
   const articleService = ArtikelService();
   const schoolService = ConfigSchoolService();
+  const studentService = StudentService();
+  const courseInClass = CourseInClassService();
 
   const [cookieLogin] = useCookie("userLoginCookie");
   const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
-const [dataStatistik, setDataStatistik] = useState<Statistik>()
+  const [dataStatistik, setDataStatistik] = useState<Statistik>();
+  const dtoken = decodeToken(userLoginCookie.token);
 
-  const [dataMapel] = useState<MataPelajaran[]>([
-    {
-      "nama" : "Matematika",
-      "hari" : "Senin",
-      "jam_mulai" : "10:00",
-      "jam_selesai" : "12:00",
-      "guru" : "Rizky Fadillah",
-    },
-    {
-      "nama" : "Bahasa",
-      "hari" : "Selasa",
-      "jam_mulai" : "10:00",
-      "jam_selesai" : "12:00",
-      "guru" : "Putra Fadillah",
-    },
-    {
-      "nama" : "Teknik",
-      "hari" : "Rabu",
-      "jam_mulai" : "10:00",
-      "jam_selesai" : "12:00",
-      "guru" : "John Doe",
-    },
-  ]);
-
+  const [dataMapel, setDataMapel] = useState<CourseInClass[]>([]);
   const [dataArtikel, setDataArtikel] = useState<Artikel[]>([]);
-  const [loadingDeleteBerita, setLoadingDeleteBerita] = useState(false);
 
   const getAllArtikel = async () => {
     const response = await articleService.getAllArtikels("1", 8);
@@ -75,43 +49,35 @@ const [dataStatistik, setDataStatistik] = useState<Statistik>()
     setDataStatistik(response.data);
   };
 
-  const handleDeleteBerita = async (idArtikel: number) => {
-    const result = await showConfirmationDialog({
-      title: "Ingin menghapus Berita ini?",
-      icon: "warning",
-      confirmButtonText: "Ya, Hapus!",
-      cancelButtonText: "Batal",
-    });
-
-    if (result.isConfirmed) {
-      setLoadingDeleteBerita(true);
+  const getStudent = async () => {
+    if (dtoken.nis) {
       try {
-        const response = await articleService.deleteArtikel(idArtikel);
+        const response = await studentService.getStudentByNis(dtoken.nis);
         if (response.status === 200) {
-          getAllArtikel();
-          Toast.fire({
-            icon: "success",
-            title: "Berita/Artikel berhasil dihapus",
-            timer: 4000,
-          });
+          if (getDayNow() === "Minggu") return;
+          const resCourse = await courseInClass.getCourseinClass(
+            parseInt(response.data.HistoryClass[0].currentClassId),
+            getDayNow()
+          );
+          setDataMapel(resCourse.data);
         }
+        console.log(response.data.name);
       } catch (error) {
-        console.error("Error deleting Berita/Artikel:", error);
-        Swal.fire("Gagal", "Terjadi kesalahan saat menghapus Berita/Artikel", "error");
-      } finally {
-        setLoadingDeleteBerita(false); // Set loading to false once the operation is complete
+        console.error(error);
       }
     }
   };
 
   useEffect(() => {
     getStatistik();
+    getStudent();
     getAllArtikel();
   }, []);
 
   return (
     <>
-      {userLoginCookie.role === "STAFF" || userLoginCookie.role === "TEACHER" ? (
+      {userLoginCookie.role === "STAFF" ||
+      userLoginCookie.role === "TEACHER" ? (
         <div className="m-1 m-lg-4 m-md-4 my-4">
           <div className="fw-bold fs-5 mb-3 text-dark-soft">Dashboard</div>
           <div className="container-fluid px-0">
@@ -148,40 +114,120 @@ const [dataStatistik, setDataStatistik] = useState<Statistik>()
       )}
 
       {userLoginCookie.role === "STUDENT" && (
-        <div className="m-1 m-lg-4 m-md-4 my-4">
-          <div className="fw-bold fs-5 text-dark-soft mb-3">Mata Pelajaran</div>
-          <div className="container-fluid px-0">
-            <div className="row">
-            {dataMapel.map(dt=>(
-              <div className="col-12 col-lg-4 col-md-3 mb-3" key={dt.nama}>
-                <div className="card card-body">
-                  <span className={`badge mb-2 text-bg-info`} style={{maxWidth: 'fit-content'}}>{dt.hari}</span>
-                  <h4>{dt.nama}</h4>
-                  <h6>Guru : {dt.guru}</h6>
-                  <hr />
-                  <div className="d-flex gap-3">
-                    <div>
-                      <h6>Jam Mulai</h6>
-                      <p>{dt.jam_mulai}</p>
-                    </div>
-                    <div>
-                      <h6>Jam Selesai</h6>
-                      <p>{dt.jam_selesai}</p>
+        <>
+          <div className="m-1 m-lg-4 m-md-4 my-4">
+            <div className="fw-bold fs-5 text-dark-soft mb-3">
+              Mata Pelajaran <span className="text-blue">Hari ini</span>
+            </div>
+            <div className="container-fluid px-0">
+              <div className="row">
+                {getDayNow() == "Minggu" && (
+                  <div className="text-center">
+                    <img
+                      src={weekend}
+                      alt=""
+                      className="img-fluid"
+                      style={{ width: "400px" }}
+                    />
+                    <div className="text-blue fw-bold mt-3 fs-5">
+                      Happy Weekend
                     </div>
                   </div>
-                </div>
+                )}
+                {dataMapel &&
+                  dataMapel.map((dt) => (
+                    <div
+                      className="col-12 col-lg-4 col-md-3 mb-3"
+                      key={dt.courseDetail.name}
+                    >
+                      <div className="card card-body">
+                        <span
+                          className={`badge mb-2 text-bg-info bg-blue text-light`}
+                          style={{ maxWidth: "fit-content" }}
+                        >
+                          {dt.day}
+                        </span>
+                        <h4>{dt.courseDetail.name}</h4>
+                        <h6>Guru : {dt.teacher.name}</h6>
+                        <hr />
+                        <div className="d-flex gap-3">
+                          <div>
+                            <h6>Jam Mulai</h6>
+                            <p>{dt.timeStart}</p>
+                          </div>
+                          <div>
+                            <h6>Jam Selesai</h6>
+                            <p>{dt.timeEnd}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
               </div>
-            ))}
             </div>
           </div>
-        </div>
+          <div className="m-1 m-lg-4 m-md-4 my-4">
+            <div className="fw-bold fs-5 text-dark-soft mb-3">
+              Absensi Bulan <span className="text-blue">{getDayMonth()}</span>
+            </div>
+            <div className="container-fluid px-0">
+              <div className="row">
+                {getDayNow() == "Minggu" && (
+                  <div className="text-center">
+                    <img
+                      src={weekend}
+                      alt=""
+                      className="img-fluid"
+                      style={{ width: "400px" }}
+                    />
+                    <div className="text-blue fw-bold mt-3 fs-5">
+                      Happy Weekend
+                    </div>
+                  </div>
+                )}
+                {dataMapel &&
+                  dataMapel.map((dt) => (
+                    <div
+                      className="col-12 col-lg-4 col-md-3 mb-3"
+                      key={dt.courseDetail.name}
+                    >
+                      <div className="card card-body">
+                        <span
+                          className={`badge mb-2 text-bg-info bg-blue text-light`}
+                          style={{ maxWidth: "fit-content" }}
+                        >
+                          {dt.day}
+                        </span>
+                        <h4>{dt.courseDetail.name}</h4>
+                        <h6>Guru : {dt.teacher.name}</h6>
+                        <hr />
+                        <div className="d-flex gap-3">
+                          <div>
+                            <h6>Jam Mulai</h6>
+                            <p>{dt.timeStart}</p>
+                          </div>
+                          <div>
+                            <h6>Jam Selesai</h6>
+                            <p>{dt.timeEnd}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          </div>
+        </>
       )}
 
       <div className="m-1 m-lg-4 m-md-4 my-4">
         <div className="d-flex justify-content-between mb-3">
           <span className="fw-bold fs-5 text-dark-soft">Berita/Artikel</span>
-          <Link to="/berita" className="fw-medium text-blue text-decoration-none">
-            Lainnya <FaCaretRight/>
+          <Link
+            to="/berita"
+            className="fw-medium text-blue text-decoration-none"
+          >
+            Lainnya <FaCaretRight />
           </Link>
         </div>
         <section className="">
@@ -193,14 +239,15 @@ const [dataStatistik, setDataStatistik] = useState<Statistik>()
                       <CardBerita
                         idArtikel={data.id}
                         uuidArtikel={data.uuid}
-                        imageArtikel={data.banner?.url || "https://plus.unsplash.com/premium_photo-1661772661721-b16346fe5b0f?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YnVzc2luZXNzfGVufDB8fDB8fHww"}
+                        imageArtikel={
+                          data.banner?.url ||
+                          "https://plus.unsplash.com/premium_photo-1661772661721-b16346fe5b0f?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YnVzc2luZXNzfGVufDB8fDB8fHww"
+                        }
                         tipeArtikel={data.type}
                         dateArtikel={data.createdAt}
                         statusArtikel={data.status}
                         titleArtikel={data.title}
                         descArtikel={data.description}
-                        handleDeleteBerita={handleDeleteBerita}
-                        loadingDeleteBerita={loadingDeleteBerita}
                       />
                     </div>
                   ))

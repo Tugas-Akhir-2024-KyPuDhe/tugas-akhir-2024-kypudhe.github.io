@@ -161,6 +161,7 @@ export interface StudentDetail {
   Major: Fajusek
   class: Class
   ParentOfStudent: ParentOfStudent[]
+  HistoryClass: StudentHistory[];
   user: {
     username: string;
     password: string;

@@ -25,7 +25,8 @@ export interface FormState {
   timeEnd: string;
 }
 
-export interface ResponseActionCourseInClass {
+export interface ResponseActionCourseInClass<T = unknown> {
   status: number;
   message: string;
+  data: T
 }

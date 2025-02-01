@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import {
+  CourseInClass,
   FormState,
   ResponseActionCourseInClass,
 } from "../interface/courseInClass.interface";
@@ -13,6 +14,10 @@ interface CourseInClassService {
     formData: FormState
   ) => Promise<ResponseActionCourseInClass>;
   deleteCourse: (id: number) => Promise<ResponseActionCourseInClass>;
+  getCourseinClass: (
+    classId: number,
+    day: string
+  ) => Promise<ResponseActionCourseInClass<CourseInClass[]>>;
 }
 
 const CourseInClassService = (): CourseInClassService => {
@@ -86,10 +91,35 @@ const CourseInClassService = (): CourseInClassService => {
     }
   };
 
+  const getCourseinClass = async (
+    classId: number,
+    day: string
+  ): Promise<ResponseActionCourseInClass<CourseInClass[]>> => {
+    try {
+      const response: AxiosResponse<
+        ResponseActionCourseInClass<CourseInClass[]>
+      > = await axios.get(
+        `${apiUrl}/api/course-inclass/get?classId=${classId}&day=${day}`,
+        {
+          headers: {
+            Authorization: `Bearer ${userLoginCookie.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        handleUnauthorized(error.response?.status || 0);
+      }
+      throw error;
+    }
+  };
+
   return {
     addCourse,
     updateCourse,
     deleteCourse,
+    getCourseinClass,
   };
 };
 

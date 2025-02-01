@@ -13,8 +13,6 @@ interface Artikel {
   statusArtikel: string;
   titleArtikel: string;
   descArtikel: string;
-  handleDeleteBerita: (idArtikel: number) => void;
-  loadingDeleteBerita: boolean;
 }
 
 export const CardBerita: React.FC<Artikel> = ({
