@@ -5,12 +5,11 @@ import {
 } from "../../../../interface/studentAttendance.interface";
 import {
   bgColorAttendance,
-  formatDate,
+  formatTanggal,
   statusAttendance,
 } from "../../../../utils/myFunctions";
 import { Tooltip } from "react-tooltip";
 import { Class } from "../../../../interface/studentClass.interface";
-
 interface AbsensiProps {
   loading: boolean;
   data: IDataSummaryAttendance[];
@@ -173,11 +172,11 @@ export const DaftarAbsensi: React.FC<AbsensiProps> = ({
                         <td className="py-3">{siswa.nis}</td>
                         <td className="py-3">{siswa.name}</td>
                         {siswa.absensi.map((attendance, index2) => {
-                          const tooltipId = `tooltip-${index}-${index2}`; // ID unik untuk setiap tooltip
+                          const tooltipId = `tooltip-${index}-${index2}`;
                           return (
                             <td
                               key={index2}
-                              id={tooltipId} // Tetapkan ID unik
+                              id={tooltipId}
                               className={`tooltip-detail text-center py-3 ${bgColorAttendance(
                                 attendance.status
                               )} border`}
@@ -186,12 +185,18 @@ export const DaftarAbsensi: React.FC<AbsensiProps> = ({
                                 {statusAttendance(attendance.status)}
                               </span>
                               <Tooltip
-                                anchorId={tooltipId} // Gunakan ID unik sebagai anchor
+                                anchorId={tooltipId}
                                 className="text-light"
-                                style={{ backgroundColor: "var(--blue-color)" }}
+                                style={{
+                                  backgroundColor: "var(--blue-color)",
+                                  fontSize: "12px",
+                                  padding: "5px",
+                                }}
                                 content={
-                                  formatDate(new Date(attendance.tanggal)) +
-                                    attendance.notes || " | " + attendance.notes
+                                  formatTanggal(attendance.tanggal) +
+                                  " (" +
+                                  statusAttendance(attendance.status, 1) +
+                                  ")"
                                 }
                               />
                             </td>

@@ -1,6 +1,6 @@
 import React from "react";
 import { Tooltip } from "react-tooltip";
-import { bgColorAttendance, formatDateTime, formatMonthAndYear, statusAttendance } from "../../../utils/myFunctions";
+import { bgColorAttendance, formatMonthAndYear, formatTanggal, statusAttendance } from "../../../utils/myFunctions";
 import { AttendanceMonth } from "../../../interface/studentAttendance.interface";
 
 interface CardProps {
@@ -64,8 +64,6 @@ export const CardAbsensiDetailKelas: React.FC<CardProps> = ({ loading, data }) =
                 <div className="d-flex flex-wrap">
                   {dataMonth.records.map((dataRecord, index2) => {
                     const tooltipId = `tooltip-${index}-${index2}`;
-                    const timeAtt = formatDateTime(dataRecord.date).split(" ");
-                    const timeClean = `${timeAtt[0]} ${timeAtt[1]} ${timeAtt[2]}`;
                     return (
                       <>
                         <div
@@ -83,9 +81,9 @@ export const CardAbsensiDetailKelas: React.FC<CardProps> = ({ loading, data }) =
                         <Tooltip
                           anchorId={tooltipId}
                           className="text-light"
-                          style={{ backgroundColor: "var(--blue-color)" }}
+                          style={{ backgroundColor: "var(--blue-color)", fontSize: '12px', padding: '5px'}}
                           content={
-                            timeClean +
+                            formatTanggal(dataRecord.date) +
                             " (" +
                             statusAttendance(dataRecord.status, 1) +
                             ")"

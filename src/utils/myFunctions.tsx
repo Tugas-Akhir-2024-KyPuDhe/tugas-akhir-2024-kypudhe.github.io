@@ -1,7 +1,8 @@
 // import { FaCircle } from "react-icons/fa6";
-import moment from "moment";
+import moment from 'moment/min/moment-with-locales';
 import Swal from "sweetalert2";
 import "moment/locale/id";
+moment.locale("id");
 
 export const Toast = Swal.mixin({
   toast: true,
@@ -196,7 +197,13 @@ export const bgColorAttendance = (status: number): string => {
     ? "bg-danger"
     : "";
 };
+
 export const formatMonthAndYear = (dateString: string) => {
-  moment.locale("id");
   return moment(dateString, "YYYY-MM").locale("id").format("MMMM YYYY");
 };
+
+export const formatTanggal = (inputDate: string) => {
+  const tanggal = moment(inputDate);
+  const formattedDate = tanggal.format('dddd, DD MMM YYYY');
+  return formattedDate;
+}

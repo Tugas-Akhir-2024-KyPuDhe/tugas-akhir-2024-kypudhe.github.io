@@ -5,8 +5,8 @@ import useCookie from "react-use-cookie";
 import {
   bgColorAttendance,
   decodeToken,
-  formatDateTime,
   formatMonthAndYear,
+  formatTanggal,
   statusAttendance,
 } from "../../../utils/myFunctions";
 import StudentHistoryService from "../../../services/studentHistoryService";
@@ -145,8 +145,6 @@ export const Content: React.FC = () => {
                 <div className="d-flex flex-wrap">
                   {dataMonth.records.map((dataRecord, index2) => {
                     const tooltipId = `tooltip-${index}-${index2}`;
-                    const timeAtt = formatDateTime(dataRecord.date).split(" ");
-                    const timeClean = `${timeAtt[0]} ${timeAtt[1]} ${timeAtt[2]}`;
                     return (
                       <>
                         <div
@@ -164,9 +162,13 @@ export const Content: React.FC = () => {
                         <Tooltip
                           anchorId={tooltipId}
                           className="text-light"
-                          style={{ backgroundColor: "var(--blue-color)" }}
+                          style={{
+                            backgroundColor: "var(--blue-color)",
+                            fontSize: "12px",
+                            padding: "5px",
+                          }}
                           content={
-                            timeClean +
+                            formatTanggal(dataRecord.date) +
                             " (" +
                             statusAttendance(dataRecord.status, 1) +
                             ")"
