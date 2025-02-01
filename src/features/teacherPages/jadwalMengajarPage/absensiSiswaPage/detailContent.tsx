@@ -438,6 +438,7 @@ export const InputAbsensi: React.FC<AbsensiProps> = ({
                         <td className="text-center py-3">
                           <input
                             type="radio"
+                            disabled={data.status == 1}
                             name={`absensi-${siswa.id}`}
                             checked={siswa.status === 1}
                             onChange={() => handleStatusChange(index, 1)}
@@ -446,6 +447,7 @@ export const InputAbsensi: React.FC<AbsensiProps> = ({
                         <td className="text-center py-3">
                           <input
                             type="radio"
+                            disabled={data.status == 1}
                             name={`absensi-${siswa.id}`}
                             checked={siswa.status === 2}
                             onChange={() => handleStatusChange(index, 2)}
@@ -454,6 +456,7 @@ export const InputAbsensi: React.FC<AbsensiProps> = ({
                         <td className="text-center py-3 p">
                           <input
                             type="radio"
+                            disabled={data.status == 1}
                             name={`absensi-${siswa.id}`}
                             checked={siswa.status === 3}
                             onChange={() => handleStatusChange(index, 3)}
@@ -462,6 +465,7 @@ export const InputAbsensi: React.FC<AbsensiProps> = ({
                         <td className="text-center py-3">
                           <input
                             type="radio"
+                            disabled={data.status == 1}
                             name={`absensi-${siswa.id}`}
                             checked={siswa.status === 4}
                             onChange={() => handleStatusChange(index, 4)}
@@ -470,6 +474,7 @@ export const InputAbsensi: React.FC<AbsensiProps> = ({
                         <td className="">
                           <input
                             type="text"
+                            readOnly={data.status == 1}
                             value={siswa.notes || ""}
                             onChange={(e) =>
                               handleNoteChange(index, e.target.value)
