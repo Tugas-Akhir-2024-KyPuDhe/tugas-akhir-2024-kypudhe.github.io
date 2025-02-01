@@ -6,6 +6,11 @@ import {
   IStudentAttendanceInClass,
 } from "../../../../interface/studentAttendance.interface";
 import { Class } from "../../../../interface/studentClass.interface";
+import {
+  exportToPDFAbsensiHarian,
+  IReportAttendanceToday,
+} from "../../../../utils/printDocument/rekapAbsensi/PDFRekapAbsensiHarian";
+import { statusAttendance } from "../../../../utils/myFunctions";
 
 interface AbsensiProps {
   loading: boolean;
@@ -82,6 +87,17 @@ export const InputAbsensi: React.FC<AbsensiProps> = ({
     updateStatusAttendace(formattedData, selectedDate, kelas.id, data.id);
   };
 
+  const finalAttendance = async () => {
+    const formattedData = attendanceData.map((siswa) => ({
+      id: siswa.id,
+      nis: siswa.student.nis,
+      notes: siswa.notes || "",
+      status: siswa.status,
+    }));
+    await updateStatusAttendace(formattedData, selectedDate, kelas.id, data.id);
+    await updateFinalAttendance(kelas.id, data.id, selectedDate)
+  };
+
   const countStatus = (
     attendanceData: IStudentAttendanceInClass["detailAttendanceStudents"]
   ) => {
@@ -103,6 +119,26 @@ export const InputAbsensi: React.FC<AbsensiProps> = ({
   };
 
   const { hadir, izin, sakit, alpa } = countStatus(attendanceData);
+
+  const dataToExport: IReportAttendanceToday = {
+    created: data && data.createdBy,
+    kelas: kelas.name,
+    date: selectedDate,
+    total: data && data.detailAttendanceStudents.length,
+    hadir: hadir,
+    alpa: alpa,
+    izin: izin,
+    sakit: sakit,
+    siswaAbsen:
+      data &&
+      data.detailAttendanceStudents
+        .filter((s) => s.status !== 1)
+        .map((s) => ({
+          nama: s.student.name,
+          status: statusAttendance(s.status, 1),
+          alasan: s.notes || "-",
+        })),
+  };
 
   return (
     <>
@@ -149,7 +185,9 @@ export const InputAbsensi: React.FC<AbsensiProps> = ({
           </div>
           <div className="col-12">
             <div className="row mb-3">
-              <div className="col-3 col-md-2 fw-medium">Tanggal Pelaksanaan</div>
+              <div className="col-3 col-md-2 fw-medium">
+                Tanggal Pelaksanaan
+              </div>
               <div className="col-auto">:</div>
               <div className="col fw-medium">
                 <input
@@ -261,7 +299,6 @@ export const InputAbsensi: React.FC<AbsensiProps> = ({
           className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
           style={{ backgroundColor: "#fff", position: "relative" }}
         >
-          {/* Show the loader overlay when loading */}
           {loading && (
             <div
               style={{
@@ -299,6 +336,44 @@ export const InputAbsensi: React.FC<AbsensiProps> = ({
                 />
               </div>
             </div>
+            {
+              data.status == 1 && (
+                <div className="col-12">
+                  <div className="btn-group">
+                    <div className="dropdown">
+                      <button
+                        className="btn border-success text-success dropdown-toggle"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        Export Data
+                      </button>
+                      <ul className="dropdown-menu">
+                        {/* <li>
+                      <button
+                        className="dropdown-item"
+                        onClick={() => exportToExcelDaftarMapel(data, "---")}
+                      >
+                        Excel
+                      </button>
+                    </li> */}
+                        <li>
+                          <button
+                            onClick={() =>
+                              exportToPDFAbsensiHarian(dataToExport, "---")
+                            }
+                            className="dropdown-item"
+                          >
+                            PDF
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              )
+            }
             <div className="col-12">
               <div className="col-12 table-responsive">
                 <table className="table table-striped">
@@ -421,7 +496,7 @@ export const InputAbsensi: React.FC<AbsensiProps> = ({
                   <button
                     type="button"
                     onClick={() =>
-                      updateFinalAttendance(kelas.id, data.id, selectedDate)
+                      finalAttendance()
                     }
                     className="btn btn-success border-0 bg-blue py-2"
                   >
