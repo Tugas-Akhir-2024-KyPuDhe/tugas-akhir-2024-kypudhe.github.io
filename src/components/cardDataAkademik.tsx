@@ -1,4 +1,5 @@
 import React from "react";
+import { convertStatus } from "../utils/myFunctions";
 
 interface DataState {
   kelas: string;
@@ -43,7 +44,7 @@ export const CardDataAkademik: React.FC<DataState> = ({
         </div>
         <div className="mb-3">
           <label className="fw-bold">Status Siswa</label>
-          <div className="fw-medium">{studentStatus}</div>
+          <div className="fw-medium">{convertStatus(studentStatus)}</div>
         </div>
       </div>
     </>

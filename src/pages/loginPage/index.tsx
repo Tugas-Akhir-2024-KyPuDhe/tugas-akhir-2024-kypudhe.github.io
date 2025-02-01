@@ -169,7 +169,7 @@ export const LoginPage: React.FC = () => {
                 </div>
                 <button
                   type="submit"
-                  className="btn btn-primary bg-blue w-100 py-2 fw-bold"
+                  className="btn btn-primary bg-blue border-0 w-100 py-2 fw-bold"
                   disabled={loadingFormLogin}
                 >
                   {loadingFormLogin ? (

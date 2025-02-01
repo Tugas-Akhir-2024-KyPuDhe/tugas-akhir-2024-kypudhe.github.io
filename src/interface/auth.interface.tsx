@@ -2,6 +2,7 @@ import { Fajusek } from "./fajusek.interfase";
 import { Media } from "./media.interface";
 import { ParentOfStudent } from "./student.interface";
 import { Class } from "./studentClass.interface";
+import { StudentHistory } from "./studentHistory.interface";
 
 export interface UserDetails {
   // === GENERAL
@@ -32,6 +33,7 @@ export interface UserDetails {
   nisn?: number;
   ParentOfStudent?: ParentOfStudent[];
   class?: Class;
+  HistoryClass?: StudentHistory[];
   Major?: Fajusek;
 
   // === SENSITIF

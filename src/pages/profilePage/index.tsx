@@ -237,6 +237,9 @@ export const ProfilePage = () => {
                 allCourse={allCourse}
                 //STUDENT
                 nis={profileDetail.details[0].nis || 0}
+                currentClass={profileDetail.details[0].HistoryClass![0]?.currentClass.name || ""}
+                currentClassUuid={profileDetail.details[0].HistoryClass![0]?.uuid || ""}
+                currentHoomRoomTeacher={profileDetail.details[0].HistoryClass![0]?.currentClass.homeRoomTeacher.name || ""}
                 nisn={profileDetail.details[0].nisn || 0}
               />
               {(userLoginCookie.role === "STUDENT" ||
@@ -299,7 +302,7 @@ export const ProfilePage = () => {
                             .toString() || "-"
                         }
                         studentStatus={
-                          profileDetail?.details?.[0]?.status || "-"
+                         profileDetail?.details?.[0]?.status || "-"
                         }
                       />
                     )}

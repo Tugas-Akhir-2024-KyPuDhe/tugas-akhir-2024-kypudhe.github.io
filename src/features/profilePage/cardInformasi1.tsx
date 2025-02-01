@@ -2,6 +2,7 @@ import React from "react";
 import useCookie from "react-use-cookie";
 import { formatDate } from "../../utils/myFunctions";
 import { Course } from "../../interface/course.interface";
+import { useNavigate } from "react-router-dom";
 
 interface dataInformasi {
   // STAFF OR TEACHER
@@ -13,6 +14,9 @@ interface dataInformasi {
   allCourse: Course[];
   // STUDENT
   nis: number;
+  currentClass: string;
+  currentClassUuid: string;
+  currentHoomRoomTeacher: string;
   nisn: number;
 }
 
@@ -24,10 +28,14 @@ export const CardInformasi1: React.FC<dataInformasi> = ({
   myCourse,
   allCourse,
   nis,
+  currentClass,
+  currentClassUuid,
+  currentHoomRoomTeacher,
   nisn,
 }) => {
   const [cookieLogin] = useCookie("userLoginCookie", "");
   const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
+  const navigate = useNavigate()
 
   return (
     <>
@@ -68,16 +76,16 @@ export const CardInformasi1: React.FC<dataInformasi> = ({
                   </div>
                   <div className="col-7 col-lg-9 mb-3">
                     <label className="fw-bold text-dark-soft">Kelas</label>
-                    <div>XII-RPL-1</div>
+                    <div>{currentClass}</div>
                   </div>
                   <div className="col-5 col-lg-3 m-auto">
-                    <button className="btn btn-primary border-0 bg-blue text-light btn-sm rounded-5 w-100">
+                    <button onClick={()=> navigate(`/kelas/detail/${currentClassUuid}`)} className="btn btn-primary border-0 bg-blue text-light btn-sm rounded-5 w-100">
                       Lihat
                     </button>
                   </div>
                   <div className="col-12 mb-3">
                     <label className="fw-bold text-dark-soft">Wali Kelas</label>
-                    <div>Sri Mulyani</div>
+                    <div>{currentHoomRoomTeacher}</div>
                   </div>
                 </div>
               </div>
