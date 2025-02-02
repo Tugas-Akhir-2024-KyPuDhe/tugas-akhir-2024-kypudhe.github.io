@@ -19,25 +19,39 @@ import { CardInformasi } from "../../features/homePage/components/cardInformasi"
 import ConfigSchoolService from "../../services/sekolahConfigService";
 import { Statistik } from "../../interface/school.interface";
 import StudentService from "../../services/studentService";
-import { decodeToken, getDayMonth, getDayNow } from "../../utils/myFunctions";
+import {
+  bgColorAttendance,
+  decodeToken,
+  formatMonthAndYear,
+  formatTanggal,
+  getDayMonth,
+  getDayNow,
+  statusAttendance,
+} from "../../utils/myFunctions";
 import useCookie from "react-use-cookie";
 import CourseInClassService from "../../services/courseInClassService";
 import { CourseInClass } from "../../interface/courseInClass.interface";
 import weekend from "./../../../src/assets/images/weekend.svg";
+import { Tooltip } from "react-tooltip";
+import { AttendanceMonth } from "../../interface/studentAttendance.interface";
+import StudentAttendanceService from "../../services/studentAttendanceService";
 
 export const HomePage = () => {
   const articleService = ArtikelService();
   const schoolService = ConfigSchoolService();
   const studentService = StudentService();
   const courseInClass = CourseInClassService();
+  const studentAttendanceService = StudentAttendanceService();
 
   const [cookieLogin] = useCookie("userLoginCookie");
   const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
   const [dataStatistik, setDataStatistik] = useState<Statistik>();
   const dtoken = decodeToken(userLoginCookie.token);
 
+  const [loading, setLoading] = useState<boolean>(false);
   const [dataMapel, setDataMapel] = useState<CourseInClass[]>([]);
   const [dataArtikel, setDataArtikel] = useState<Artikel[]>([]);
+  const [dataAttendance, setDataAttendance] = useState<AttendanceMonth[]>([]);
 
   const getAllArtikel = async () => {
     const response = await articleService.getAllArtikels("1", 8);
@@ -52,8 +66,13 @@ export const HomePage = () => {
   const getStudent = async () => {
     if (dtoken.nis) {
       try {
+        setLoading(true);
         const response = await studentService.getStudentByNis(dtoken.nis);
         if (response.status === 200) {
+          await getStudentDetailAttendance(
+            dtoken.nis,
+            parseInt(response.data.HistoryClass[0].currentClassId)
+          );
           if (getDayNow() === "Minggu") return;
           const resCourse = await courseInClass.getCourseinClass(
             parseInt(response.data.HistoryClass[0].currentClassId),
@@ -63,7 +82,20 @@ export const HomePage = () => {
         }
       } catch (error) {
         console.error(error);
+      } finally {
+        setLoading(false);
       }
+    }
+  };
+
+  const getStudentDetailAttendance = async (nis: string, classId: number) => {
+    try {
+      const response =
+        await studentAttendanceService.getStudentDetailAttendance(nis, classId);
+      setDataAttendance(response.data.attendances);
+      console.log(response);
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -115,12 +147,20 @@ export const HomePage = () => {
       {userLoginCookie.role === "STUDENT" && (
         <>
           <div className="m-1 m-lg-4 m-md-4 my-4">
-            <div className="fw-bold fs-5 text-dark-soft mb-3">
-              Mata Pelajaran <span className="text-blue">Hari ini</span>
+            <div className="d-flex justify-content-between mb-3">
+              <span className="fw-bold fs-5 text-dark-soft">
+                Mata Pelajaran <span className="text-blue">Hari ini</span>
+              </span>
+              <Link
+                to="/mata-pelajaran"
+                className="fw-medium text-blue text-decoration-none"
+              >
+                Lainnya <FaCaretRight />
+              </Link>
             </div>
-            <div className="container-fluid px-0">
+            <div className="container-fluid px-0" style={{ minHeight: "20vh" }}>
               <div className="row">
-                {getDayNow() == "Minggu" && (
+                {getDayNow() === "Minggu" ? ( // Jika hari ini Minggu
                   <div className="text-center">
                     <img
                       src={weekend}
@@ -132,14 +172,22 @@ export const HomePage = () => {
                       Happy Weekend
                     </div>
                   </div>
-                )}
-                {dataMapel &&
+                ) : loading ? ( // Jika sedang loading
+                  <div className="text-center">
+                    <div
+                      className="spinner-border text-primary"
+                      role="status"
+                    ></div>
+                  </div>
+                ) : (
+                  // Jika tidak Minggu dan tidak loading
+                  dataMapel.length > 0 ?
                   dataMapel.map((dt) => (
                     <div
                       className="col-12 col-lg-4 col-md-3 mb-3"
                       key={dt.courseDetail.name}
                     >
-                      <div className="card card-body">
+                      <div className="card card-body border-0 shadow-sm">
                         <span
                           className={`badge mb-2 text-bg-info bg-blue text-light`}
                           style={{ maxWidth: "fit-content" }}
@@ -161,58 +209,80 @@ export const HomePage = () => {
                         </div>
                       </div>
                     </div>
-                  ))}
+                  )): <p className="text-center">Mata Pelajaran masih kosong!</p>
+                )}
               </div>
             </div>
           </div>
           <div className="m-1 m-lg-4 m-md-4 my-4">
-            <div className="fw-bold fs-5 text-dark-soft mb-3">
-              Absensi Bulan <span className="text-blue">{getDayMonth()}</span>
+            <div className="d-flex justify-content-between mb-3">
+              <span className="fw-bold fs-5 text-dark-soft">
+                Absensi Bulan <span className="text-blue">{getDayMonth()}</span>
+              </span>
+              <Link
+                to="/absensi"
+                className="fw-medium text-blue text-decoration-none"
+              >
+                Lainnya <FaCaretRight />
+              </Link>
             </div>
-            <div className="container-fluid px-0">
-              <div className="row">
-                {getDayNow() == "Minggu" && (
+            <div className="container-fluid px-0" style={{ minHeight: "20vh" }}>
+              <div className="row g-3">
+                {loading ? (
                   <div className="text-center">
-                    <img
-                      src={weekend}
-                      alt=""
-                      className="img-fluid"
-                      style={{ width: "400px" }}
-                    />
-                    <div className="text-blue fw-bold mt-3 fs-5">
-                      Happy Weekend
-                    </div>
-                  </div>
-                )}
-                {dataMapel &&
-                  dataMapel.map((dt) => (
                     <div
-                      className="col-12 col-lg-4 col-md-3 mb-3"
-                      key={dt.courseDetail.name}
-                    >
-                      <div className="card card-body">
-                        <span
-                          className={`badge mb-2 text-bg-info bg-blue text-light`}
-                          style={{ maxWidth: "fit-content" }}
-                        >
-                          {dt.day}
-                        </span>
-                        <h4>{dt.courseDetail.name}</h4>
-                        <h6>Guru : {dt.teacher.name}</h6>
-                        <hr />
-                        <div className="d-flex gap-3">
-                          <div>
-                            <h6>Jam Mulai</h6>
-                            <p>{dt.timeStart}</p>
-                          </div>
-                          <div>
-                            <h6>Jam Selesai</h6>
-                            <p>{dt.timeEnd}</p>
-                          </div>
-                        </div>
+                      className="spinner-border text-primary"
+                      role="status"
+                    ></div>
+                  </div>
+                ) : dataAttendance.length > 0 ? (
+                  <div className="col-12">
+                    <div className="card card-body border-0 shadow-sm">
+                      <div className="fw-medium">
+                        {formatMonthAndYear(dataAttendance[0].month)}
+                      </div>
+                      <hr />
+                      <div className="d-flex flex-wrap">
+                        {dataAttendance[0].records.map((dataRecord, index2) => {
+                          const tooltipId = `tooltip-${index2}`;
+                          return (
+                            <>
+                              <div
+                                key={index2}
+                                style={{ width: 50 }}
+                                id={tooltipId}
+                                className={`
+                            py-1 px-2 text-center text-light fw-medium border border-light ${bgColorAttendance(
+                              dataRecord.status
+                            )} 
+                          `}
+                              >
+                                {dataRecord.date.split("-")[2]}
+                              </div>
+                              <Tooltip
+                                anchorId={tooltipId}
+                                className="text-light"
+                                style={{
+                                  backgroundColor: "var(--blue-color)",
+                                  fontSize: "12px",
+                                  padding: "5px",
+                                }}
+                                content={
+                                  formatTanggal(dataRecord.date) +
+                                  " (" +
+                                  statusAttendance(dataRecord.status, 1) +
+                                  ")"
+                                }
+                              />
+                            </>
+                          );
+                        })}
                       </div>
                     </div>
-                  ))}
+                  </div>
+                ) : (
+                  <p className="text-center">Absensi masih kosong!</p>
+                )}
               </div>
             </div>
           </div>
