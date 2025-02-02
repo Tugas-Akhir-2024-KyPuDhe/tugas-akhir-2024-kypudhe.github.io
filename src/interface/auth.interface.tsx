@@ -29,7 +29,7 @@ export interface UserDetails {
   endDate?: string | null;
   mapel?: string[];
   // === STUDENT
-  nis?: number;
+  nis?: string;
   nisn?: number;
   ParentOfStudent?: ParentOfStudent[];
   class?: Class;

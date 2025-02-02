@@ -30,6 +30,7 @@ export interface StudentHistory {
   id: number;
   uuid: string;
   studentId: string;
+  nis: string;
   oldClassId: string;
   currentClassId: string;
   academicYear: string;

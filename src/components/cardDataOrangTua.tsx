@@ -7,7 +7,7 @@ interface DataState {
   onSaveUpdate?: (nis: number, data: FormParentOfStudent) => void;
   statusUpdateData?: boolean;
   loadingUpdateData?: boolean;
-  nis: number;
+  nis: string;
   fatherName: string;
   motherName: string;
   phone: string;

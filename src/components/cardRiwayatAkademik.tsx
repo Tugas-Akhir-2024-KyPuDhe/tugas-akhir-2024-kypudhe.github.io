@@ -1,16 +1,41 @@
 import React, { useState } from "react";
 import { FaEye } from "react-icons/fa6";
 import { StudentHistory } from "../interface/studentHistory.interface";
+import { AttendanceMonth } from "../interface/studentAttendance.interface";
+import {
+  bgColorAttendance,
+  formatMonthAndYear,
+  formatTanggal,
+  statusAttendance,
+} from "../utils/myFunctions";
+import { Tooltip } from "react-tooltip";
+import StudentAttendanceService from "../services/studentAttendanceService";
 
 interface GradeProps {
+  nis: string;
   data: StudentHistory[];
 }
 
-export const CardRiwayatAkademik: React.FC<GradeProps> = ({ data }) => {
+export const CardRiwayatAkademik: React.FC<GradeProps> = ({ nis, data }) => {
   const [selectedClass, setSelectedClass] = useState<StudentHistory>();
+  const [dataAttendance, setDataAttendance] = useState<AttendanceMonth[]>([]);
 
-  const handleSelected = (dataClass: StudentHistory) => {
+  const studentAttendanceService = StudentAttendanceService();
+
+  const getStudentDetailAttendance = async (classId: number) => {
+    try {
+      const response =
+        await studentAttendanceService.getStudentDetailAttendance(nis, classId);
+      setDataAttendance(response.data.attendances);
+      console.log('asd',response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleSelected = async (dataClass: StudentHistory) => {
     setSelectedClass(dataClass);
+    await getStudentDetailAttendance(parseInt(dataClass.currentClassId));
   };
 
   return (
@@ -52,7 +77,10 @@ export const CardRiwayatAkademik: React.FC<GradeProps> = ({ data }) => {
                       <FaEye className="me-2 fs-5" /> Detail
                     </button>
 
-                    <ModalDetail dataClass={selectedClass! && selectedClass!} />
+                    <ModalDetail
+                      dataClass={selectedClass! && selectedClass!}
+                      dataAttendance={dataAttendance! && dataAttendance}
+                    />
                   </span>
                 </li>
               </>
@@ -66,10 +94,24 @@ export const CardRiwayatAkademik: React.FC<GradeProps> = ({ data }) => {
 
 interface ModalProps {
   dataClass: StudentHistory;
+  dataAttendance: AttendanceMonth[];
 }
 
-export const ModalDetail: React.FC<ModalProps> = ({ dataClass }) => {
+const subMenuItemsHistory = [
+  { label: "Nilai Siswa", key: "nilai" },
+  { label: "Absensi", key: "absensi" },
+];
+
+export const ModalDetail: React.FC<ModalProps> = ({
+  dataClass,
+  dataAttendance,
+}) => {
   const [selectedDescription, setSelectedDescription] = useState("");
+
+  const [activeMenu, setActiveMenu] = useState(subMenuItemsHistory[0]?.key);
+  const handleMenuClick = (menu: string) => {
+    setActiveMenu(menu);
+  };
   return (
     <>
       <div
@@ -132,165 +174,225 @@ export const ModalDetail: React.FC<ModalProps> = ({ dataClass }) => {
                     </div>
                   </div>
                 </div>
-                <div className="col-12">
-                  <div className="table-responsive">
-                    <table className="table text-center">
-                      <thead>
-                        <tr>
-                          <th
-                            className="py-3 bg-blue text-light text-center"
-                            scope="col"
-                            style={{ width: "50px", fontSize: "0.9rem" }}
-                          >
-                            No
-                          </th>
-                          <th
-                            className="border-start py-3 bg-blue text-light"
-                            scope="col"
-                            style={{ fontSize: "0.9rem" }}
-                          >
-                            Mata Pelajaran
-                          </th>
-                          <th
-                            className="border-start py-3 bg-blue text-light"
-                            scope="col"
-                            style={{ fontSize: "0.9rem" }}
-                          >
-                            Guru Pengajar
-                          </th>
-                          <th
-                            className="border-start text-center py-3 bg-blue text-light"
-                            scope="col"
-                            style={{ width: "70px", fontSize: "0.9rem" }}
-                          >
-                            Tugas
-                          </th>
-                          <th
-                            className="border-start text-center py-3 bg-blue text-light text-center"
-                            scope="col"
-                            style={{ width: "70px", fontSize: "0.9rem" }}
-                          >
-                            UH
-                          </th>
-                          <th
-                            className="border-start text-center py-3 bg-blue text-light text-center"
-                            scope="col"
-                            style={{ width: "70px", fontSize: "0.9rem" }}
-                          >
-                            PTS
-                          </th>
-                          <th
-                            className="border-start text-center py-3 bg-blue text-light text-center"
-                            scope="col"
-                            style={{ width: "70px", fontSize: "0.9rem" }}
-                          >
-                            PAS
-                          </th>
-                          <th
-                            className="border-start text-center py-3 bg-blue text-light text-center"
-                            scope="col"
-                            style={{ width: "70px", fontSize: "0.9rem" }}
-                          >
-                            Portofolio
-                          </th>
-                          <th
-                            className="border-start text-center py-3 bg-blue text-light text-center"
-                            scope="col"
-                            style={{ width: "70px", fontSize: "0.9rem" }}
-                          >
-                            Proyek
-                          </th>
-                          <th
-                            className="border-start py-3 bg-blue text-light text-center"
-                            scope="col"
-                            style={{ fontSize: "0.9rem" }}
-                          >
-                            KET
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {(dataClass &&
-                          dataClass.currentClass.CourseInClass?.map(
-                            (mapel, index) => (
-                              <tr key={index}>
-                                <td className="py-3 text-center" scope="row">
-                                  {index + 1}
-                                </td>
-                                <td className="py-3 text-start">
-                                  {mapel.courseDetail.name}
-                                </td>
-                                <td className="py-3 text-start">
-                                  {mapel.teacher.name}
-                                </td>
-                                <td className="py-3 text-center">
-                                  {mapel.courseDetail.StudentsGrades![0]
-                                    ? mapel.courseDetail.StudentsGrades![0]
-                                        .task || "-"
-                                    : "-"}
-                                </td>
-                                <td className="py-3 text-center">
-                                  {mapel.courseDetail.StudentsGrades![0]
-                                    ? mapel.courseDetail.StudentsGrades![0]
-                                        .UH || "-"
-                                    : "-"}
-                                </td>
-                                <td className="py-3 text-center">
-                                  {mapel.courseDetail.StudentsGrades![0]
-                                    ? mapel.courseDetail.StudentsGrades![0]
-                                        .PTS || "-"
-                                    : "-"}
-                                </td>
-                                <td className="py-3 text-center">
-                                  {mapel.courseDetail.StudentsGrades![0]
-                                    ? mapel.courseDetail.StudentsGrades![0]
-                                        .PAS || "-"
-                                    : "-"}
-                                </td>
-                                <td className="py-3 text-center">
-                                  {mapel.courseDetail.StudentsGrades![0]
-                                    ? mapel.courseDetail.StudentsGrades![0]
-                                        .portofolio || "-"
-                                    : "-"}
-                                </td>
-                                <td className="py-3 text-center">
-                                  {mapel.courseDetail.StudentsGrades![0]
-                                    ? mapel.courseDetail.StudentsGrades![0]
-                                        .proyek || "-"
-                                    : "-"}
-                                </td>
-                                <td className="py-3 text-center">
-                                  <button
-                                    className="btn btn-link"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#modalDeskripsi"
-                                    onClick={() =>
-                                      setSelectedDescription(
-                                        mapel.courseDetail.StudentsGrades![0]
-                                          ? mapel.courseDetail
-                                              .StudentsGrades![0].description ||
-                                              "-"
-                                          : "-"
-                                      )
-                                    }
-                                    style={{ fontSize: "0.9rem" }}
-                                  >
-                                    Lihat
-                                  </button>
-                                </td>
-                              </tr>
-                            )
-                          )) || (
+                <NavSubMenu
+                  menuItems={subMenuItemsHistory}
+                  activeMenu={activeMenu}
+                  onMenuClick={handleMenuClick}
+                />
+                {activeMenu === "nilai" ? (
+                  <div className="col-12">
+                    <div className="table-responsive">
+                      <table className="table text-center">
+                        <thead>
                           <tr>
-                            <td colSpan={10} className="py-3 text-center">
-                              Tidak ada data mata pelajaran untuk kelas ini.
-                            </td>
+                            <th
+                              className="py-3 bg-blue text-light text-center"
+                              scope="col"
+                              style={{ width: "50px", fontSize: "0.9rem" }}
+                            >
+                              No
+                            </th>
+                            <th
+                              className="border-start py-3 bg-blue text-light"
+                              scope="col"
+                              style={{ fontSize: "0.9rem" }}
+                            >
+                              Mata Pelajaran
+                            </th>
+                            <th
+                              className="border-start py-3 bg-blue text-light"
+                              scope="col"
+                              style={{ fontSize: "0.9rem" }}
+                            >
+                              Guru Pengajar
+                            </th>
+                            <th
+                              className="border-start text-center py-3 bg-blue text-light"
+                              scope="col"
+                              style={{ width: "70px", fontSize: "0.9rem" }}
+                            >
+                              Tugas
+                            </th>
+                            <th
+                              className="border-start text-center py-3 bg-blue text-light text-center"
+                              scope="col"
+                              style={{ width: "70px", fontSize: "0.9rem" }}
+                            >
+                              UH
+                            </th>
+                            <th
+                              className="border-start text-center py-3 bg-blue text-light text-center"
+                              scope="col"
+                              style={{ width: "70px", fontSize: "0.9rem" }}
+                            >
+                              PTS
+                            </th>
+                            <th
+                              className="border-start text-center py-3 bg-blue text-light text-center"
+                              scope="col"
+                              style={{ width: "70px", fontSize: "0.9rem" }}
+                            >
+                              PAS
+                            </th>
+                            <th
+                              className="border-start text-center py-3 bg-blue text-light text-center"
+                              scope="col"
+                              style={{ width: "70px", fontSize: "0.9rem" }}
+                            >
+                              Portofolio
+                            </th>
+                            <th
+                              className="border-start text-center py-3 bg-blue text-light text-center"
+                              scope="col"
+                              style={{ width: "70px", fontSize: "0.9rem" }}
+                            >
+                              Proyek
+                            </th>
+                            <th
+                              className="border-start py-3 bg-blue text-light text-center"
+                              scope="col"
+                              style={{ fontSize: "0.9rem" }}
+                            >
+                              KET
+                            </th>
                           </tr>
-                        )}
-                      </tbody>
-                    </table>
+                        </thead>
+                        <tbody>
+                          {(dataClass &&
+                            dataClass.currentClass.CourseInClass?.map(
+                              (mapel, index) => (
+                                <tr key={index}>
+                                  <td className="py-3 text-center" scope="row">
+                                    {index + 1}
+                                  </td>
+                                  <td className="py-3 text-start">
+                                    {mapel.courseDetail.name}
+                                  </td>
+                                  <td className="py-3 text-start">
+                                    {mapel.teacher.name}
+                                  </td>
+                                  <td className="py-3 text-center">
+                                    {mapel.courseDetail.StudentsGrades![0]
+                                      ? mapel.courseDetail.StudentsGrades![0]
+                                          .task || "-"
+                                      : "-"}
+                                  </td>
+                                  <td className="py-3 text-center">
+                                    {mapel.courseDetail.StudentsGrades![0]
+                                      ? mapel.courseDetail.StudentsGrades![0]
+                                          .UH || "-"
+                                      : "-"}
+                                  </td>
+                                  <td className="py-3 text-center">
+                                    {mapel.courseDetail.StudentsGrades![0]
+                                      ? mapel.courseDetail.StudentsGrades![0]
+                                          .PTS || "-"
+                                      : "-"}
+                                  </td>
+                                  <td className="py-3 text-center">
+                                    {mapel.courseDetail.StudentsGrades![0]
+                                      ? mapel.courseDetail.StudentsGrades![0]
+                                          .PAS || "-"
+                                      : "-"}
+                                  </td>
+                                  <td className="py-3 text-center">
+                                    {mapel.courseDetail.StudentsGrades![0]
+                                      ? mapel.courseDetail.StudentsGrades![0]
+                                          .portofolio || "-"
+                                      : "-"}
+                                  </td>
+                                  <td className="py-3 text-center">
+                                    {mapel.courseDetail.StudentsGrades![0]
+                                      ? mapel.courseDetail.StudentsGrades![0]
+                                          .proyek || "-"
+                                      : "-"}
+                                  </td>
+                                  <td className="py-3 text-center">
+                                    <button
+                                      className="btn btn-link"
+                                      data-bs-toggle="modal"
+                                      data-bs-target="#modalDeskripsi"
+                                      onClick={() =>
+                                        setSelectedDescription(
+                                          mapel.courseDetail.StudentsGrades![0]
+                                            ? mapel.courseDetail
+                                                .StudentsGrades![0]
+                                                .description || "-"
+                                            : "-"
+                                        )
+                                      }
+                                      style={{ fontSize: "0.9rem" }}
+                                    >
+                                      Lihat
+                                    </button>
+                                  </td>
+                                </tr>
+                              )
+                            )) || (
+                            <tr>
+                              <td colSpan={10} className="py-3 text-center">
+                                Tidak ada data mata pelajaran untuk kelas ini.
+                              </td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <>
+                    {dataAttendance.length > 0 ? (
+                      dataAttendance.map((dataMonth, index) => (
+                        <div key={index} className="col-12 col-md-4">
+                          <div className="card card-body">
+                            <div className="fw-medium">
+                              {formatMonthAndYear(dataMonth.month)}
+                            </div>
+                            <hr />
+                            <div className="d-flex flex-wrap">
+                              {dataMonth.records.map((dataRecord, index2) => {
+                                const tooltipId = `tooltip-${index}-${index2}`;
+                                return (
+                                  <>
+                                    <div
+                                      key={index2}
+                                      style={{ width: 50 }}
+                                      id={tooltipId}
+                                      className={`
+                            py-1 px-2 text-center text-light fw-medium border border-light ${bgColorAttendance(
+                              dataRecord.status
+                            )} 
+                          `}
+                                    >
+                                      {dataRecord.date.split("-")[2]}
+                                    </div>
+                                    <Tooltip
+                                      anchorId={tooltipId}
+                                      className="text-light"
+                                      style={{
+                                        backgroundColor: "var(--blue-color)",
+                                        fontSize: "12px",
+                                        padding: "5px",
+                                      }}
+                                      content={
+                                        formatTanggal(dataRecord.date) +
+                                        " (" +
+                                        statusAttendance(dataRecord.status, 1) +
+                                        ")"
+                                      }
+                                    />
+                                  </>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-center">Absensi masih kosong!</p>
+                    )}
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -321,5 +423,43 @@ export const ModalDetail: React.FC<ModalProps> = ({ dataClass }) => {
         </div>
       </div>
     </>
+  );
+};
+
+interface MenuItem {
+  label: string;
+  key: string;
+}
+
+interface NavMenuProps {
+  menuItems: MenuItem[];
+  activeMenu: string;
+  onMenuClick: (key: string) => void;
+}
+
+export const NavSubMenu: React.FC<NavMenuProps> = ({
+  menuItems,
+  activeMenu,
+  onMenuClick,
+}) => {
+  return (
+    <div className="px-3 rounded bg-white">
+      <ul className="nav nav-underline">
+        {menuItems.map((item) => (
+          <li className="nav-item" style={{ cursor: "pointer" }} key={item.key}>
+            <a
+              className={`nav-link my-2 ${
+                activeMenu === item.key
+                  ? "active text-blue fw-bold"
+                  : "text-dark"
+              }`}
+              onClick={() => onMenuClick(item.key)}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 };

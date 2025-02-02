@@ -236,7 +236,7 @@ export const ProfilePage = () => {
                 myCourse={profileDetail.details[0].mapel || []}
                 allCourse={allCourse}
                 //STUDENT
-                nis={profileDetail.details[0].nis || 0}
+                nis={profileDetail.details[0].nis || ""}
                 currentClass={profileDetail.details[0].HistoryClass![0]?.currentClass.name || ""}
                 currentClassUuid={profileDetail.details[0].HistoryClass![0]?.uuid || ""}
                 currentHoomRoomTeacher={profileDetail.details[0].HistoryClass![0]?.currentClass.homeRoomTeacher.name || ""}
@@ -312,7 +312,7 @@ export const ProfilePage = () => {
                         onSaveUpdate={handleSaveUpdateParent}
                         statusUpdateData={statusUpdateDataParent}
                         loadingUpdateData={loadingUpdateDataParent}
-                        nis={profileDetail?.details?.[0]?.nis || 0}
+                        nis={profileDetail?.details?.[0]?.nis || ""}
                         fatherName={
                           profileDetail?.details?.[0]?.ParentOfStudent?.[0]
                             ?.fatherName || "-"
@@ -336,7 +336,7 @@ export const ProfilePage = () => {
                       />
                     )}
                     {activeMenu === "riwayat-akademik" && (
-                      <CardRiwayatAkademik data={DataStudentHistory} />
+                      <CardRiwayatAkademik nis={profileDetail?.details[0].nis || ""} data={DataStudentHistory} />
                     )}
 
                     {/* === TEACHER */}

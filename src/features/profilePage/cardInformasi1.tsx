@@ -13,7 +13,7 @@ interface dataInformasi {
   myCourse: string[];
   allCourse: Course[];
   // STUDENT
-  nis: number;
+  nis: string;
   currentClass: string;
   currentClassUuid: string;
   currentHoomRoomTeacher: string;

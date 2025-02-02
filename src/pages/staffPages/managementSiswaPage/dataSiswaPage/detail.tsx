@@ -206,7 +206,7 @@ export const DetailSiswaMangementSiswa: React.FC = () => {
           />
         ) : activeMenu === "data-orang-tua" ? (
           <CardDataOrangTua
-            nis={parseInt(data!.nis)}
+            nis={data!.nis}
             fatherName={
               (data?.ParentOfStudent[0] &&
                 data?.ParentOfStudent[0].fatherName) ||
@@ -233,7 +233,7 @@ export const DetailSiswaMangementSiswa: React.FC = () => {
             }
           />
         ) : activeMenu === "riwayat-akademik" ? (
-          <CardRiwayatAkademik data={DataStudentHistory} />
+          <CardRiwayatAkademik nis={data!.nis} data={DataStudentHistory} />
         ) : (
           <div>Halaman tidak ditemukan</div>
         )}
