@@ -237,9 +237,9 @@ export const ProfilePage = () => {
                 allCourse={allCourse}
                 //STUDENT
                 nis={profileDetail.details[0].nis || ""}
-                currentClass={profileDetail.details[0].HistoryClass![0]?.currentClass.name || ""}
-                currentClassUuid={profileDetail.details[0].HistoryClass![0]?.uuid || ""}
-                currentHoomRoomTeacher={profileDetail.details[0].HistoryClass![0]?.currentClass.homeRoomTeacher.name || ""}
+                currentClass={profileDetail.details[0].HistoryClass && profileDetail.details[0].HistoryClass![0].currentClass.name || ""}
+                currentClassUuid={profileDetail.details[0].HistoryClass && profileDetail.details[0].HistoryClass![0].uuid || ""}
+                currentHoomRoomTeacher={profileDetail.details[0].HistoryClass && profileDetail.details[0].HistoryClass![0].currentClass.homeRoomTeacher.name || ""}
                 nisn={profileDetail.details[0].nisn || 0}
               />
               {(userLoginCookie.role === "STUDENT" ||
