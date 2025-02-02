@@ -142,7 +142,7 @@ export const ProfilePage = () => {
   };
 
   const handleSaveUpdateParent = async (
-    nis: number,
+    nis: string,
     updatedData: FormParentOfStudent
   ) => {
     try {

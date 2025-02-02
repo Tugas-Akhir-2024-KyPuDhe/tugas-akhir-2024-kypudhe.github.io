@@ -367,7 +367,7 @@ export const CardDaftarSiswaKelas: React.FC<CardProps> = ({
                       />
                     ) : activeMenu === "data-orang-tua" ? (
                       <CardDataOrangTua
-                        nis={parseInt(selectedStudent!.nis)}
+                        nis={selectedStudent!.nis}
                         fatherName={
                           (selectedStudent?.ParentOfStudent[0] &&
                             selectedStudent?.ParentOfStudent[0].fatherName) ||

@@ -209,7 +209,7 @@ const AuthService = () => {
   };
 
   const updateDataParent = async (
-    nis: number,
+    nis: string,
     data: FormParentOfStudent
   ): Promise<ResponseUpdatePhotoUser> => {
     try {

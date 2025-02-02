@@ -4,7 +4,7 @@ import { FormParentOfStudent } from "../interface/student.interface";
 
 interface DataState {
   handleUpdateAccess?: () => void;
-  onSaveUpdate?: (nis: number, data: FormParentOfStudent) => void;
+  onSaveUpdate?: (nis: string, data: FormParentOfStudent) => void;
   statusUpdateData?: boolean;
   loadingUpdateData?: boolean;
   nis: string;
