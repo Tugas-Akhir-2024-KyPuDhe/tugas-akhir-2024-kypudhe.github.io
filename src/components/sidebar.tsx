@@ -15,7 +15,7 @@ import {
   menuClasses,
   sidebarClasses,
 } from "react-pro-sidebar";
-import { IoGrid } from "react-icons/io5";
+import { IoGrid, IoSettingsSharp } from "react-icons/io5";
 import { FaUserCircle } from "react-icons/fa";
 import AuthService from "../services/authService";
 import useCookie from "react-use-cookie";
@@ -709,35 +709,6 @@ export const ListMenu = () => {
               Banner
             </MenuItem>
             <MenuItem
-              onClick={() => handleMenuClick("/content-web/sekolah")}
-              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
-              style={{
-                position: "relative",
-                backgroundColor: selectedMenu.includes("/content-web/sekolah")
-                  ? "#E5EAF2"
-                  : "",
-              }}
-              className={`fw-medium ${
-                selectedMenu.includes("/content-web/sekolah")
-                  ? "text-blue"
-                  : "text-dark-soft"
-              }`}
-            >
-              {selectedMenu.includes("/content-web/sekolah") && (
-                <div
-                  style={{
-                    position: "absolute",
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
-                    width: "4px",
-                    backgroundColor: "var(--blue-color)",
-                  }}
-                />
-              )}
-              Sekolah
-            </MenuItem>
-            <MenuItem
               onClick={() => handleMenuClick("/content-web/jurusan")}
               icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
               style={{
@@ -885,6 +856,77 @@ export const ListMenu = () => {
                 />
               )}
               Study Tracer
+            </MenuItem>
+          </SubMenu>
+          <SubMenu
+            open={openSubmenu === "config"}
+            onOpenChange={() => handleSubmenuToggle("config")}
+            icon={<IoSettingsSharp />}
+            label="Config"
+            rootStyles={{
+              ["." + menuClasses.subMenuContent]: {
+                backgroundColor: "#f0f0f0",
+              },
+            }}
+            className="fw-medium"
+          >
+            <MenuItem
+              onClick={() => handleMenuClick("/config/tahun-ajaran")}
+              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
+              style={{
+                position: "relative",
+                backgroundColor: selectedMenu.includes("/config/tahun-ajaran")
+                  ? "#E5EAF2"
+                  : "",
+              }}
+              className={`fw-medium ${
+                selectedMenu.includes("/config/tahun-ajaran")
+                  ? "text-blue"
+                  : "text-dark-soft"
+              }`}
+            >
+              {selectedMenu.includes("/config/tahun-ajaran") && (
+                <div
+                  style={{
+                    position: "absolute",
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                    width: "4px",
+                    backgroundColor: "var(--blue-color)",
+                  }}
+                />
+              )}
+              Tahun Ajaran
+            </MenuItem>
+            <MenuItem
+              onClick={() => handleMenuClick("/content-web/sekolah")}
+              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
+              style={{
+                position: "relative",
+                backgroundColor: selectedMenu.includes("/content-web/sekolah")
+                  ? "#E5EAF2"
+                  : "",
+              }}
+              className={`fw-medium ${
+                selectedMenu.includes("/content-web/sekolah")
+                  ? "text-blue"
+                  : "text-dark-soft"
+              }`}
+            >
+              {selectedMenu.includes("/content-web/sekolah") && (
+                <div
+                  style={{
+                    position: "absolute",
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                    width: "4px",
+                    backgroundColor: "var(--blue-color)",
+                  }}
+                />
+              )}
+              Sekolah
             </MenuItem>
           </SubMenu>
         </>

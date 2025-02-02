@@ -42,6 +42,8 @@ import {
   KelasWaliPage,
   DetailKelasWaliPage,
   StudyTracerPage,
+  SchoolYearPage,
+  FormSchoolYearPage,
 } from "./pages";
 import { SideBar } from "./components/sidebar";
 import PrivateRoute from "./components/privateRoute";
@@ -361,6 +363,33 @@ function App() {
               element={
                 <PrivateRoute
                   Component={FormStaffMangementStaffPage}
+                  Role={["STAFF"]}
+                />
+              }
+            />
+            <Route
+              path="/config/tahun-ajaran"
+              element={
+                <PrivateRoute
+                  Component={SchoolYearPage}
+                  Role={["STAFF"]}
+                />
+              }
+            />
+            <Route
+              path="/config/tahun-ajaran/tambah"
+              element={
+                <PrivateRoute
+                  Component={FormSchoolYearPage}
+                  Role={["STAFF"]}
+                />
+              }
+            />
+            <Route
+              path="/config/tahun-ajaran/update/:id"
+              element={
+                <PrivateRoute
+                  Component={FormSchoolYearPage}
                   Role={["STAFF"]}
                 />
               }
