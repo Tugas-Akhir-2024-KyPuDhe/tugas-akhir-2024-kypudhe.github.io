@@ -17,6 +17,9 @@ import {
   IDetailStudentAttendance,
 } from "../../../interface/studentAttendance.interface";
 import StudentAttendanceService from "../../../services/studentAttendanceService";
+import { CourseInClass } from "../../../interface/courseInClass.interface";
+import CourseInClassService from "../../../services/courseInClassService";
+import { CardDaftarMapelKelas } from "../../../features/teacherPages/kelasWaliPage/cardDaftarMapelKelas";
 
 const subMenuItemsDetailKelasWaliGuru = [
   { label: "Daftar Siswa", key: "daftar-siswa" },
@@ -29,6 +32,7 @@ export const DetailKelasWaliPage: React.FC = () => {
   const navigate = useNavigate();
   const classService = ClassStudentService();
   const studentAttendance = StudentAttendanceService();
+  const courseInClass = CourseInClassService();
   const { id } = useParams<{ id: string }>();
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -41,6 +45,7 @@ export const DetailKelasWaliPage: React.FC = () => {
   const [listAllStudentsAttendance, setListAllStudentsAttendance] = useState<
     IDataSummaryAttendance[] | null
   >([]);
+  const [dataMapel, setDataMapel] = useState<CourseInClass[]>([]);
 
   const [activeMenu, setActiveMenu] = useState("daftar-siswa");
   const handleMenuClick = (menu: string) => {
@@ -57,6 +62,7 @@ export const DetailKelasWaliPage: React.FC = () => {
         setData(response.data);
         setstudents(response.data.student);
         await handleGetSummaryAttendance(parseInt(id));
+        await getMapel(parseInt(id));
       } catch (error) {
         const axiosError = error as AxiosError;
         if (axiosError.response?.status === 404) {
@@ -97,6 +103,15 @@ export const DetailKelasWaliPage: React.FC = () => {
       console.error(error);
     } finally {
       setLoadingAttendance(false);
+    }
+  };
+
+const getMapel = async (classId: number) => {
+    try {
+      const response = await courseInClass.getCourseinClass(classId);
+      setDataMapel(response.data);
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -154,7 +169,7 @@ export const DetailKelasWaliPage: React.FC = () => {
             dataHeader={listAllStudentsAttendanceHeader!}
           />
         ) : activeMenu === "mata-pelajaran-dikelas" ? (
-          <CardAbsensiKelas loading={loading} />
+          <CardDaftarMapelKelas loading={loading} data={dataMapel} />
         ) : activeMenu === "nilai-akhir-siswa" ? (
           <CardAbsensiKelas loading={loading} />
         ) : (

@@ -39,6 +39,7 @@ export const DetailJadwalMengajarPage: React.FC = () => {
   const [listAllStudentsAttendance, setListAllStudentsAttendance] = useState<
     IDataSummaryAttendance[] | null
   >([]);
+  
   const [data, setData] = useState<CourseInClass>();
   const [teacherName, setTeacherName] = useState("");
 

@@ -134,7 +134,7 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
           <main style={{ width: "100%" }}>
             <nav
               className="navbar py-3 pe-4 sticky-top shadow-sm"
-              style={{ backgroundColor: "#fff", zIndex: '99' }}
+              style={{ backgroundColor: "#fff", zIndex: "99" }}
             >
               <div className="container-fluid">
                 <div className="navbar-brand">
@@ -238,7 +238,7 @@ export const ListMenu = () => {
   const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
   const [selectedMenu, setSelectedMenu] = useState("");
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
-  
+
   useEffect(() => {
     setSelectedMenu(location.pathname);
   }, [location.pathname]);
@@ -426,16 +426,17 @@ export const ListMenu = () => {
             icon={<BsPersonSquare />}
             style={{
               position: "relative",
-              backgroundColor:
-                selectedMenu === "/guru/kelas-wali" ? "#E5EAF2" : "",
+              backgroundColor: selectedMenu.includes("/guru/kelas-wali")
+                ? "#E5EAF2"
+                : "",
             }}
             className={`fw-medium ${
-              selectedMenu === "/guru/kelas-wali"
+              selectedMenu.includes("/guru/kelas-wali")
                 ? "text-blue"
                 : "text-dark-soft"
             }`}
           >
-            {selectedMenu === "/guru/kelas-wali" && (
+            {selectedMenu.includes("/guru/kelas-wali") && (
               <div
                 style={{
                   position: "absolute",
@@ -587,8 +588,8 @@ export const ListMenu = () => {
             </MenuItem>
           </SubMenu>
           <SubMenu
-          open={openSubmenu === "manajemenStaff"}
-          onOpenChange={() => handleSubmenuToggle("manajemenStaff")}
+            open={openSubmenu === "manajemenStaff"}
+            onOpenChange={() => handleSubmenuToggle("manajemenStaff")}
             icon={<IoIosPeople />}
             label="Manajemen Staff"
             rootStyles={{
@@ -630,8 +631,8 @@ export const ListMenu = () => {
             </MenuItem>
           </SubMenu>
           <SubMenu
-          open={openSubmenu === "contentWeb"}
-          onOpenChange={() => handleSubmenuToggle("contentWeb")}
+            open={openSubmenu === "contentWeb"}
+            onOpenChange={() => handleSubmenuToggle("contentWeb")}
             icon={<FaGlobe />}
             label="Content Web"
             rootStyles={{

@@ -171,7 +171,7 @@ export const DaftarAbsensi: React.FC<AbsensiProps> = ({
                         <td className="text-center py-3">{index + 1}</td>
                         <td className="py-3">{siswa.nis}</td>
                         <td className="py-3">{siswa.name}</td>
-                        {siswa.absensi.map((attendance, index2) => {
+                        {siswa.absensi.reverse().map((attendance, index2) => {
                           const tooltipId = `tooltip-${index}-${index2}`;
                           return (
                             <td

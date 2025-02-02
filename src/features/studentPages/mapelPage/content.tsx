@@ -251,7 +251,7 @@ export const Content: React.FC = () => {
                       </td>
                       <td className="py-3">{mapel.courseDetail.name}</td>
                       <td className="py-3">{mapel.teacher.name}</td>
-                      <td className="py-3">{mapel.day}</td>
+                      <td className="py-3 text-center">{mapel.day}</td>
                       <td
                         className="py-3 text-center"
                         style={{ width: "140px" }}

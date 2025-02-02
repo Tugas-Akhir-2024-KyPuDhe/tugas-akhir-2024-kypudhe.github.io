@@ -16,7 +16,7 @@ interface CourseInClassService {
   deleteCourse: (id: number) => Promise<ResponseActionCourseInClass>;
   getCourseinClass: (
     classId: number,
-    day: string
+    day?: string
   ) => Promise<ResponseActionCourseInClass<CourseInClass[]>>;
 }
 
@@ -93,7 +93,7 @@ const CourseInClassService = (): CourseInClassService => {
 
   const getCourseinClass = async (
     classId: number,
-    day: string
+    day: string = ''
   ): Promise<ResponseActionCourseInClass<CourseInClass[]>> => {
     try {
       const response: AxiosResponse<
