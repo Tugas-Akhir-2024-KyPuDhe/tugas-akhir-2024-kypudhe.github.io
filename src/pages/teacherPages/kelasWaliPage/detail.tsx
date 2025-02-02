@@ -12,7 +12,10 @@ import { NavSubMenu } from "../../../components/navSubmenu";
 import { CardPerangkatKelas } from "../../../features/teacherPages/kelasWaliPage/cardPerangkatKelas";
 import { StudentDetail } from "../../../interface/student.interface";
 import { DaftarAbsensi } from "../../../features/teacherPages/jadwalMengajarPage/absensiSiswaPage/daftarAbsensiKelas";
-import { IDataSummaryAttendance, IDetailStudentAttendance } from "../../../interface/studentAttendance.interface";
+import {
+  IDataSummaryAttendance,
+  IDetailStudentAttendance,
+} from "../../../interface/studentAttendance.interface";
 import StudentAttendanceService from "../../../services/studentAttendanceService";
 
 const subMenuItemsDetailKelasWaliGuru = [
@@ -34,10 +37,10 @@ export const DetailKelasWaliPage: React.FC = () => {
   const [data, setData] = useState<Class>();
   const [students, setstudents] = useState<StudentDetail[]>([]);
   const [listAllStudentsAttendanceHeader, setListAllStudentsAttendanceHeader] =
-  useState<IDetailStudentAttendance[] | null>([]);
+    useState<IDetailStudentAttendance[] | null>([]);
   const [listAllStudentsAttendance, setListAllStudentsAttendance] = useState<
-  IDataSummaryAttendance[] | null
->([]);
+    IDataSummaryAttendance[] | null
+  >([]);
 
   const [activeMenu, setActiveMenu] = useState("daftar-siswa");
   const handleMenuClick = (menu: string) => {
@@ -53,7 +56,7 @@ export const DetailKelasWaliPage: React.FC = () => {
         const response = await classService.getClassById(parseInt(id));
         setData(response.data);
         setstudents(response.data.student);
-        await handleGetSummaryAttendance(parseInt(id))
+        await handleGetSummaryAttendance(parseInt(id));
       } catch (error) {
         const axiosError = error as AxiosError;
         if (axiosError.response?.status === 404) {
@@ -125,7 +128,7 @@ export const DetailKelasWaliPage: React.FC = () => {
             refreshData={getData}
             loading={loading}
             optionsStudents={optionsStudents}
-            classId = {data.id}
+            classId={data.id}
             data={data?.StudentPositionInClass || []} // Tambahkan fallback ke array kosong jika null
           />
         </>

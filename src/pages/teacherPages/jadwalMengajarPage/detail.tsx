@@ -6,11 +6,16 @@ import StaffService from "../../../services/staffService";
 import useCookie from "react-use-cookie";
 import { CourseInClass } from "../../../interface/courseInClass.interface";
 import { CardDetailKelas } from "../../../features/teacherPages/jadwalMengajarPage/cardDetailKelas";
-import { CardAbsensiKelas } from "../../../features/teacherPages/jadwalMengajarPage/cardAbsensiKelas";
 import { CardNilaiKelas } from "../../../features/teacherPages/jadwalMengajarPage/cardNilaiKelas";
 import { CardDaftarSiswaKelas } from "../../../features/teacherPages/jadwalMengajarPage/cardDaftarSiswaKelas";
 import { AxiosError } from "axios";
 import { NavSubMenu } from "../../../components/navSubmenu";
+import { DaftarAbsensi } from "../../../features/teacherPages/jadwalMengajarPage/absensiSiswaPage/daftarAbsensiKelas";
+import {
+  IDataSummaryAttendance,
+  IDetailStudentAttendance,
+} from "../../../interface/studentAttendance.interface";
+import StudentAttendanceService from "../../../services/studentAttendanceService";
 
 const subMenuItemsDetailKelasGuru = [
   { label: "Daftar Siswa", key: "daftar-siswa" },
@@ -21,11 +26,19 @@ const subMenuItemsDetailKelasGuru = [
 export const DetailJadwalMengajarPage: React.FC = () => {
   const navigate = useNavigate();
   const teacherService = StaffService();
+  const studentAttendance = StudentAttendanceService();
+
   const [cookieLogin] = useCookie("userLoginCookie");
   const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
   const { id } = useParams<{ id: string }>();
 
   const [loading, setLoading] = useState<boolean>(false);
+  const [loadingAttendance, setLoadingAttendance] = useState<boolean>(false);
+  const [listAllStudentsAttendanceHeader, setListAllStudentsAttendanceHeader] =
+    useState<IDetailStudentAttendance[] | null>([]);
+  const [listAllStudentsAttendance, setListAllStudentsAttendance] = useState<
+    IDataSummaryAttendance[] | null
+  >([]);
   const [data, setData] = useState<CourseInClass>();
   const [teacherName, setTeacherName] = useState("");
 
@@ -33,6 +46,27 @@ export const DetailJadwalMengajarPage: React.FC = () => {
   const handleMenuClick = (menu: string) => {
     if (!loading) {
       setActiveMenu(menu);
+    }
+  };
+
+  const handleGetSummaryAttendance = async (classId: number) => {
+    try {
+      setLoadingAttendance(true);
+      const response = await studentAttendance.getAttendanceSummaryInClass(
+        classId
+      );
+      if (response.status === 200) {
+        setListAllStudentsAttendance(response.data);
+        setListAllStudentsAttendanceHeader(response.data[0].absensi);
+      }
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      if (axiosError.response?.status === 404) {
+        setListAllStudentsAttendance(null);
+      }
+      console.error(error);
+    } finally {
+      setLoadingAttendance(false);
     }
   };
 
@@ -44,6 +78,9 @@ export const DetailJadwalMengajarPage: React.FC = () => {
         const response = await teacherService.getClassOfTeacher(
           dtoken.username,
           id
+        );
+        await handleGetSummaryAttendance(
+          response.data.CourseInClass[0].class.id
         );
         setTeacherName(response.data.name);
         setData(response.data.CourseInClass[0]);
@@ -102,7 +139,11 @@ export const DetailJadwalMengajarPage: React.FC = () => {
             data={data!}
           />
         ) : activeMenu === "absensi" ? (
-          <CardAbsensiKelas loading={loading} />
+          <DaftarAbsensi
+            loading={loading || loadingAttendance}
+            data={listAllStudentsAttendance!}
+            dataHeader={listAllStudentsAttendanceHeader!}
+          />
         ) : (
           <CardNilaiKelas
             refreshData={getData}
