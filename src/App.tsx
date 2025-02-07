@@ -44,6 +44,7 @@ import {
   StudyTracerPage,
   SchoolYearPage,
   FormSchoolYearPage,
+  DetailStudyTracerPage,
 } from "./pages";
 import { SideBar } from "./components/sidebar";
 import PrivateRoute from "./components/privateRoute";
@@ -231,6 +232,10 @@ function App() {
              <Route
               path="/content-web/study-tracer"
               element={<PrivateRoute Component={StudyTracerPage} Role={["STAFF"]} />}
+            />
+             <Route
+              path="/content-web/study-tracer/detail/:id"
+              element={<PrivateRoute Component={DetailStudyTracerPage} Role={["STAFF"]} />}
             />
             <Route
               path="/manajemen-siswa/daftar-siswa"

@@ -40,7 +40,7 @@ export const StudyTracerPage: React.FC = () => {
       try {
         const response = await studyTracerService.deleteStudyTracer(id);
         if (response.status === 200) {
-          getData();
+          await getData();
           Toast.fire({
             icon: "success",
             title: "Study Tracer berhasil dihapus",
@@ -70,8 +70,8 @@ export const StudyTracerPage: React.FC = () => {
         title="Study Tracer"
         subTitle="Study Tracer SMKN 1 Lumban Julu"
         backDisplay={false}
-        addDisplay={true}
-        linkAdd="tambah"
+        addDisplay={false}
+        linkAdd=""
       />
 
       <TableStudyTracer

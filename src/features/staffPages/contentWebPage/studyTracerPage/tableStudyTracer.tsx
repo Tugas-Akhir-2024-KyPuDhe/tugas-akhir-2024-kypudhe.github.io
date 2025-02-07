@@ -2,7 +2,7 @@ import React from "react";
 import DataTable from "react-data-table-component";
 import { StyleSheetManager } from "styled-components";
 import { FaTrash } from "react-icons/fa";
-import { FaPen } from "react-icons/fa6";
+import { FaEye } from "react-icons/fa6";
 import { IStudyTracer } from "../../../../interface/studyTracer.interface";
 import { useNavigate } from "react-router-dom";
 
@@ -26,7 +26,7 @@ export const TableStudyTracer: React.FC<TableStudyTracerProps> = ({
   const columns = [
     {
       name: "No",
-      cell: (_row: IStudyTracer, index: number) => index + 1,
+      cell: (_row: IStudyTracer, index: number) => <div className="w-100 text-center">{index + 1}</div>,
       width: "50px",
     },
     {
@@ -39,21 +39,21 @@ export const TableStudyTracer: React.FC<TableStudyTracerProps> = ({
       name: "Gender",
       selector: (row: IStudyTracer) => row.gender,
       sortable: true,
-      cell: (row: IStudyTracer) => row.gender,
-      width: '110px',
+      cell: (row: IStudyTracer) => <div className="w-100 text-center">{row.gender}</div>,
+      width: '140px',
     },
     {
       name: "No. Telp",
       selector: (row: IStudyTracer) => row.phone,
       sortable: true,
       cell: (row: IStudyTracer) => row.phone,
-      width: '150px',
+      width: '140px',
     },
     {
       name: "Tamatan",
       selector: (row: IStudyTracer) => row.endYear,
       sortable: true,
-      cell: (row: IStudyTracer) => row.endYear,
+      cell: (row: IStudyTracer) => <div className="w-100 text-center">{row.endYear}</div>,
       width: '120px',
     },
     {
@@ -61,7 +61,7 @@ export const TableStudyTracer: React.FC<TableStudyTracerProps> = ({
       selector: (row: IStudyTracer) => row.employmentStatus,
       sortable: true,
       cell: (row: IStudyTracer) => row.employmentStatus,
-      width: '120px',
+      width: '140px',
     },
     {
       name: "Action",
@@ -69,11 +69,11 @@ export const TableStudyTracer: React.FC<TableStudyTracerProps> = ({
       cell: (row: IStudyTracer) => (
         <>
           <button
-            className="btn btn-warning btn-sm text me-2 text-light"
-            onClick={() => navigate(`update/${row.id}`)}
+            className="btn btn-info btn-sm text me-2 text-light"
+            onClick={() => navigate(`detail/${row.id}`)}
             disabled={loading}
           >
-            <FaPen />
+            <FaEye />
           </button>
           <button
             className="btn btn-danger btn-sm"
