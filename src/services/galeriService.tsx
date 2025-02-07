@@ -16,6 +16,7 @@ interface GaleriService {
     formData: FormData
   ) => Promise<ResponseActionGaleri>;
   deleteGaleri: (id: number) => Promise<ResponseActionGaleri>;
+  deleteMediaGaleri: (id: number) => Promise<ResponseActionGaleri>;
 }
 
 const GaleriService = (): GaleriService => {
@@ -123,12 +124,32 @@ const GaleriService = (): GaleriService => {
     }
   };
 
+  const deleteMediaGaleri = async (id: number): Promise<ResponseActionGaleri> => {
+    try {
+      const response: AxiosResponse<ResponseActionGaleri> = await axios.delete(
+        `${apiUrl}/api/galeri/delete/media/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${userLoginCookie.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        handleUnauthorized(error.response?.status || 0);
+      }
+      throw error;
+    }
+  };
+
   return {
     getAllGaleri,
     getGaleriById,
     addGaleri,
     updateGaleri,
     deleteGaleri,
+    deleteMediaGaleri,
   };
 };
 

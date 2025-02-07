@@ -137,12 +137,35 @@ export const TableCollectionGaleri: React.FC = () => {
     });
 
     if (result.isConfirmed) {
-      setFormData((prev) => ({
-        ...prev,
-        mediaIdsToDelete: [...prev.mediaIdsToDelete, mediaId],
-      }));
-
       setLoading(true);
+      try {
+        const response = await galeriService.deleteMediaGaleri(mediaId);
+
+        if (response.status === 200) {
+          Toast.fire({
+            icon: "success",
+            title: `Media berhasil dihapus`,
+            timer: 4000,
+          });
+          getData();
+        }
+      } catch (error) {
+        const axiosError = error as AxiosError;
+        if (axiosError.response?.status === 404) {
+          return Toast.fire({
+            icon: "error",
+            title: `Data Tidak Ditemukan!`,
+            timer: 4000,
+          });
+        }
+        Toast.fire({
+          icon: "error",
+          title: `Terjadi kesalahan ketika hapus media!`,
+          timer: 4000,
+        });
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
