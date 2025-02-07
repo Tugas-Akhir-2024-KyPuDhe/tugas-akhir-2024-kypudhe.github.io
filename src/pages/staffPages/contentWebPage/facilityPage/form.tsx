@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
-import { Toast } from "../../../../utils/myFunctions";
+import { Toast, toolbarOptions } from "../../../../utils/myFunctions";
 import { useNavigate, useParams } from "react-router-dom";
 import FacilityService from "../../../../services/facilityService";
 import { HeaderTitlePage } from "../../../../components/headerTitlePage";
 import { optionsPrioritas } from "../../../../utils/optionsData";
 import { AxiosError } from "axios";
+import ReactQuill from "react-quill";
 
 interface FormState {
   id?: number;
@@ -83,15 +84,9 @@ export const FormFacilityPage: React.FC = () => {
     setErrorsForms((prevErrors) => ({ ...prevErrors, [name]: "" }));
   };
 
-  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
-    setErrorsForms((prevErrors) => ({ ...prevErrors, [name]: "" }));
+  const handleDescriptionChange = (value: string) => {
+    setFormData((prev) => ({ ...prev, description: value }));
+    setErrorsForms((prevErrors) => ({ ...prevErrors, description: "" }));
   };
 
   const handleSelectChange = (
@@ -243,14 +238,30 @@ export const FormFacilityPage: React.FC = () => {
             <div className="col-12">
               <div className="form-group mb-3">
                 <label className="mb-2">Deskripsi *</label>
-                <textarea
-                  name="description"
-                  className={`form-control ${
-                    errorsForms.description ? "is-invalid" : ""
-                  }`}
-                  placeholder="Masukkan deskripsi"
+                <ReactQuill
+                  theme="snow"
                   value={formData.description}
-                  onChange={handleTextareaChange}
+                  onChange={handleDescriptionChange}
+                  modules={{ toolbar: toolbarOptions }}
+                  formats={[
+                    "header",
+                    "font",
+                    "size",
+                    "bold",
+                    "italic",
+                    "underline",
+                    "strike",
+                    "blockquote",
+                    "list",
+                    "bullet",
+                    "indent",
+                    "link",
+                    "image",
+                    "video",
+                    "align",
+                    "color",
+                    "background",
+                  ]}
                 />
                 {errorsForms.description && (
                   <div className="invalid-form">Deskripsi masih kosong!</div>
