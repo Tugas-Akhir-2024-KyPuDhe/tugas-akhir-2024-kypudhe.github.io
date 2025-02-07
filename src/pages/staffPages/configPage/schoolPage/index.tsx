@@ -22,6 +22,7 @@ export const SchoolPage: React.FC = () => {
   const [data, setdata] = useState<School>({
     name: "",
     about: "",
+    historySchool: "",
     vision: "",
     mission: "",
     address: "",
@@ -112,6 +113,7 @@ export const SchoolPage: React.FC = () => {
       "telp",
       "address",
       "about",
+      "historySchool",
       "vision",
       "mission",
     ];
@@ -151,8 +153,9 @@ export const SchoolPage: React.FC = () => {
         title: `${error}`,
       });
       console.error("Error processing galeri:", error);
-    }finally{
-      setloading(false)
+    } finally {
+      setStatusUpdateInfo(false)
+      setloading(false);
     }
   };
 
@@ -164,7 +167,7 @@ export const SchoolPage: React.FC = () => {
     <>
       <HeaderTitlePage
         title="Config Sekolah"
-        subTitle="SMKN 1 Lumban Julu"
+        subTitle="Config Sekolah SMKN 1 Lumban Julu"
         backDisplay={false}
         addDisplay={false}
         linkAdd=""
@@ -173,7 +176,7 @@ export const SchoolPage: React.FC = () => {
         <div className="col-12 col-md-4">
           <div
             className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded sticky-lg-top"
-            style={{ backgroundColor: "#fff", marginTop: "40px", top: "130px", }}
+            style={{ backgroundColor: "#fff", marginTop: "40px", top: "130px" }}
           >
             {loading && (
               <div
@@ -476,6 +479,51 @@ export const SchoolPage: React.FC = () => {
               </div>
               <div className="col-12">
                 <div className="form-group mb-3">
+                  <label className="mb-2 fw-bold text-dark-soft">
+                    Sejarah Singkat
+                  </label>
+                  {statusUpdateInfo ? (
+                    <>
+                      <ReactQuill
+                        theme="snow"
+                        value={data.historySchool}
+                        onChange={(value) =>
+                          handleQuillChange("historySchool", value)
+                        }
+                        modules={{ toolbar: toolbarOptions }}
+                        formats={[
+                          "header",
+                          "font",
+                          "size",
+                          "bold",
+                          "italic",
+                          "underline",
+                          "strike",
+                          "blockquote",
+                          "list",
+                          "bullet",
+                          "indent",
+                          "link",
+                          "image",
+                          "video",
+                          "align",
+                          "color",
+                          "background",
+                        ]}
+                      />
+                      {errorsForms.historySchool && (
+                        <div className="invalid-form">
+                          Sejarah Sekolah masih kosong!
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <div>{parse(data.historySchool || "-")}</div>
+                  )}
+                </div>
+              </div>
+              <div className="col-12">
+                <div className="form-group mb-3">
                   <label className="mb-2 fw-bold text-dark-soft">Tentang</label>
                   {statusUpdateInfo ? (
                     <>
@@ -711,23 +759,25 @@ export const SchoolPage: React.FC = () => {
                   )}
                 </div>
               </div>
-              <div className="col-12">
-                <button
-                  className={`btn btn-primary bg-blue border-0`}
-                  // type="submit"
-                  style={{ fontSize: "1.1rem" }}
-                  disabled={loading}
-                  onClick={() => handleUpdateInformasi(data.id!)}
-                >
-                  {loading ? (
-                    <div className="spinner-border text-light" role="status">
-                      <span className="visually-hidden">Loading...</span>
-                    </div>
-                  ) : (
-                    "Update"
-                  )}
-                </button>
-              </div>
+              {statusUpdateInfo && (
+                <div className="col-12">
+                  <button
+                    className={`btn btn-primary bg-blue border-0`}
+                    // type="submit"
+                    style={{ fontSize: "1.1rem" }}
+                    disabled={loading}
+                    onClick={() => handleUpdateInformasi(data.id!)}
+                  >
+                    {loading ? (
+                      <div className="spinner-border text-light" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                      </div>
+                    ) : (
+                      "Update"
+                    )}
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>

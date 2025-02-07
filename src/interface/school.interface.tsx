@@ -4,6 +4,7 @@ export interface School {
     id?: number,
     name: string,
     about: string,
+    historySchool: string,
     vision: string,
     mission: string,
     address: string,
