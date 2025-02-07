@@ -60,8 +60,8 @@ export const Table: React.FC = () => {
       name: "Kapasitas",
       selector: (row: Class) => row.capacity,
       sortable: true,
-      cell: (row: Class) => row.capacity,
-      width: "150px",
+      cell: (row: Class) => <div className="w-100 text-center">{row.capacity}</div>,
+      width: "120px",
     },
     {
       name: "Wali Kelas",
@@ -84,7 +84,7 @@ export const Table: React.FC = () => {
           <button
             className="btn btn-warning btn-sm text me-2 text-light"
             onClick={() =>
-              navigate(`/manajemen-siswa/daftar-siswa/detail/${row.id}`)
+              navigate(`update/${row.id}`)
             }
             disabled={loading}
           >

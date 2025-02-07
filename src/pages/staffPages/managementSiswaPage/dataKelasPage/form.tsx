@@ -11,18 +11,22 @@ import { FormState } from "../../../../interface/studentClass.interface";
 import { AxiosError } from "axios";
 import { optionsGrade } from "../../../../utils/optionsData";
 import StaffService from "../../../../services/staffService";
+import SchoolYearService from "../../../../services/schoolYearService";
+import { ISchoolYear } from "../../../../interface/schoolYear.interface";
 
 export const FormDataKelasMangementSiswaPage: React.FC = () => {
   const navigate = useNavigate();
   const majorService = JurusanService();
   const staffService = StaffService();
   const classService = ClassStudentService();
+  const schoolYearService = SchoolYearService();
 
   const { id } = useParams<{ id: string }>();
   const [errorsForms, setErrorsForms] = useState<{ [key: string]: string }>({});
   const [loadingForm, setloadingForm] = useState(true);
   const [dataMajor, setDataMajor] = useState<Fajusek[]>([]);
   const [dataTeachers, setdataTeachers] = useState<StaffDetails[]>([]);
+  const [dataSchoolYear, setdataSchoolYear] = useState<ISchoolYear[]>([]);
   const optionsMajor = [
     ...dataMajor.map((data) => ({
       value: data.majorCode,
@@ -32,6 +36,12 @@ export const FormDataKelasMangementSiswaPage: React.FC = () => {
   const optionsTeacher = [
     ...dataTeachers.map((data) => ({
       value: data.id.toString(),
+      label: data.name,
+    })),
+  ];
+  const optionsSchoolYear = [
+    ...dataSchoolYear.map((data) => ({
+      value: data.name,
       label: data.name,
     })),
   ];
@@ -94,9 +104,30 @@ export const FormDataKelasMangementSiswaPage: React.FC = () => {
     }
   };
 
+  const getSchoolYear = async () => {
+    setloadingForm(true);
+    try {
+      const response = await schoolYearService.getAllSchoolYears();
+      setdataSchoolYear(response.data);
+      if (!id) {
+        if (response.data && response.data.length > 0) {
+          setFormData((prev) => ({
+            ...prev,
+            academicYear: response.data[0]?.name || "",
+          }));
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setloadingForm(false);
+    }
+  };
+
   useEffect(() => {
     getTeacher();
     getMajor();
+    getSchoolYear();
   }, []);
 
   useEffect(() => {
@@ -302,15 +333,26 @@ export const FormDataKelasMangementSiswaPage: React.FC = () => {
             <div className="col-12 col-lg-6 col-md-6">
               <div className="form-group mb-3">
                 <label className="mb-2 fw-medium">Tahun Ajaran *</label>
-                <input
-                  type="text"
-                  name="academicYear"
-                  className={`form-control ${
-                    errorsForms.academicYear ? "is-invalid" : ""
-                  }`}
-                  placeholder="Masukkan Tahun Ajaran.."
-                  value={formData.academicYear}
-                  onChange={handleInputChange}
+                <Select
+                  options={optionsSchoolYear}
+                  value={optionsSchoolYear.find((option) => {
+                    return option.value === formData.academicYear;
+                  })}
+                  onChange={(option) => handleSelectChange("academicYear", option)}
+                  placeholder="Pilih Tahun Ajaran"
+                  isSearchable={false}
+                  className="form-control-lg px-0 pt-0"
+                  styles={{
+                    control: (baseStyles) => ({
+                      ...baseStyles,
+                      fontSize: "0.955rem",
+                      borderRadius: "8px",
+                    }),
+                    option: (provided) => ({
+                      ...provided,
+                      fontSize: "1rem",
+                    }),
+                  }}
                 />
                 {errorsForms.academicYear && (
                   <div className="invalid-form">Tahun Ajaran masih kosong!</div>

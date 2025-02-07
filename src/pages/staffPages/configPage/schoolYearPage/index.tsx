@@ -1,6 +1,6 @@
 import React from "react";
 import { HeaderTitlePage } from "../../../../components/headerTitlePage";
-import { TableSchoolYear } from "../../../../features/staffPages/configPage/bannerPage/tableSchoolYear";
+import { TableSchoolYear } from "../../../../features/staffPages/configPage/schoolYear/tableSchoolYear";
 
 export const SchoolYearPage: React.FC = () => {
   

@@ -48,7 +48,7 @@ export const TableSchoolYear: React.FC = () => {
       try {
         const response = await schoolYearService.deleteSchoolYear(id);
         if (response.status === 200) {
-          getData();
+          await getData();
           Toast.fire({
             icon: "success",
             title: "Tahun ajaran berhasil dihapus",

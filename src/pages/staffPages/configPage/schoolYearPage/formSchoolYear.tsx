@@ -112,12 +112,21 @@ export const FormSchoolYearPage: React.FC = () => {
         navigate(-1);
       }
     } catch (error) {
-      setloadingForm(false);
+      const axiosError = error as AxiosError;
+      if (axiosError.response?.status === 409) {
+        return Toast.fire({
+          icon: "error",
+          title: `Gagal, Tahun ajaran sudah ada!`,
+          timer: 4000,
+        });
+      }
       Toast.fire({
         icon: "error",
         title: `${error}`,
       });
       console.error("Error processing tahun ajaran:", error);
+    } finally {
+      setloadingForm(false);
     }
   };
 
