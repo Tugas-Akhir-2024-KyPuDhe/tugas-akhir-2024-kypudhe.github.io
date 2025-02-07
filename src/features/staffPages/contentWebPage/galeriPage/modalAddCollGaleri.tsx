@@ -97,24 +97,15 @@ export const ModalAddGaleri: React.FC<ModalAddGaleriProps> = ({
             icon: "success",
             title: `Galeri Berhasil ${formData.id ? "Diupdate" : "Ditambah"}`,
           });
-          const fileInput1 = document.getElementById(
-            "inputFileGaleri1"
-          ) as HTMLInputElement;
-          const fileInput2 = document.getElementById(
-            "inputFileGaleri2"
-          ) as HTMLInputElement;
-          const fileInput3 = document.getElementById(
-            "inputFileGaleri3"
-          ) as HTMLInputElement;
-          const fileInput4 = document.getElementById(
-            "inputFileGaleri4"
-          ) as HTMLInputElement;
-          if (fileInput1 || fileInput2 || fileInput3 || fileInput4) {
-            fileInput1.value = "";
-            fileInput2.value = "";
-            fileInput3.value = "";
-            fileInput4.value = "";
-          }
+          
+          [1, 2, 3, 4].forEach((_, index) => {
+            const fileInput = document.getElementById(
+              `inputFileGaleri${index + 1}`
+            ) as HTMLInputElement;
+            if (fileInput) fileInput.value = "";
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (formData as any)[`media${index + 1}`] = null;
+          });
         }
       }
     } catch (error) {

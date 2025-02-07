@@ -142,12 +142,12 @@ export const TableCollectionGaleri: React.FC = () => {
         const response = await galeriService.deleteMediaGaleri(mediaId);
 
         if (response.status === 200) {
+          await getData();
           Toast.fire({
             icon: "success",
             title: `Media berhasil dihapus`,
             timer: 4000,
           });
-          getData();
         }
       } catch (error) {
         const axiosError = error as AxiosError;
@@ -281,28 +281,6 @@ export const TableCollectionGaleri: React.FC = () => {
                 }}
               />
             </div>
-          </div>
-          <div className="col-12">
-            {/* <div className="form-group mb-3">
-              {[1, 2, 3, 4].map((index) => (
-                <div className="input-group mb-3" key={`media${index}`}>
-                  <input
-                    type="file"
-                    name={`media${index}`}
-                    className="form-control fs-6"
-                    id={`inputFileGaleri${index}`}
-                    accept=".jpeg, .jpg, .png, .gif"
-                    onChange={handleInputChange}
-                  />
-                  <label
-                    className="input-group-text"
-                    htmlFor={`inputFileGaleri${index}`}
-                  >
-                    Upload
-                  </label>
-                </div>
-              ))}
-            </div> */}
           </div>
           <div className="col-12">
             <button
