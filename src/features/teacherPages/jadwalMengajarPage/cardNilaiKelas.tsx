@@ -113,17 +113,19 @@ export const CardNilaiKelas: React.FC<CardProps> = ({
   const columns = [
     {
       name: "No",
-      cell: (_row: StudentDetail, index: number) => index + 1,
+      cell: (_row: StudentDetail, index: number) => <div className="w-100 text-center">{index + 1}</div>,
       width: "50px",
     },
     {
       name: "Nim",
       selector: (row: StudentDetail) => row.nis,
+      cell: (row: StudentDetail) => row.nis,
       width: "100px",
     },
     {
       name: "Nama",
       selector: (row: StudentDetail) => row.name,
+      cell: (row: StudentDetail) => row.name,
     },
     {
       name: "Tugas",

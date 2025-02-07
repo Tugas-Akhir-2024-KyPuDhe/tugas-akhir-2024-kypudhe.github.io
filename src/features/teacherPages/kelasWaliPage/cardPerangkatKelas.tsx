@@ -32,7 +32,7 @@ export const CardPerangkatKelas: React.FC<CardProps> = ({
   const studentPostionService = StudentPositionService();
   const [loadingForm, setLoadingForm] = useState<boolean>(false);
   const [formData, setformData] = useState<FormStudentPosition>({
-    nis: optionsStudents[0].value,
+    nis: optionsStudents.length > 0 && optionsStudents[0].value || "",
     classId,
     positionName: optionsRoleStudent[0].value,
   });
@@ -133,7 +133,6 @@ export const CardPerangkatKelas: React.FC<CardProps> = ({
         id="modalAddPosition"
         tabIndex={-1}
         aria-hidden="true"
-        data-bs-backdrop="static"
         data-bs-keyboard="false"
       >
         <div className="modal-dialog">

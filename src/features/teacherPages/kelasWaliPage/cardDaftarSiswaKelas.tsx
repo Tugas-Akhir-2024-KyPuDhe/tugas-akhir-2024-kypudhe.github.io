@@ -13,6 +13,9 @@ import { CardNilaiKelas } from "./cardNilaiKelas";
 import { Class } from "../../../interface/studentClass.interface";
 import { exportToPDFDaftarSiswaInClass } from "../../../utils/printDocument/daftarSiswaInClass/PDFDaftarSiswaInClass";
 import { exportToExcelDaftarSiswaInClass } from "../../../utils/printDocument/daftarSiswaInClass/ExcelDaftarSiswaInClass";
+import { AttendanceMonth } from "../../../interface/studentAttendance.interface";
+import StudentAttendanceService from "../../../services/studentAttendanceService";
+import { CardAbsensiStudent } from "../../../components/cardAbsensiStudent";
 interface CardProps {
   loading: boolean;
   data: Class;
@@ -23,14 +26,38 @@ export const CardDaftarSiswaKelas: React.FC<CardProps> = ({
   loading,
   data,
 }) => {
+  const studentAttendanceService = StudentAttendanceService();
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [selectedStudent, setSelectedStudent] = useState<StudentDetail | null>(
     null
   );
   const [activeMenu, setActiveMenu] = useState("data-akademik");
 
+  const [dataStudentAttendance, setDataStudentAttendance] = useState<
+    AttendanceMonth[]
+  >([]);
+
+  const getStudentDetailAttendance = async (nis: string, classId: number) => {
+    try {
+      const response =
+        await studentAttendanceService.getStudentDetailAttendance(nis, classId);
+      setDataStudentAttendance(response.data.attendances);
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleMenuClick = (menu: string) => {
     setActiveMenu(menu);
+  };
+
+  const handleClickDetail = async (data: StudentDetail) => {
+    setSelectedStudent(data);
+    await getStudentDetailAttendance(
+      data.nis,
+      parseInt(data.HistoryClass[0].currentClassId)
+    );
   };
 
   const columns = [
@@ -72,7 +99,7 @@ export const CardDaftarSiswaKelas: React.FC<CardProps> = ({
               data-bs-toggle="modal"
               data-bs-target="#modalDetailSiswa"
               className="btn btn-info btn-sm text me-2 text-light"
-              onClick={() => setSelectedStudent(row)}
+              onClick={() => handleClickDetail(row)}
               disabled={loading}
             >
               <FaEye />
@@ -418,6 +445,7 @@ export const CardDaftarSiswaKelas: React.FC<CardProps> = ({
                             />
                           </div>
                         </div>
+                        <CardAbsensiStudent data={dataStudentAttendance} />
                       </>
                     ) : activeMenu === "hasil-raport" ? (
                       <>

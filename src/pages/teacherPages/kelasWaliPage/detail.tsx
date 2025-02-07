@@ -45,6 +45,7 @@ export const DetailKelasWaliPage: React.FC = () => {
   const [listAllStudentsAttendance, setListAllStudentsAttendance] = useState<
     IDataSummaryAttendance[] | null
   >([]);
+
   const [dataMapel, setDataMapel] = useState<CourseInClass[]>([]);
 
   const [activeMenu, setActiveMenu] = useState("daftar-siswa");
@@ -57,6 +58,7 @@ export const DetailKelasWaliPage: React.FC = () => {
   const getData = async () => {
     if (id) {
       try {
+        
         setLoading(true);
         const response = await classService.getClassById(parseInt(id));
         setData(response.data);
@@ -106,7 +108,7 @@ export const DetailKelasWaliPage: React.FC = () => {
     }
   };
 
-const getMapel = async (classId: number) => {
+  const getMapel = async (classId: number) => {
     try {
       const response = await courseInClass.getCourseinClass(classId);
       setDataMapel(response.data);
@@ -142,7 +144,7 @@ const getMapel = async (classId: number) => {
           <CardPerangkatKelas
             refreshData={getData}
             loading={loading}
-            optionsStudents={optionsStudents}
+            optionsStudents={optionsStudents || []}
             classId={data.id}
             data={data?.StudentPositionInClass || []} // Tambahkan fallback ke array kosong jika null
           />

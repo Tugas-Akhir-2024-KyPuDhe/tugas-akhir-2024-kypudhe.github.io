@@ -2,14 +2,8 @@ import React, { useState } from "react";
 import { FaEye } from "react-icons/fa6";
 import { StudentHistory } from "../interface/studentHistory.interface";
 import { AttendanceMonth } from "../interface/studentAttendance.interface";
-import {
-  bgColorAttendance,
-  formatMonthAndYear,
-  formatTanggal,
-  statusAttendance,
-} from "../utils/myFunctions";
-import { Tooltip } from "react-tooltip";
 import StudentAttendanceService from "../services/studentAttendanceService";
+import { CardAbsensiStudent } from "./cardAbsensiStudent";
 
 interface GradeProps {
   nis: string;
@@ -27,7 +21,7 @@ export const CardRiwayatAkademik: React.FC<GradeProps> = ({ nis, data }) => {
       const response =
         await studentAttendanceService.getStudentDetailAttendance(nis, classId);
       setDataAttendance(response.data.attendances);
-      console.log('asd',response);
+      console.log("asd", response);
     } catch (error) {
       console.error(error);
     }
@@ -122,8 +116,8 @@ export const ModalDetail: React.FC<ModalProps> = ({
       >
         <div className="modal-dialog">
           <div className="modal-content position-relative">
-            <div className="row mx-0 pb-4">
-              <div className="col p-2 text-start py-3 px-3">
+            <div className="row mx-0">
+              <div className="col p-2 text-start pt-3 px-3">
                 <div className="fw-bold position-relative pb-2 fs-5">
                   Detail Nilai Siswa
                   <div
@@ -138,7 +132,7 @@ export const ModalDetail: React.FC<ModalProps> = ({
                   />
                 </div>
               </div>
-              <div className="col-auto p-2 text-start py-3 px-3">
+              <div className="col-auto p-2 text-start pb-3 px-3">
                 <button
                   type="button"
                   className="btn-close"
@@ -147,7 +141,7 @@ export const ModalDetail: React.FC<ModalProps> = ({
                 ></button>
               </div>
             </div>
-            <div className="modal-body pb-4 px-4">
+            <div className="modal-body m-lg-4 m-md-4 my-4 rounded">
               <div className="row g-3">
                 <div className="col-12">
                   <div className="row mb-3">
@@ -340,58 +334,7 @@ export const ModalDetail: React.FC<ModalProps> = ({
                     </div>
                   </div>
                 ) : (
-                  <>
-                    {dataAttendance.length > 0 ? (
-                      dataAttendance.map((dataMonth, index) => (
-                        <div key={index} className="col-12 col-md-4">
-                          <div className="card card-body">
-                            <div className="fw-medium">
-                              {formatMonthAndYear(dataMonth.month)}
-                            </div>
-                            <hr />
-                            <div className="d-flex flex-wrap">
-                              {dataMonth.records.map((dataRecord, index2) => {
-                                const tooltipId = `tooltip-${index}-${index2}`;
-                                return (
-                                  <>
-                                    <div
-                                      key={index2}
-                                      style={{ width: 50 }}
-                                      id={tooltipId}
-                                      className={`
-                            py-1 px-2 text-center text-light fw-medium border border-light ${bgColorAttendance(
-                              dataRecord.status
-                            )} 
-                          `}
-                                    >
-                                      {dataRecord.date.split("-")[2]}
-                                    </div>
-                                    <Tooltip
-                                      anchorId={tooltipId}
-                                      className="text-light"
-                                      style={{
-                                        backgroundColor: "var(--blue-color)",
-                                        fontSize: "12px",
-                                        padding: "5px",
-                                      }}
-                                      content={
-                                        formatTanggal(dataRecord.date) +
-                                        " (" +
-                                        statusAttendance(dataRecord.status, 1) +
-                                        ")"
-                                      }
-                                    />
-                                  </>
-                                );
-                              })}
-                            </div>
-                          </div>
-                        </div>
-                      ))
-                    ) : (
-                      <p className="text-center">Absensi masih kosong!</p>
-                    )}
-                  </>
+                  <CardAbsensiStudent data={dataAttendance} />
                 )}
               </div>
             </div>
@@ -443,15 +386,16 @@ export const NavSubMenu: React.FC<NavMenuProps> = ({
   onMenuClick,
 }) => {
   return (
-    <div className="px-3 rounded bg-white">
-      <ul className="nav nav-underline">
+    <div className="my-4 rounded">
+      <ul
+        className="nav nav-underline"
+        style={{ borderBottom: "0.5px solid grey" }}
+      >
         {menuItems.map((item) => (
           <li className="nav-item" style={{ cursor: "pointer" }} key={item.key}>
             <a
-              className={`nav-link my-2 ${
-                activeMenu === item.key
-                  ? "active text-blue fw-bold"
-                  : "text-dark"
+              className={`nav-link ${
+                activeMenu === item.key ? "active text-blue" : "text-dark"
               }`}
               onClick={() => onMenuClick(item.key)}
             >

@@ -12,6 +12,9 @@ import { CardDataOrangTua } from "../../../components/cardDataOrangTua";
 import moment from "moment";
 import { exportToPDFDaftarSiswaInClass } from "../../../utils/printDocument/daftarSiswaInClass/PDFDaftarSiswaInClass";
 import { exportToExcelDaftarSiswaInClass } from "../../../utils/printDocument/daftarSiswaInClass/ExcelDaftarSiswaInClass";
+import StudentAttendanceService from "../../../services/studentAttendanceService";
+import { AttendanceMonth } from "../../../interface/studentAttendance.interface";
+import { CardAbsensiStudent } from "../../../components/cardAbsensiStudent";
 
 interface CardProps {
   loading: boolean;
@@ -23,14 +26,38 @@ export const CardDaftarSiswaKelas: React.FC<CardProps> = ({
   loading,
   data,
 }) => {
+  const studentAttendanceService = StudentAttendanceService();
+
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [selectedStudent, setSelectedStudent] = useState<StudentDetail | null>(
     null
   );
+  const [dataStudentAttendance, setDataStudentAttendance] = useState<
+    AttendanceMonth[]
+  >([]);
   const [activeMenu, setActiveMenu] = useState("data-akademik");
 
   const handleMenuClick = (menu: string) => {
     setActiveMenu(menu);
+  };
+
+  const getStudentDetailAttendance = async (nis: string, classId: number) => {
+    try {
+      const response =
+        await studentAttendanceService.getStudentDetailAttendance(nis, classId);
+      setDataStudentAttendance(response.data.attendances);
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleClickDetail = async (data: StudentDetail) => {
+    setSelectedStudent(data);
+    await getStudentDetailAttendance(
+      data.nis,
+      parseInt(data.HistoryClass[0].currentClassId)
+    );
   };
 
   const columns = [
@@ -72,7 +99,7 @@ export const CardDaftarSiswaKelas: React.FC<CardProps> = ({
               data-bs-toggle="modal"
               data-bs-target="#modalDetailSiswa"
               className="btn btn-info btn-sm text me-2 text-light"
-              onClick={() => setSelectedStudent(row)}
+              onClick={() => handleClickDetail(row)}
               disabled={loading}
             >
               <FaEye />
@@ -151,7 +178,7 @@ export const CardDaftarSiswaKelas: React.FC<CardProps> = ({
                         data.class.name,
                         data.class.major.name,
                         data.class.academicYear,
-                        data.class.homeRoomTeacher.name,
+                        data.class.homeRoomTeacher.name
                       )
                     }
                   >
@@ -166,7 +193,7 @@ export const CardDaftarSiswaKelas: React.FC<CardProps> = ({
                         data.class.name,
                         data.class.major.name,
                         data.class.academicYear,
-                        data.class.homeRoomTeacher.name,
+                        data.class.homeRoomTeacher.name
                       )
                     }
                     className="dropdown-item"
@@ -297,6 +324,18 @@ export const CardDaftarSiswaKelas: React.FC<CardProps> = ({
                       <li className="nav-item" style={{ cursor: "pointer" }}>
                         <a
                           className={`nav-link ${
+                            activeMenu === "absensi"
+                              ? "active text-blue"
+                              : "text-dark"
+                          }`}
+                          onClick={() => handleMenuClick("absensi")}
+                        >
+                          Absensi
+                        </a>
+                      </li>
+                      <li className="nav-item" style={{ cursor: "pointer" }}>
+                        <a
+                          className={`nav-link ${
                             activeMenu === "data-orang-tua"
                               ? "active text-blue"
                               : "text-dark"
@@ -358,6 +397,25 @@ export const CardDaftarSiswaKelas: React.FC<CardProps> = ({
                           "-"
                         }
                       />
+                    ) : activeMenu === "absensi" ? (
+                      <>
+                        <div className="fw-bold fs-5 mb-4 text-dark-soft position-relative pb-2">
+                          <div className="d-flex justify-content-between">
+                            <div className="">Absensi Siswa</div>
+                            <div
+                              style={{
+                                position: "absolute",
+                                left: 0,
+                                bottom: 0,
+                                width: "50px",
+                                height: "5px",
+                                backgroundColor: "var(--blue-color)",
+                              }}
+                            />
+                          </div>
+                        </div>
+                        <CardAbsensiStudent data={dataStudentAttendance} />
+                      </>
                     ) : (
                       <div>Halaman tidak ditemukan</div>
                     )}
