@@ -131,7 +131,7 @@ export const convertRole = (role: string): string => {
   return role === "STAFF" ? "Pegawai" : role == "TEACHER" ? "Guru" : "Siswa/i";
 };
 
-export const convertToRoman = (num: number): string => {
+export const numberToRoman = (num: number): string => {
   if (num < 1 || num > 3999) {
     throw new Error("Angka harus berada antara 1 dan 3999");
   }
@@ -159,6 +159,41 @@ export const convertToRoman = (num: number): string => {
       num -= value;
     }
   }
+  return result;
+};
+
+export const romanToNumber = (roman: string): number => {
+  const romanToNum: { [key: string]: number } = {
+    M: 1000,
+    CM: 900,
+    D: 500,
+    CD: 400,
+    C: 100,
+    XC: 90,
+    L: 50,
+    XL: 40,
+    X: 10,
+    IX: 9,
+    V: 5,
+    IV: 4,
+    I: 1,
+  };
+
+  let result = 0;
+  let i = 0;
+
+  while (i < roman.length) {
+    // Cek apakah dua karakter saat ini ada dalam map (untuk kasus seperti CM, CD, XC, dll.)
+    if (i + 1 < roman.length && romanToNum[roman.substring(i, i + 2)]) {
+      result += romanToNum[roman.substring(i, i + 2)];
+      i += 2;
+    } else {
+      // Jika tidak, ambil satu karakter saja
+      result += romanToNum[roman[i]];
+      i += 1;
+    }
+  }
+
   return result;
 };
 

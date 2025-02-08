@@ -43,7 +43,7 @@ export const Content: React.FC = () => {
         );
         setSelectedOption({
           label: activeClass.currentClass.name,
-          value: activeClass.currentClass.name,
+          value: activeClass.currentClass.id.toString(),
         });
       }
     } catch (error) {
@@ -59,7 +59,7 @@ export const Content: React.FC = () => {
 
   useEffect(() => {
     const selectedClass = dataHistory.find(
-      (dt) => dt.currentClass.name === selectedOption.value
+      (dt) => dt.currentClass.name === selectedOption.label
     );
 
     if (selectedClass) {
@@ -77,7 +77,6 @@ export const Content: React.FC = () => {
       const response =
         await studentAttendanceService.getStudentDetailAttendance(nis, classId);
       setDataAttendance(response.data.attendances);
-      console.log(response);
     } catch (error) {
       console.error(error);
     }
@@ -87,6 +86,7 @@ export const Content: React.FC = () => {
     selectedOption: { value: string; label: string } | null
   ) => {
     if (selectedOption) {
+      getStudentDetailAttendance(dtoken.nis, parseInt(selectedOption.value))
       setSelectedOption(selectedOption);
     }
   };
@@ -126,7 +126,7 @@ export const Content: React.FC = () => {
             <div className="col-12 col-lg-4 col-md-3">
               <Select
                 options={dataHistory.map((dt) => ({
-                  value: dt.currentClass.name,
+                  value:  dt.currentClass.id.toString(),
                   label: dt.currentClass.name,
                 }))}
                 onChange={handleSelectChange}

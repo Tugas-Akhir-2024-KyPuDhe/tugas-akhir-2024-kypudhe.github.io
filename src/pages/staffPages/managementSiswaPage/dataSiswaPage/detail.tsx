@@ -197,46 +197,51 @@ export const DetailSiswaMangementSiswa: React.FC = () => {
             </div>
           </div>
         )}
-        {activeMenu === "data-akademik" ? (
-          <CardDataAkademik
-            kelas={data?.class.name || "-"}
-            major={data?.Major.name || "-"}
-            startYear={moment(data?.startYear).year().toString() || ""}
-            studentStatus={data?.status || ""}
-          />
-        ) : activeMenu === "data-orang-tua" ? (
-          <CardDataOrangTua
-            nis={data!.nis}
-            fatherName={
-              (data?.ParentOfStudent[0] &&
-                data?.ParentOfStudent[0].fatherName) ||
-              "-"
-            }
-            motherName={
-              (data?.ParentOfStudent[0] &&
-                data?.ParentOfStudent[0].motherName) ||
-              "-"
-            }
-            phone={
-              (data?.ParentOfStudent[0] && data?.ParentOfStudent[0].phone) ||
-              "-"
-            }
-            parentJob={
-              (data?.ParentOfStudent[0] &&
-                data?.ParentOfStudent[0].parentJob) ||
-              ""
-            }
-            parentAddress={
-              (data?.ParentOfStudent[0] &&
-                data?.ParentOfStudent[0].parentAddress) ||
-              "-"
-            }
-          />
-        ) : activeMenu === "riwayat-akademik" ? (
-          <CardRiwayatAkademik nis={data!.nis} data={DataStudentHistory} />
-        ) : (
-          <div>Halaman tidak ditemukan</div>
-        )}
+        {!loading &&
+          (activeMenu === "data-akademik" ? (
+            <CardDataAkademik
+              kelas={
+                (DataStudentHistory &&
+                  DataStudentHistory[0].currentClass.name) ||
+                "-"
+              }
+              major={data?.Major.name || "-"}
+              startYear={moment(data?.startYear).year().toString() || ""}
+              studentStatus={data?.status || ""}
+            />
+          ) : activeMenu === "data-orang-tua" ? (
+            <CardDataOrangTua
+              nis={data!.nis}
+              fatherName={
+                (data?.ParentOfStudent[0] &&
+                  data?.ParentOfStudent[0].fatherName) ||
+                "-"
+              }
+              motherName={
+                (data?.ParentOfStudent[0] &&
+                  data?.ParentOfStudent[0].motherName) ||
+                "-"
+              }
+              phone={
+                (data?.ParentOfStudent[0] && data?.ParentOfStudent[0].phone) ||
+                "-"
+              }
+              parentJob={
+                (data?.ParentOfStudent[0] &&
+                  data?.ParentOfStudent[0].parentJob) ||
+                ""
+              }
+              parentAddress={
+                (data?.ParentOfStudent[0] &&
+                  data?.ParentOfStudent[0].parentAddress) ||
+                "-"
+              }
+            />
+          ) : activeMenu === "riwayat-akademik" ? (
+            <CardRiwayatAkademik nis={data!.nis} data={DataStudentHistory} />
+          ) : (
+            <div>Halaman tidak ditemukan</div>
+          ))}
       </div>
     </>
   );
