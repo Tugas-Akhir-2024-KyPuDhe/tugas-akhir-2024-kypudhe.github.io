@@ -61,7 +61,7 @@ const StudentService = () => {
   const getAllStudent = async (
     major_code: string = "",
     grade: string = "",
-    status: string = "all"
+    status: string = "All"
   ): Promise<ResponseGetStudent<StudentDetail[]>> => {
     try {
       const response = await axios.get<ResponseGetStudent<StudentDetail[]>>(

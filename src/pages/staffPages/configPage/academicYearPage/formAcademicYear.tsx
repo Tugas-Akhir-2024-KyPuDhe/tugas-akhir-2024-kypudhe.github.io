@@ -6,18 +6,18 @@ import useCookie from "react-use-cookie";
 import { HeaderTitlePage } from "../../../../components/headerTitlePage";
 import { optionsStatus } from "../../../../utils/optionsData";
 import { AxiosError } from "axios";
-import { IpayloadSchoolYear } from "../../../../interface/schoolYear.interface";
-import SchoolYearService from "../../../../services/schoolYearService";
+import { IpayloadAcademicYear } from "../../../../interface/academicYear.interface";
+import AcademicYearService from "../../../../services/academicYearService";
 
-export const FormSchoolYearPage: React.FC = () => {
+export const FormAcademicYearPage: React.FC = () => {
   const navigate = useNavigate();
-  const schoolYearService = SchoolYearService();
+  const academicYearService = AcademicYearService();
 
   const [cookieLogin] = useCookie("userLoginCookie");
   const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
 
   const { id } = useParams<{ id: string }>();
-  const [formData, setFormData] = useState<IpayloadSchoolYear>({
+  const [formData, setFormData] = useState<IpayloadAcademicYear>({
     name: "",
     status: optionsStatus[0].value,
     createdBy: userLoginCookie.name,
@@ -29,7 +29,7 @@ export const FormSchoolYearPage: React.FC = () => {
     const getData = async () => {
       if (id) {
         try {
-          const response = await schoolYearService.getSchoolYearById(parseInt(id));
+          const response = await academicYearService.getAcademicYearById(parseInt(id));
           const data = response.data;
           setFormData({
             id: data.id,
@@ -100,9 +100,9 @@ export const FormSchoolYearPage: React.FC = () => {
     try {
       let response;
       if (formData.id) {
-        response = await schoolYearService.updateSchoolYear(formData.id, formData);
+        response = await academicYearService.updateAcademicYear(formData.id, formData);
       } else {
-        response = await schoolYearService.addSchoolYear(formData);
+        response = await academicYearService.addAcademicYear(formData);
       }
       if (response.status === 201 || response.status === 200) {
         Toast.fire({

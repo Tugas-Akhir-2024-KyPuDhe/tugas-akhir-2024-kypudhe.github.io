@@ -120,7 +120,13 @@ export const FormMapelMangementSiswaPage: React.FC = () => {
     setloadingForm(true);
     const payload = new FormData();
     Object.entries(formData).forEach(([key, value]) => {
-      payload.append(key, value as string | Blob);
+      if (key === "code") {
+        const dataCode = `${formData.grade + value}`
+        payload.append(key, dataCode as string);
+      } else {
+        payload.append(key, value as string | Blob);
+      }
+      
     });
 
     try {
@@ -184,6 +190,35 @@ export const FormMapelMangementSiswaPage: React.FC = () => {
         )}
         <form onSubmit={handleSubmit}>
           <div className="row">
+          <div className="col-12 col-lg-2">
+              <div className="form-group mb-3">
+                <label className="mb-2 fw-medium">Tingkat *</label>
+                <Select
+                  options={optionsGrade}
+                  value={optionsGrade.find((option) => {
+                    return (
+                      option.value.split("-")[0] ===
+                      formData.grade.split("-")[0]
+                    );
+                  })}
+                  onChange={(option) => handleSelectChange("grade", option)}
+                  placeholder="Pilih TIngkat Kelas"
+                  isSearchable={false}
+                  className="form-control-lg px-0 pt-0"
+                  styles={{
+                    control: (baseStyles) => ({
+                      ...baseStyles,
+                      fontSize: "0.955rem",
+                      borderRadius: "8px",
+                    }),
+                    option: (provided) => ({
+                      ...provided,
+                      fontSize: "1rem",
+                    }),
+                  }}
+                />
+              </div>
+            </div>
             <div className="col-12 col-lg-3 col-md-3">
               <div className="form-group mb-3">
                 <label className="mb-2 fw-medium">Kode Mapel *</label>
@@ -220,35 +255,7 @@ export const FormMapelMangementSiswaPage: React.FC = () => {
                 )}
               </div>
             </div>
-            <div className="col-12 col-lg-2">
-              <div className="form-group mb-3">
-                <label className="mb-2 fw-medium">Tingkat *</label>
-                <Select
-                  options={optionsGrade}
-                  value={optionsGrade.find((option) => {
-                    return (
-                      option.value.split("-")[0] ===
-                      formData.grade.split("-")[0]
-                    );
-                  })}
-                  onChange={(option) => handleSelectChange("grade", option)}
-                  placeholder="Pilih TIngkat Kelas"
-                  isSearchable={false}
-                  className="form-control-lg px-0 pt-0"
-                  styles={{
-                    control: (baseStyles) => ({
-                      ...baseStyles,
-                      fontSize: "0.955rem",
-                      borderRadius: "8px",
-                    }),
-                    option: (provided) => ({
-                      ...provided,
-                      fontSize: "1rem",
-                    }),
-                  }}
-                />
-              </div>
-            </div>
+            
             <div className="col-12">
               <div className="form-group mb-3">
                 <label className="mb-2 fw-medium">Deskripsi</label>

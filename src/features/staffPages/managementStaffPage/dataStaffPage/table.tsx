@@ -124,7 +124,7 @@ export const Table: React.FC = () => {
 
   return (
     <>
-      <div
+      {/* <div
         className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
         style={{ backgroundColor: "#fff", position: "relative" }}
       >
@@ -175,7 +175,7 @@ export const Table: React.FC = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       <div
         className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"

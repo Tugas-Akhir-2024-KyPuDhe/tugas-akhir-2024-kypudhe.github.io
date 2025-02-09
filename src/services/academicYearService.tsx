@@ -2,23 +2,23 @@ import axios, { AxiosResponse } from "axios";
 import { useNavigate } from "react-router-dom";
 import useCookie from "react-use-cookie";
 import {
-  IpayloadSchoolYear,
+  IpayloadAcademicYear,
   IResponse,
-  ISchoolYear,
-} from "../interface/schoolYear.interface";
+  IAcademicYear,
+} from "../interface/academicYear.interface";
 
-interface SchoolYearService {
-  getAllSchoolYears: () => Promise<IResponse<ISchoolYear[]>>;
-  getSchoolYearById: (id: number) => Promise<IResponse<ISchoolYear>>;
-  addSchoolYear: (data: IpayloadSchoolYear) => Promise<IResponse>;
-  updateSchoolYear: (
+interface AcademicYearService {
+  getAllAcademicYears: () => Promise<IResponse<IAcademicYear[]>>;
+  getAcademicYearById: (id: number) => Promise<IResponse<IAcademicYear>>;
+  addAcademicYear: (data: IpayloadAcademicYear) => Promise<IResponse>;
+  updateAcademicYear: (
     id: number,
-    data: IpayloadSchoolYear
+    data: IpayloadAcademicYear
   ) => Promise<IResponse>;
-  deleteSchoolYear: (id: number) => Promise<IResponse>;
+  deleteAcademicYear: (id: number) => Promise<IResponse>;
 }
 
-const SchoolYearService = (): SchoolYearService => {
+const AcademicYearService = (): AcademicYearService => {
   const navigate = useNavigate();
   const [cookieLogin] = useCookie("userLoginCookie");
   const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
@@ -30,9 +30,9 @@ const SchoolYearService = (): SchoolYearService => {
     }
   };
 
-  const getAllSchoolYears = async (): Promise<IResponse<ISchoolYear[]>> => {
+  const getAllAcademicYears = async (): Promise<IResponse<IAcademicYear[]>> => {
     try {
-      const response: AxiosResponse<IResponse<ISchoolYear[]>> = await axios.get(
+      const response: AxiosResponse<IResponse<IAcademicYear[]>> = await axios.get(
         `${apiUrl}/api/school-year/get`,
         {
           headers: {
@@ -47,11 +47,11 @@ const SchoolYearService = (): SchoolYearService => {
     }
   };
 
-  const getSchoolYearById = async (
+  const getAcademicYearById = async (
     id: number
-  ): Promise<IResponse<ISchoolYear>> => {
+  ): Promise<IResponse<IAcademicYear>> => {
     try {
-      const response: AxiosResponse<IResponse<ISchoolYear>> = await axios.get(
+      const response: AxiosResponse<IResponse<IAcademicYear>> = await axios.get(
         `${apiUrl}/api/school-year/get/${id}`,
         {
           headers: {
@@ -66,8 +66,8 @@ const SchoolYearService = (): SchoolYearService => {
     }
   };
 
-  const addSchoolYear = async (
-    data: IpayloadSchoolYear
+  const addAcademicYear = async (
+    data: IpayloadAcademicYear
   ): Promise<IResponse> => {
     try {
       const response: AxiosResponse<IResponse> = await axios.post(
@@ -88,9 +88,9 @@ const SchoolYearService = (): SchoolYearService => {
     }
   };
 
-  const updateSchoolYear = async (
+  const updateAcademicYear = async (
     id: number,
-    data: IpayloadSchoolYear
+    data: IpayloadAcademicYear
   ): Promise<IResponse> => {
     try {
       const response: AxiosResponse<IResponse> = await axios.put(
@@ -111,7 +111,7 @@ const SchoolYearService = (): SchoolYearService => {
     }
   };
 
-  const deleteSchoolYear = async (id: number): Promise<IResponse> => {
+  const deleteAcademicYear = async (id: number): Promise<IResponse> => {
     try {
       const response: AxiosResponse<IResponse> = await axios.delete(
         `${apiUrl}/api/school-year/delete/${id}`,
@@ -131,12 +131,12 @@ const SchoolYearService = (): SchoolYearService => {
   };
 
   return {
-    getAllSchoolYears,
-    getSchoolYearById,
-    addSchoolYear,
-    updateSchoolYear,
-    deleteSchoolYear,
+    getAllAcademicYears,
+    getAcademicYearById,
+    addAcademicYear,
+    updateAcademicYear,
+    deleteAcademicYear,
   };
 };
 
-export default SchoolYearService;
+export default AcademicYearService;

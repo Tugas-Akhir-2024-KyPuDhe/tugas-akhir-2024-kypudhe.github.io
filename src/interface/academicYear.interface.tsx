@@ -4,7 +4,7 @@ export interface IResponse<T = unknown> {
   data: T;
 }
 
-export interface ISchoolYear {
+export interface IAcademicYear {
   id: number;
   uuid: string;
   name: string;
@@ -14,7 +14,7 @@ export interface ISchoolYear {
   updatedAt: string;
 }
 
-export interface IpayloadSchoolYear {
+export interface IpayloadAcademicYear {
   id?: number;
   name: string;
   status?: string;

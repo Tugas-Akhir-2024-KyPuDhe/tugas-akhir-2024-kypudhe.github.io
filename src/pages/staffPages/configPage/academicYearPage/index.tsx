@@ -1,13 +1,13 @@
 import React from "react";
 import { HeaderTitlePage } from "../../../../components/headerTitlePage";
-import { TableSchoolYear } from "../../../../features/staffPages/configPage/schoolYear/tableSchoolYear";
+import { TableAcademicYear } from "../../../../features/staffPages/configPage/academicYear/tableAcademicYear";
 
-export const SchoolYearPage: React.FC = () => {
+export const AcademicYearPage: React.FC = () => {
   
   return (
     <>
       <HeaderTitlePage title="Tahun Ajaran" subTitle="Data Tahun Ajaran SMKN 1 Lumban Julu" backDisplay={false} addDisplay={true} linkAdd="tambah"/>
-      <TableSchoolYear />
+      <TableAcademicYear />
     </>
   );
 };

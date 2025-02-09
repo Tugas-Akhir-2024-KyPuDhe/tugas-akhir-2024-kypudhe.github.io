@@ -101,16 +101,16 @@ export const Table: React.FC = () => {
       name: "Jurusan",
       selector: (row: StudentDetail) => row.Major.majorCode,
       sortable: true,
-      cell: (row: StudentDetail) => row.Major.majorCode,
+      cell: (row: StudentDetail) => <div className="w-100 text-center">{row.Major.majorCode}</div>,
       width: "100px",
     },
     {
       name: "Kelas",
       selector: (row: StudentDetail) =>
-        row.class ? row.class.name.split("-")[0] : "Belum Masuk",
+        row.status == "New" ? "Siswa Baru" : row.class.name.split("-")[0],
       sortable: true,
       cell: (row: StudentDetail) =>
-        row.class ? row.class.name.split("-")[0] : "Belum Masuk",
+        row.status == "New" ? <div className="text-blue w-100 text-center">Siswa Baru</div> : row.class.name.split("-")[0],
       width: "100px",
     },
     {

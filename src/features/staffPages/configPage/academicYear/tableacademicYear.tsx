@@ -11,22 +11,22 @@ import {
 import { FaTrash } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { FaPen } from "react-icons/fa6";
-import { ISchoolYear } from "../../../../interface/schoolYear.interface";
-import SchoolYearService from "../../../../services/schoolYearService";
+import { IAcademicYear } from "../../../../interface/academicYear.interface";
+import AcademicYearService from "../../../../services/academicYearService";
 import { AxiosError } from "axios";
 
-export const TableSchoolYear: React.FC = () => {
-  const schoolYearService = SchoolYearService();
+export const TableAcademicYear: React.FC = () => {
+  const academicYearService = AcademicYearService();
   const navigate = useNavigate();
 
-  const [data, setData] = useState<ISchoolYear[]>([]);
+  const [data, setData] = useState<IAcademicYear[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
   const getData = async () => {
     setLoading(true);
     try {
-      const response = await schoolYearService.getAllSchoolYears();
+      const response = await academicYearService.getAllAcademicYears();
       setData(response.data);
     } catch (error) {
       console.error(error);
@@ -35,7 +35,7 @@ export const TableSchoolYear: React.FC = () => {
     }
   };
 
-  const deleteSchoolYear = async (id: number) => {
+  const deleteAcademicYear = async (id: number) => {
     const result = await showConfirmationDialog({
       title: "Ingin menghapus Tahun Ajaran ini?",
       icon: "warning",
@@ -46,7 +46,7 @@ export const TableSchoolYear: React.FC = () => {
     if (result.isConfirmed) {
       setLoading(true);
       try {
-        const response = await schoolYearService.deleteSchoolYear(id);
+        const response = await academicYearService.deleteAcademicYear(id);
         if (response.status === 200) {
           await getData();
           Toast.fire({
@@ -79,31 +79,31 @@ export const TableSchoolYear: React.FC = () => {
   const columns = [
     {
       name: "No",
-      cell: (_row: ISchoolYear, index: number) => index + 1,
+      cell: (_row: IAcademicYear, index: number) => index + 1,
       width: "50px",
     },
     {
       name: "Tahun Ajaran",
-      selector: (row: ISchoolYear) => row.name,
+      selector: (row: IAcademicYear) => row.name,
       sortable: true,
-      cell: (row: ISchoolYear) => row.name,
+      cell: (row: IAcademicYear) => row.name,
     },
     {
       name: "Dibuat Oleh",
-      selector: (row: ISchoolYear) => row.createdBy,
+      selector: (row: IAcademicYear) => row.createdBy,
       sortable: true,
       width: "170px",
     },
     {
       name: "Dibuat Pada",
-      selector: (row: ISchoolYear) => formatDateTime(row.createdAt),
+      selector: (row: IAcademicYear) => formatDateTime(row.createdAt),
       sortable: true,
       width: "170px",
     },
     {
       name: "Status",
-      selector: (row: ISchoolYear) => row.status,
-      cell: (row: ISchoolYear) => (
+      selector: (row: IAcademicYear) => row.status,
+      cell: (row: IAcademicYear) => (
         <div className="text-center w-100">{convertStatus(row.status)}</div>
       ),
       sortable: true,
@@ -111,8 +111,8 @@ export const TableSchoolYear: React.FC = () => {
     },
     {
       name: "Action",
-      selector: (row: ISchoolYear) => row.name,
-      cell: (row: ISchoolYear) => (
+      selector: (row: IAcademicYear) => row.name,
+      cell: (row: IAcademicYear) => (
         <div className="text-center w-100">
           <button
             className="btn btn-warning btn-sm text me-2 text-light"
@@ -123,7 +123,7 @@ export const TableSchoolYear: React.FC = () => {
           </button>
           <button
             className="btn btn-danger btn-sm"
-            onClick={() => deleteSchoolYear(row.id)}
+            onClick={() => deleteAcademicYear(row.id)}
             disabled={loading}
           >
             <FaTrash />

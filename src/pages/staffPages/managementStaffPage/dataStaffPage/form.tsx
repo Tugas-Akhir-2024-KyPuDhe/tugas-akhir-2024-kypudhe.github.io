@@ -174,7 +174,7 @@ export const FormStaffMangementStaffPage: React.FC = () => {
   ) => {
     setFormData((prev) => ({
       ...prev,
-      [name]: selectedOptions.map((opt) => opt.value), 
+      [name]: selectedOptions.map((opt) => opt.value),
     }));
   };
 
@@ -231,14 +231,23 @@ export const FormStaffMangementStaffPage: React.FC = () => {
           });
           navigate(-1);
         }
-      } 
+      }
     } catch (error) {
-      setloadingForm(false);
+      const axiosError = error as AxiosError;
+      if (axiosError.response?.status === 409) {
+        return Toast.fire({
+          icon: "error",
+          title: `NIP sudah pernah terdaftar!`,
+          timer: 4000,
+        });
+      }
       Toast.fire({
         icon: "error",
         title: `${error}`,
       });
       console.error("Error processing banner:", error);
+    } finally {
+      setloadingForm(false);
     }
   };
 
