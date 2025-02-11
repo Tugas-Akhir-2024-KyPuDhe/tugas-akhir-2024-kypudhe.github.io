@@ -3,7 +3,7 @@ import Select from "react-select";
 import { StudentHistory } from "../../../interface/studentHistory.interface";
 import StudentHistoryService from "../../../services/studentHistoryService";
 import useCookie from "react-use-cookie";
-import { decodeToken } from "../../../utils/myFunctions";
+import { badgeStatusHistory, decodeToken } from "../../../utils/myFunctions";
 
 export const Content: React.FC = () => {
   const handleSelectChange = (
@@ -144,7 +144,14 @@ export const Content: React.FC = () => {
             <div className="row mb-3">
               <div className="col-2 fw-medium">Status </div>
               <div className="col-auto">:</div>
-              <div className="col-9 fw-medium">{summary.status}</div>
+              <div className="col-9 fw-medium">
+                <span
+                  className={`badge mb-2 ${badgeStatusHistory(summary.status)}`}
+                  style={{ maxWidth: "fit-content" }}
+                >
+                  {summary.status}
+                </span>
+              </div>
             </div>
           </div>
         </div>

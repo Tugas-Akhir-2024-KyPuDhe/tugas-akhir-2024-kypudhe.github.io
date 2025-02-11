@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import StudentHistoryService from "../../../services/studentHistoryService";
-import { decodeToken } from "../../../utils/myFunctions";
+import { badgeStatusHistory, decodeToken } from "../../../utils/myFunctions";
 import useCookie from "react-use-cookie";
 import { StudentHistory } from "../../../interface/studentHistory.interface";
 import { FaArrowRight } from "react-icons/fa6";
@@ -39,7 +39,7 @@ export const Content: React.FC = () => {
       style={{
         backgroundColor: "#fff",
         position: "relative",
-        minHeight: '30vh'
+        minHeight: "30vh",
       }}
     >
       {loading && (
@@ -68,13 +68,7 @@ export const Content: React.FC = () => {
             <div className="col-12 col-lg-4 col-md-3 mb-3" key={index}>
               <div className="card card-body">
                 <span
-                  className={`badge mb-2 ${
-                    data.status === "Aktif"
-                      ? "text-bg-success"
-                      : data.status === "Naik"
-                      ? "text-bg-primary"
-                      : "text-bg-danger"
-                  }`}
+                  className={`badge mb-2 ${badgeStatusHistory(data.status)}`}
                   style={{ maxWidth: "fit-content" }}
                 >
                   {data.status}
@@ -83,9 +77,14 @@ export const Content: React.FC = () => {
                 <h6>Wali Kelas : {data.currentClass.homeRoomTeacher.name}</h6>
                 <hr />
                 <div className="d-flex justify-content-between">
-                  <div className="my-auto text-start fw-medium">{data.academicYear}</div>
-                  <Link to={`detail/${data.uuid}`} className="btn btn-primary border-0 bg-blue w-auto px-3">
-                    <FaArrowRight className="fs-5"/>{" "}
+                  <div className="my-auto text-start fw-medium">
+                    {data.academicYear}
+                  </div>
+                  <Link
+                    to={`detail/${data.uuid}`}
+                    className="btn btn-primary border-0 bg-blue w-auto px-3"
+                  >
+                    <FaArrowRight className="fs-5" />{" "}
                   </Link>
                 </div>
               </div>

@@ -241,6 +241,14 @@ export const bgColorAttendance = (status: number): string => {
     : "";
 };
 
+export const badgeStatusHistory = (data: string): string => {
+  return data === "Aktif"
+    ? "bg-blue"
+    : data === "Lulus"
+    ? "text-bg-success"
+    : "text-bg-danger";
+};
+
 export const formatMonthAndYear = (dateString: string) => {
   return moment(dateString, "YYYY-MM").locale("id").format("MMMM YYYY");
 };

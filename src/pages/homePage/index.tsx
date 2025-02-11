@@ -35,6 +35,7 @@ import weekend from "./../../../src/assets/images/weekend.svg";
 import { Tooltip } from "react-tooltip";
 import { AttendanceMonth } from "../../interface/studentAttendance.interface";
 import StudentAttendanceService from "../../services/studentAttendanceService";
+import imgEmpty from "./../../assets/images/empty-data.svg";
 
 export const HomePage = () => {
   const articleService = ArtikelService();
@@ -69,6 +70,8 @@ export const HomePage = () => {
         setLoading(true);
         const response = await studentService.getStudentByNis(dtoken.nis);
         if (response.status === 200) {
+          console.log(response.data);
+          
           await getStudentDetailAttendance(
             dtoken.nis,
             parseInt(response.data.HistoryClass[0].currentClassId)
@@ -78,6 +81,7 @@ export const HomePage = () => {
             parseInt(response.data.HistoryClass[0].currentClassId),
             getDayNow()
           );
+          
           setDataMapel(resCourse.data);
         }
       } catch (error) {
@@ -93,7 +97,6 @@ export const HomePage = () => {
       const response =
         await studentAttendanceService.getStudentDetailAttendance(nis, classId);
       setDataAttendance(response.data.attendances);
-      console.log(response);
     } catch (error) {
       console.error(error);
     }
@@ -179,9 +182,8 @@ export const HomePage = () => {
                       role="status"
                     ></div>
                   </div>
-                ) : (
-                  // Jika tidak Minggu dan tidak loading
-                  dataMapel.length > 0 ?
+                ) : // Jika tidak Minggu dan tidak loading
+                dataMapel.length > 0 ? (
                   dataMapel.map((dt) => (
                     <div
                       className="col-12 col-lg-4 col-md-3 mb-3"
@@ -209,7 +211,19 @@ export const HomePage = () => {
                         </div>
                       </div>
                     </div>
-                  )): <p className="text-center">Mata Pelajaran masih kosong!</p>
+                  ))
+                ) : (
+                  <div className="text-center">
+                    <img
+                      src={imgEmpty}
+                      alt=""
+                      className="img-fluid"
+                      style={{ width: "200px" }}
+                    />
+                    <div className="text-blue fw-bold mt-3 fs-6">
+                      Mata Pelajaran hari ini masing kosong!
+                    </div>
+                  </div>
                 )}
               </div>
             </div>
@@ -281,7 +295,17 @@ export const HomePage = () => {
                     </div>
                   </div>
                 ) : (
-                  <p className="text-center">Absensi masih kosong!</p>
+                  <div className="text-center">
+                    <img
+                      src={imgEmpty}
+                      alt=""
+                      className="img-fluid"
+                      style={{ width: "200px" }}
+                    />
+                    <div className="text-blue fw-bold mt-3 fs-6">
+                      Data Absensi Bulan ini Masih Kosong!
+                    </div>
+                  </div>
                 )}
               </div>
             </div>
@@ -302,8 +326,9 @@ export const HomePage = () => {
         <section className="">
           <div className="container-fluid px-0">
             <div className="row g-3 d-flex">
-              {dataArtikel.length > 0
-                ? dataArtikel.map((data, index) => (
+              {!loading ? (
+                dataArtikel.length > 0 ? (
+                  dataArtikel.map((data, index) => (
                     <div className="col-12 col-lg-3 col-md-6" key={index}>
                       <CardBerita
                         idArtikel={data.id}
@@ -320,9 +345,24 @@ export const HomePage = () => {
                       />
                     </div>
                   ))
-                : Array.from({ length: 8 }).map((_, index) => (
-                    <CardBeritaSkeleton key={index} />
-                  ))}
+                ) : (
+                  <div className="text-center">
+                    <img
+                      src={imgEmpty}
+                      alt=""
+                      className="img-fluid"
+                      style={{ width: "200px" }}
+                    />
+                    <div className="text-blue fw-bold mt-3 fs-6">
+                      Data Berita/Artikel Masih Kosong!
+                    </div>
+                  </div>
+                )
+              ) : (
+                Array.from({ length: 8 }).map((_, index) => (
+                  <CardBeritaSkeleton key={index} />
+                ))
+              )}
             </div>
           </div>
         </section>

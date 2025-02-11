@@ -57,7 +57,9 @@ export const DetailKelasSiswaPage: React.FC = () => {
   >([]);
   const [listAllStudentsAttendanceHeader, setListAllStudentsAttendanceHeader] =
     useState<IDetailStudentAttendance[] | null>([]);
-    const [dataAttendanceStudent, setDataAttendanceStudent] = useState<AttendanceMonth[]>([]);
+  const [dataAttendanceStudent, setDataAttendanceStudent] = useState<
+    AttendanceMonth[]
+  >([]);
   const [cookieLogin] = useCookie("userLoginCookie", "");
   const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
   const dtoken = decodeToken(userLoginCookie.token);
@@ -87,7 +89,10 @@ export const DetailKelasSiswaPage: React.FC = () => {
             parseInt(response.data.currentClassId)
           );
           await getClass(parseInt(response.data.currentClassId));
-          await getStudentDetailAttendance(dtoken.nis, parseInt(response.data.currentClassId));
+          await getStudentDetailAttendance(
+            dtoken.nis,
+            parseInt(response.data.currentClassId)
+          );
         } catch (error) {
           console.error(error);
           const axiosError = error as AxiosError;
@@ -112,8 +117,10 @@ export const DetailKelasSiswaPage: React.FC = () => {
 
   const getStudentDetailAttendance = async (nis: string, classId: number) => {
     try {
-      const response =
-        await studentAttendance.getStudentDetailAttendance(nis, classId);
+      const response = await studentAttendance.getStudentDetailAttendance(
+        nis,
+        classId
+      );
       setDataAttendanceStudent(response.data.attendances);
       console.log(response);
     } catch (error) {
@@ -125,11 +132,19 @@ export const DetailKelasSiswaPage: React.FC = () => {
     try {
       setLoading(true);
       const response = await studentClass.getClassById(id);
-      const data = response.data;
-      const havePosition = data?.StudentPositionInClass.filter(
+      const dataRes = response.data;
+      const havePosition = dataRes?.StudentPositionInClass.filter(
         (dt) => dt.student.nis == dtoken.nis
       );
       if (havePosition.length > 0) {
+        console.log(data?.status);
+        
+        if (data?.status === "Lulus") {
+          setSubMenuItemsAbsensi([
+            ...subMenuItemsAbsensi,
+            { label: "Daftar Absensi", key: "daftar-absensi" },
+          ]);
+        }
         setSubMenuItemsAbsensi([
           ...subMenuItemsAbsensi,
           { label: "Buat Absensi", key: "buat-absensi" },
@@ -352,7 +367,10 @@ export const DetailKelasSiswaPage: React.FC = () => {
 
       {data &&
         (activeMenu === "absensi-siswa" ? (
-          <CardAbsensiDetailKelas loading={loading} data={dataAttendanceStudent!} />
+          <CardAbsensiDetailKelas
+            loading={loading}
+            data={dataAttendanceStudent!}
+          />
         ) : activeMenu === "buat-absensi" ? (
           <InputAbsensi
             loading={loading || loadingAttendance}

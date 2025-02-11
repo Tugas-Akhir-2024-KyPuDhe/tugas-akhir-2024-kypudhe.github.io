@@ -4,6 +4,7 @@ import ArtikelService from "../../services/artikelService";
 import { CardBerita } from "../../components/cardBerita";
 import { CardBeritaSkeleton } from "../../components/cardBeritaSkeleton";
 import { HeaderArticle } from "../../features/articlePage/headerArticle";
+import imgEmpty from "./../../assets/images/empty-data.svg";
 
 export const ArticlePage: React.FC = () => {
   const articleService = ArtikelService();
@@ -86,8 +87,16 @@ export const ArticlePage: React.FC = () => {
                 ))
               : !loading &&
                 noResults && (
-                  <div className="text-center my-4 d-flex align-items-center justify-content-center">
-                    <p className="fs-4">Artikel tidak ditemukan.</p>
+                  <div className="text-center align-items-center mt-5">
+                    <img
+                      src={imgEmpty}
+                      alt=""
+                      className="img-fluid"
+                      style={{ width: "200px" }}
+                    />
+                    <div className="text-blue fw-bold mt-3 fs-6">
+                      Data Berita/Artikel Masih Kosong!
+                    </div>
                   </div>
                 )}
           </div>

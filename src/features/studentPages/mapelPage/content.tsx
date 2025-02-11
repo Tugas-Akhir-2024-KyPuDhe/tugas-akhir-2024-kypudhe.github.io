@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import useCookie from "react-use-cookie";
 import StudentHistoryService from "../../../services/studentHistoryService";
-import { decodeToken } from "../../../utils/myFunctions";
+import { badgeStatusHistory, decodeToken } from "../../../utils/myFunctions";
 import { StudentHistory } from "../../../interface/studentHistory.interface";
 
 export const Content: React.FC = () => {
@@ -145,7 +145,14 @@ export const Content: React.FC = () => {
             <div className="row mb-3">
               <div className="col-2 fw-medium">Status </div>
               <div className="col-auto">:</div>
-              <div className="col-9 fw-medium">{summary.status}</div>
+              <div className="col-9 fw-medium">
+                <span
+                  className={`badge mb-2 ${badgeStatusHistory(summary.status)}`}
+                  style={{ maxWidth: "fit-content" }}
+                >
+                  {summary.status}
+                </span>
+              </div>
             </div>
           </div>
         </div>

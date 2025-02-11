@@ -43,11 +43,16 @@ export const SchoolPage: React.FC = () => {
   const [statusUpdateInfo, setStatusUpdateInfo] = useState(false);
 
   const getData = async () => {
-    const response = await configSchool.getConfigSchool();
-    setdata(response.data);
-    setTempLogo(response.data.logo!.url);
-    setloading(false);
-  };
+    try {
+      const response = await configSchool.getConfigSchool();
+      setdata(response.data);
+      setTempLogo(response.data.logo!.url);
+    } catch (error) {
+      console.error(error)
+    }finally{
+      setloading(false);
+    }
+  }; 
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, files } = e.target;
