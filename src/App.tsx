@@ -45,6 +45,7 @@ import {
   AcademicYearPage,
   FormAcademicYearPage,
   DetailStudyTracerPage,
+  ChangePasswordPage,
 } from "./pages";
 import { SideBar } from "./components/sidebar";
 import PrivateRoute from "./components/privateRoute";
@@ -109,6 +110,15 @@ function App() {
               element={
                 <PrivateRoute
                   Component={DetailArticlePage}
+                  Role={["STAFF", "TEACHER", "STUDENT"]}
+                />
+              }
+            />
+            <Route
+              path="/ganti-password"
+              element={
+                <PrivateRoute
+                  Component={ChangePasswordPage}
                   Role={["STAFF", "TEACHER", "STUDENT"]}
                 />
               }

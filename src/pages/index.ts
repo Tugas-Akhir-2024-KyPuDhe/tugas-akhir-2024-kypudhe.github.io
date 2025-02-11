@@ -53,6 +53,7 @@ import { MapelPage } from './studentPages/mapelPage/index';
 import { KelasPage } from './studentPages/kelasPage/index';
 import { NilaiPage } from './studentPages/nilaiPage/index';
 import { DetailKelasSiswaPage } from './studentPages/kelasPage/detail';
+import { ChangePasswordPage } from './changePasswordPage';
 
 //GLOBAL
 import { ArticlePage } from "./articlePage";
@@ -62,4 +63,4 @@ import { LoginPage } from "./loginPage";
 import { ProfilePage } from './profilePage';
 import { NotFoundPage } from './notFoundPage';
 
-export { NotFoundPage, HomePage, LoginPage, ArticlePage, FormArticlePage, DetailArticlePage, BannerPage, FormBannerPage, NilaiPage, KelasPage, MapelPage, AbsensiPage, SchoolPage, FacilityPage, FormFacilityPage, JurusanPage, FormJurusanPage, EkskulPage, FormEkskulPage, ProfilePage, DataSiswaMangementSiswaPage, FormSiswaMangementSiswaPage, DetailSiswaMangementSiswa, GaleriPage, FormGaleriPage, UpdateGaleriColletion, DataKelasMangementSiswaPage,FormDataKelasMangementSiswaPage, DetailKelasMangementSiswaPage, DataMapelMangementSiswaPage, FormMapelMangementSiswaPage, DataStaffMangementStaffPage,FormStaffMangementStaffPage, DetailKelasSiswaPage, BeritaPage, DetailStaffMangementSiswa, JadwalMengajarPage, DetailJadwalMengajarPage, KelasWaliPage, DetailKelasWaliPage, StudyTracerPage, AcademicYearPage, FormAcademicYearPage, DetailStudyTracerPage }
+export { NotFoundPage, HomePage, LoginPage, ArticlePage, FormArticlePage, DetailArticlePage, BannerPage, FormBannerPage, NilaiPage, KelasPage, MapelPage, AbsensiPage, SchoolPage, FacilityPage, FormFacilityPage, JurusanPage, FormJurusanPage, EkskulPage, FormEkskulPage, ProfilePage, DataSiswaMangementSiswaPage, FormSiswaMangementSiswaPage, DetailSiswaMangementSiswa, GaleriPage, FormGaleriPage, UpdateGaleriColletion, DataKelasMangementSiswaPage,FormDataKelasMangementSiswaPage, DetailKelasMangementSiswaPage, DataMapelMangementSiswaPage, FormMapelMangementSiswaPage, DataStaffMangementStaffPage,FormStaffMangementStaffPage, DetailKelasSiswaPage, BeritaPage, DetailStaffMangementSiswa, JadwalMengajarPage, DetailJadwalMengajarPage, KelasWaliPage, DetailKelasWaliPage, StudyTracerPage, AcademicYearPage, FormAcademicYearPage, DetailStudyTracerPage, ChangePasswordPage }

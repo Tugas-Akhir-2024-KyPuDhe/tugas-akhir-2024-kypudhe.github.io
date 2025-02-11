@@ -192,12 +192,12 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
                         </Link>
                       </li>
                       <li>
-                        <button
+                        <Link
+                          to="/ganti-password"
                           className="dropdown-item py-3"
-                          onClick={handleLogout}
                         >
                           Ganti Password
-                        </button>
+                        </Link>
                       </li>
                       <li>
                         <button

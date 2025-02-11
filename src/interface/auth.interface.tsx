@@ -62,6 +62,12 @@ export interface LoginData {
   username: string;
   password: string;
 }
+export interface PayloadChangePassword {
+  userId: number;
+  oldPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
 
 export interface TokenValidationResponse {
   valid: boolean;

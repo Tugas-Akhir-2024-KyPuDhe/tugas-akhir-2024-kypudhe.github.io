@@ -11,6 +11,7 @@ import {
   GetUsersResponse,
   ResponseGetStudentDetail,
   ResponseUpdatePhotoUser,
+  PayloadChangePassword,
 } from "./../interface/auth.interface";
 import useCookie from "react-use-cookie";
 import { FormParentOfStudent } from "../interface/student.interface";
@@ -27,11 +28,32 @@ const AuthService = () => {
       navigate("/login");
     }
   };
+
   const loginAuth = async (data: LoginData): Promise<LoginResponse> => {
     try {
       const response = await axios.post<LoginResponse>(
         `${apiUrl}/api/auth/login`,
         data
+      );
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  };
+
+  const changePassword = async (
+    data: PayloadChangePassword
+  ): Promise<UpdateUserResponse> => {
+    try {
+      const response = await axios.post<UpdateUserResponse>(
+        `${apiUrl}/api/auth/change-password`,
+        data,
+        {
+          headers: {
+            authorization: `Bearer ${userLoginCookie.token}`,
+          },
+        }
       );
       return response.data;
     } catch (error) {
@@ -248,6 +270,7 @@ const AuthService = () => {
     getStudentByNis,
     updatePhotoUser,
     updateDataParent,
+    changePassword,
   };
 };
 
