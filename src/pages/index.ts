@@ -46,6 +46,7 @@ import { StudyTracerPage } from './staffPages/contentWebPage/studyTracerPage';
 import { DetailStudyTracerPage } from './staffPages/contentWebPage/studyTracerPage/detail';
 import { AcademicYearPage } from './staffPages/configPage/academicYearPage';
 import { FormAcademicYearPage } from './staffPages/configPage/academicYearPage/formAcademicYear';
+import { ProblemReportPage } from './staffPages/configPage/problemReportpage';
 
 //STUDENT
 import { AbsensiPage } from './studentPages/absensiPage/index';
@@ -62,5 +63,6 @@ import { HomePage } from "./homePage";
 import { LoginPage } from "./loginPage";
 import { ProfilePage } from './profilePage';
 import { NotFoundPage } from './notFoundPage';
+import { FormProblemReportPage } from './problemReportpage/form';
 
-export { NotFoundPage, HomePage, LoginPage, ArticlePage, FormArticlePage, DetailArticlePage, BannerPage, FormBannerPage, NilaiPage, KelasPage, MapelPage, AbsensiPage, SchoolPage, FacilityPage, FormFacilityPage, JurusanPage, FormJurusanPage, EkskulPage, FormEkskulPage, ProfilePage, DataSiswaMangementSiswaPage, FormSiswaMangementSiswaPage, DetailSiswaMangementSiswa, GaleriPage, FormGaleriPage, UpdateGaleriColletion, DataKelasMangementSiswaPage,FormDataKelasMangementSiswaPage, DetailKelasMangementSiswaPage, DataMapelMangementSiswaPage, FormMapelMangementSiswaPage, DataStaffMangementStaffPage,FormStaffMangementStaffPage, DetailKelasSiswaPage, BeritaPage, DetailStaffMangementSiswa, JadwalMengajarPage, DetailJadwalMengajarPage, KelasWaliPage, DetailKelasWaliPage, StudyTracerPage, AcademicYearPage, FormAcademicYearPage, DetailStudyTracerPage, ChangePasswordPage }
+export { NotFoundPage, HomePage, LoginPage, ArticlePage, FormArticlePage, DetailArticlePage, BannerPage, FormBannerPage, NilaiPage, KelasPage, MapelPage, AbsensiPage, SchoolPage, FacilityPage, FormFacilityPage, JurusanPage, FormJurusanPage, EkskulPage, FormEkskulPage, ProfilePage, DataSiswaMangementSiswaPage, FormSiswaMangementSiswaPage, DetailSiswaMangementSiswa, GaleriPage, FormGaleriPage, UpdateGaleriColletion, DataKelasMangementSiswaPage,FormDataKelasMangementSiswaPage, DetailKelasMangementSiswaPage, DataMapelMangementSiswaPage, FormMapelMangementSiswaPage, DataStaffMangementStaffPage,FormStaffMangementStaffPage, DetailKelasSiswaPage, BeritaPage, DetailStaffMangementSiswa, JadwalMengajarPage, DetailJadwalMengajarPage, KelasWaliPage, DetailKelasWaliPage, StudyTracerPage, AcademicYearPage, FormAcademicYearPage, DetailStudyTracerPage, ChangePasswordPage, FormProblemReportPage, ProblemReportPage }

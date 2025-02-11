@@ -6,6 +6,7 @@ import {
   FaCircle,
   FaGlobe,
   FaNewspaper,
+  FaRegPenToSquare,
 } from "react-icons/fa6";
 import {
   Sidebar,
@@ -15,12 +16,12 @@ import {
   menuClasses,
   sidebarClasses,
 } from "react-pro-sidebar";
-import { IoGrid, IoSettingsSharp } from "react-icons/io5";
+import { IoGrid, IoSettingsSharp, IoWarningOutline } from "react-icons/io5";
 import { FaUserCircle } from "react-icons/fa";
 import AuthService from "../services/authService";
 import useCookie from "react-use-cookie";
 import { Footer } from "./footer";
-import { MdKeyboardArrowDown, MdLibraryBooks } from "react-icons/md";
+import { MdKeyboardArrowDown } from "react-icons/md";
 import { LuCheckSquare } from "react-icons/lu";
 import { RiSchoolLine } from "react-icons/ri";
 import { TbBooks, TbUserScreen } from "react-icons/tb";
@@ -315,7 +316,7 @@ export const ListMenu = () => {
         <>
           <MenuItem
             onClick={() => handleMenuClick("/nilai")}
-            icon={<MdLibraryBooks />}
+            icon={<FaRegPenToSquare />}
             style={{
               position: "relative",
               backgroundColor: selectedMenu.includes("/nilai") ? "#E5EAF2" : "",
@@ -928,9 +929,63 @@ export const ListMenu = () => {
               )}
               Sekolah
             </MenuItem>
+            <MenuItem
+              onClick={() => handleMenuClick("/config/kendala/laporan-kendala")}
+              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
+              style={{
+                position: "relative",
+                backgroundColor: selectedMenu.includes("/config/kendala/laporan-kendala")
+                  ? "#E5EAF2"
+                  : "",
+              }}
+              className={`fw-medium ${
+                selectedMenu.includes("/config/kendala/laporan-kendala")
+                  ? "text-blue"
+                  : "text-dark-soft"
+              }`}
+            >
+              {selectedMenu.includes("/config/kendala/laporan-kendala") && (
+                <div
+                  style={{
+                    position: "absolute",
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                    width: "4px",
+                    backgroundColor: "var(--blue-color)",
+                  }}
+                />
+              )}
+              Lihat kendala
+            </MenuItem>
           </SubMenu>
         </>
       )}
+      <MenuItem
+        onClick={() => handleMenuClick("/form-kendala")}
+        icon={<IoWarningOutline />}
+        style={{
+          position: "relative",
+          backgroundColor: selectedMenu === "/form-kendala" ? "#E5EAF2" : "",
+        }}
+        className={`fw-medium ${
+          selectedMenu === "/form-kendala" ? "text-blue" : "text-dark-soft"
+        }`}
+      >
+        {selectedMenu === "/form-kendala" && (
+          <div
+            style={{
+              position: "absolute",
+              right: 0,
+              top: 0,
+              bottom: 0,
+              width: "4px",
+              backgroundColor: "var(--blue-color)",
+            }}
+          />
+        )}
+        Laporkan Kendala
+      </MenuItem>
     </Menu>
   );
 };

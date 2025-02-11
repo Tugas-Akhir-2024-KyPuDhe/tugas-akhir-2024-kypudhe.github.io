@@ -46,6 +46,8 @@ import {
   FormAcademicYearPage,
   DetailStudyTracerPage,
   ChangePasswordPage,
+  FormProblemReportPage,
+  ProblemReportPage,
 } from "./pages";
 import { SideBar } from "./components/sidebar";
 import PrivateRoute from "./components/privateRoute";
@@ -119,6 +121,15 @@ function App() {
               element={
                 <PrivateRoute
                   Component={ChangePasswordPage}
+                  Role={["STAFF", "TEACHER", "STUDENT"]}
+                />
+              }
+            />
+            <Route
+              path="/form-kendala"
+              element={
+                <PrivateRoute
+                  Component={FormProblemReportPage}
                   Role={["STAFF", "TEACHER", "STUDENT"]}
                 />
               }
@@ -405,6 +416,15 @@ function App() {
               element={
                 <PrivateRoute
                   Component={FormAcademicYearPage}
+                  Role={["STAFF"]}
+                />
+              }
+            />
+            <Route
+              path="/config/kendala/laporan-kendala"
+              element={
+                <PrivateRoute
+                  Component={ProblemReportPage}
                   Role={["STAFF"]}
                 />
               }
