@@ -249,7 +249,7 @@ const PDFDaftarMengajarGuru: React.FC<PDFProps> = ({ guru, TA, data }) => (
               {item.timeEnd}
             </Text>
             <Text style={[styles.bodyCell, styles.col2, styles.textCenter]}>
-              {item.class.student.length}
+              {item.class.mainStudent.length}
             </Text>
           </View>
         ))}

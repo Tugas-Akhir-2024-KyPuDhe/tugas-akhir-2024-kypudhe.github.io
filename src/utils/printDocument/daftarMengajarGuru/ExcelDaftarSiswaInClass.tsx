@@ -46,7 +46,7 @@ export const exportToExcelDaftarMengajarGuru = (
       item.day,
       item.timeStart,
       item.timeEnd,
-      item.class.student.length,
+      item.class.mainStudent.length,
     ]);
   });
 

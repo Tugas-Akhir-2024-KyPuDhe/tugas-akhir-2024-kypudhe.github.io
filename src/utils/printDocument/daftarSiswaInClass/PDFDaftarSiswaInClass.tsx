@@ -276,12 +276,12 @@ const PDFDaftarSiswa: React.FC<PDFProps> = ({
             <Text style={[styles.bodyCell, styles.col2]}>{item.address}</Text>
             <Text style={[styles.bodyCell, styles.col2]}>{item.email}</Text>
             <Text style={[styles.bodyCell, styles.col3]}>
-              {item.ParentOfStudent[0]?.fatherName ||
+              {/* {item.ParentOfStudent[0]?.fatherName ||
                 item.ParentOfStudent[0]?.motherName ||
-                "-"}
+                "-"} */}
             </Text>
             <Text style={[styles.bodyCell, styles.col2]}>
-              {item.ParentOfStudent[0]?.phone || "-"}
+              {/* {item.ParentOfStudent[0]?.phone || "-"} */}
             </Text>
             <Text style={[styles.bodyCell, styles.col2, styles.textCenter]}>
               {convertTextStatus(item.status)}

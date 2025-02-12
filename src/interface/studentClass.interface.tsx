@@ -35,6 +35,7 @@ export interface Class {
   StudentPositionInClass: IStudentPositionInClass[];
   homeRoomTeacher: StaffDetails;
   student: StudentDetail[];
+  mainStudent: StudentDetail[];
   CourseInClass?: CourseInClass[];
   major: Fajusek  
   totalStudent: number

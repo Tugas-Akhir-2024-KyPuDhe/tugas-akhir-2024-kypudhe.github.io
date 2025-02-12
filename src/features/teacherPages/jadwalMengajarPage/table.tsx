@@ -87,10 +87,10 @@ export const Table: React.FC = () => {
           Siswa
         </>
       ),
-      selector: (row: CourseInClass) => row.class.student.length,
+      selector: (row: CourseInClass) => row.class.mainStudent.length,
       cell: (row: CourseInClass) => (
         <>
-          <div className="text-center w-100">{row.class.student.length}</div>
+          <div className="text-center w-100">{row.class.mainStudent.length}</div>
         </>
       ),
       sortable: true,

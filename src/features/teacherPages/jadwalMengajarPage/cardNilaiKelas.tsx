@@ -34,7 +34,7 @@ export const CardNilaiKelas: React.FC<CardProps> = ({
   useEffect(() => {
     if (data?.class?.student) {
       const initialGrades: Record<string, FormStateStudentGrade> = {};
-      data.class.student.forEach((student) => {
+      data.class.mainStudent.forEach((student) => {
         const studentGrade = student.StudentsGrades[0] || {};
         initialGrades[student.nis] = {
           courseCode: studentGrade.courseCode || "",
@@ -308,7 +308,7 @@ export const CardNilaiKelas: React.FC<CardProps> = ({
   ];
 
   const filteredData =
-    data?.class.student.filter((dt) =>
+    data?.class.mainStudent.filter((dt) =>
       dt.name.toLowerCase().includes(searchTerm.toLowerCase())
     ) || [];
 
@@ -371,14 +371,14 @@ export const CardNilaiKelas: React.FC<CardProps> = ({
       </div>
       <div className="col-12">
         <div className="pt-2">
-          Total : <span className="fw-bold">{data.class.student.length}</span>
+          Total : <span className="fw-bold">{data.class.mainStudent.length}</span>
         </div>
       </div>
 
       <div className="col-12">
         <DataTable
           columns={columns}
-          data={searchTerm ? filteredData : data?.class.student || []}
+          data={searchTerm ? filteredData : data?.class.mainStudent || []}
           pagination
           highlightOnHover
           className="mt-3"
