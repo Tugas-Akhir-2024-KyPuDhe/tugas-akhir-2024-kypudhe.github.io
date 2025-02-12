@@ -112,7 +112,7 @@ export const CardDaftarSiswaKelas: React.FC<CardProps> = ({
   ];
 
   const filteredData =
-    data?.class.mainStudent.filter((dt) =>
+    data?.class.student.filter((dt) =>
       dt.name.toLowerCase().includes(searchTerm.toLowerCase())
     ) || [];
 
@@ -174,7 +174,7 @@ export const CardDaftarSiswaKelas: React.FC<CardProps> = ({
                     className="dropdown-item"
                     onClick={() =>
                       exportToExcelDaftarSiswaInClass(
-                        data?.class.mainStudent,
+                        data?.class.student,
                         data.class.name,
                         data.class.major.name,
                         data.class.academicYear,
@@ -189,7 +189,7 @@ export const CardDaftarSiswaKelas: React.FC<CardProps> = ({
                   <button
                     onClick={() =>
                       exportToPDFDaftarSiswaInClass(
-                        data?.class.mainStudent,
+                        data?.class.student,
                         data.class.name,
                         data.class.major.name,
                         data.class.academicYear,
@@ -217,7 +217,7 @@ export const CardDaftarSiswaKelas: React.FC<CardProps> = ({
         </div>
         <div className="col-12">
           <div className="">
-            Total : <span className="fw-bold">{data.class.mainStudent.length}</span>
+            Total : <span className="fw-bold">{data.class.student.length}</span>
           </div>
         </div>
       </div>
@@ -225,7 +225,7 @@ export const CardDaftarSiswaKelas: React.FC<CardProps> = ({
       <div className="col-12">
         <DataTable
           columns={columns}
-          data={searchTerm ? filteredData : data?.class.mainStudent || []}
+          data={searchTerm ? filteredData : data?.class.student || []}
           pagination
           highlightOnHover
           className="mt-3"

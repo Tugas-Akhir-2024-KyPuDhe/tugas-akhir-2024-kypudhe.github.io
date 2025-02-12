@@ -174,7 +174,6 @@ export const DetailKelasMangementSiswaPage: React.FC = () => {
         const response = await classService.getClassById(parseInt(id));
         const data = response.data;
         setDataClass(data);
-        console.log('dari class', response);
         
         setDataStudentsInClass(response.data.student);
         setDataCourseInClass(data.CourseInClass!);
