@@ -20,7 +20,7 @@ const StudentGradeService = () => {
   };
 
   const insertGrade = async (
-    data: FormStateStudentGrade
+    data: FormStateStudentGrade[]
   ): Promise<ResponseActionStudentGrade> => {
     try {
       const response = await axios.post<ResponseActionStudentGrade>(

@@ -27,9 +27,7 @@ export const CardNilaiKelas: React.FC<CardProps> = ({
   const [selectedStudent, setSelectedStudent] = useState<StudentDetail | null>(
     null
   );
-  const [loadingButton, setLoadingButton] = useState<Record<string, boolean>>(
-    {}
-  );
+  const [loadingButton, setLoadingButton] = useState<boolean>(false);
 
   useEffect(() => {
     if (data?.class?.student) {
@@ -69,24 +67,15 @@ export const CardNilaiKelas: React.FC<CardProps> = ({
     }));
   };
 
-  const handleSaveGarde = async (studentName: string, studentId: string) => {
-    setLoadingButton((prev) => ({ ...prev, [studentId]: true })); // Set loading state for the specific student
-    const currentGrade = grades[studentId] || {};
+  const handleSaveAllGrades = async () => {
+    setLoadingButton(true); // Set loading state for the save button
 
-    const payload: FormStateStudentGrade = {
-      task: currentGrade.task || "",
-      UH: currentGrade.UH || "",
-      PTS: currentGrade.PTS || "",
-      PAS: currentGrade.PAS || "",
-      portofolio: currentGrade.portofolio || "",
-      proyek: currentGrade.proyek || "",
-      attitude: currentGrade.attitude || "",
-      description: currentGrade.description || "",
-      nis: studentId,
+    const payload = Object.keys(grades).map((nis) => ({
+      ...grades[nis],
       teacherId: data.teacher.id,
       classId: data.class.id,
       courseCode: data.courseDetail.code,
-    };
+    }));
 
     try {
       const response = await studentGradeService.insertGrade(payload);
@@ -95,7 +84,7 @@ export const CardNilaiKelas: React.FC<CardProps> = ({
         Toast.fire({
           icon: "success",
           timer: 5000,
-          title: `Nilai ${studentName} Berhasil Diupdate`,
+          title: `Nilai semua siswa berhasil diupdate`,
         });
       }
     } catch (error) {
@@ -103,17 +92,19 @@ export const CardNilaiKelas: React.FC<CardProps> = ({
       Toast.fire({
         icon: "error",
         timer: 5000,
-        title: `Nilai ${studentName} Gagal Diupdate`,
+        title: `Gagal mengupdate nilai siswa`,
       });
     } finally {
-      setLoadingButton((prev) => ({ ...prev, [studentId]: false })); // Reset loading state
+      setLoadingButton(false); // Reset loading state
     }
   };
 
   const columns = [
     {
       name: "No",
-      cell: (_row: StudentDetail, index: number) => <div className="w-100 text-center">{index + 1}</div>,
+      cell: (_row: StudentDetail, index: number) => (
+        <div className="w-100 text-center">{index + 1}</div>
+      ),
       width: "50px",
     },
     {
@@ -279,32 +270,6 @@ export const CardNilaiKelas: React.FC<CardProps> = ({
       ),
       width: "95px",
     },
-    {
-      name: "Action",
-      cell: (row: StudentDetail) => (
-        <div className="text-center w-100">
-          <button
-            className="btn btn-info bg-blue btn-sm border-0 me-2 text-light"
-            onClick={() => handleSaveGarde(row.name, row.nis)}
-            disabled={loading || loadingButton[row.nis]} // Disable button if loading
-          >
-            {loadingButton[row.nis] ? (
-              <div
-                className="spinner-border spinner-border-sm text-light"
-                role="status"
-              >
-                <span className="visually-hidden">Loading...</span>
-              </div>
-            ) : (
-              <>
-                <FaSave className="me-1" /> Simpan
-              </>
-            )}
-          </button>
-        </div>
-      ),
-      width: "140px",
-    },
   ];
 
   const filteredData =
@@ -403,6 +368,30 @@ export const CardNilaiKelas: React.FC<CardProps> = ({
           }}
         />
       </div>
+      {/* Tombol Simpan untuk Semua Data */}
+      <div className="col-12">
+        <div className="text-end">
+          <button
+            type="button"
+            onClick={handleSaveAllGrades}
+            className="btn btn-success border-0 me-3 py-2"
+            disabled={loading || loadingButton} // Disable button if loading
+          >
+            {loadingButton ? (
+              <div
+                className="spinner-border spinner-border-sm text-light"
+                role="status"
+              >
+                <span className="visually-hidden">Loading...</span>
+              </div>
+            ) : (
+              <>
+                <FaSave className="me-2" /> Simpan Semua
+              </>
+            )}
+          </button>
+        </div>
+      </div>
       {/* Modal */}
       <div
         className="modal fade"
@@ -439,7 +428,7 @@ export const CardNilaiKelas: React.FC<CardProps> = ({
                     <div className="col-2 fw-medium">NIS</div>
                     <div className="col-auto">:</div>
                     <div className="col-9 fw-medium">
-                    {(selectedStudent && selectedStudent.nis) || ""}
+                      {(selectedStudent && selectedStudent.nis) || ""}
                     </div>
                   </div>
                 </div>
