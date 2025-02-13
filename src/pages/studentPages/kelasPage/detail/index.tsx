@@ -88,7 +88,10 @@ export const DetailKelasSiswaPage: React.FC = () => {
           await handleGetSummaryAttendance(
             parseInt(response.data.currentClassId)
           );
-          await getClass(parseInt(response.data.currentClassId));
+          await getClass(
+            parseInt(response.data.currentClassId),
+            response.data.status
+          );
           await getStudentDetailAttendance(
             dtoken.nis,
             parseInt(response.data.currentClassId)
@@ -128,7 +131,7 @@ export const DetailKelasSiswaPage: React.FC = () => {
     }
   };
 
-  const getClass = async (id: number) => {
+  const getClass = async (id: number, statusHistory: string) => {
     try {
       setLoading(true);
       const response = await studentClass.getClassById(id);
@@ -137,9 +140,7 @@ export const DetailKelasSiswaPage: React.FC = () => {
         (dt) => dt.student.nis == dtoken.nis
       );
       if (havePosition.length > 0) {
-        console.log(data?.status);
-        
-        if (data?.status === "Lulus") {
+        if (statusHistory === "Lulus") {
           setSubMenuItemsAbsensi([
             ...subMenuItemsAbsensi,
             { label: "Daftar Absensi", key: "daftar-absensi" },
