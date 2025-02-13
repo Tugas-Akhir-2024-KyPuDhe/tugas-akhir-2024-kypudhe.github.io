@@ -1,7 +1,11 @@
 import axios from "axios";
 import useCookie from "react-use-cookie";
 import { useNavigate } from "react-router-dom";
-import { ResponseGetStudent, StudentDetail } from "../interface/student.interface";
+import {
+  ParentOfStudent,
+  ResponseGetStudent,
+  StudentDetail,
+} from "../interface/student.interface";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 const StudentService = () => {
@@ -81,10 +85,32 @@ const StudentService = () => {
     }
   };
 
+  const getParentStudent = async (
+    nis: string
+  ): Promise<ResponseGetStudent<ParentOfStudent>> => {
+    try {
+      const response = await axios.get<ResponseGetStudent<ParentOfStudent>>(
+        `${apiUrl}/api/student/parent/get?nis=${nis}`,
+        {
+          headers: {
+            authorization: `Bearer ${userLoginCookie?.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        handleUnauthorized(error.response?.status || 0);
+      }
+      throw error;
+    }
+  };
+
   return {
     getNewStudent,
     getAllStudent,
     getStudentByNis,
+    getParentStudent,
   };
 };
 

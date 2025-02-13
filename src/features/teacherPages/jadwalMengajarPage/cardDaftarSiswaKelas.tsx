@@ -1,5 +1,8 @@
 import React, { useState } from "react";
-import { StudentDetail } from "../../../interface/student.interface";
+import {
+  ParentOfStudent,
+  StudentDetail,
+} from "../../../interface/student.interface";
 import { CourseInClass } from "../../../interface/courseInClass.interface";
 import DataTable from "react-data-table-component";
 import { FaEye } from "react-icons/fa6";
@@ -15,6 +18,7 @@ import { exportToExcelDaftarSiswaInClass } from "../../../utils/printDocument/da
 import StudentAttendanceService from "../../../services/studentAttendanceService";
 import { AttendanceMonth } from "../../../interface/studentAttendance.interface";
 import { CardAbsensiStudent } from "../../../components/cardAbsensiStudent";
+import StudentService from "../../../services/studentService";
 
 interface CardProps {
   loading: boolean;
@@ -26,12 +30,15 @@ export const CardDaftarSiswaKelas: React.FC<CardProps> = ({
   loading,
   data,
 }) => {
+  const studentService = StudentService();
   const studentAttendanceService = StudentAttendanceService();
 
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [selectedStudent, setSelectedStudent] = useState<StudentDetail | null>(
     null
   );
+  const [parentOfStudent, setParentOfStudent] =
+    useState<ParentOfStudent | null>(null);
   const [dataStudentAttendance, setDataStudentAttendance] = useState<
     AttendanceMonth[]
   >([]);
@@ -46,14 +53,26 @@ export const CardDaftarSiswaKelas: React.FC<CardProps> = ({
       const response =
         await studentAttendanceService.getStudentDetailAttendance(nis, classId);
       setDataStudentAttendance(response.data.attendances);
-      console.log(response);
     } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getParentOfStudent = async (nis: string) => {
+    try {
+      const response = await studentService.getParentStudent(nis);
+      if (response.status === 200) {
+        setParentOfStudent(response.data);
+      }
+    } catch (error) {
+      setParentOfStudent(null);
       console.error(error);
     }
   };
 
   const handleClickDetail = async (data: StudentDetail) => {
     setSelectedStudent(data);
+    await getParentOfStudent(data.nis);
     await getStudentDetailAttendance(
       data.nis,
       parseInt(data.HistoryClass[0].currentClassId)
@@ -371,29 +390,21 @@ export const CardDaftarSiswaKelas: React.FC<CardProps> = ({
                       <CardDataOrangTua
                         nis={selectedStudent!.nis}
                         fatherName={
-                          (selectedStudent?.ParentOfStudent[0] &&
-                            selectedStudent?.ParentOfStudent[0].fatherName) ||
+                          (parentOfStudent && parentOfStudent?.fatherName) ||
                           "-"
                         }
                         motherName={
-                          (selectedStudent?.ParentOfStudent[0] &&
-                            selectedStudent?.ParentOfStudent[0].motherName) ||
+                          (parentOfStudent && parentOfStudent?.motherName) ||
                           "-"
                         }
                         phone={
-                          (selectedStudent?.ParentOfStudent[0] &&
-                            selectedStudent?.ParentOfStudent[0].phone) ||
-                          "-"
+                          (parentOfStudent && parentOfStudent?.phone) || "-"
                         }
                         parentJob={
-                          (selectedStudent?.ParentOfStudent[0] &&
-                            selectedStudent?.ParentOfStudent[0].parentJob) ||
-                          ""
+                          (parentOfStudent && parentOfStudent?.parentJob) || ""
                         }
                         parentAddress={
-                          (selectedStudent?.ParentOfStudent[0] &&
-                            selectedStudent?.ParentOfStudent[0]
-                              .parentAddress) ||
+                          (parentOfStudent && parentOfStudent?.parentAddress) ||
                           "-"
                         }
                       />

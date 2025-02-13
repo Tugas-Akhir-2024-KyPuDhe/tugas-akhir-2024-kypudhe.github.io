@@ -135,7 +135,13 @@ export const CardNilaiDetailKelas: React.FC<CardProps> = ({
               </thead>
               <tbody>
                 {(data &&
-                  data.currentClass.CourseInClass?.map((mapel, index) => (
+                  data.currentClass.CourseInClass?.filter(
+                    (mapel, index, self) =>
+                      index ===
+                      self.findIndex(
+                        (m) => m.courseDetail.name === mapel.courseDetail.name
+                      )
+                  ).map((mapel, index) => (
                     <tr key={index}>
                       <td className="py-3 text-center" scope="row">
                         {index + 1}

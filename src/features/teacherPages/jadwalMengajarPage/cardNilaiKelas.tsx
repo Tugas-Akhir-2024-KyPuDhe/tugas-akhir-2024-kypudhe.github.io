@@ -72,6 +72,7 @@ export const CardNilaiKelas: React.FC<CardProps> = ({
 
     const payload = Object.keys(grades).map((nis) => ({
       ...grades[nis],
+      nis: nis,
       teacherId: data.teacher.id,
       classId: data.class.id,
       courseCode: data.courseDetail.code,
