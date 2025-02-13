@@ -139,18 +139,16 @@ export const DetailKelasSiswaPage: React.FC = () => {
       const havePosition = dataRes?.StudentPositionInClass.filter(
         (dt) => dt.student.nis == dtoken.nis
       );
+      
       if (havePosition.length > 0) {
-        if (statusHistory === "Lulus") {
+        console.log(statusHistory);
+        if (statusHistory === "Aktif") {
           setSubMenuItemsAbsensi([
             ...subMenuItemsAbsensi,
+            { label: "Buat Absensi", key: "buat-absensi" },
             { label: "Daftar Absensi", key: "daftar-absensi" },
           ]);
         }
-        setSubMenuItemsAbsensi([
-          ...subMenuItemsAbsensi,
-          { label: "Buat Absensi", key: "buat-absensi" },
-          { label: "Daftar Absensi", key: "daftar-absensi" },
-        ]);
       }
     } catch (error) {
       const axiosError = error as AxiosError;
