@@ -384,7 +384,7 @@ export const CardDaftarSiswaKelas: React.FC<CardProps> = ({
                             .year()
                             .toString() || ""
                         }
-                        studentStatus={selectedStudent?.status || ""}
+                        studentStatus={selectedStudent?.HistoryClass[0].status || ""}
                       />
                     ) : activeMenu === "data-orang-tua" ? (
                       <CardDataOrangTua

@@ -55,31 +55,31 @@ export const CardDetailKelas: React.FC<CardProps> = ({
         </div>
         <div className="col-12">
           <div className="row mb-3">
-            <div className="col-2 fw-medium">Tahun Ajaran</div>
+            <div className="col-3 col-md-2 fw-medium">Tahun Ajaran</div>
             <div className="col-auto">:</div>
-            <div className="col-9 fw-medium">{data && data.class.academicYear}</div>
+            <div className="col fw-medium">{data && data.class.academicYear}</div>
           </div>
           <div className="row mb-3">
-            <div className="col-2 fw-medium">Guru Pengajar</div>
+            <div className="col-3 col-md-2 fw-medium">Guru Pengajar</div>
             <div className="col-auto">:</div>
-            <div className="col-9 fw-medium">{data && teacherName}</div>
+            <div className="col fw-medium">{data && teacherName}</div>
           </div>
           <div className="row mb-3">
-            <div className="col-2 fw-medium">Nama Kelas</div>
+            <div className="col-3 col-md-2 fw-medium">Nama Kelas</div>
             <div className="col-auto">:</div>
-            <div className="col-9 fw-medium">{data && data.class.name}</div>
+            <div className="col fw-medium">{data && data.class.name}</div>
           </div>
           <div className="row mb-3">
-            <div className="col-2 fw-medium">Mata Pelajaran</div>
+            <div className="col-3 col-md-2 fw-medium">Mata Pelajaran</div>
             <div className="col-auto">:</div>
-            <div className="col-9 fw-medium">
+            <div className="col fw-medium">
               {data && data.courseDetail.name}
             </div>
           </div>
           <div className="row mb-3">
-            <div className="col-2 fw-medium">Jadwal</div>
+            <div className="col-3 col-md-2 fw-medium">Jadwal</div>
             <div className="col-auto">:</div>
-            <div className="col-9 fw-medium">
+            <div className="col fw-medium">
               {data && data.day}, {data && data.timeStart} -{" "}
               {data && data.timeEnd}
             </div>

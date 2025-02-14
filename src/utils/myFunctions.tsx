@@ -89,6 +89,26 @@ export const convertStartEndYear = (startYear: Date): string => {
   return date.toISOString().split("T")[0];
 };
 
+export const convertStatusHistory = (status: string): JSX.Element => {
+  return status.toLocaleLowerCase() === "active" ? (
+    <>
+      <span className="badge bg-blue">Aktif</span>
+    </>
+  ) : status.toLocaleLowerCase() === "naik kelas" ? (
+    <>
+      <span className="badge text-bg-success">{status}</span>
+    </>
+  ) : status.toLocaleLowerCase() === "lulus" ? (
+    <>
+      <span className="badge text-bg-success">{status}</span>
+    </>
+  ) : (
+    <>
+      <span className="badge text-bg-danger">{status}</span>
+    </>
+  );
+};
+
 export const convertStatus = (status: string): JSX.Element => {
   return status === "Active" ? (
     <>
@@ -278,3 +298,9 @@ export const toolbarOptions = [
   [{ align: [] }, { color: [] }, { background: [] }],
   ["clean"],
 ];
+
+export const convertToPercentage = (value: string) => {
+  const floatValue = parseFloat(value);
+  if (isNaN(floatValue)) return "0%";
+  return `${(floatValue * 100).toFixed(0)}%`;
+};

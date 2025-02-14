@@ -20,7 +20,7 @@ import StudentAttendanceService from "../../../services/studentAttendanceService
 const subMenuItemsDetailKelasGuru = [
   { label: "Daftar Siswa", key: "daftar-siswa" },
   { label: "Absensi", key: "absensi" },
-  { label: "Nilai", key: "nilai" },
+  { label: "Penilaian", key: "nilai" },
 ];
 
 export const DetailJadwalMengajarPage: React.FC = () => {

@@ -4,7 +4,11 @@ import { CourseInClass } from "../../../interface/courseInClass.interface";
 import DataTable from "react-data-table-component";
 import { FaSave } from "react-icons/fa";
 import StudentGradeService from "../../../services/studentGradeService";
-import { Toast } from "../../../utils/myFunctions";
+import {
+  convertToPercentage,
+  showConfirmationDialog,
+  Toast,
+} from "../../../utils/myFunctions";
 import { FormStateStudentGrade } from "../../../interface/studentGrade.interface";
 
 interface CardProps {
@@ -27,6 +31,25 @@ export const CardNilaiKelas: React.FC<CardProps> = ({
   const [selectedStudent, setSelectedStudent] = useState<StudentDetail | null>(
     null
   );
+  const [manualFinalGrades, setManualFinalGrades] = useState<
+    Record<string, string>
+  >({});
+  const [weights, setWeights] = useState({
+    task: 0,
+    UH: 0,
+    PTS: 0,
+    PAS: 0,
+    portofolio: 0,
+    proyek: 0,
+  });
+  const [weightPercentages, setWeightPercentages] = useState({
+    task: "0%",
+    UH: "0%",
+    PTS: "0%",
+    PAS: "0%",
+    portofolio: "0%",
+    proyek: "0%",
+  });
   const [loadingButton, setLoadingButton] = useState<boolean>(false);
 
   useEffect(() => {
@@ -68,36 +91,110 @@ export const CardNilaiKelas: React.FC<CardProps> = ({
   };
 
   const handleSaveAllGrades = async () => {
-    setLoadingButton(true); // Set loading state for the save button
+    const result = await showConfirmationDialog({
+      title: "<b>Apakah Nilai Sudah Sesuai?</b>",
+      icon: "warning",
+      confirmButtonText: "Ya, Sudah!",
+      cancelButtonText: "Cek Lagi",
+    });
 
-    const payload = Object.keys(grades).map((nis) => ({
-      ...grades[nis],
-      nis: nis,
-      teacherId: data.teacher.id,
-      classId: data.class.id,
-      courseCode: data.courseDetail.code,
+    if (result.isConfirmed) {
+      setLoadingButton(true);
+
+      const payload = Object.keys(grades).map((nis) => ({
+        ...grades[nis],
+        nis: nis,
+        teacherId: data.teacher.id,
+        classId: data.class.id,
+        courseCode: data.courseDetail.code,
+        finalGrade: manualFinalGrades[nis] || calculateFinalGrade(nis), // Gunakan nilai manual jika ada, jika tidak gunakan nilai otomatis
+      }));
+
+      try {
+        const response = await studentGradeService.insertGrade(payload);
+        refreshData!();
+        if (response.status === 201) {
+          Toast.fire({
+            icon: "success",
+            timer: 5000,
+            title: `Nilai semua siswa berhasil diupdate`,
+          });
+        }
+      } catch (error) {
+        console.error(error);
+        Toast.fire({
+          icon: "error",
+          timer: 5000,
+          title: `Gagal mengupdate nilai siswa`,
+        });
+      } finally {
+        setLoadingButton(false);
+      }
+    }
+  };
+
+  const handleWeightChange = (field: string, value: string) => {
+    // Update nilai bobot
+    setWeights((prev) => ({
+      ...prev,
+      [field]: parseFloat(value) || 0,
     }));
 
-    try {
-      const response = await studentGradeService.insertGrade(payload);
-      refreshData!();
-      if (response.status === 201) {
-        Toast.fire({
-          icon: "success",
-          timer: 5000,
-          title: `Nilai semua siswa berhasil diupdate`,
-        });
-      }
-    } catch (error) {
-      console.error(error);
-      Toast.fire({
-        icon: "error",
-        timer: 5000,
-        title: `Gagal mengupdate nilai siswa`,
-      });
-    } finally {
-      setLoadingButton(false); // Reset loading state
-    }
+    // Update nilai persentase
+    setWeightPercentages((prev) => ({
+      ...prev,
+      [field]: convertToPercentage(value),
+    }));
+  };
+
+  const calculateFinalGrade = (studentId: string) => {
+    const studentGrades = grades[studentId];
+    if (!studentGrades) return "0.00"; // Pastikan mengembalikan string agar konsisten
+
+    // Ambil nilai siswa dengan default 0 jika undefined
+    const {
+      task = "0",
+      UH = "0",
+      PTS = "0",
+      PAS = "0",
+      portofolio = "0",
+      proyek = "0",
+    } = studentGrades;
+
+    // Ambil bobot dengan default 0 jika undefined
+    const {
+      task: taskWeight = 0,
+      UH: UHWeight = 0,
+      PTS: PTSWeight = 0,
+      PAS: PASWeight = 0,
+      portofolio: portofolioWeight = 0,
+      proyek: proyekWeight = 0,
+    } = weights;
+
+    // Hitung total bobot
+    const totalWeight =
+      taskWeight +
+      UHWeight +
+      PTSWeight +
+      PASWeight +
+      portofolioWeight +
+      proyekWeight;
+
+    // Hindari pembagian dengan nol
+    if (totalWeight === 0) return "-";
+
+    // Hitung nilai akhir
+    const finalGrade =
+      (parseFloat(task) * taskWeight +
+        parseFloat(UH) * UHWeight +
+        parseFloat(PTS) * PTSWeight +
+        parseFloat(PAS) * PASWeight +
+        parseFloat(portofolio) * portofolioWeight +
+        parseFloat(proyek) * proyekWeight) /
+      totalWeight;
+
+    // return finalGrade.toFixed(2); // Format angka dengan 2 desimal
+    return Math.floor(finalGrade);
   };
 
   const columns = [
@@ -120,7 +217,7 @@ export const CardNilaiKelas: React.FC<CardProps> = ({
       cell: (row: StudentDetail) => row.name,
     },
     {
-      name: "Tugas",
+      name: <div className="w-100 text-center">Nilai Tugas</div>,
       selector: (row: StudentDetail) =>
         row.StudentsGrades[0] && (row.StudentsGrades[0].task || "-"),
       cell: (row: StudentDetail) => (
@@ -141,7 +238,7 @@ export const CardNilaiKelas: React.FC<CardProps> = ({
       width: "80px",
     },
     {
-      name: "UH",
+      name: <div className="w-100 text-center">Nilai UH</div>,
       selector: (row: StudentDetail) =>
         row.StudentsGrades[0] && (row.StudentsGrades[0].UH || "-"),
       cell: (row: StudentDetail) => (
@@ -162,7 +259,7 @@ export const CardNilaiKelas: React.FC<CardProps> = ({
       width: "80px",
     },
     {
-      name: "PTS",
+      name: <div className="w-100 text-center">Nilai PTS</div>,
       selector: (row: StudentDetail) =>
         row.StudentsGrades[0] && (row.StudentsGrades[0].PTS || "-"),
       cell: (row: StudentDetail) => (
@@ -183,7 +280,7 @@ export const CardNilaiKelas: React.FC<CardProps> = ({
       width: "80px",
     },
     {
-      name: "PAS",
+      name: <div className="w-100 text-center">Nilai PAS</div>,
       selector: (row: StudentDetail) =>
         row.StudentsGrades[0] && (row.StudentsGrades[0].PAS || "-"),
       cell: (row: StudentDetail) => (
@@ -204,7 +301,7 @@ export const CardNilaiKelas: React.FC<CardProps> = ({
       width: "80px",
     },
     {
-      name: "Portofolio",
+      name: <div className="w-100 text-center">Nilai Portofolio</div>,
       selector: (row: StudentDetail) =>
         row.StudentsGrades[0] && (row.StudentsGrades[0].portofolio || "-"),
       cell: (row: StudentDetail) => (
@@ -230,7 +327,7 @@ export const CardNilaiKelas: React.FC<CardProps> = ({
       width: "80px",
     },
     {
-      name: "Proyek",
+      name: <div className="w-100 text-center">Nilai Proyek</div>,
       selector: (row: StudentDetail) =>
         row.StudentsGrades[0] && (row.StudentsGrades[0].proyek || "-"),
       cell: (row: StudentDetail) => (
@@ -255,7 +352,37 @@ export const CardNilaiKelas: React.FC<CardProps> = ({
       width: "80px",
     },
     {
-      name: "Ket",
+      name: <>Nilai Akhir</>,
+      selector: () => "",
+      cell: (row: StudentDetail) => (
+        <>
+          <input
+            type="text"
+            className="form-control text-center fw-medium px-0 fw-bold"
+            value={
+              manualFinalGrades[row.nis] !== undefined
+                ? manualFinalGrades[row.nis]
+                : calculateFinalGrade(row.nis)
+            }
+            onKeyPress={(event) => {
+              if (!/[0-9]/.test(event.key)) {
+                event.preventDefault();
+              }
+            }}
+            onChange={(e) => {
+              const value = e.target.value;
+              setManualFinalGrades((prev) => ({
+                ...prev,
+                [row.nis]: value,
+              }));
+            }}
+          />
+        </>
+      ),
+      width: "80px",
+    },
+    {
+      name: <div className="w-100 text-center">Ket</div>,
       cell: (row: StudentDetail) => (
         <>
           <button
@@ -279,180 +406,346 @@ export const CardNilaiKelas: React.FC<CardProps> = ({
     ) || [];
 
   return (
-    <div
-      className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
-      style={{ backgroundColor: "#fff", position: "relative" }}
-    >
-      {loading && (
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(255, 255, 255, 0.7)",
-            zIndex: 20,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div className="spinner-border text-primary" role="status">
-            <span className="visually-hidden">Loading...</span>
+    <>
+      <div
+        className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
+        style={{ backgroundColor: "#fff", position: "relative" }}
+      >
+        {loading && (
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: "rgba(255, 255, 255, 0.7)",
+              zIndex: 20,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        )}
+        <div className="row g-3 d-flex justify-content-between">
+          <div className="col-12">
+            <div className="fw-bold position-relative pb-2">
+              Buat Penilaian Akhir
+              <div
+                style={{
+                  position: "absolute",
+                  left: 0,
+                  bottom: 0,
+                  width: "50px",
+                  height: "3px",
+                  backgroundColor: "var(--blue-color)",
+                }}
+              />
+            </div>
+          </div>
+          <div className="col-12">
+            <div className="alert alert-primary border-0 py-2">
+              Penilaian akhir ini digunakan untuk membantu perhitungan{" "}
+              <b>nilai akhir</b> setiap siswa. Nilai tersebut dihitung
+              berdasarkan bobot dan komponen penilaian seperti tugas, UH, PTS,
+              PAS, portofolio, dan proyek.
+            </div>
+          </div>
+          <div className="col-12 col-md-6">
+            <div className="row mb-3">
+              <div className="col-3 col-md-2 fw-medium">
+                Bobot Tugas{" "}
+                <b className="d-block text-blue">({weightPercentages.task})</b>
+              </div>
+              <div className="col-auto d-flex align-items-center">:</div>
+              <div className="col col-md-5 fw-medium my-auto">
+                <input
+                  type="text"
+                  name="bobotTugas"
+                  placeholder="Bobot (desimal)"
+                  className="form-control"
+                  onChange={(e) => handleWeightChange("task", e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="col-12 col-md-6">
+            <div className="row mb-3">
+              <div className="col-3 col-md-2 fw-medium">
+                Bobot UH{" "}
+                <b className="d-block text-blue">({weightPercentages.UH})</b>
+              </div>
+              <div className="col-auto d-flex align-items-center">:</div>
+              <div className="col col-md-5 fw-medium my-auto">
+                <input
+                  type="text"
+                  name="bobotUH"
+                  placeholder="Bobot (desimal)"
+                  className="form-control"
+                  onChange={(e) => handleWeightChange("UH", e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="col-12 col-md-6">
+            <div className="row mb-3">
+              <div className="col-3 col-md-2 fw-medium">
+                Bobot PTS{" "}
+                <b className="d-block text-blue">({weightPercentages.PTS})</b>
+              </div>
+              <div className="col-auto d-flex align-items-center">:</div>
+              <div className="col col-md-5 fw-medium my-auto">
+                <input
+                  type="text"
+                  name="bobotPTS"
+                  placeholder="Bobot (desimal)"
+                  className="form-control"
+                  onChange={(e) => handleWeightChange("PTS", e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="col-12 col-md-6">
+            <div className="row mb-3">
+              <div className="col-3 col-md-2 fw-medium">
+                Bobot PAS{" "}
+                <b className="d-block text-blue">({weightPercentages.PAS})</b>
+              </div>
+              <div className="col-auto d-flex align-items-center">:</div>
+              <div className="col col-md-5 fw-medium my-auto">
+                <input
+                  type="text"
+                  name="bobotPAS"
+                  placeholder="Bobot (desimal)"
+                  className="form-control"
+                  onChange={(e) => handleWeightChange("PAS", e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="col-12 col-md-6">
+            <div className="row mb-3">
+              <div className="col-3 col-md-2 fw-medium">
+                Bobot Portofolio{" "}
+                <b className="d-block text-blue">
+                  ({weightPercentages.portofolio})
+                </b>
+              </div>
+              <div className="col-auto d-flex align-items-center">:</div>
+              <div className="col col-md-5 fw-medium my-auto">
+                <input
+                  type="text"
+                  name="bobotPortofolio"
+                  placeholder="Bobot (desimal)"
+                  className="form-control"
+                  onChange={(e) =>
+                    handleWeightChange("portofolio", e.target.value)
+                  }
+                />
+              </div>
+            </div>
+          </div>
+          <div className="col-12 col-md-6">
+            <div className="row mb-3">
+              <div className="col-3 col-md-2 fw-medium">
+                Bobot Proyek{" "}
+                <b className="d-block text-blue">
+                  ({weightPercentages.proyek})
+                </b>
+              </div>
+              <div className="col-auto d-flex align-items-center">:</div>
+              <div className="col col-md-5 fw-medium my-auto">
+                <input
+                  type="text"
+                  name="bobotProyek"
+                  placeholder="Bobot (desimal)"
+                  className="form-control"
+                  onChange={(e) => handleWeightChange("proyek", e.target.value)}
+                />
+              </div>
+            </div>
           </div>
         </div>
-      )}
-      <div className="row g-3 d-flex justify-content-between">
-        <div className="col-12">
-          <div className="fw-bold position-relative pb-2">
-            Daftar Nilai Siswa
-            <div
-              style={{
-                position: "absolute",
-                left: 0,
-                bottom: 0,
-                width: "50px",
-                height: "3px",
-                backgroundColor: "var(--blue-color)",
-              }}
+      </div>
+      <div
+        className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
+        style={{ backgroundColor: "#fff", position: "relative" }}
+      >
+        {loading && (
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: "rgba(255, 255, 255, 0.7)",
+              zIndex: 20,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        )}
+        <div className="row g-3 d-flex justify-content-between">
+          <div className="col-12">
+            <div className="fw-bold position-relative pb-2">
+              Daftar Nilai Siswa
+              <div
+                style={{
+                  position: "absolute",
+                  left: 0,
+                  bottom: 0,
+                  width: "50px",
+                  height: "3px",
+                  backgroundColor: "var(--blue-color)",
+                }}
+              />
+            </div>
+          </div>
+          <div className="col-6 col-lg-3 col-md-3">
+            <button className="btn border-success text-success">
+              Export to Excel
+            </button>
+          </div>
+          <div className="col-6 col-lg-3 col-md-3">
+            <input
+              type="text"
+              className="form-control border-dark"
+              placeholder="Search.."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{ fontSize: "1.1em" }}
             />
           </div>
         </div>
-        <div className="col-6 col-lg-3 col-md-3">
-          <button className="btn border-success text-success">
-            Export to Excel
-          </button>
+        <div className="col-12">
+          <div className="pt-2">
+            Total : <span className="fw-bold">{data.class.student.length}</span>
+          </div>
         </div>
-        <div className="col-6 col-lg-3 col-md-3">
-          <input
-            type="text"
-            className="form-control border-dark"
-            placeholder="Search.."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            style={{ fontSize: "1.1em" }}
-          />
-        </div>
-      </div>
-      <div className="col-12">
-        <div className="pt-2">
-          Total : <span className="fw-bold">{data.class.student.length}</span>
-        </div>
-      </div>
 
-      <div className="col-12">
-        <DataTable
-          columns={columns}
-          data={searchTerm ? filteredData : data?.class.student || []}
-          pagination
-          highlightOnHover
-          className="mt-3"
-          customStyles={{
-            rows: {
-              style: {
-                "&:hover": {
-                  backgroundColor: "#f5f5f5",
-                  color: "#007bff",
+        <div className="col-12">
+          <DataTable
+            columns={columns}
+            data={searchTerm ? filteredData : data?.class.student || []}
+            pagination
+            highlightOnHover
+            className="mt-3"
+            customStyles={{
+              rows: {
+                style: {
+                  "&:hover": {
+                    backgroundColor: "#f5f5f5",
+                    color: "#007bff",
+                  },
                 },
               },
-            },
-            headCells: {
-              style: {
-                backgroundColor: "var(--blue-color)",
-                color: "#ffffff",
-                fontWeight: "bold",
-                textAlign: "center",
-                border: "0.1px solid #ddd",
+              headCells: {
+                style: {
+                  backgroundColor: "var(--blue-color)",
+                  color: "#ffffff",
+                  fontWeight: "bold",
+                  textAlign: "center",
+                  border: "0.1px solid #ddd",
+                },
               },
-            },
-          }}
-        />
-      </div>
-      {/* Tombol Simpan untuk Semua Data */}
-      <div className="col-12">
-        <div className="text-end">
-          <button
-            type="button"
-            onClick={handleSaveAllGrades}
-            className="btn btn-success border-0 me-3 py-2"
-            disabled={loading || loadingButton} // Disable button if loading
-          >
-            {loadingButton ? (
-              <div
-                className="spinner-border spinner-border-sm text-light"
-                role="status"
-              >
-                <span className="visually-hidden">Loading...</span>
-              </div>
-            ) : (
-              <>
-                <FaSave className="me-2" /> Simpan Semua
-              </>
-            )}
-          </button>
+            }}
+          />
         </div>
-      </div>
-      {/* Modal */}
-      <div
-        className="modal fade"
-        id="modalDetailDesk"
-        tabIndex={-1}
-        aria-hidden="true"
-      >
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title">Detail Keterangan Siswa</h5>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div className="modal-body">
-              <div className="row g-3">
-                <div className="col-12">
-                  <div className="row mb-3">
-                    <div className="col-2 fw-medium">Nama</div>
-                    <div className="col-auto">:</div>
-                    <div className="col-9 fw-medium">
-                      {(selectedStudent && selectedStudent.name) || ""}
+        {/* Tombol Simpan untuk Semua Data */}
+        <div className="col-12">
+          <div className="text-end">
+            <button
+              type="button"
+              onClick={handleSaveAllGrades}
+              className="btn btn-success border-0 me-3 py-2"
+              disabled={loading || loadingButton} // Disable button if loading
+            >
+              {loadingButton ? (
+                <div
+                  className="spinner-border spinner-border-sm text-light"
+                  role="status"
+                >
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              ) : (
+                <>
+                  <FaSave className="me-2" /> Simpan Semua
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+        {/* Modal */}
+        <div
+          className="modal fade"
+          id="modalDetailDesk"
+          tabIndex={-1}
+          aria-hidden="true"
+        >
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Detail Keterangan Siswa</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div className="modal-body">
+                <div className="row g-3">
+                  <div className="col-12">
+                    <div className="row mb-3">
+                      <div className="col-2 fw-medium">Nama</div>
+                      <div className="col-auto">:</div>
+                      <div className="col-9 fw-medium">
+                        {(selectedStudent && selectedStudent.name) || ""}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="row g-3">
-                <div className="col-12">
-                  <div className="row mb-3">
-                    <div className="col-2 fw-medium">NIS</div>
-                    <div className="col-auto">:</div>
-                    <div className="col-9 fw-medium">
-                      {(selectedStudent && selectedStudent.nis) || ""}
+                <div className="row g-3">
+                  <div className="col-12">
+                    <div className="row mb-3">
+                      <div className="col-2 fw-medium">NIS</div>
+                      <div className="col-auto">:</div>
+                      <div className="col-9 fw-medium">
+                        {(selectedStudent && selectedStudent.nis) || ""}
+                      </div>
                     </div>
                   </div>
                 </div>
+                <textarea
+                  className="form-control"
+                  placeholder="Masukkan Catatan..."
+                  value={
+                    grades[(selectedStudent && selectedStudent.nis) || ""]
+                      ?.description || ""
+                  }
+                  onChange={(e) =>
+                    handleInputChange(
+                      (selectedStudent && selectedStudent.nis) || "",
+                      "description",
+                      e.target.value
+                    )
+                  }
+                ></textarea>
               </div>
-              <textarea
-                className="form-control"
-                placeholder="Masukkan Catatan..."
-                value={
-                  grades[(selectedStudent && selectedStudent.nis) || ""]
-                    ?.description || ""
-                }
-                onChange={(e) =>
-                  handleInputChange(
-                    (selectedStudent && selectedStudent.nis) || "",
-                    "description",
-                    e.target.value
-                  )
-                }
-              ></textarea>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
