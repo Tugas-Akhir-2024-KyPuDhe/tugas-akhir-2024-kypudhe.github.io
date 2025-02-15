@@ -29,6 +29,7 @@ export interface StudentsGrades {
   portofolio: string;
   proyek: string;
   attitude: string;
+  finalGrade: string;
   description: string;
   course: Course;
   teacher: StaffDetail;
@@ -47,6 +48,7 @@ export interface FormStateStudentGrade {
   PAS: string;
   portofolio: string;
   proyek: string;
+  finalGrade?: string;
   attitude: string;
   description?: string;
 }

@@ -10,6 +10,7 @@ import {
   Toast,
 } from "../../../utils/myFunctions";
 import { FormStateStudentGrade } from "../../../interface/studentGrade.interface";
+import { FaPenToSquare } from "react-icons/fa6";
 
 interface CardProps {
   loading: boolean;
@@ -55,6 +56,8 @@ export const CardNilaiKelas: React.FC<CardProps> = ({
   useEffect(() => {
     if (data?.class?.student) {
       const initialGrades: Record<string, FormStateStudentGrade> = {};
+      const initialManualFinalGrades: Record<string, string> = {};
+
       data.class.student.forEach((student) => {
         const studentGrade = student.StudentsGrades[0] || {};
         initialGrades[student.nis] = {
@@ -71,8 +74,15 @@ export const CardNilaiKelas: React.FC<CardProps> = ({
           attitude: studentGrade.attitude || "",
           description: studentGrade.description || "",
         };
+
+        // Jika finalGrade sudah ada, simpan ke state manualFinalGrades
+        if (studentGrade.finalGrade !== undefined) {
+          initialManualFinalGrades[student.nis] = studentGrade.finalGrade;
+        }
       });
+
       setGrades(initialGrades);
+      setManualFinalGrades(initialManualFinalGrades); // Set nilai finalGrade dari backend
     }
   }, [data]);
 
@@ -92,12 +102,11 @@ export const CardNilaiKelas: React.FC<CardProps> = ({
 
   const handleSaveAllGrades = async () => {
     const result = await showConfirmationDialog({
-      title: "<b>Apakah Nilai Sudah Sesuai?</b>",
+      title: "<b>Data nilai yang ingin diupdate sudah sesuai semua?</b>",
       icon: "warning",
       confirmButtonText: "Ya, Sudah!",
       cancelButtonText: "Cek Lagi",
     });
-
     if (result.isConfirmed) {
       setLoadingButton(true);
 
@@ -107,7 +116,10 @@ export const CardNilaiKelas: React.FC<CardProps> = ({
         teacherId: data.teacher.id,
         classId: data.class.id,
         courseCode: data.courseDetail.code,
-        finalGrade: manualFinalGrades[nis] || calculateFinalGrade(nis), // Gunakan nilai manual jika ada, jika tidak gunakan nilai otomatis
+        finalGrade:
+          manualFinalGrades[nis] !== undefined // Jika ada nilai manual
+            ? manualFinalGrades[nis] // Gunakan nilai manual
+            : calculateFinalGrade(nis), // Jika tidak, gunakan nilai otomatis
       }));
 
       try {
@@ -145,6 +157,16 @@ export const CardNilaiKelas: React.FC<CardProps> = ({
       ...prev,
       [field]: convertToPercentage(value),
     }));
+  };
+
+  const handleGenerateFinalGrades = () => {
+    const updatedManualFinalGrades: Record<string, string> = {};
+
+    Object.keys(grades).forEach((nis) => {
+      updatedManualFinalGrades[nis] = calculateFinalGrade(nis);
+    });
+
+    setManualFinalGrades(updatedManualFinalGrades);
   };
 
   const calculateFinalGrade = (studentId: string) => {
@@ -193,8 +215,7 @@ export const CardNilaiKelas: React.FC<CardProps> = ({
         parseFloat(proyek) * proyekWeight) /
       totalWeight;
 
-    // return finalGrade.toFixed(2); // Format angka dengan 2 desimal
-    return Math.floor(finalGrade);
+      return Math.floor(finalGrade).toString();
   };
 
   const columns = [
@@ -353,22 +374,20 @@ export const CardNilaiKelas: React.FC<CardProps> = ({
     },
     {
       name: <>Nilai Akhir</>,
-      selector: () => "",
+      selector: (row: StudentDetail) =>
+        manualFinalGrades[row.nis] !== undefined // Cek apakah ada nilai manual
+          ? manualFinalGrades[row.nis] // Tampilkan nilai manual
+          : calculateFinalGrade(row.nis), // Jika tidak, tampilkan nilai otomatis
       cell: (row: StudentDetail) => (
         <>
           <input
             type="text"
-            className="form-control text-center fw-medium px-0 fw-bold"
+            className="form-control text-center fw-medium px-0"
             value={
-              manualFinalGrades[row.nis] !== undefined
-                ? manualFinalGrades[row.nis]
-                : calculateFinalGrade(row.nis)
+              manualFinalGrades[row.nis] !== undefined // Cek apakah ada nilai manual
+                ? manualFinalGrades[row.nis] // Tampilkan nilai manual
+                : calculateFinalGrade(row.nis) // Jika tidak, tampilkan nilai otomatis
             }
-            onKeyPress={(event) => {
-              if (!/[0-9]/.test(event.key)) {
-                event.preventDefault();
-              }
-            }}
             onChange={(e) => {
               const value = e.target.value;
               setManualFinalGrades((prev) => ({
@@ -568,6 +587,14 @@ export const CardNilaiKelas: React.FC<CardProps> = ({
                 />
               </div>
             </div>
+          </div>
+          <div className="col-12">
+            <button
+              className="btn btn-success py-2 px-4"
+              onClick={handleGenerateFinalGrades}
+            >
+              <FaPenToSquare className="me-3" /> Generate Nilai
+            </button>
           </div>
         </div>
       </div>
