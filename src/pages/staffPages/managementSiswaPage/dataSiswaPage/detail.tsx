@@ -201,7 +201,7 @@ export const DetailSiswaMangementSiswa: React.FC = () => {
           (activeMenu === "data-akademik" ? (
             <CardDataAkademik
               kelas={
-                (DataStudentHistory &&
+                (DataStudentHistory.length > 1 &&
                   DataStudentHistory[0].currentClass.name) ||
                 "-"
               }
