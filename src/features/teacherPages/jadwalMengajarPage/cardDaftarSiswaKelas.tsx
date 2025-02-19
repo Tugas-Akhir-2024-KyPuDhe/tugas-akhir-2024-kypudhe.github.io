@@ -248,6 +248,7 @@ export const CardDaftarSiswaKelas: React.FC<CardProps> = ({
           pagination
           highlightOnHover
           className="mt-3"
+          paginationDefaultPage={50}
           customStyles={{
             rows: {
               style: {

@@ -378,18 +378,6 @@ export const CardDaftarSiswaKelas: React.FC<CardProps> = ({
                           Absensi
                         </a>
                       </li>
-                      <li className="nav-item" style={{ cursor: "pointer" }}>
-                        <a
-                          className={`nav-link ${
-                            activeMenu === "hasil-raport"
-                              ? "active text-blue"
-                              : "text-dark"
-                          }`}
-                          onClick={() => handleMenuClick("hasil-raport")}
-                        >
-                          Hasil Raport
-                        </a>
-                      </li>
                     </ul>
                   </div>
 

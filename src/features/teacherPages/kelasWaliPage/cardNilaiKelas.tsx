@@ -142,17 +142,13 @@ export const CardNilaiKelas: React.FC<CardProps> = ({ data, student }) => {
           Akhir
         </div>
       ),
-      cell: () => <div className="w-100 text-center">-</div>,
-      width: "80px",
-    },
-    {
-      name: (
+      cell: (row: CourseInClass) => (
         <div className="w-100 text-center">
-          Nilai <br />
-          Huruf
+          {(row.courseDetail.StudentsGrades![0] &&
+            (row.courseDetail.StudentsGrades![0].finalGrade || "-")) ||
+            "-"}
         </div>
       ),
-      cell: () => <div className="w-100 text-center">-</div>,
       width: "80px",
     },
     {
@@ -247,6 +243,7 @@ export const CardNilaiKelas: React.FC<CardProps> = ({ data, student }) => {
           pagination
           highlightOnHover
           className="mt-3"
+          paginationDefaultPage={50}
           customStyles={{
             rows: {
               style: {

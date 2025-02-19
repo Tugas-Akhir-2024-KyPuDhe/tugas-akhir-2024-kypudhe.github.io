@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { HeaderTitlePage } from "../../../components/headerTitlePage";
 import { useNavigate, useParams } from "react-router-dom";
 import { CardDetailKelas } from "../../../features/teacherPages/kelasWaliPage/cardDetailKelas";
-import { CardAbsensiKelas } from "../../../features/teacherPages/jadwalMengajarPage/cardAbsensiKelas";
+import { CardNilaiKelas } from "../../../features/teacherPages/jadwalMengajarPage/cardAbsensiKelas";
 import { AxiosError } from "axios";
 import ClassStudentService from "../../../services/classStudentService";
 import { Class } from "../../../interface/studentClass.interface";
@@ -173,7 +173,7 @@ export const DetailKelasWaliPage: React.FC = () => {
         ) : activeMenu === "mata-pelajaran-dikelas" ? (
           <CardDaftarMapelKelas loading={loading} data={dataMapel} />
         ) : activeMenu === "nilai-akhir-siswa" ? (
-          <CardAbsensiKelas loading={loading} />
+          <CardNilaiKelas loading={loading} data={data!} />
         ) : (
           "lorem"
         ))}
