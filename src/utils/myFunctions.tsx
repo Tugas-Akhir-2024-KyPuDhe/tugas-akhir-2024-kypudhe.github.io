@@ -262,11 +262,16 @@ export const bgColorAttendance = (status: number): string => {
 };
 
 export const badgeStatusHistory = (data: string): string => {
-  return data === "Aktif"
-    ? "bg-blue"
-    : data === "Lulus"
-    ? "text-bg-success"
-    : "text-bg-danger";
+  const lowerCaseData = data.toLocaleLowerCase();
+  if (lowerCaseData === "aktif") {
+    return "bg-blue";
+  } else if (lowerCaseData === "lulus") {
+    return "text-bg-success";
+  } else if (lowerCaseData === "naik kelas") {
+    return "text-bg-success";
+  } else {
+    return "text-bg-danger";
+  }
 };
 
 export const formatMonthAndYear = (dateString: string) => {
