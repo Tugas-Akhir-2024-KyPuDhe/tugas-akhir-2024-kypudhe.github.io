@@ -114,11 +114,12 @@ const StaffService = () => {
 
   const getClassOfTeacher = async (
     nip: string,
-    id: string = ""
+    clasiid: string = "",
+    courseIdInClass: string = ""
   ): Promise<GetClassOfTeacher> => {
     try {
       const response = await axios.get<GetClassOfTeacher>(
-        `${apiUrl}/api/staff/get/class?nip=${nip}&id=${id}`,
+        `${apiUrl}/api/staff/get/class?nip=${nip}&id=${clasiid}&courseIdInClass=${courseIdInClass}`,
         {
           headers: {
             "Content-Type": "application/json",

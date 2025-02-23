@@ -9,7 +9,7 @@ import {
   showConfirmationDialog,
   Toast,
 } from "../../../utils/myFunctions";
-import { FormStateStudentGrade } from "../../../interface/studentGrade.interface";
+import { FormStateStudentGrade, StudentsGrades } from "../../../interface/studentGrade.interface";
 import { FaPenToSquare } from "react-icons/fa6";
 
 interface CardProps {
@@ -59,9 +59,13 @@ export const CardNilaiKelas: React.FC<CardProps> = ({
       const initialManualFinalGrades: Record<string, string> = {};
 
       data.class.student.forEach((student) => {
-        const studentGrade = student.StudentsGrades[0] || {};
+        // const studentGrade = student.StudentsGrades[0] || {};
+        const studentGrade = student.StudentsGrades.find(
+          (grade) => grade.courseCode === data.courseDetail.code
+        ) || {} as StudentsGrades;
+        
         initialGrades[student.nis] = {
-          courseCode: studentGrade.courseCode || "",
+          courseCode: data.courseDetail.code || "",
           classId: studentGrade.classId,
           nis: studentGrade.nis,
           teacherId: studentGrade.teacherId,
