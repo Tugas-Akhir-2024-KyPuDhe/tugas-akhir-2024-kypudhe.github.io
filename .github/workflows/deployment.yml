@@ -1,0 +1,29 @@
+name: Deployment
+on:
+  push:
+    branches:
+      - main
+jobs:
+  Deployment:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: "18.x"
+      - run: npm install
+      - run: npm run build
+        env:
+          CI: false
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+      - name: Copy files to VPS
+        uses: appleboy/scp-action@master
+        with:
+          source: ./dist/*
+          target: /var/www/html/portal/
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          strip_components: 1
+      - run: echo "🍏 This job's status is ${{ job.status }}."
