@@ -1,6 +1,8 @@
 import { StaffDetails } from "./auth.interface";
 import { CourseInClass } from "./courseInClass.interface";
+import { Fajusek } from "./fajusek.interfase";
 import { StudentDetail } from "./student.interface";
+import { IStudentPositionInClass } from "./studentPosition.interface";
 
 export interface ResponseAction {
   status: number;
@@ -30,9 +32,13 @@ export interface Class {
   capacity: number;
   createdAt: string;
   updatedAt: string;
+  StudentPositionInClass: IStudentPositionInClass[];
   homeRoomTeacher: StaffDetails;
   student: StudentDetail[];
+  mainStudent: StudentDetail[];
   CourseInClass?: CourseInClass[];
+  major: Fajusek  
+  totalStudent: number
 }
 
 export interface GetAllClassResponse {

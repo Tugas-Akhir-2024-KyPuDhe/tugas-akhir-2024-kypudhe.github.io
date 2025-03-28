@@ -6,8 +6,7 @@ import {
   CourseInClass,
   FormState,
 } from "../../../../interface/courseInClass.interface";
-import { FaPen, FaPlus, FaTrash } from "react-icons/fa6";
-import { useNavigate } from "react-router-dom";
+import { FaPlus, FaTrash } from "react-icons/fa6";
 import { optionsDays } from "../../../../utils/optionsData";
 
 interface Option {
@@ -45,7 +44,6 @@ export const CardMatkulDetailKelas: React.FC<CardMatkulProps> = ({
   handleSelectChangeMapel,
   handleInputChangeMapel,
 }) => {
-  const navigate = useNavigate();
 
   const columns = [
     {
@@ -89,14 +87,7 @@ export const CardMatkulDetailKelas: React.FC<CardMatkulProps> = ({
     {
       name: "Action",
       cell: (row: CourseInClass) => (
-        <>
-          <button
-            className="btn btn-warning btn-sm text me-2 text-light"
-            onClick={() => navigate(`update/${row.id}`)}
-            disabled={loading}
-          >
-            <FaPen />
-          </button>
+        <div className="text-center w-100">
           <button
             className="btn btn-danger btn-sm"
             onClick={() => deleteCourse(row.id)}
@@ -104,9 +95,9 @@ export const CardMatkulDetailKelas: React.FC<CardMatkulProps> = ({
           >
             <FaTrash />
           </button>
-        </>
+        </div>
       ),
-      width: "150px",
+      width: "120px",
     },
   ];
 
@@ -125,7 +116,7 @@ export const CardMatkulDetailKelas: React.FC<CardMatkulProps> = ({
               right: 0,
               bottom: 0,
               backgroundColor: "rgba(255, 255, 255, 0.7)",
-              zIndex: 9999,
+              zIndex: 20,
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
@@ -162,7 +153,7 @@ export const CardMatkulDetailKelas: React.FC<CardMatkulProps> = ({
             data-bs-toggle="modal"
             data-bs-target="#modalAddMatkul"
           >
-            <FaPlus className="me-2 fs-5" /> Tambah Matkul
+            <FaPlus className="me-2 fs-5" /> Tambah Mapel
           </button>
         </div>
       </form>
@@ -171,6 +162,7 @@ export const CardMatkulDetailKelas: React.FC<CardMatkulProps> = ({
           columns={columns}
           data={data}
           highlightOnHover
+          className="mt-3"
           customStyles={{
             rows: {
               style: {
@@ -178,6 +170,15 @@ export const CardMatkulDetailKelas: React.FC<CardMatkulProps> = ({
                   backgroundColor: "#f5f5f5",
                   color: "#007bff",
                 },
+              },
+            },
+            headCells: {
+              style: {
+                backgroundColor: "var(--blue-color)",
+                color: "#ffffff",
+                fontWeight: "bold",
+                textAlign: "center",
+                border: "0.1px solid #ddd",
               },
             },
           }}
@@ -190,7 +191,7 @@ export const CardMatkulDetailKelas: React.FC<CardMatkulProps> = ({
         id="modalAddMatkul"
         tabIndex={-1}
         aria-hidden="true"
-        data-bs-backdrop="static" 
+        data-bs-backdrop="static"
         data-bs-keyboard="false"
       >
         <div className="modal-dialog">
@@ -336,7 +337,7 @@ export const CardMatkulDetailKelas: React.FC<CardMatkulProps> = ({
                 </div>
                 <div className="col-6 col-lg-3">
                   <div className="form-group mb-3">
-                    <label className="mb-2 fw-medium">Jam Mulai *</label>
+                    <label className="mb-2 fw-medium">Jam Selesai *</label>
                     <input
                       type="time"
                       name="timeEnd"

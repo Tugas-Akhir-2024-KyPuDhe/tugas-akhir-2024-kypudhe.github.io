@@ -60,8 +60,8 @@ export const Table: React.FC = () => {
       name: "Kapasitas",
       selector: (row: Class) => row.capacity,
       sortable: true,
-      cell: (row: Class) => row.capacity,
-      width: "150px",
+      cell: (row: Class) => <div className="w-100 text-center">{row.capacity}</div>,
+      width: "120px",
     },
     {
       name: "Wali Kelas",
@@ -84,7 +84,7 @@ export const Table: React.FC = () => {
           <button
             className="btn btn-warning btn-sm text me-2 text-light"
             onClick={() =>
-              navigate(`/manajemen-siswa/data-siswa-baru/detail/${row.id}`)
+              navigate(`update/${row.id}`)
             }
             disabled={loading}
           >
@@ -119,7 +119,7 @@ export const Table: React.FC = () => {
               right: 0,
               bottom: 0,
               backgroundColor: "rgba(255, 255, 255, 0.7)",
-              zIndex: 9999,
+              zIndex: 20,
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
@@ -154,6 +154,7 @@ export const Table: React.FC = () => {
           data={filterData}
           pagination
           highlightOnHover
+          className="mt-3"
           customStyles={{
             rows: {
               style: {
@@ -161,6 +162,15 @@ export const Table: React.FC = () => {
                   backgroundColor: "#f5f5f5",
                   color: "#007bff",
                 },
+              },
+            },
+            headCells: {
+              style: {
+                backgroundColor: "var(--blue-color)",
+                color: "#ffffff",
+                fontWeight: "bold",
+                textAlign: "center",
+                border: "0.1px solid #ddd",
               },
             },
           }}

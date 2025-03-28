@@ -8,7 +8,7 @@ import {
   DetailUserResponse,
   UpdatedBiodata,
 } from "../../interface/auth.interface";
-import { formatGender, Toast } from "../../utils/myFunctions";
+import { decodeToken, formatGender, Toast } from "../../utils/myFunctions";
 import noPhotoFemale from "./../../assets/images/profile-female.jpg";
 import noPhotoMale from "./../../assets/images/profile-male.jpg";
 import { CardDataOrangTua } from "../../components/cardDataOrangTua";
@@ -20,6 +20,9 @@ import { CardClassTeacher } from "../../features/profilePage/cardClassTeacher";
 import { FormParentOfStudent } from "../../interface/student.interface";
 import { Course } from "../../interface/course.interface";
 import CourseService from "../../services/courseService";
+import moment from "moment";
+import StudentHistoryService from "../../services/studentHistoryService";
+import { StudentHistory } from "../../interface/studentHistory.interface";
 
 const subMenuItemsStudent = [
   { label: "Data Akademik", key: "data-akademik" },
@@ -31,13 +34,19 @@ const subMenuItemsTeacher = [{ label: "Kelas", key: "kelas" }];
 export const ProfilePage = () => {
   const authService = AuthService();
   const courseService = CourseService();
+  const studentHistory = StudentHistoryService();
+
   const [cookieLogin] = useCookie("userLoginCookie", "");
   const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
+  const dtoken = decodeToken(userLoginCookie.token);
 
   const [profileDetail, setProfileDetail] = useState<DetailUserResponse | null>(
     null
   );
-  const [allCourse, setAllCourse] = useState<Course[]>([])
+  const [allCourse, setAllCourse] = useState<Course[]>([]);
+  const [DataStudentHistory, setDataStudentHistory] = useState<
+    StudentHistory[]
+  >([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -63,10 +72,27 @@ export const ProfilePage = () => {
     try {
       const user = await authService.getUser();
       setProfileDetail(user);
+      if (user.details[0].nis) {
+        await getStudentHistory();
+      }
       setLoading(false);
     } catch (err) {
-      console.log(err);
+      console.error(err);
       setError("Failed to fetch user data");
+      setLoading(false);
+    }
+  };
+
+  const getStudentHistory = async () => {
+    try {
+      setLoading(true);
+      const response = await studentHistory.getStudentHistory(
+        dtoken.student_id
+      );
+      setDataStudentHistory(response.data);
+    } catch (error) {
+      console.error(error);
+    } finally {
       setLoading(false);
     }
   };
@@ -87,7 +113,7 @@ export const ProfilePage = () => {
 
   useEffect(() => {
     getUser();
-    getAllCourse()
+    getAllCourse();
   }, []);
 
   const handleUpdateAccessIdentity = () =>
@@ -116,7 +142,7 @@ export const ProfilePage = () => {
   };
 
   const handleSaveUpdateParent = async (
-    nis: number,
+    nis: string,
     updatedData: FormParentOfStudent
   ) => {
     try {
@@ -210,23 +236,24 @@ export const ProfilePage = () => {
                 myCourse={profileDetail.details[0].mapel || []}
                 allCourse={allCourse}
                 //STUDENT
-                nis={profileDetail.details[0].nis || 0}
+                nis={profileDetail.details[0].nis || ""}
+                currentClass={profileDetail.details[0].HistoryClass && profileDetail.details[0].HistoryClass![0].currentClass.name || ""}
+                currentClassUuid={profileDetail.details[0].HistoryClass && profileDetail.details[0].HistoryClass![0].uuid || ""}
+                currentHoomRoomTeacher={profileDetail.details[0].HistoryClass && profileDetail.details[0].HistoryClass![0].currentClass.homeRoomTeacher.name || ""}
                 nisn={profileDetail.details[0].nisn || 0}
               />
               {(userLoginCookie.role === "STUDENT" ||
                 userLoginCookie.role === "TEACHER") && (
                 <div className="col-12">
-                  <div className="mx-md-4 my-4 mb-0 rounded">
-                    <NavSubMenu
-                      menuItems={
-                        userLoginCookie.role === "STUDENT"
-                          ? subMenuItemsStudent
-                          : subMenuItemsTeacher
-                      }
-                      activeMenu={activeMenu}
-                      onMenuClick={handleMenuClick}
-                    />
-                  </div>
+                  <NavSubMenu
+                    menuItems={
+                      userLoginCookie.role === "STUDENT"
+                        ? subMenuItemsStudent
+                        : subMenuItemsTeacher
+                    }
+                    activeMenu={activeMenu}
+                    onMenuClick={handleMenuClick}
+                  />
                 </div>
               )}
 
@@ -234,7 +261,7 @@ export const ProfilePage = () => {
                 userLoginCookie.role == "TEACHER") && (
                 <div className="col-12">
                   <div
-                    className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
+                    className="shadow p-4 m-1 mx-md-4 rounded"
                     style={{
                       backgroundColor: "#fff",
                       position: "relative",
@@ -250,7 +277,7 @@ export const ProfilePage = () => {
                           right: 0,
                           bottom: 0,
                           backgroundColor: "rgba(255, 255, 255, 0.7)",
-                          zIndex: 9999,
+                          zIndex: 20,
                           display: "flex",
                           justifyContent: "center",
                           alignItems: "center",
@@ -267,10 +294,16 @@ export const ProfilePage = () => {
                     {/* === STUDENT */}
                     {activeMenu === "data-akademik" && (
                       <CardDataAkademik
-                        kelas={"XII"}
-                        major={"Rekayasa Perangkat Lunak"}
-                        startYear={"2023"}
-                        studentStatus={"Aktif"}
+                        kelas={profileDetail?.details?.[0]?.class?.name || "-"}
+                        major={profileDetail?.details?.[0]?.Major?.name || "-"}
+                        startYear={
+                          moment(profileDetail?.details?.[0]?.startYear)
+                            .year()
+                            .toString() || "-"
+                        }
+                        studentStatus={
+                         profileDetail?.details?.[0]?.status || "-"
+                        }
                       />
                     )}
                     {activeMenu === "data-orang-tua" && (
@@ -279,7 +312,7 @@ export const ProfilePage = () => {
                         onSaveUpdate={handleSaveUpdateParent}
                         statusUpdateData={statusUpdateDataParent}
                         loadingUpdateData={loadingUpdateDataParent}
-                        nis={profileDetail?.details?.[0]?.nis || 0}
+                        nis={profileDetail?.details?.[0]?.nis || ""}
                         fatherName={
                           profileDetail?.details?.[0]?.ParentOfStudent?.[0]
                             ?.fatherName || "-"
@@ -303,7 +336,7 @@ export const ProfilePage = () => {
                       />
                     )}
                     {activeMenu === "riwayat-akademik" && (
-                      <CardRiwayatAkademik />
+                      <CardRiwayatAkademik nis={profileDetail?.details[0].nis || ""} data={DataStudentHistory} />
                     )}
 
                     {/* === TEACHER */}

@@ -20,7 +20,7 @@ export const TableBanner: React.FC = () => {
   const getData = async () => {
     setLoading(true);
     try {
-      const response = await bannerService.getAllBanners();
+      const response = await bannerService.getAllBanners("All");
       setListBanner(response.data);
     } catch (error) {
       console.error(error)
@@ -152,7 +152,7 @@ export const TableBanner: React.FC = () => {
             right: 0,
             bottom: 0,
             backgroundColor: "rgba(255, 255, 255, 0.7)",
-            zIndex: 9999,
+            zIndex: 20,
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
@@ -183,6 +183,7 @@ export const TableBanner: React.FC = () => {
           data={filteredBanner}
           pagination
           highlightOnHover
+          className="mt-3"
           customStyles={{
             rows: {
               style: {
@@ -190,6 +191,15 @@ export const TableBanner: React.FC = () => {
                   backgroundColor: "#f5f5f5",
                   color: "#007bff",
                 },
+              },
+            },
+            headCells: {
+              style: {
+                backgroundColor: "var(--blue-color)",
+                color: "#ffffff",
+                fontWeight: "bold",
+                textAlign: "center",
+                border: "0.1px solid #ddd",
               },
             },
           }}

@@ -11,6 +11,7 @@ export const optionsGrade = [
 
 export const optionsStatusArticle = [
   { value: "PUBLISH", label: "PUBLISH" },
+  { value: "NONACTIVE", label: "NONACTIVE" },
   { value: "DRAFT", label: "DRAFT" },
 ];
 
@@ -22,6 +23,13 @@ export const optionsPrioritas = Array.from({ length: 20 }, (_, index) => ({
 export const optionsGender = [
   { value: "L", label: "Laki-laki" },
   { value: "P", label: "Perempuan" },
+];
+
+export const optionsRoleStudent = [
+  { value: "Ketua Kelas", label: "Ketua Kelas" },
+  { value: "Wakil Ketua Kelas", label: "Wakil Ketua Kelas" },
+  { value: "Sekretaris", label: "Sekretaris" },
+  { value: "Bendahara", label: "Bendahara" },
 ];
 
 const currentDate = new Date();

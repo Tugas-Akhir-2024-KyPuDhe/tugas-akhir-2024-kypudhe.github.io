@@ -11,6 +11,7 @@ import {
   GetUsersResponse,
   ResponseGetStudentDetail,
   ResponseUpdatePhotoUser,
+  PayloadChangePassword,
 } from "./../interface/auth.interface";
 import useCookie from "react-use-cookie";
 import { FormParentOfStudent } from "../interface/student.interface";
@@ -27,6 +28,7 @@ const AuthService = () => {
       navigate("/login");
     }
   };
+
   const loginAuth = async (data: LoginData): Promise<LoginResponse> => {
     try {
       const response = await axios.post<LoginResponse>(
@@ -35,7 +37,27 @@ const AuthService = () => {
       );
       return response.data;
     } catch (error) {
-      console.log("");
+      console.error(error);
+      throw error;
+    }
+  };
+
+  const changePassword = async (
+    data: PayloadChangePassword
+  ): Promise<UpdateUserResponse> => {
+    try {
+      const response = await axios.post<UpdateUserResponse>(
+        `${apiUrl}/api/auth/change-password`,
+        data,
+        {
+          headers: {
+            authorization: `Bearer ${userLoginCookie.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error(error);
       throw error;
     }
   };
@@ -54,7 +76,7 @@ const AuthService = () => {
       );
       return response.data;
     } catch (error) {
-      console.log("");
+      console.error(error);
       throw error;
     }
   };
@@ -71,7 +93,7 @@ const AuthService = () => {
       );
       return response.data.user;
     } catch (error) {
-      console.log("");
+      console.error(error);
       throw error;
     }
   };
@@ -91,7 +113,7 @@ const AuthService = () => {
       );
       return response.data;
     } catch (error) {
-      console.log("");
+      console.error(error);
       throw error;
     }
   };
@@ -112,7 +134,7 @@ const AuthService = () => {
       );
       return response.data;
     } catch (error) {
-      console.log("");
+      console.error(error);
       throw error;
     }
   };
@@ -133,7 +155,7 @@ const AuthService = () => {
       );
       return response.data;
     } catch (error) {
-      console.log("");
+      console.error(error);
       throw error;
     }
   };
@@ -209,7 +231,7 @@ const AuthService = () => {
   };
 
   const updateDataParent = async (
-    nis: number,
+    nis: string,
     data: FormParentOfStudent
   ): Promise<ResponseUpdatePhotoUser> => {
     try {
@@ -248,6 +270,7 @@ const AuthService = () => {
     getStudentByNis,
     updatePhotoUser,
     updateDataParent,
+    changePassword,
   };
 };
 

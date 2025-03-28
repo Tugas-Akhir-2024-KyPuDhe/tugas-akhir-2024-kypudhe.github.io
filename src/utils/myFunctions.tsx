@@ -1,5 +1,8 @@
-import { FaCircle } from "react-icons/fa6";
+// import { FaCircle } from "react-icons/fa6";
+import moment from "moment/min/moment-with-locales";
 import Swal from "sweetalert2";
+import "moment/locale/id";
+moment.locale("id");
 
 export const Toast = Swal.mixin({
   toast: true,
@@ -27,7 +30,7 @@ export const showConfirmationDialog = async ({
   cancelButtonText,
 }: ConfirmationDialogOptions) => {
   return Swal.fire({
-    text: title,
+    html: title,
     icon,
     showCancelButton: true,
     confirmButtonColor: "#1D7DC1",
@@ -86,25 +89,69 @@ export const convertStartEndYear = (startYear: Date): string => {
   return date.toISOString().split("T")[0];
 };
 
-export const convertStatus = (status: string): JSX.Element => {
-  return status === "Active" ? (
+export const convertStatusHistory = (status: string): JSX.Element => {
+  return status.toLocaleLowerCase() === "active" ? (
     <>
-      <FaCircle className="text-success me-2" style={{ fontSize: "0.5rem" }} />
-      Aktif
+      <span className="badge bg-blue">Aktif</span>
+    </>
+  ) : status.toLocaleLowerCase() === "naik kelas" ? (
+    <>
+      <span className="badge text-bg-success">{status}</span>
+    </>
+  ) : status.toLocaleLowerCase() === "lulus" ? (
+    <>
+      <span className="badge text-bg-success">{status}</span>
     </>
   ) : (
     <>
-      <FaCircle className="text-danger me-2" style={{ fontSize: "0.5rem" }} />
-      Non Aktif
+      <span className="badge text-bg-danger">{status}</span>
     </>
   );
+};
+
+export const convertStatus = (status: string): JSX.Element => {
+  return status === "Active" ? (
+    <>
+      <span className="badge text-bg-success">Aktif</span>
+    </>
+  ) : (
+    <>
+      <span className="badge text-bg-danger">Non Aktif</span>
+    </>
+  );
+};
+
+export const convertTextStatus = (status: string): string => {
+  return status === "Active" ? "Aktif" : "Non Aktif";
+};
+
+export const convertStatusBerita = (status: string): JSX.Element => {
+  if (status === "PUBLISH") {
+    return (
+      <>
+        <span className="badge text-bg-success">Aktif</span>
+      </>
+    );
+  } else if (status === "DRAFT") {
+    return (
+      <>
+        <span className="badge text-bg-warning">Draft</span>
+      </>
+    );
+  } else {
+    return (
+      <>
+        <span className="badge text-bg-danger">Non Aktif</span>
+      </>
+    );
+  }
 };
 
 export const convertRole = (role: string): string => {
   return role === "STAFF" ? "Pegawai" : role == "TEACHER" ? "Guru" : "Siswa/i";
 };
 
-export const convertToRoman = (num: number): string => {
+export const numberToRoman = (num: number): string => {
   if (num < 1 || num > 3999) {
     throw new Error("Angka harus berada antara 1 dan 3999");
   }
@@ -135,6 +182,41 @@ export const convertToRoman = (num: number): string => {
   return result;
 };
 
+export const romanToNumber = (roman: string): number => {
+  const romanToNum: { [key: string]: number } = {
+    M: 1000,
+    CM: 900,
+    D: 500,
+    CD: 400,
+    C: 100,
+    XC: 90,
+    L: 50,
+    XL: 40,
+    X: 10,
+    IX: 9,
+    V: 5,
+    IV: 4,
+    I: 1,
+  };
+
+  let result = 0;
+  let i = 0;
+
+  while (i < roman.length) {
+    // Cek apakah dua karakter saat ini ada dalam map (untuk kasus seperti CM, CD, XC, dll.)
+    if (i + 1 < roman.length && romanToNum[roman.substring(i, i + 2)]) {
+      result += romanToNum[roman.substring(i, i + 2)];
+      i += 2;
+    } else {
+      // Jika tidak, ambil satu karakter saja
+      result += romanToNum[roman[i]];
+      i += 1;
+    }
+  }
+
+  return result;
+};
+
 export const decodeToken = (token: string) => {
   const base64Url = token.split(".")[1];
   const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
@@ -145,4 +227,85 @@ export const decodeToken = (token: string) => {
       .join("")
   );
   return JSON.parse(jsonPayload);
+};
+
+export const statusAttendance = (status: number, complate = 0): string => {
+  return status === 1
+    ? complate
+      ? "Hadir"
+      : "H"
+    : status == 2
+    ? complate
+      ? "Izin"
+      : "I"
+    : status == 3
+    ? complate
+      ? "Sakit"
+      : "S"
+    : status == 4
+    ? complate
+      ? "Alpa"
+      : "A"
+    : "";
+};
+
+export const bgColorAttendance = (status: number): string => {
+  return status === 1
+    ? "bg-success"
+    : status == 2
+    ? "bg-warning"
+    : status == 3
+    ? "bg-warning"
+    : status == 4
+    ? "bg-danger"
+    : "";
+};
+
+export const badgeStatusHistory = (data: string): string => {
+  const lowerCaseData = data.toLocaleLowerCase();
+  if (lowerCaseData === "aktif") {
+    return "bg-blue";
+  } else if (lowerCaseData === "lulus") {
+    return "text-bg-success";
+  } else if (lowerCaseData === "naik kelas") {
+    return "text-bg-success";
+  } else {
+    return "text-bg-danger";
+  }
+};
+
+export const formatMonthAndYear = (dateString: string) => {
+  return moment(dateString, "YYYY-MM").locale("id").format("MMMM YYYY");
+};
+
+export const formatTanggal = (inputDate: string) => {
+  const tanggal = moment(inputDate);
+  const formattedDate = tanggal.format("dddd, DD MMM YYYY");
+  return formattedDate;
+};
+
+export const getDayNow = () => {
+  const hariIni = moment().format("dddd");
+  return hariIni;
+};
+
+export const getDayMonth = () => {
+  const hariIni = moment().format("MMMM");
+  return hariIni;
+};
+
+export const toolbarOptions = [
+  [{ header: "1" }, { header: "2" }, { font: [] }],
+  [{ size: ["small", false, "large", "huge"] }],
+  ["bold", "italic", "underline", "strike", "blockquote"],
+  [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
+  ["link", "image", "video"],
+  [{ align: [] }, { color: [] }, { background: [] }],
+  ["clean"],
+];
+
+export const convertToPercentage = (value: string) => {
+  const floatValue = parseFloat(value);
+  if (isNaN(floatValue)) return "0%";
+  return `${(floatValue * 100).toFixed(0)}%`;
 };

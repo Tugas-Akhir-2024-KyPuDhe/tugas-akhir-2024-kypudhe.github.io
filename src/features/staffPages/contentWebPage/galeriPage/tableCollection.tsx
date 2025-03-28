@@ -11,6 +11,8 @@ import {
   Toast,
 } from "../../../../utils/myFunctions";
 import { AxiosError } from "axios";
+import { FaPlus } from "react-icons/fa6";
+import { ModalAddGaleri } from "./modalAddCollGaleri";
 
 interface FormState {
   id?: number;
@@ -126,17 +128,6 @@ export const TableCollectionGaleri: React.FC = () => {
     },
   ];
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, files } = e.target;
-
-    if (files && files[0]) {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: files[0],
-      }));
-    }
-  };
-
   const handleDeleteMedia = async (mediaId: number) => {
     const result = await showConfirmationDialog({
       title: "Ingin menghapus galeri ini?",
@@ -146,93 +137,41 @@ export const TableCollectionGaleri: React.FC = () => {
     });
 
     if (result.isConfirmed) {
-      setFormData((prev) => ({
-        ...prev,
-        mediaIdsToDelete: [...prev.mediaIdsToDelete, mediaId],
-      }));
-
       setLoading(true);
-    }
-  };
+      try {
+        const response = await galeriService.deleteMediaGaleri(mediaId);
 
-  const handleSubmit = async () => {
-    if (
-      formData.media1 == null &&
-      formData.media2 == null &&
-      formData.media3 == null &&
-      formData.media4 == null
-    ) {
-      return Toast.fire({
-        icon: "warning",
-        title: `Masukkan gambar minimal 1 gambar!`,
-        timer: 3500,
-      });
-    }
-
-    setLoading(true);
-    const payload = new FormData();
-    Object.entries(formData).forEach(([key, value]) => {
-      if (key === "mediaIdsToDelete") {
-        (value as number[]).forEach((id) =>
-          payload.append("mediaIdsToDelete[]", id.toString())
-        );
-      } else if (key.startsWith("media") && value) {
-        payload.append("media", value as File);
-      } else {
-        payload.append(key, value as string | Blob);
-      }
-    });
-
-    try {
-      let response;
-      if (formData.id) {
-        response = await galeriService.updateGaleri(formData.id, payload);
         if (response.status === 200) {
           await getData();
           Toast.fire({
             icon: "success",
-            title: `Galeri Berhasil ${formData.id ? "Diupdate" : "Ditambah"}`,
+            title: `Media berhasil dihapus`,
+            timer: 4000,
           });
-          const fileInput1 = document.getElementById(
-            "inputFileGaleri1"
-          ) as HTMLInputElement;
-          const fileInput2 = document.getElementById(
-            "inputFileGaleri2"
-          ) as HTMLInputElement;
-          const fileInput3 = document.getElementById(
-            "inputFileGaleri3"
-          ) as HTMLInputElement;
-          const fileInput4 = document.getElementById(
-            "inputFileGaleri4"
-          ) as HTMLInputElement;
-          if (fileInput1 || fileInput2 || fileInput3 || fileInput4) {
-            fileInput1.value = "";
-            fileInput2.value = "";
-            fileInput3.value = "";
-            fileInput4.value = "";
-          }
         }
+      } catch (error) {
+        const axiosError = error as AxiosError;
+        if (axiosError.response?.status === 404) {
+          return Toast.fire({
+            icon: "error",
+            title: `Data Tidak Ditemukan!`,
+            timer: 4000,
+          });
+        }
+        Toast.fire({
+          icon: "error",
+          title: `Terjadi kesalahan ketika hapus media!`,
+          timer: 4000,
+        });
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      setLoading(false);
-      Toast.fire({
-        icon: "error",
-        title: `${error}`,
-      });
-    } finally {
-      setLoading(false);
     }
   };
 
   useEffect(() => {
     getData();
   }, []);
-
-  useEffect(() => {
-    if (formData.mediaIdsToDelete.length > 0) {
-      handleSubmit();
-    }
-  }, [formData.mediaIdsToDelete]);
 
   return (
     <>
@@ -249,7 +188,7 @@ export const TableCollectionGaleri: React.FC = () => {
               right: 0,
               bottom: 0,
               backgroundColor: "rgba(255, 255, 255, 0.7)",
-              zIndex: 9999,
+              zIndex: 20,
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
@@ -316,7 +255,7 @@ export const TableCollectionGaleri: React.FC = () => {
               right: 0,
               bottom: 0,
               backgroundColor: "rgba(255, 255, 255, 0.7)",
-              zIndex: 9999,
+              zIndex: 20,
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
@@ -328,7 +267,7 @@ export const TableCollectionGaleri: React.FC = () => {
           </div>
         )}
         <div className="row g-3">
-        <div className="col-12">
+          <div className="col-12">
             <div className="fw-bold position-relative pb-2">
               Tambah Galeri
               <div
@@ -344,36 +283,23 @@ export const TableCollectionGaleri: React.FC = () => {
             </div>
           </div>
           <div className="col-12">
-            <div className="form-group mb-3">
-              {[1, 2, 3, 4].map((index) => (
-                <div className="input-group mb-3" key={`media${index}`}>
-                  <input
-                    type="file"
-                    name={`media${index}`}
-                    className="form-control fs-6"
-                    id={`inputFileGaleri${index}`}
-                    accept=".jpeg, .jpg, .png, .gif"
-                    onChange={handleInputChange}
-                  />
-                  <label
-                    className="input-group-text"
-                    htmlFor={`inputFileGaleri${index}`}
-                  >
-                    Upload
-                  </label>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="col-12">
-            <div className="form-group mb-3">
-              <button
-                className="btn btn-primary bg-blue border-0"
-                onClick={() => handleSubmit()}
-              >
-                Tambah
-              </button>
-            </div>
+            <button
+              className="btn border-blue text-blue"
+              data-bs-toggle="modal"
+              data-bs-target="#modalAddGaleri"
+            >
+              <FaPlus className="me-2 fs-5" /> Tambah
+            </button>
+            {formData.id && (
+              <ModalAddGaleri
+                id={formData.id}
+                name={formData.name}
+                description={formData.description}
+                prioritas={formData.prioritas}
+                status={formData.status}
+                handleGetDataGaleri={getData}
+              />
+            )}
           </div>
           <StyleSheetManager>
             <DataTable
@@ -381,6 +307,7 @@ export const TableCollectionGaleri: React.FC = () => {
               data={mediaList}
               pagination
               highlightOnHover
+              className="mt-3"
               customStyles={{
                 rows: {
                   style: {
@@ -388,6 +315,15 @@ export const TableCollectionGaleri: React.FC = () => {
                       backgroundColor: "#f5f5f5",
                       color: "#007bff",
                     },
+                  },
+                },
+                headCells: {
+                  style: {
+                    backgroundColor: "var(--blue-color)",
+                    color: "#ffffff",
+                    fontWeight: "bold",
+                    textAlign: "center",
+                    border: "0.1px solid #ddd",
                   },
                 },
               }}

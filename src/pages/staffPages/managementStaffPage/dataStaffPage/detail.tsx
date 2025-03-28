@@ -1,75 +1,87 @@
 import React, { useEffect, useState } from "react";
 import { HeaderTitlePage } from "../../../../components/headerTitlePage";
 import { useNavigate, useParams } from "react-router-dom";
-import AuthService from "../../../../services/authService";
-import { formatDate, formatGender, Toast } from "../../../../utils/myFunctions";
-import { CardProfil } from "../../../../features/staffPages/managementSiswaPage/dataSiswaPage/cardProfil";
+import { formatGender, Toast } from "../../../../utils/myFunctions";
 import noPhotoFemale from "./../../../../assets/images/profile-female.jpg";
 import noPhotoMale from "./../../../../assets/images/profile-male.jpg";
-import { CardDataOrangTua } from "../../../../components/cardDataOrangTua";
-import { CardRiwayatAkademik } from "../../../../components/cardRiwayatAkademik";
-import { CardDataAkademik } from "../../../../components/cardDataAkademik";
 import { AxiosError } from "axios";
-interface DataState {
-  id?: number;
-  password?: string;
-  name: string;
-  birthPlace: string;
-  address: string;
-  nis: string;
-  nisn: string;
-  gender: string;
-  phone: string;
-  email: string;
-  startYear: string;
-}
+import { CardProfil } from "../../../../features/staffPages/managementStaffPage/dataStaffPage/cardProfil";
+import StaffService from "../../../../services/staffService";
+import { StaffDetail } from "../../../../interface/staff.interface";
+import { Course } from "../../../../interface/course.interface";
+import CourseService from "../../../../services/courseService";
+import { CourseInClass } from "../../../../interface/courseInClass.interface";
+import { NavSubMenu } from "../../../../components/navSubmenu";
+import { Class } from "../../../../interface/studentClass.interface";
+import { CardRiwayatMengajar } from "../../../../features/staffPages/managementStaffPage/dataStaffPage/cardRiwayatMengajar";
+import { CardDataAkademik } from "../../../../features/staffPages/managementStaffPage/dataStaffPage/cardDataAkademik";
+import { CardKelasWali } from "../../../../features/staffPages/managementStaffPage/dataStaffPage/cardKelasWali";
 
-export const DetailSiswaMangementSiswa: React.FC = () => {
+const subMenuItems = [
+  { label: "Data Akademik", key: "data-akademik" },
+  { label: "Riwayat Mengajar", key: "riwayat-mengajar" },
+  { label: "Kelas Wali", key: "kelas-wali" },
+];
+
+export const DetailStaffMangementSiswa: React.FC = () => {
+  const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  const studentService = AuthService();
-  const navigate = useNavigate()
+  const staffService = StaffService();
+  const courseService = CourseService();
 
-  const [loading, setLoading] = useState<boolean>(true);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [activeMenu, setActiveMenu] = useState("data-akademik");
+  const [data, setData] = useState<StaffDetail>();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [allCourse, setAllCourse] = useState<Course[]>([]);
+  const [dataTeachTeacher, setDataTeachTeacher] = useState<CourseInClass[]>([]);
+  const [dataWaliTeacher, setDataWaliTeacher] = useState<Class[]>([]);
 
+  const getDataTeachTeacher = async (nip: string) => {
+    try {
+      setLoading(true);
+      const response = await staffService.getClassOfTeacher(nip);
+      setDataTeachTeacher(response.data.CourseInClass);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const [activeMenu, setActiveMenu] = useState("data-akademik");
   const handleMenuClick = (menu: string) => {
     setActiveMenu(menu);
   };
 
-  const [data, setData] = useState<DataState>({
-    password: "",
-    name: "",
-    birthPlace: "",
-    address: "",
-    nis: "",
-    nisn: "",
-    gender: "",
-    phone: "",
-    email: "",
-    startYear: "",
-  });
-
   useEffect(() => {
-    const getDataSiswa = async () => {
+    const getDataPegawai = async () => {
       if (id) {
         try {
-          const response = await studentService.getStudentByNis(parseFloat(id));
+          const response = await staffService.getStaffByNip(id);
           const data = response.data;
           setData({
             id: data.id,
-            password: data.user.password,
+            uuid: data.uuid,
             name: data.name,
             birthPlace: data.birthPlace,
             address: data.address,
-            nis: data.nis,
-            nisn: data.nisn,
-            gender: data.gender,
             phone: data.phone,
             email: data.email,
-            startYear: formatDate(data.startYear),
+            gender: data.gender,
+            mapel: data.mapel,
+            nip: data.nip,
+            type: data.type,
+            position: data.position,
+            startDate: data.startDate,
+            endDate: data.endDate,
+            mediaId: data.mediaId,
+            createdAt: data.createdAt,
+            updatedAt: data.updatedAt,
+            photo: data.photo,
           });
-          setImageUrl(data.photo.url);
+          setImageUrl(data.photo?.url);
+          await getAllCourse();
+          await getDataTeachTeacher(response.data.nip);
+          await getDataWaliTeacher(response.data.id.toString());
         } catch (error) {
           const axiosError = error as AxiosError;
           if (axiosError.response?.status === 404) {
@@ -78,7 +90,7 @@ export const DetailSiswaMangementSiswa: React.FC = () => {
               title: `Data Tidak Ditemukan!`,
               timer: 4000,
             });
-          navigate(-1)
+            navigate("/");
           }
         } finally {
           setLoading(false);
@@ -88,13 +100,40 @@ export const DetailSiswaMangementSiswa: React.FC = () => {
       }
     };
 
-    getDataSiswa();
+    getDataPegawai();
   }, []);
+
+  const getDataWaliTeacher = async (id: string) => {
+    try {
+      setLoading(true);
+      const response = await staffService.getClassRoomOfTeacher(id.toString());
+      setDataWaliTeacher(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getAllCourse = async () => {
+    setLoading(true);
+    try {
+      const response = await courseService.getAllCourses();
+      if (response.data && response.data.length > 0) {
+        setAllCourse(response.data);
+      }
+    } catch (error) {
+      console.error("Error fetching Course data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <HeaderTitlePage
-        title="Detail Siswa"
-        subTitle="Detail Siswa SMKN 1 Lumban Julu"
+        title="Detail Pegawai"
+        subTitle="Detail Pegawai SMKN 1 Lumban Julu"
         backDisplay={true}
         addDisplay={false}
         linkAdd=""
@@ -112,7 +151,7 @@ export const DetailSiswaMangementSiswa: React.FC = () => {
               right: 0,
               bottom: 0,
               backgroundColor: "rgba(255, 255, 255, 0.7)",
-              zIndex: 9999,
+              zIndex: 20,
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
@@ -125,58 +164,25 @@ export const DetailSiswaMangementSiswa: React.FC = () => {
         )}
 
         <CardProfil
-          id={data.id || 0}
+          id={data?.id || 0}
           photo={
-            imageUrl || (data.gender === "L" ? noPhotoMale : noPhotoFemale)
+            imageUrl || (data?.gender === "L" ? noPhotoMale : noPhotoFemale)
           }
-          name={data.name}
-          nis={data.nis}
-          nisn={data.nisn}
-          email={data.email}
-          phone={data.phone}
-          address={data.address}
-          gender={formatGender(data.gender)}
-          birthPlace={data.birthPlace}
+          name={data?.name || "-"}
+          nip={data?.nip || "-"}
+          email={data?.email || "-"}
+          phone={data?.phone || "-"}
+          address={data?.address || "-"}
+          gender={formatGender(data?.gender || "-")}
+          birthPlace={data?.birthPlace || "-"}
         />
       </div>
 
-      <div className="m-lg-4 m-md-4 my-4 rounded">
-        <ul
-          className="nav nav-underline"
-          style={{ borderBottom: "0.5px solid grey" }}
-        >
-          <li className="nav-item" style={{ cursor: "pointer" }}>
-            <a
-              className={`nav-link text-blue ${
-                activeMenu === "data-akademik" ? "active" : ""
-              }`}
-              onClick={() => handleMenuClick("data-akademik")}
-            >
-              Data Akademik
-            </a>
-          </li>
-          <li className="nav-item" style={{ cursor: "pointer" }}>
-            <a
-              className={`nav-link text-blue ${
-                activeMenu === "data-orang-tua" ? "active" : ""
-              }`}
-              onClick={() => handleMenuClick("data-orang-tua")}
-            >
-              Data Orang Tua
-            </a>
-          </li>
-          <li className="nav-item" style={{ cursor: "pointer" }}>
-            <a
-              className={`nav-link text-blue ${
-                activeMenu === "riwayat-akademik" ? "active" : ""
-              }`}
-              onClick={() => handleMenuClick("riwayat-akademik")}
-            >
-              Riwayat Akademik
-            </a>
-          </li>
-        </ul>
-      </div>
+      <NavSubMenu
+        menuItems={subMenuItems}
+        activeMenu={activeMenu}
+        onMenuClick={handleMenuClick}
+      />
 
       <div
         className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
@@ -195,7 +201,7 @@ export const DetailSiswaMangementSiswa: React.FC = () => {
               right: 0,
               bottom: 0,
               backgroundColor: "rgba(255, 255, 255, 0.7)",
-              zIndex: 9999,
+              zIndex: 20,
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
@@ -207,25 +213,15 @@ export const DetailSiswaMangementSiswa: React.FC = () => {
           </div>
         )}
         {activeMenu === "data-akademik" ? (
-          <CardDataAkademik
-            kelas={"XII"}
-            major={"Rekayasa Perangkat Lunak"}
-            startYear={"2023"}
-            studentStatus={"Aktif"}
-          />
-        ) : activeMenu === "data-orang-tua" ? (
-          <CardDataOrangTua
-            nis={112233}
-            fatherName={"Agus"}
-            motherName={"Luna"}
-            phone={"082382383832"}
-            parentJob={"Pegawai Negeri"}
-            parentAddress={"Jalan Thamrin"}
-          />
+          <CardDataAkademik data={data!} allCourse={allCourse} />
+        ) : activeMenu === "riwayat-mengajar" ? (
+          <>
+            <CardRiwayatMengajar data={dataTeachTeacher} />
+          </>
         ) : activeMenu === "riwayat-akademik" ? (
-          <CardRiwayatAkademik />
+          <p></p>
         ) : (
-          <div>Halaman tidak ditemukan</div>
+          <CardKelasWali data={dataWaliTeacher} />
         )}
       </div>
     </>

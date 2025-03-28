@@ -6,6 +6,7 @@ import {
 import useCookie from "react-use-cookie";
 import {
   GetClassOfTeacher,
+  GetClassRoomOfTeacher,
   ResponseGetStaff,
   ResponseGetStaffDetail,
 } from "../interface/staff.interface";
@@ -113,11 +114,34 @@ const StaffService = () => {
 
   const getClassOfTeacher = async (
     nip: string,
-    id: string = ""
+    clasiid: string = "",
+    courseIdInClass: string = ""
   ): Promise<GetClassOfTeacher> => {
     try {
       const response = await axios.get<GetClassOfTeacher>(
-        `${apiUrl}/api/staff/get/class?nip=${nip}&id=${id}`,
+        `${apiUrl}/api/staff/get/class?nip=${nip}&id=${clasiid}&courseIdInClass=${courseIdInClass}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${userLoginCookie?.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        handleUnauthorized(error.response?.status || 0);
+      }
+      throw error;
+    }
+  };
+
+  const getClassRoomOfTeacher = async (
+    teacherId: string
+  ): Promise<GetClassRoomOfTeacher> => {
+    try {
+      const response = await axios.get<GetClassRoomOfTeacher>(
+        `${apiUrl}/api/staff/get/class-room?id=${teacherId}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -162,6 +186,7 @@ const StaffService = () => {
     getStaffByNip,
     createStaff,
     getClassOfTeacher,
+    getClassRoomOfTeacher,
   };
 };
 

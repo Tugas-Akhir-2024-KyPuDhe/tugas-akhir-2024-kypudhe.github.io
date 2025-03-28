@@ -9,11 +9,11 @@ import useCookie from "react-use-cookie";
 
 interface ArtikelService {
   getAllArtikels: (
-    page: number,
-    perPage: number,
+    page?: string,
+    perPage?: number,
     keyword?: string
   ) => Promise<GetAllArtikelResponse>;
-  getArtikelById: (id: string) => Promise<GetDetailArtikelResponse>;
+  getArtikelById: (id: string, type?: string) => Promise<GetDetailArtikelResponse>;
   addArtikel: (formData: FormData) => Promise<ResponseActionArtikel>;
   updateArtikel: (
     id: number,
@@ -36,8 +36,8 @@ const ArtikelService = (): ArtikelService => {
   };
 
   const getAllArtikels = async (
-    page: number,
-    perPage: number,
+    page?: string,
+    perPage?: number,
     keyword = ""
   ): Promise<GetAllArtikelResponse> => {
     try {
@@ -46,21 +46,22 @@ const ArtikelService = (): ArtikelService => {
       );
       return response.data;
     } catch (error) {
-      console.log("");
+      console.error(error);
       throw error;
     }
   };
 
   const getArtikelById = async (
-    id: string
+    id: string,
+    type?: string
   ): Promise<GetDetailArtikelResponse> => {
     try {
       const response: AxiosResponse<GetDetailArtikelResponse> = await axios.get(
-        `${apiUrl}/api/artikel/get/${id}`
+        `${apiUrl}/api/artikel/get/${id}?type=${type}`
       );
       return response.data;
     } catch (error) {
-      console.log("");
+      console.error(error);
       throw error;
     }
   };

@@ -24,7 +24,7 @@ export const CardInformasiDetailkelas: React.FC<ClassDetailsProps> = ({
             right: 0,
             bottom: 0,
             backgroundColor: "rgba(255, 255, 255, 0.7)",
-            zIndex: 9999,
+            zIndex: 20,
             display: "flex",
             justifyContent: "center",
             alignItems: "center",

@@ -1,7 +1,12 @@
 import axios from "axios";
 import useCookie from "react-use-cookie";
-import { ResponseGetStudentDetail } from "../interface/student.interface";
 import { useNavigate } from "react-router-dom";
+import {
+  ParentOfStudent,
+  ResponseGetStudent,
+  StudentDetail,
+} from "../interface/student.interface";
+
 const apiUrl = import.meta.env.VITE_API_URL;
 const StudentService = () => {
   const navigate = useNavigate();
@@ -16,9 +21,9 @@ const StudentService = () => {
 
   const getNewStudent = async (
     major: string = ""
-  ): Promise<ResponseGetStudentDetail> => {
+  ): Promise<ResponseGetStudent<StudentDetail[]>> => {
     try {
-      const response = await axios.get<ResponseGetStudentDetail>(
+      const response = await axios.get<ResponseGetStudent<StudentDetail[]>>(
         `${apiUrl}/api/student/newStudent?majorCode=${major}`,
         {
           headers: {
@@ -35,14 +40,57 @@ const StudentService = () => {
     }
   };
 
-  const getAllStudent = async (
-    status: string = "",
-    major_code: string = "",
-    grade: string = ""
-  ): Promise<ResponseGetStudentDetail> => {
+  const getStudentByNis = async (
+    nis: number
+  ): Promise<ResponseGetStudent<StudentDetail>> => {
     try {
-      const response = await axios.get<ResponseGetStudentDetail>(
+      const response = await axios.get<ResponseGetStudent<StudentDetail>>(
+        `${apiUrl}/api/student/get/${nis}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${userLoginCookie?.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        handleUnauthorized(error.response?.status || 0);
+      }
+      throw error;
+    }
+  };
+
+  const getAllStudent = async (
+    major_code: string = "",
+    grade: string = "",
+    status: string = "All"
+  ): Promise<ResponseGetStudent<StudentDetail[]>> => {
+    try {
+      const response = await axios.get<ResponseGetStudent<StudentDetail[]>>(
         `${apiUrl}/api/student/get?status=${status}&major_code=${major_code}&grade=${grade}`,
+        {
+          headers: {
+            authorization: `Bearer ${userLoginCookie?.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        handleUnauthorized(error.response?.status || 0);
+      }
+      throw error;
+    }
+  };
+
+  const getParentStudent = async (
+    nis: string
+  ): Promise<ResponseGetStudent<ParentOfStudent>> => {
+    try {
+      const response = await axios.get<ResponseGetStudent<ParentOfStudent>>(
+        `${apiUrl}/api/student/parent/get?nis=${nis}`,
         {
           headers: {
             authorization: `Bearer ${userLoginCookie?.token}`,
@@ -61,6 +109,8 @@ const StudentService = () => {
   return {
     getNewStudent,
     getAllStudent,
+    getStudentByNis,
+    getParentStudent,
   };
 };
 

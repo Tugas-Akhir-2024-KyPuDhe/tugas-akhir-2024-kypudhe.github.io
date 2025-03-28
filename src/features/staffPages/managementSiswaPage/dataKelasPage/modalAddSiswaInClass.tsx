@@ -84,8 +84,6 @@ export const ModalAddStudentInClass: React.FC<ModalAddStudentInClassProps> = ({
       collectionNis.push(data.nis);
     });
 
-    console.log(collectionNis);
-
     if (collectionNis.length < 1) {
       return Toast.fire({
         icon: "error",
@@ -153,7 +151,7 @@ export const ModalAddStudentInClass: React.FC<ModalAddStudentInClassProps> = ({
                 right: 0,
                 bottom: 0,
                 backgroundColor: "rgba(255, 255, 255, 0.7)",
-                zIndex: 9999,
+                zIndex: 20,
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
@@ -164,7 +162,7 @@ export const ModalAddStudentInClass: React.FC<ModalAddStudentInClassProps> = ({
               </div>
             </div>
           )}
-          <div className="row mx-0 pb-4">
+          <div className="row mx-0 bg-light">
             <div className="col p-2 text-start py-3 px-3">
               <div className="fw-bold position-relative pb-2 fs-5">
                 Tambah Siswa Ke Dalam Kelas
@@ -179,6 +177,12 @@ export const ModalAddStudentInClass: React.FC<ModalAddStudentInClassProps> = ({
                   }}
                 />
               </div>
+              <p className="mt-2 fw-medium">
+                Silakan pilih siswa-siswa yang akan dimasukkan ke dalam kelas
+                ini dengan berkoordinasi bersama guru dan staf terkait, agar
+                penempatan ini sesuai dengan tujuan pembelajaran dan kenyamanan
+                siswa.
+              </p>
             </div>
             <div className="col-auto p-2 text-start py-3 px-3">
               <button
@@ -191,7 +195,7 @@ export const ModalAddStudentInClass: React.FC<ModalAddStudentInClassProps> = ({
           </div>
           <div className="modal-body pb-4">
             <div className="row">
-              <div className="col-12 col-lg-8">
+              <div className="col-12 col-lg-7">
                 <div className="row justify-content-between">
                   <div className="col-auto">
                     <div className="">
@@ -221,6 +225,7 @@ export const ModalAddStudentInClass: React.FC<ModalAddStudentInClassProps> = ({
                   selectableRows
                   onSelectedRowsChange={handleChange}
                   highlightOnHover
+                  className="mt-3"
                   customStyles={{
                     rows: {
                       style: {
@@ -230,46 +235,53 @@ export const ModalAddStudentInClass: React.FC<ModalAddStudentInClassProps> = ({
                         },
                       },
                     },
+                    headCells: {
+                      style: {
+                        backgroundColor: "var(--blue-color)",
+                        color: "#ffffff",
+                        fontWeight: "bold",
+                        textAlign: "center",
+                        border: "0.1px solid #ddd",
+                      },
+                    },
                   }}
                 />
               </div>
               <div
-                className="col-12 col-lg-4"
+                className="col-12 col-lg-5"
                 style={{ borderLeft: "0.5px solid grey" }}
               >
-                <div className="mb-3 fw-bold">Siswa Dipilih</div>
-                <div className="row">
-                  <div className="col-12">
+                <div className="row px-3">
+                  <div className="col-12 alert alert-success">
+                    <div className="mb-3 fw-bold">Siswa Dipilih</div>
                     <div className="row mb-3">
                       <div className="col-4 fw-medium">TA</div>
                       <div className="col-auto">:</div>
-                      <div className="col-7 fw-medium">
+                      <div className="col fw-medium">
                         {dataClass?.academicYear}
                       </div>
                     </div>
                     <div className="row mb-3">
                       <div className="col-4 fw-medium">Kelas</div>
                       <div className="col-auto">:</div>
-                      <div className="col-7 fw-medium">{dataClass?.name}</div>
+                      <div className="col fw-medium">{dataClass?.name}</div>
                     </div>
                     <div className="row mb-3">
                       <div className="col-4 fw-medium">Kapasitas </div>
                       <div className="col-auto">:</div>
-                      <div className="col-7 fw-medium">
-                        {dataClass?.capacity}
-                      </div>
+                      <div className="col fw-medium">{dataClass?.capacity}</div>
                     </div>
                     <div className="row mb-3">
                       <div className="col-4 fw-medium">Saat Ini </div>
                       <div className="col-auto">:</div>
-                      <div className="col-7 fw-medium">
+                      <div className="col fw-medium">
                         {dataStudentsInClass?.length} Siswa
                       </div>
                     </div>
                     <div className="row mb-3">
                       <div className="col-4 fw-medium">Wali Kelas </div>
                       <div className="col-auto">:</div>
-                      <div className="col-7 fw-medium">
+                      <div className="col fw-medium">
                         {dataClass?.homeRoomTeacher.name}
                       </div>
                     </div>

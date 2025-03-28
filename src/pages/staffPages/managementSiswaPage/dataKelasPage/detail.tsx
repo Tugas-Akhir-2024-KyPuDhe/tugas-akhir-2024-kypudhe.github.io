@@ -20,6 +20,9 @@ import StaffService from "../../../../services/staffService";
 import { CardInformasiDetailkelas } from "../../../../features/staffPages/managementSiswaPage/dataKelasPage/cardInformasiKelas";
 import { CardMatkulDetailKelas } from "../../../../features/staffPages/managementSiswaPage/dataKelasPage/cardMatkul";
 import { CardDaftarSiswaDetailKelas } from "../../../../features/staffPages/managementSiswaPage/dataKelasPage/cardDaftarSiswa";
+import { CardPerangkatKelas } from "../../../../features/studentPages/kelasPage/cardPerangkatKelas";
+import { IStudentPositionInClass } from "../../../../interface/studentPosition.interface";
+import StudentPositionService from "../../../../services/studentPositionInClassService";
 
 export const DetailKelasMangementSiswaPage: React.FC = () => {
   const studentService = StudentService();
@@ -27,33 +30,44 @@ export const DetailKelasMangementSiswaPage: React.FC = () => {
   const courseService = CourseService();
   const courseInClassService = CourseInClassService();
   const teacherService = StaffService();
+  const studentPosition = StudentPositionService();
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
 
   const [dataStudentsInClass, setDataStudentsInClass] = useState<
     StudentDetail[]
   >([]);
+  const [dataPosition, setDataPosition] = useState<IStudentPositionInClass[]>(
+    []
+  );
   const [dataAllStudents, setDataAllStudents] = useState<StudentDetail[]>([]);
   const [dataCourseInClass, setDataCourseInClass] = useState<CourseInClass[]>(
     []
   );
-  const [dataCourse, setdataCourse] = useState<Course[]>([]);
-  const [dataTeachers, setdataTeachers] = useState<StaffDetail[]>([]);
+  const [dataAllCourse, setDataAllCourse] = useState<Course[]>([]);
+  const [dataAllTeachers, setDataAllTeachers] = useState<StaffDetail[]>([]);
+  const [dataAllClass, setDataAllClass] = useState<Class[]>([]);
   const [dataClass, setDataClass] = useState<Class>();
 
   const [loading, setLoading] = useState<boolean>(true);
   const [loadingFormMapel, setLoadingFormMapel] = useState<boolean>(false);
   const [errorsForms, setErrorsForms] = useState<{ [key: string]: string }>({});
   const optionsCourse = [
-    ...dataCourse.map((data) => ({
+    ...dataAllCourse.map((data) => ({
       value: data.code,
-      label: `${data.name} | ${data.grade}`,
+      label: `${data.name} (${data.grade})`,
     })),
   ];
   const optionsTeachers = [
-    ...dataTeachers.map((data) => ({
+    ...dataAllTeachers.map((data) => ({
       value: data.id.toString(),
       label: `${data.name}`,
+    })),
+  ];
+  const optionsClass = [
+    ...dataAllClass.map((data) => ({
+      value: data.id.toString(),
+      label: `${data.name}, ${data.academicYear}`,
     })),
   ];
 
@@ -86,13 +100,22 @@ export const DetailKelasMangementSiswaPage: React.FC = () => {
     setErrorsForms((prevErrors) => ({ ...prevErrors, [name]: "" }));
   };
 
-  const getTeacher = async () => {
+  const getPositionInClass = async (id: number) => {
+    try {
+      const response = await studentPosition.getAllPositionByClass(id);
+      setDataPosition(response.data!);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getAllTeacher = async () => {
     try {
       const response = await teacherService.getStaff("TEACHER");
-      setdataTeachers(response.data);
+      setDataAllTeachers(response.data);
       if (!id) {
         if (response.data && response.data.length > 0) {
-          setdataTeachers((prev) => ({
+          setDataAllTeachers((prev) => ({
             ...prev,
             staffId: response.data[0]?.id.toString() || "",
           }));
@@ -103,18 +126,27 @@ export const DetailKelasMangementSiswaPage: React.FC = () => {
     }
   };
 
-  const getCourse = async () => {
+  const getAllCourse = async () => {
     try {
       const response = await courseService.getAllCourses();
-      setdataCourse(response.data);
+      setDataAllCourse(response.data);
       if (!id) {
         if (response.data && response.data.length > 0) {
-          setdataCourse((prev) => ({
+          setDataAllCourse((prev) => ({
             ...prev,
             staffId: response.data[0]?.id.toString() || "",
           }));
         }
       }
+    } catch (error) {
+      console.error("Error fetching Student data:", error);
+    }
+  };
+
+  const getAllClass = async () => {
+    try {
+      const response = await classService.getAllClass();
+      setDataAllClass(response.data);
     } catch (error) {
       console.error("Error fetching Student data:", error);
     }
@@ -123,9 +155,9 @@ export const DetailKelasMangementSiswaPage: React.FC = () => {
   const getAllStudents = async (majorCode: string) => {
     try {
       const response = await studentService.getAllStudent(
-        "not_registered",
         majorCode,
-        dataClass?.name.split("-")[0]
+        "",
+        "New"
       );
       if (response.data && response.data.length > 0) {
         setDataAllStudents(response.data);
@@ -142,12 +174,15 @@ export const DetailKelasMangementSiswaPage: React.FC = () => {
         const response = await classService.getClassById(parseInt(id));
         const data = response.data;
         setDataClass(data);
+        
         setDataStudentsInClass(response.data.student);
         setDataCourseInClass(data.CourseInClass!);
         setFormCourse({ ...formCourse, classId: data.id });
-        await getCourse();
-        await getTeacher();
+        await getAllCourse();
+        await getAllTeacher();
         await getAllStudents(data.majorCode);
+        await getPositionInClass(response.data.id);
+        await getAllClass()
       } catch (error) {
         const axiosError = error as AxiosError;
         if (axiosError.response?.status === 404) {
@@ -250,7 +285,7 @@ export const DetailKelasMangementSiswaPage: React.FC = () => {
         await getDataClass();
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setLoadingFormMapel(false);
     }
@@ -267,6 +302,12 @@ export const DetailKelasMangementSiswaPage: React.FC = () => {
       />
 
       <CardInformasiDetailkelas dataClass={dataClass} loading={loading} />
+
+      <CardPerangkatKelas
+        loading={loading}
+        data={dataPosition || []}
+      />
+      
       <CardMatkulDetailKelas
         data={dataCourseInClass}
         loading={loading}
@@ -284,6 +325,7 @@ export const DetailKelasMangementSiswaPage: React.FC = () => {
         onRefreshData={getDataClass}
         dataStudentsInClass={dataStudentsInClass}
         dataAllStudents={dataAllStudents}
+        optionsClass={optionsClass}
         dataClass={dataClass!}
         loading={loading}
       />

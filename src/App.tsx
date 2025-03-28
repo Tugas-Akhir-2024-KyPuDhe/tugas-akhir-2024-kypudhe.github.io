@@ -18,18 +18,8 @@ import {
   FormJurusanPage,
   EkskulPage,
   FormEkskulPage,
-  GuruMapelPage,
-  FormGuruMapelPage,
-  DaftarSiswaPage,
-  FormDaftarSiswaPage,
-  DaftarKelasPage,
-  FormDaftarKelasPage,
-  NilaiSiswaPage,
-  FormNilaiSiswaPage,
   FormArticlePage,
   ProfilePage,
-  AbsensiSiswaPage,
-  DetailAbsensiSiswaPage,
   DataSiswaMangementSiswaPage,
   FormSiswaMangementSiswaPage,
   DetailSiswaMangementSiswa,
@@ -44,7 +34,20 @@ import {
   FormMapelMangementSiswaPage,
   DataStaffMangementStaffPage,
   FormStaffMangementStaffPage,
-  DaftarKelasNilaiSiswaPage,
+  DetailKelasSiswaPage,
+  BeritaPage,
+  DetailStaffMangementSiswa,
+  DetailJadwalMengajarPage,
+  JadwalMengajarPage,
+  KelasWaliPage,
+  DetailKelasWaliPage,
+  StudyTracerPage,
+  AcademicYearPage,
+  FormAcademicYearPage,
+  DetailStudyTracerPage,
+  ChangePasswordPage,
+  FormProblemReportPage,
+  ProblemReportPage,
 } from "./pages";
 import { SideBar } from "./components/sidebar";
 import PrivateRoute from "./components/privateRoute";
@@ -68,243 +71,427 @@ function App() {
           <Routes>
             {/* #region | Global */}
             <Route path="*" element={<NotFoundPage />} />
-            <Route path="/" element={<PrivateRoute Component={HomePage} />} />
+            <Route
+              path="/"
+              element={
+                <PrivateRoute
+                  Component={HomePage}
+                  Role={["STAFF", "TEACHER", "STUDENT"]}
+                />
+              }
+            />
             <Route
               path="/profil"
-              element={<PrivateRoute Component={ProfilePage} />}
+              element={
+                <PrivateRoute
+                  Component={ProfilePage}
+                  Role={["STAFF", "TEACHER", "STUDENT"]}
+                />
+              }
             />
             <Route
               path="/dashboard"
-              element={<PrivateRoute Component={HomePage} />}
+              element={
+                <PrivateRoute
+                  Component={HomePage}
+                  Role={["STAFF", "TEACHER", "STUDENT"]}
+                />
+              }
             />
             <Route
               path="/berita"
-              element={<PrivateRoute Component={ArticlePage} />}
+              element={
+                <PrivateRoute
+                  Component={ArticlePage}
+                  Role={["STAFF", "TEACHER", "STUDENT"]}
+                />
+              }
             />
             <Route
               path="/berita/:id"
-              element={<PrivateRoute Component={DetailArticlePage} />}
+              element={
+                <PrivateRoute
+                  Component={DetailArticlePage}
+                  Role={["STAFF", "TEACHER", "STUDENT"]}
+                />
+              }
+            />
+            <Route
+              path="/ganti-password"
+              element={
+                <PrivateRoute
+                  Component={ChangePasswordPage}
+                  Role={["STAFF", "TEACHER", "STUDENT"]}
+                />
+              }
+            />
+            <Route
+              path="/form-kendala"
+              element={
+                <PrivateRoute
+                  Component={FormProblemReportPage}
+                  Role={["STAFF", "TEACHER", "STUDENT"]}
+                />
+              }
             />
             {/* #endregion */}
 
             {/* #region | Staff */}
             <Route
-              path="/berita/tambah"
-              element={<PrivateRoute Component={FormArticlePage} />}
+              path="/content-web/berita"
+              element={<PrivateRoute Component={BeritaPage} Role={["STAFF"]} />}
             />
             <Route
-              path="/berita/update/:id"
-              element={<PrivateRoute Component={FormArticlePage} />}
+              path="/content-web/berita/tambah"
+              element={
+                <PrivateRoute Component={FormArticlePage} Role={["STAFF"]} />
+              }
+            />
+            <Route
+              path="/content-web/berita/update/:id"
+              element={
+                <PrivateRoute Component={FormArticlePage} Role={["STAFF"]} />
+              }
             />
             <Route
               path="/content-web/banner"
-              element={<PrivateRoute Component={BannerPage} />}
+              element={<PrivateRoute Component={BannerPage} Role={["STAFF"]} />}
             />
             <Route
               path="/content-web/banner/tambah"
-              element={<PrivateRoute Component={FormBannerPage} />}
+              element={
+                <PrivateRoute Component={FormBannerPage} Role={["STAFF"]} />
+              }
             />
             <Route
               path="/content-web/banner/update/:id"
-              element={<PrivateRoute Component={FormBannerPage} />}
+              element={
+                <PrivateRoute Component={FormBannerPage} Role={["STAFF"]} />
+              }
             />
             <Route
               path="/content-web/sekolah"
-              element={<PrivateRoute Component={SchoolPage} />}
+              element={<PrivateRoute Component={SchoolPage} Role={["STAFF"]} />}
             />
             <Route
               path="/content-web/fasilitas"
-              element={<PrivateRoute Component={FacilityPage} />}
+              element={
+                <PrivateRoute Component={FacilityPage} Role={["STAFF"]} />
+              }
             />
             <Route
               path="/content-web/fasilitas/tambah"
-              element={<PrivateRoute Component={FormFacilityPage} />}
+              element={
+                <PrivateRoute Component={FormFacilityPage} Role={["STAFF"]} />
+              }
             />
             <Route
               path="/content-web/fasilitas/update/:id"
-              element={<PrivateRoute Component={FormFacilityPage} />}
+              element={
+                <PrivateRoute Component={FormFacilityPage} Role={["STAFF"]} />
+              }
             />
             <Route
               path="/content-web/jurusan"
-              element={<PrivateRoute Component={JurusanPage} />}
+              element={
+                <PrivateRoute Component={JurusanPage} Role={["STAFF"]} />
+              }
             />
             <Route
               path="/content-web/jurusan/tambah"
-              element={<PrivateRoute Component={FormJurusanPage} />}
+              element={
+                <PrivateRoute Component={FormJurusanPage} Role={["STAFF"]} />
+              }
             />
             <Route
               path="/content-web/jurusan/update/:id"
-              element={<PrivateRoute Component={FormJurusanPage} />}
+              element={
+                <PrivateRoute Component={FormJurusanPage} Role={["STAFF"]} />
+              }
             />
             <Route
               path="/content-web/ekstra-kurikuler"
-              element={<PrivateRoute Component={EkskulPage} />}
+              element={<PrivateRoute Component={EkskulPage} Role={["STAFF"]} />}
             />
             <Route
               path="/content-web/ekstra-kurikuler/tambah"
-              element={<PrivateRoute Component={FormEkskulPage} />}
+              element={
+                <PrivateRoute Component={FormEkskulPage} Role={["STAFF"]} />
+              }
             />
             <Route
               path="/content-web/ekstra-kurikuler/update/:id"
-              element={<PrivateRoute Component={FormEkskulPage} />}
+              element={
+                <PrivateRoute Component={FormEkskulPage} Role={["STAFF"]} />
+              }
             />
             <Route
               path="/content-web/galeri"
-              element={<PrivateRoute Component={GaleriPage} />}
+              element={<PrivateRoute Component={GaleriPage} Role={["STAFF"]} />}
             />
             <Route
               path="/content-web/galeri/tambah"
-              element={<PrivateRoute Component={FormGaleriPage} />}
+              element={
+                <PrivateRoute Component={FormGaleriPage} Role={["STAFF"]} />
+              }
             />
             <Route
               path="/content-web/galeri/update/:id"
-              element={<PrivateRoute Component={FormGaleriPage} />}
+              element={
+                <PrivateRoute Component={FormGaleriPage} Role={["STAFF"]} />
+              }
             />
             <Route
               path="/content-web/galeri/koleksi/:id"
-              element={<PrivateRoute Component={UpdateGaleriColletion} />}
+              element={
+                <PrivateRoute
+                  Component={UpdateGaleriColletion}
+                  Role={["STAFF"]}
+                />
+              }
+            />
+             <Route
+              path="/content-web/study-tracer"
+              element={<PrivateRoute Component={StudyTracerPage} Role={["STAFF"]} />}
+            />
+             <Route
+              path="/content-web/study-tracer/detail/:id"
+              element={<PrivateRoute Component={DetailStudyTracerPage} Role={["STAFF"]} />}
             />
             <Route
-              path="/manajemen-siswa/data-siswa-baru"
-              element={<PrivateRoute Component={DataSiswaMangementSiswaPage} />}
+              path="/manajemen-siswa/daftar-siswa"
+              element={
+                <PrivateRoute
+                  Component={DataSiswaMangementSiswaPage}
+                  Role={["STAFF"]}
+                />
+              }
             />
             <Route
-              path="/manajemen-siswa/data-siswa-baru/tambah"
-              element={<PrivateRoute Component={FormSiswaMangementSiswaPage} />}
+              path="/manajemen-siswa/daftar-siswa/tambah"
+              element={
+                <PrivateRoute
+                  Component={FormSiswaMangementSiswaPage}
+                  Role={["STAFF"]}
+                />
+              }
             />
             <Route
-              path="/manajemen-siswa/data-siswa-baru/update/:id"
-              element={<PrivateRoute Component={FormSiswaMangementSiswaPage} />}
+              path="/manajemen-siswa/daftar-siswa/update/:id"
+              element={
+                <PrivateRoute
+                  Component={FormSiswaMangementSiswaPage}
+                  Role={["STAFF"]}
+                />
+              }
             />
             <Route
-              path="/manajemen-siswa/data-siswa-baru/detail/:id"
-              element={<PrivateRoute Component={DetailSiswaMangementSiswa} />}
+              path="/manajemen-siswa/daftar-siswa/detail/:id"
+              element={
+                <PrivateRoute
+                  Component={DetailSiswaMangementSiswa}
+                  Role={["STAFF"]}
+                />
+              }
             />
             <Route
               path="/manajemen-siswa/data-kelas"
-              element={<PrivateRoute Component={DataKelasMangementSiswaPage} />}
+              element={
+                <PrivateRoute
+                  Component={DataKelasMangementSiswaPage}
+                  Role={["STAFF"]}
+                />
+              }
             />
             <Route
               path="/manajemen-siswa/data-kelas/tambah"
-              element={<PrivateRoute Component={FormDataKelasMangementSiswaPage} />}
+              element={
+                <PrivateRoute
+                  Component={FormDataKelasMangementSiswaPage}
+                  Role={["STAFF"]}
+                />
+              }
             />
             <Route
               path="/manajemen-siswa/data-kelas/update/:id"
-              element={<PrivateRoute Component={FormDataKelasMangementSiswaPage} />}
+              element={
+                <PrivateRoute
+                  Component={FormDataKelasMangementSiswaPage}
+                  Role={["STAFF"]}
+                />
+              }
             />
             <Route
               path="/manajemen-siswa/data-kelas/detail/:id"
-              element={<PrivateRoute Component={DetailKelasMangementSiswaPage} />}
+              element={
+                <PrivateRoute
+                  Component={DetailKelasMangementSiswaPage}
+                  Role={["STAFF"]}
+                />
+              }
             />
             <Route
               path="/manajemen-siswa/data-mapel"
-              element={<PrivateRoute Component={DataMapelMangementSiswaPage} />}
+              element={
+                <PrivateRoute
+                  Component={DataMapelMangementSiswaPage}
+                  Role={["STAFF"]}
+                />
+              }
             />
             <Route
               path="/manajemen-siswa/data-mapel/tambah"
-              element={<PrivateRoute Component={FormMapelMangementSiswaPage} />}
+              element={
+                <PrivateRoute
+                  Component={FormMapelMangementSiswaPage}
+                  Role={["STAFF"]}
+                />
+              }
             />
             <Route
               path="/manajemen-siswa/data-mapel/update/:id"
-              element={<PrivateRoute Component={FormMapelMangementSiswaPage} />}
+              element={
+                <PrivateRoute
+                  Component={FormMapelMangementSiswaPage}
+                  Role={["STAFF"]}
+                />
+              }
             />
             <Route
               path="/manajemen-staff/data-staff"
-              element={<PrivateRoute Component={DataStaffMangementStaffPage} />}
+              element={
+                <PrivateRoute
+                  Component={DataStaffMangementStaffPage}
+                  Role={["STAFF"]}
+                />
+              }
             />
             <Route
               path="/manajemen-staff/data-staff/tambah"
-              element={<PrivateRoute Component={FormStaffMangementStaffPage} />}
+              element={
+                <PrivateRoute
+                  Component={FormStaffMangementStaffPage}
+                  Role={["STAFF"]}
+                />
+              }
             />
             <Route
               path="/manajemen-staff/data-staff/detail/:id"
-              element={<PrivateRoute Component={FormStaffMangementStaffPage} />}
+              element={
+                <PrivateRoute
+                  Component={DetailStaffMangementSiswa}
+                  Role={["STAFF"]}
+                />
+              }
             />
             <Route
               path="/manajemen-staff/data-staff/update/:id"
-              element={<PrivateRoute Component={FormStaffMangementStaffPage} />}
+              element={
+                <PrivateRoute
+                  Component={FormStaffMangementStaffPage}
+                  Role={["STAFF"]}
+                />
+              }
+            />
+            <Route
+              path="/config/tahun-ajaran"
+              element={
+                <PrivateRoute
+                  Component={AcademicYearPage}
+                  Role={["STAFF"]}
+                />
+              }
+            />
+            <Route
+              path="/config/tahun-ajaran/tambah"
+              element={
+                <PrivateRoute
+                  Component={FormAcademicYearPage}
+                  Role={["STAFF"]}
+                />
+              }
+            />
+            <Route
+              path="/config/tahun-ajaran/update/:id"
+              element={
+                <PrivateRoute
+                  Component={FormAcademicYearPage}
+                  Role={["STAFF"]}
+                />
+              }
+            />
+            <Route
+              path="/config/kendala/laporan-kendala"
+              element={
+                <PrivateRoute
+                  Component={ProblemReportPage}
+                  Role={["STAFF"]}
+                />
+              }
             />
             {/* === #endregion */}
 
             {/* #region | Teacher */}
             <Route
-              path="/guru/mata-pelajaran"
-              element={<PrivateRoute Component={GuruMapelPage} />}
+              path="/guru/kelas-wali"
+              element={
+                <PrivateRoute Component={KelasWaliPage} Role={["TEACHER"]} />
+              }
             />
             <Route
-              path="/guru/mata-pelajaran/tambah"
-              element={<PrivateRoute Component={FormGuruMapelPage} />}
+              path="/guru/kelas-wali/detail/:id"
+              element={
+                <PrivateRoute Component={DetailKelasWaliPage} Role={["TEACHER"]} />
+              }
             />
             <Route
-              path="/guru/mata-pelajaran/update/:id"
-              element={<PrivateRoute Component={FormGuruMapelPage} />}
+              path="/guru/jadwal-mengajar"
+              element={
+                <PrivateRoute Component={JadwalMengajarPage} Role={["TEACHER"]} />
+              }
             />
             <Route
-              path="/pengelolaan-siswa/daftar-siswa"
-              element={<PrivateRoute Component={DaftarSiswaPage} />}
+              path="/guru/jadwal-mengajar/detail/:id"
+              element={
+                <PrivateRoute Component={DetailJadwalMengajarPage} Role={["TEACHER"]} />
+              }
             />
-            <Route
-              path="/pengelolaan-siswa/daftar-siswa/tambah"
-              element={<PrivateRoute Component={FormDaftarSiswaPage} />}
-            />
-            <Route
-              path="/pengelolaan-siswa/daftar-siswa/update/:id"
-              element={<PrivateRoute Component={FormDaftarSiswaPage} />}
-            />
-            <Route
-              path="/guru/kelas-saya"
-              element={<PrivateRoute Component={DaftarKelasPage} />}
-            />
-            <Route
-              path="/guru/kelas-saya/tambah"
-              element={<PrivateRoute Component={FormDaftarKelasPage} />}
-            />
-            <Route
-              path="/guru/kelas-saya/update/:id"
-              element={<PrivateRoute Component={FormDaftarKelasPage} />}
-            />
-            <Route
-              path="/pengelolaan-siswa/nilai-siswa"
-              element={<PrivateRoute Component={NilaiSiswaPage} />}
-            />
-            <Route
-              path="/pengelolaan-siswa/nilai-siswa/tambah"
-              element={<PrivateRoute Component={FormNilaiSiswaPage} />}
-            />
-            <Route
-              path="/pengelolaan-siswa/nilai-siswa/update/:id"
-              element={<PrivateRoute Component={FormNilaiSiswaPage} />}
-            />
-            <Route
-              path="/pengelolaan-siswa/absensi-siswa"
-              element={<PrivateRoute Component={AbsensiSiswaPage} />}
-            />
-            <Route
-              path="/pengelolaan-siswa/absensi-siswa/:id"
-              element={<PrivateRoute Component={DetailAbsensiSiswaPage} />}
-            />
-            <Route
-              path="/guru/kelas-saya/nilai/:id"
-              element={<PrivateRoute Component={DaftarKelasNilaiSiswaPage} />}
-            />
+
             {/* #endregion */}
 
             {/* #region | Student  */}
             <Route
               path="/nilai"
-              element={<PrivateRoute Component={NilaiPage} />}
+              element={
+                <PrivateRoute Component={NilaiPage} Role={["STUDENT"]} />
+              }
             />
             <Route
               path="/kelas"
-              element={<PrivateRoute Component={KelasPage} />}
+              element={
+                <PrivateRoute Component={KelasPage} Role={["STUDENT"]} />
+              }
+            />
+            <Route
+              path="/kelas/detail/:id"
+              element={
+                <PrivateRoute
+                  Component={DetailKelasSiswaPage}
+                  Role={["STUDENT"]}
+                />
+              }
             />
             <Route
               path="/mata-pelajaran"
-              element={<PrivateRoute Component={MapelPage} />}
+              element={
+                <PrivateRoute Component={MapelPage} Role={["STUDENT"]} />
+              }
             />
             <Route
               path="/absensi"
-              element={<PrivateRoute Component={AbsensiPage} />}
+              element={
+                <PrivateRoute Component={AbsensiPage} Role={["STUDENT"]} />
+              }
             />
             {/* #endregion */}
           </Routes>

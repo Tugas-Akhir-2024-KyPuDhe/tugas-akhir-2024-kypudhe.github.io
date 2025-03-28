@@ -4,9 +4,9 @@ import {
   FaBars,
   FaBookOpenReader,
   FaCircle,
-  FaFileLines,
   FaGlobe,
   FaNewspaper,
+  FaRegPenToSquare,
 } from "react-icons/fa6";
 import {
   Sidebar,
@@ -16,18 +16,19 @@ import {
   menuClasses,
   sidebarClasses,
 } from "react-pro-sidebar";
-import { IoGrid } from "react-icons/io5";
+import { IoGrid, IoSettingsSharp, IoWarningOutline } from "react-icons/io5";
 import { FaUserCircle } from "react-icons/fa";
 import AuthService from "../services/authService";
 import useCookie from "react-use-cookie";
 import { Footer } from "./footer";
-import { MdKeyboardArrowDown, MdLibraryBooks } from "react-icons/md";
+import { MdKeyboardArrowDown } from "react-icons/md";
 import { LuCheckSquare } from "react-icons/lu";
 import { RiSchoolLine } from "react-icons/ri";
 import { TbBooks, TbUserScreen } from "react-icons/tb";
 import { Link } from "react-router-dom";
 import { IoIosPeople } from "react-icons/io";
 import { convertRole } from "../utils/myFunctions";
+import { BsPersonSquare } from "react-icons/bs";
 
 interface SideBarAdminProps {
   children: ReactNode;
@@ -96,6 +97,12 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
         <div style={{ display: "flex", height: "100%", minHeight: "400px" }}>
           {isMobile ? (
             <Sidebar
+              rootStyles={{
+                zIndex: 100,
+                position: "sticky",
+                top: 0,
+                height: "100vh",
+              }}
               backgroundColor="#fff"
               transitionDuration={600}
               onBackdropClick={() => setMobileToggled(false)}
@@ -112,6 +119,9 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
               transitionDuration={600}
               style={{ minHeight: "100vh" }}
               rootStyles={{
+                position: "sticky",
+                top: 0,
+                height: "100vh",
                 [`.${sidebarClasses.container}`]: {
                   fixed: "top",
                   height: "100vh",
@@ -124,8 +134,8 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
           )}
           <main style={{ width: "100%" }}>
             <nav
-              className="navbar py-3 pe-4 shadow-sm"
-              style={{ backgroundColor: "#fff" }}
+              className="navbar py-3 pe-4 sticky-top shadow-sm"
+              style={{ backgroundColor: "#fff", zIndex: "99" }}
             >
               <div className="container-fluid">
                 <div className="navbar-brand">
@@ -163,7 +173,7 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
                             <FaUserCircle className="me-3 fs-2" />
                           )}
                         </div>
-                        <div className="col-auto text-start px-0">
+                        <div className="d-none d-md-block col-auto text-start px-0">
                           <div className="fw-medium">
                             {userLoginCookie?.name} <MdKeyboardArrowDown />{" "}
                           </div>
@@ -183,12 +193,12 @@ export const SideBar: React.FC<SideBarAdminProps> = ({ children }) => {
                         </Link>
                       </li>
                       <li>
-                        <button
+                        <Link
+                          to="/ganti-password"
                           className="dropdown-item py-3"
-                          onClick={handleLogout}
                         >
-                          Other
-                        </button>
+                          Ganti Password
+                        </Link>
                       </li>
                       <li>
                         <button
@@ -228,6 +238,7 @@ export const ListMenu = () => {
   const [cookieLogin] = useCookie("userLoginCookie");
   const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
   const [selectedMenu, setSelectedMenu] = useState("");
+  const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
 
   useEffect(() => {
     setSelectedMenu(location.pathname);
@@ -235,6 +246,10 @@ export const ListMenu = () => {
 
   const handleMenuClick = (path: string) => {
     navigate(path);
+  };
+
+  const handleSubmenuToggle = (submenu: string) => {
+    setOpenSubmenu((prev) => (prev === submenu ? null : submenu));
   };
 
   return (
@@ -301,16 +316,16 @@ export const ListMenu = () => {
         <>
           <MenuItem
             onClick={() => handleMenuClick("/nilai")}
-            icon={<MdLibraryBooks />}
+            icon={<FaRegPenToSquare />}
             style={{
               position: "relative",
-              backgroundColor: selectedMenu === "/nilai" ? "#E5EAF2" : "",
+              backgroundColor: selectedMenu.includes("/nilai") ? "#E5EAF2" : "",
             }}
             className={`fw-medium ${
-              selectedMenu === "/nilai" ? "text-blue" : "text-dark-soft"
+              selectedMenu.includes("/nilai") ? "text-blue" : "text-dark-soft"
             }`}
           >
-            {selectedMenu === "/nilai" && (
+            {selectedMenu.includes("/nilai") && (
               <div
                 style={{
                   position: "absolute",
@@ -329,13 +344,15 @@ export const ListMenu = () => {
             icon={<LuCheckSquare />}
             style={{
               position: "relative",
-              backgroundColor: selectedMenu === "/absensi" ? "#E5EAF2" : "",
+              backgroundColor: selectedMenu.includes("/absensi")
+                ? "#E5EAF2"
+                : "",
             }}
             className={`fw-medium ${
-              selectedMenu === "/absensi" ? "text-blue" : "text-dark-soft"
+              selectedMenu.includes("/absensi") ? "text-blue" : "text-dark-soft"
             }`}
           >
-            {selectedMenu === "/absensi" && (
+            {selectedMenu.includes("/absensi") && (
               <div
                 style={{
                   position: "absolute",
@@ -354,13 +371,13 @@ export const ListMenu = () => {
             icon={<RiSchoolLine />}
             style={{
               position: "relative",
-              backgroundColor: selectedMenu === "/kelas" ? "#E5EAF2" : "",
+              backgroundColor: selectedMenu.includes("/kelas") ? "#E5EAF2" : "",
             }}
             className={`fw-medium ${
-              selectedMenu === "/kelas" ? "text-blue" : "text-dark-soft"
+              selectedMenu.includes("/kelas") ? "text-blue" : "text-dark-soft"
             }`}
           >
-            {selectedMenu === "/kelas" && (
+            {selectedMenu.includes("/kelas") && (
               <div
                 style={{
                   position: "absolute",
@@ -379,16 +396,17 @@ export const ListMenu = () => {
             icon={<TbBooks />}
             style={{
               position: "relative",
-              backgroundColor:
-                selectedMenu === "/mata-pelajaran" ? "#E5EAF2" : "",
+              backgroundColor: selectedMenu.includes("/mata-pelajaran")
+                ? "#E5EAF2"
+                : "",
             }}
             className={`fw-medium ${
-              selectedMenu === "/mata-pelajaran"
+              selectedMenu.includes("/mata-pelajaran")
                 ? "text-blue"
                 : "text-dark-soft"
             }`}
           >
-            {selectedMenu === "/mata-pelajaran" && (
+            {selectedMenu.includes("/mata-pelajaran") && (
               <div
                 style={{
                   position: "absolute",
@@ -408,20 +426,21 @@ export const ListMenu = () => {
       {userLoginCookie?.role === "TEACHER" && (
         <>
           <MenuItem
-            onClick={() => handleMenuClick("/guru/mata-pelajaran")}
-            icon={<TbBooks />}
+            onClick={() => handleMenuClick("/guru/kelas-wali")}
+            icon={<BsPersonSquare />}
             style={{
               position: "relative",
-              backgroundColor:
-                selectedMenu === "/guru/mata-pelajaran" ? "#E5EAF2" : "",
+              backgroundColor: selectedMenu.includes("/guru/kelas-wali")
+                ? "#E5EAF2"
+                : "",
             }}
             className={`fw-medium ${
-              selectedMenu === "/guru/mata-pelajaran"
+              selectedMenu.includes("/guru/kelas-wali")
                 ? "text-blue"
                 : "text-dark-soft"
             }`}
           >
-            {selectedMenu === "/guru/mata-pelajaran" && (
+            {selectedMenu.includes("/guru/kelas-wali") && (
               <div
                 style={{
                   position: "absolute",
@@ -433,237 +452,73 @@ export const ListMenu = () => {
                 }}
               />
             )}
-            Mata Pelajaran
+            Kelas Wali
           </MenuItem>
 
           <MenuItem
-              onClick={() => handleMenuClick("/guru/kelas-saya")}
-              icon={<FaBookOpenReader />}
-              style={{
-                position: "relative",
-                backgroundColor:
-                  selectedMenu === "/guru/kelas-saya"
-                    ? "#E5EAF2"
-                    : "",
-              }}
-              className={`fw-medium ${
-                selectedMenu === "/guru/kelas-saya"
-                  ? "text-blue"
-                  : "text-dark-soft"
-              }`}
-            >
-              {selectedMenu === "/guru/kelas-saya" && (
-                <div
-                  style={{
-                    position: "absolute",
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
-                    width: "4px",
-                    backgroundColor: "var(--blue-color)",
-                  }}
-                />
-              )}
-              Kelas Saya
-            </MenuItem>
-
-          <SubMenu
-            icon={<FaFileLines />}
-            label="Pengelolaan Siswa"
-            rootStyles={{
-              ["." + menuClasses.subMenuContent]: {
-                backgroundColor: "#fff",
-              },
+            onClick={() => handleMenuClick("/guru/jadwal-mengajar")}
+            icon={<FaBookOpenReader />}
+            style={{
+              position: "relative",
+              backgroundColor: selectedMenu.includes("/guru/jadwal-mengajar")
+                ? "#E5EAF2"
+                : "",
             }}
-            className="fw-medium"
+            className={`fw-medium ${
+              selectedMenu.includes("/guru/jadwal-mengajar")
+                ? "text-blue"
+                : "text-dark-soft"
+            }`}
           >
-            <MenuItem
-              onClick={() =>
-                handleMenuClick("/pengelolaan-siswa/absensi-siswa")
-              }
-              icon={<FaCircle style={{ fontSize: "8px" }} />}
-              style={{
-                position: "relative",
-                backgroundColor:
-                  selectedMenu === "/pengelolaan-siswa/absensi-siswa"
-                    ? "#E5EAF2"
-                    : "",
-              }}
-              className={`fw-medium ${
-                selectedMenu === "/pengelolaan-siswa/absensi-siswa"
-                  ? "text-blue"
-                  : "text-dark-soft"
-              }`}
-            >
-              {selectedMenu === "/pengelolaan-siswa/absensi-siswa" && (
-                <div
-                  style={{
-                    position: "absolute",
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
-                    width: "4px",
-                    backgroundColor: "var(--blue-color)",
-                  }}
-                />
-              )}
-              Absensi
-            </MenuItem>
-            <MenuItem
-              onClick={() => handleMenuClick("/pengelolaan-siswa/daftar-siswa")}
-              icon={<FaCircle style={{ fontSize: "8px" }} />}
-              style={{
-                position: "relative",
-                backgroundColor:
-                  selectedMenu === "/pengelolaan-siswa/daftar-siswa"
-                    ? "#E5EAF2"
-                    : "",
-              }}
-              className={`fw-medium ${
-                selectedMenu === "/pengelolaan-siswa/daftar-siswa"
-                  ? "text-blue"
-                  : "text-dark-soft"
-              }`}
-            >
-              {selectedMenu === "/pengelolaan-siswa/daftar-siswa" && (
-                <div
-                  style={{
-                    position: "absolute",
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
-                    width: "4px",
-                    backgroundColor: "var(--blue-color)",
-                  }}
-                />
-              )}
-              Daftar Siswa
-            </MenuItem>
-            <MenuItem
-              onClick={() => handleMenuClick("/guru/kelas-saya")}
-              icon={<FaCircle style={{ fontSize: "8px" }} />}
-              style={{
-                position: "relative",
-                backgroundColor:
-                  selectedMenu === "/guru/kelas-saya"
-                    ? "#E5EAF2"
-                    : "",
-              }}
-              className={`fw-medium ${
-                selectedMenu === "/guru/kelas-saya"
-                  ? "text-blue"
-                  : "text-dark-soft"
-              }`}
-            >
-              {selectedMenu === "/guru/kelas-saya" && (
-                <div
-                  style={{
-                    position: "absolute",
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
-                    width: "4px",
-                    backgroundColor: "var(--blue-color)",
-                  }}
-                />
-              )}
-              Data Kelas
-            </MenuItem>
-            <MenuItem
-              onClick={() => handleMenuClick("/pengelolaan-siswa/nilai-siswa")}
-              icon={<FaCircle style={{ fontSize: "8px" }} />}
-              style={{
-                position: "relative",
-                backgroundColor:
-                  selectedMenu === "/pengelolaan-siswa/nilai-siswa"
-                    ? "#E5EAF2"
-                    : "",
-              }}
-              className={`fw-medium ${
-                selectedMenu === "/pengelolaan-siswa/nilai-siswa"
-                  ? "text-blue"
-                  : "text-dark-soft"
-              }`}
-            >
-              {selectedMenu === "/pengelolaan-siswa/nilai-siswa" && (
-                <div
-                  style={{
-                    position: "absolute",
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
-                    width: "4px",
-                    backgroundColor: "var(--blue-color)",
-                  }}
-                />
-              )}
-              Nilai Siswa
-            </MenuItem>
-          </SubMenu>
+            {selectedMenu.includes("/guru/jadwal-mengajar") && (
+              <div
+                style={{
+                  position: "absolute",
+                  right: 0,
+                  top: 0,
+                  bottom: 0,
+                  width: "4px",
+                  backgroundColor: "var(--blue-color)",
+                }}
+              />
+            )}
+            Jadwal Mengajar
+          </MenuItem>
         </>
       )}
       {/* Config | STAFF */}
       {userLoginCookie?.role === "STAFF" && (
         <>
           <SubMenu
+            open={openSubmenu === "manajemenSiswa"}
+            onOpenChange={() => handleSubmenuToggle("manajemenSiswa")}
             icon={<TbUserScreen />}
             label="Manajemen Siswa"
             rootStyles={{
               ["." + menuClasses.subMenuContent]: {
-                backgroundColor: "#fff",
+                backgroundColor: "#f0f0f0",
               },
             }}
             className="fw-medium"
           >
             <MenuItem
-              onClick={() =>
-                handleMenuClick("/manajemen-siswa/data-siswa-baru")
-              }
-              icon={<FaCircle style={{ fontSize: "8px" }} />}
+              onClick={() => handleMenuClick("/manajemen-siswa/daftar-siswa")}
+              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
               style={{
                 position: "relative",
-                backgroundColor:
-                  selectedMenu === "/manajemen-siswa/data-siswa-baru"
-                    ? "#E5EAF2"
-                    : "",
+                backgroundColor: selectedMenu.includes(
+                  "/manajemen-siswa/daftar-siswa"
+                )
+                  ? "#E5EAF2"
+                  : "",
               }}
               className={`fw-medium ${
-                selectedMenu === "/manajemen-siswa/data-siswa-baru"
+                selectedMenu.includes("/manajemen-siswa/daftar-siswa")
                   ? "text-blue"
                   : "text-dark-soft"
               }`}
             >
-              {selectedMenu === "/manajemen-siswa/data-siswa-baru" && (
-                <div
-                  style={{
-                    position: "absolute",
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
-                    width: "4px",
-                    backgroundColor: "var(--blue-color)",
-                  }}
-                />
-              )}
-              Data Siswa Baru
-            </MenuItem>
-            <MenuItem
-              onClick={() => handleMenuClick("/manajemen-siswa/data-siswa")}
-              icon={<FaCircle style={{ fontSize: "8px" }} />}
-              style={{
-                position: "relative",
-                backgroundColor:
-                  selectedMenu === "/manajemen-siswa/data-siswa"
-                    ? "#E5EAF2"
-                    : "",
-              }}
-              className={`fw-medium ${
-                selectedMenu === "/manajemen-siswa/data-siswa"
-                  ? "text-blue"
-                  : "text-dark-soft"
-              }`}
-            >
-              {selectedMenu === "/manajemen-siswa/data-siswa" && (
+              {selectedMenu.includes("/manajemen-siswa/daftar-siswa") && (
                 <div
                   style={{
                     position: "absolute",
@@ -679,21 +534,22 @@ export const ListMenu = () => {
             </MenuItem>
             <MenuItem
               onClick={() => handleMenuClick("/manajemen-siswa/data-kelas")}
-              icon={<FaCircle style={{ fontSize: "8px" }} />}
+              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
               style={{
                 position: "relative",
-                backgroundColor:
-                  selectedMenu === "/manajemen-siswa/data-kelas"
-                    ? "#E5EAF2"
-                    : "",
+                backgroundColor: selectedMenu.includes(
+                  "/manajemen-siswa/data-kelas"
+                )
+                  ? "#E5EAF2"
+                  : "",
               }}
               className={`fw-medium ${
-                selectedMenu === "/manajemen-siswa/data-kelas"
+                selectedMenu.includes("/manajemen-siswa/data-kelas")
                   ? "text-blue"
                   : "text-dark-soft"
               }`}
             >
-              {selectedMenu === "/manajemen-siswa/data-kelas" && (
+              {selectedMenu.includes("/manajemen-siswa/data-kelas") && (
                 <div
                   style={{
                     position: "absolute",
@@ -709,21 +565,22 @@ export const ListMenu = () => {
             </MenuItem>
             <MenuItem
               onClick={() => handleMenuClick("/manajemen-siswa/data-mapel")}
-              icon={<FaCircle style={{ fontSize: "8px" }} />}
+              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
               style={{
                 position: "relative",
-                backgroundColor:
-                  selectedMenu === "/manajemen-siswa/data-mapel"
-                    ? "#E5EAF2"
-                    : "",
+                backgroundColor: selectedMenu.includes(
+                  "/manajemen-siswa/data-mapel"
+                )
+                  ? "#E5EAF2"
+                  : "",
               }}
               className={`fw-medium ${
-                selectedMenu === "/manajemen-siswa/data-mapel"
+                selectedMenu.includes("/manajemen-siswa/data-mapel")
                   ? "text-blue"
                   : "text-dark-soft"
               }`}
             >
-              {selectedMenu === "/manajemen-siswa/data-mapel" && (
+              {selectedMenu.includes("/manajemen-siswa/data-mapel") && (
                 <div
                   style={{
                     position: "absolute",
@@ -739,32 +596,35 @@ export const ListMenu = () => {
             </MenuItem>
           </SubMenu>
           <SubMenu
+            open={openSubmenu === "manajemenStaff"}
+            onOpenChange={() => handleSubmenuToggle("manajemenStaff")}
             icon={<IoIosPeople />}
             label="Manajemen Staff"
             rootStyles={{
               ["." + menuClasses.subMenuContent]: {
-                backgroundColor: "#fff",
+                backgroundColor: "#f0f0f0",
               },
             }}
             className="fw-medium"
           >
             <MenuItem
               onClick={() => handleMenuClick("/manajemen-staff/data-staff")}
-              icon={<FaCircle style={{ fontSize: "8px" }} />}
+              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
               style={{
                 position: "relative",
-                backgroundColor:
-                  selectedMenu === "/manajemen-staff/data-staff"
-                    ? "#E5EAF2"
-                    : "",
+                backgroundColor: selectedMenu.includes(
+                  "/manajemen-staff/data-staff"
+                )
+                  ? "#E5EAF2"
+                  : "",
               }}
               className={`fw-medium ${
-                selectedMenu === "/manajemen-staff/data-staff"
+                selectedMenu.includes("/manajemen-staff/data-staff")
                   ? "text-blue"
                   : "text-dark-soft"
               }`}
             >
-              {selectedMenu === "/manajemen-staff/data-staff" && (
+              {selectedMenu.includes("/manajemen-staff/data-staff") && (
                 <div
                   style={{
                     position: "absolute",
@@ -780,30 +640,62 @@ export const ListMenu = () => {
             </MenuItem>
           </SubMenu>
           <SubMenu
+            open={openSubmenu === "contentWeb"}
+            onOpenChange={() => handleSubmenuToggle("contentWeb")}
             icon={<FaGlobe />}
             label="Content Web"
             rootStyles={{
               ["." + menuClasses.subMenuContent]: {
-                backgroundColor: "#fff",
+                backgroundColor: "#f0f0f0",
               },
             }}
             className="fw-medium"
           >
             <MenuItem
-              onClick={() => handleMenuClick("/content-web/banner")}
-              icon={<FaCircle style={{ fontSize: "8px" }} />}
+              onClick={() => handleMenuClick("/content-web/berita")}
+              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
               style={{
                 position: "relative",
-                backgroundColor:
-                  selectedMenu === "/content-web/banner" ? "#E5EAF2" : "",
+                backgroundColor: selectedMenu.includes("/content-web/berita")
+                  ? "#E5EAF2"
+                  : "",
               }}
               className={`fw-medium ${
-                selectedMenu === "/content-web/banner"
+                selectedMenu.includes("/content-web/berita")
                   ? "text-blue"
                   : "text-dark-soft"
               }`}
             >
-              {selectedMenu === "/content-web/banner" && (
+              {selectedMenu.includes("/content-web/berita") && (
+                <div
+                  style={{
+                    position: "absolute",
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                    width: "4px",
+                    backgroundColor: "var(--blue-color)",
+                  }}
+                />
+              )}
+              Berita
+            </MenuItem>
+            <MenuItem
+              onClick={() => handleMenuClick("/content-web/banner")}
+              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
+              style={{
+                position: "relative",
+                backgroundColor: selectedMenu.includes("/content-web/banner")
+                  ? "#E5EAF2"
+                  : "",
+              }}
+              className={`fw-medium ${
+                selectedMenu.includes("/content-web/banner")
+                  ? "text-blue"
+                  : "text-dark-soft"
+              }`}
+            >
+              {selectedMenu.includes("/content-web/banner") && (
                 <div
                   style={{
                     position: "absolute",
@@ -818,48 +710,21 @@ export const ListMenu = () => {
               Banner
             </MenuItem>
             <MenuItem
-              onClick={() => handleMenuClick("/content-web/sekolah")}
-              icon={<FaCircle style={{ fontSize: "8px" }} />}
-              style={{
-                position: "relative",
-                backgroundColor:
-                  selectedMenu === "/content-web/sekolah" ? "#E5EAF2" : "",
-              }}
-              className={`fw-medium ${
-                selectedMenu === "/content-web/sekolah"
-                  ? "text-blue"
-                  : "text-dark-soft"
-              }`}
-            >
-              {selectedMenu === "/content-web/sekolah" && (
-                <div
-                  style={{
-                    position: "absolute",
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
-                    width: "4px",
-                    backgroundColor: "var(--blue-color)",
-                  }}
-                />
-              )}
-              Sekolah
-            </MenuItem>
-            <MenuItem
               onClick={() => handleMenuClick("/content-web/jurusan")}
-              icon={<FaCircle style={{ fontSize: "8px" }} />}
+              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
               style={{
                 position: "relative",
-                backgroundColor:
-                  selectedMenu === "/content-web/jurusan" ? "#E5EAF2" : "",
+                backgroundColor: selectedMenu.includes("/content-web/jurusan")
+                  ? "#E5EAF2"
+                  : "",
               }}
               className={`fw-medium ${
-                selectedMenu === "/content-web/jurusan"
+                selectedMenu.includes("/content-web/jurusan")
                   ? "text-blue"
                   : "text-dark-soft"
               }`}
             >
-              {selectedMenu === "/content-web/jurusan" && (
+              {selectedMenu.includes("/content-web/jurusan") && (
                 <div
                   style={{
                     position: "absolute",
@@ -875,19 +740,20 @@ export const ListMenu = () => {
             </MenuItem>
             <MenuItem
               onClick={() => handleMenuClick("/content-web/fasilitas")}
-              icon={<FaCircle style={{ fontSize: "8px" }} />}
+              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
               style={{
                 position: "relative",
-                backgroundColor:
-                  selectedMenu === "/content-web/fasilitas" ? "#E5EAF2" : "",
+                backgroundColor: selectedMenu.includes("/content-web/fasilitas")
+                  ? "#E5EAF2"
+                  : "",
               }}
               className={`fw-medium ${
-                selectedMenu === "/content-web/fasilitas"
+                selectedMenu.includes("/content-web/fasilitas")
                   ? "text-blue"
                   : "text-dark-soft"
               }`}
             >
-              {selectedMenu === "/content-web/fasilitas" && (
+              {selectedMenu.includes("/content-web/fasilitas") && (
                 <div
                   style={{
                     position: "absolute",
@@ -903,21 +769,22 @@ export const ListMenu = () => {
             </MenuItem>
             <MenuItem
               onClick={() => handleMenuClick("/content-web/ekstra-kurikuler")}
-              icon={<FaCircle style={{ fontSize: "8px" }} />}
+              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
               style={{
                 position: "relative",
-                backgroundColor:
-                  selectedMenu === "/content-web/ekstra-kurikuler"
-                    ? "#E5EAF2"
-                    : "",
+                backgroundColor: selectedMenu.includes(
+                  "/content-web/ekstra-kurikuler"
+                )
+                  ? "#E5EAF2"
+                  : "",
               }}
               className={`fw-medium ${
-                selectedMenu === "/content-web/ekstra-kurikuler"
+                selectedMenu.includes("/content-web/ekstra-kurikuler")
                   ? "text-blue"
                   : "text-dark-soft"
               }`}
             >
-              {selectedMenu === "/content-web/ekstra-kurikuler" && (
+              {selectedMenu.includes("/content-web/ekstra-kurikuler") && (
                 <div
                   style={{
                     position: "absolute",
@@ -933,19 +800,20 @@ export const ListMenu = () => {
             </MenuItem>
             <MenuItem
               onClick={() => handleMenuClick("/content-web/galeri")}
-              icon={<FaCircle style={{ fontSize: "8px" }} />}
+              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
               style={{
                 position: "relative",
-                backgroundColor:
-                  selectedMenu === "/content-web/galeri" ? "#E5EAF2" : "",
+                backgroundColor: selectedMenu.includes("/content-web/galeri")
+                  ? "#E5EAF2"
+                  : "",
               }}
               className={`fw-medium ${
-                selectedMenu === "/content-web/galeri"
+                selectedMenu.includes("/content-web/galeri")
                   ? "text-blue"
                   : "text-dark-soft"
               }`}
             >
-              {selectedMenu === "/content-web/galeri" && (
+              {selectedMenu.includes("/content-web/galeri") && (
                 <div
                   style={{
                     position: "absolute",
@@ -959,9 +827,165 @@ export const ListMenu = () => {
               )}
               Galeri
             </MenuItem>
+            <MenuItem
+              onClick={() => handleMenuClick("/content-web/study-tracer")}
+              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
+              style={{
+                position: "relative",
+                backgroundColor: selectedMenu.includes(
+                  "/content-web/study-tracer"
+                )
+                  ? "#E5EAF2"
+                  : "",
+              }}
+              className={`fw-medium ${
+                selectedMenu.includes("/content-web/study-tracer")
+                  ? "text-blue"
+                  : "text-dark-soft"
+              }`}
+            >
+              {selectedMenu.includes("/content-web/study-tracer") && (
+                <div
+                  style={{
+                    position: "absolute",
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                    width: "4px",
+                    backgroundColor: "var(--blue-color)",
+                  }}
+                />
+              )}
+              Study Tracer
+            </MenuItem>
+          </SubMenu>
+          <SubMenu
+            open={openSubmenu === "config"}
+            onOpenChange={() => handleSubmenuToggle("config")}
+            icon={<IoSettingsSharp />}
+            label="Config"
+            rootStyles={{
+              ["." + menuClasses.subMenuContent]: {
+                backgroundColor: "#f0f0f0",
+              },
+            }}
+            className="fw-medium"
+          >
+            <MenuItem
+              onClick={() => handleMenuClick("/config/tahun-ajaran")}
+              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
+              style={{
+                position: "relative",
+                backgroundColor: selectedMenu.includes("/config/tahun-ajaran")
+                  ? "#E5EAF2"
+                  : "",
+              }}
+              className={`fw-medium ${
+                selectedMenu.includes("/config/tahun-ajaran")
+                  ? "text-blue"
+                  : "text-dark-soft"
+              }`}
+            >
+              {selectedMenu.includes("/config/tahun-ajaran") && (
+                <div
+                  style={{
+                    position: "absolute",
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                    width: "4px",
+                    backgroundColor: "var(--blue-color)",
+                  }}
+                />
+              )}
+              Tahun Ajaran
+            </MenuItem>
+            <MenuItem
+              onClick={() => handleMenuClick("/content-web/sekolah")}
+              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
+              style={{
+                position: "relative",
+                backgroundColor: selectedMenu.includes("/content-web/sekolah")
+                  ? "#E5EAF2"
+                  : "",
+              }}
+              className={`fw-medium ${
+                selectedMenu.includes("/content-web/sekolah")
+                  ? "text-blue"
+                  : "text-dark-soft"
+              }`}
+            >
+              {selectedMenu.includes("/content-web/sekolah") && (
+                <div
+                  style={{
+                    position: "absolute",
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                    width: "4px",
+                    backgroundColor: "var(--blue-color)",
+                  }}
+                />
+              )}
+              Sekolah
+            </MenuItem>
+            <MenuItem
+              onClick={() => handleMenuClick("/config/kendala/laporan-kendala")}
+              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
+              style={{
+                position: "relative",
+                backgroundColor: selectedMenu.includes("/config/kendala/laporan-kendala")
+                  ? "#E5EAF2"
+                  : "",
+              }}
+              className={`fw-medium ${
+                selectedMenu.includes("/config/kendala/laporan-kendala")
+                  ? "text-blue"
+                  : "text-dark-soft"
+              }`}
+            >
+              {selectedMenu.includes("/config/kendala/laporan-kendala") && (
+                <div
+                  style={{
+                    position: "absolute",
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                    width: "4px",
+                    backgroundColor: "var(--blue-color)",
+                  }}
+                />
+              )}
+              Lihat kendala
+            </MenuItem>
           </SubMenu>
         </>
       )}
+      <MenuItem
+        onClick={() => handleMenuClick("/form-kendala")}
+        icon={<IoWarningOutline />}
+        style={{
+          position: "relative",
+          backgroundColor: selectedMenu === "/form-kendala" ? "#E5EAF2" : "",
+        }}
+        className={`fw-medium ${
+          selectedMenu === "/form-kendala" ? "text-blue" : "text-dark-soft"
+        }`}
+      >
+        {selectedMenu === "/form-kendala" && (
+          <div
+            style={{
+              position: "absolute",
+              right: 0,
+              top: 0,
+              bottom: 0,
+              width: "4px",
+              backgroundColor: "var(--blue-color)",
+            }}
+          />
+        )}
+        Laporkan Kendala
+      </MenuItem>
     </Menu>
   );
 };

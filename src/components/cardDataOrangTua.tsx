@@ -4,10 +4,10 @@ import { FormParentOfStudent } from "../interface/student.interface";
 
 interface DataState {
   handleUpdateAccess?: () => void;
-  onSaveUpdate?: (nis: number, data: FormParentOfStudent) => void;
+  onSaveUpdate?: (nis: string, data: FormParentOfStudent) => void;
   statusUpdateData?: boolean;
   loadingUpdateData?: boolean;
-  nis: number;
+  nis: string;
   fatherName: string;
   motherName: string;
   phone: string;
@@ -82,7 +82,7 @@ export const CardDataOrangTua: React.FC<DataState> = ({
             right: 0,
             bottom: 0,
             backgroundColor: "rgba(255, 255, 255, 0.7)",
-            zIndex: 9999,
+            zIndex: 20,
             display: "flex",
             justifyContent: "center",
             alignItems: "center",

@@ -1,6 +1,8 @@
 import { Fajusek } from "./fajusek.interfase";
 import { Media } from "./media.interface";
 import { ParentOfStudent } from "./student.interface";
+import { Class } from "./studentClass.interface";
+import { StudentHistory } from "./studentHistory.interface";
 
 export interface UserDetails {
   // === GENERAL
@@ -12,6 +14,7 @@ export interface UserDetails {
   phone: string;
   email: string;
   startYear: string;
+  status: string;
   endYear: string | null;
   mediaId: string | null;
   createdAt: string;
@@ -26,9 +29,12 @@ export interface UserDetails {
   endDate?: string | null;
   mapel?: string[];
   // === STUDENT
-  nis?: number;
+  nis?: string;
   nisn?: number;
   ParentOfStudent?: ParentOfStudent[];
+  class?: Class;
+  HistoryClass?: StudentHistory[];
+  Major?: Fajusek;
 
   // === SENSITIF
   password?: string;
@@ -56,10 +62,18 @@ export interface LoginData {
   username: string;
   password: string;
 }
+export interface PayloadChangePassword {
+  userId: number;
+  oldPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
 
 export interface TokenValidationResponse {
   valid: boolean;
-  user?: DetailUserResponse;
+  status: number;
+  role: string;
+  
 }
 
 export interface UpdatedBiodata {
@@ -139,6 +153,7 @@ export interface StudentDetail {
   birthPlace: string;
   address: string;
   phone: string;
+  status: string;
   email: string;
   startYear: Date;
   endYear: string | null;
@@ -150,6 +165,9 @@ export interface StudentDetail {
   nis: string;
   nisn: string;
   Major: Fajusek
+  class: Class
+  ParentOfStudent: ParentOfStudent[]
+  HistoryClass: StudentHistory[];
   user: {
     username: string;
     password: string;

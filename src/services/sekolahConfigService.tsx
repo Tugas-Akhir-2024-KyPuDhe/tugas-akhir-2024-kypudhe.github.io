@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import useCookie from "react-use-cookie";
 import {
   GetConfigSchool,
+  ResponseStatistikSchool,
   ResponseUpdateSchool,
 } from "../interface/school.interface";
 
@@ -16,6 +17,7 @@ interface ConfigSchoolService {
     id: number,
     formData: FormData
   ) => Promise<ResponseUpdateSchool>;
+  getStatikSchool: () => Promise<ResponseStatistikSchool>;
 }
 
 const ConfigSchoolService = (): ConfigSchoolService => {
@@ -43,7 +45,7 @@ const ConfigSchoolService = (): ConfigSchoolService => {
       );
       return response.data;
     } catch (error) {
-      console.log("");
+      console.error(error);
       throw error;
     }
   };
@@ -75,9 +77,9 @@ const ConfigSchoolService = (): ConfigSchoolService => {
   const updateDataConfigSchool = async (
     id: number,
     formData: FormData
-  ): Promise<ResponseUpdateSchool> => {
+  ): Promise<ResponseStatistikSchool> => {
     try {
-      const response = await axios.put<ResponseUpdateSchool>(
+      const response = await axios.put<ResponseStatistikSchool>(
         `${apiUrl}/api/config-school/update/${id}`,
         formData,
         {
@@ -96,10 +98,25 @@ const ConfigSchoolService = (): ConfigSchoolService => {
     }
   };
 
+  const getStatikSchool = async (): Promise<ResponseStatistikSchool> => {
+    try {
+      const response = await axios.get<ResponseStatistikSchool>(
+        `${apiUrl}/api/config-school/statistik`,
+      );
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        handleUnauthorized(error.response?.status || 0);
+      }
+      throw error;
+    }
+  };
+
   return {
     getConfigSchool,
     updateLogoConfig,
     updateDataConfigSchool,
+    getStatikSchool,
   };
 };
 

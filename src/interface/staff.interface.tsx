@@ -3,6 +3,7 @@
 import { CourseInClass } from "./courseInClass.interface";
 import { Media } from "./media.interface";
 import { Role } from "./role.interface";
+import { Class } from "./studentClass.interface";
 
 export interface StaffDetail {
   id: number;
@@ -52,4 +53,9 @@ export interface GetClassOfTeacher {
   status: number;
   message: string;
   data: DataClassOfteacher;
+}
+export interface GetClassRoomOfTeacher {
+  status: number;
+  message: string;
+  data: Class[];
 }

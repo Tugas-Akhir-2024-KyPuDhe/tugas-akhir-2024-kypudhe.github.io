@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import useCookie from "react-use-cookie";
 
 interface GaleriService {
-  getAllGaleri: () => Promise<GetAllGaleriResponse>;
+  getAllGaleri: (status?: string) => Promise<GetAllGaleriResponse>;
   getGaleriById: (id: number) => Promise<GetDetailGaleriResponse>;
   addGaleri: (formData: FormData) => Promise<ResponseActionGaleri>;
   updateGaleri: (
@@ -16,6 +16,7 @@ interface GaleriService {
     formData: FormData
   ) => Promise<ResponseActionGaleri>;
   deleteGaleri: (id: number) => Promise<ResponseActionGaleri>;
+  deleteMediaGaleri: (id: number) => Promise<ResponseActionGaleri>;
 }
 
 const GaleriService = (): GaleriService => {
@@ -31,14 +32,14 @@ const GaleriService = (): GaleriService => {
     }
   };
 
-  const getAllGaleri = async (): Promise<GetAllGaleriResponse> => {
+  const getAllGaleri = async (status: string = "Active"): Promise<GetAllGaleriResponse> => {
     try {
       const response: AxiosResponse<GetAllGaleriResponse> = await axios.get(
-        `${apiUrl}/api/galeri/get`
+        `${apiUrl}/api/galeri/get?status=${status}`
       );
       return response.data;
     } catch (error) {
-      console.log("");
+      console.error(error);
       throw error;
     }
   };
@@ -52,7 +53,7 @@ const GaleriService = (): GaleriService => {
       );
       return response.data;
     } catch (error) {
-      console.log("");
+      console.error(error);
       throw error;
     }
   };
@@ -123,12 +124,32 @@ const GaleriService = (): GaleriService => {
     }
   };
 
+  const deleteMediaGaleri = async (id: number): Promise<ResponseActionGaleri> => {
+    try {
+      const response: AxiosResponse<ResponseActionGaleri> = await axios.delete(
+        `${apiUrl}/api/galeri/delete/media/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${userLoginCookie.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        handleUnauthorized(error.response?.status || 0);
+      }
+      throw error;
+    }
+  };
+
   return {
     getAllGaleri,
     getGaleriById,
     addGaleri,
     updateGaleri,
     deleteGaleri,
+    deleteMediaGaleri,
   };
 };
 

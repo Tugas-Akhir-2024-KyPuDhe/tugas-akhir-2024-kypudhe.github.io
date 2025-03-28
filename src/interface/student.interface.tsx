@@ -1,5 +1,8 @@
 import { Fajusek } from "./fajusek.interfase"
 import { Media } from "./media.interface"
+import { Class } from "./studentClass.interface"
+import { StudentsGrades } from "./studentGrade.interface"
+import { StudentHistory } from "./studentHistory.interface"
 
 export interface ParentOfStudent {
     id: number
@@ -39,16 +42,22 @@ export interface ParentOfStudent {
     nis: string;
     nisn: string;
     Major: Fajusek
+    class: Class
+    status: string;
+    ParentOfStudent: ParentOfStudent[];
+    StudentsGrades: StudentsGrades[]
+    HistoryClass: StudentHistory[];
     // user: {
     //   username: string;
     //   password: string;
     // };
   }
 
-  export interface ResponseGetStudentDetail{
+
+  export interface ResponseGetStudent<T = unknown>{
     status: number;
     message: string;
-    data: StudentDetail[];
+    data: T;
   }
 
   export interface PayloadInsertStundets {

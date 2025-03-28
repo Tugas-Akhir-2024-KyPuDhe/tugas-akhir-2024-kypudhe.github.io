@@ -2,14 +2,23 @@ import React, { useState } from "react";
 import DataTable from "react-data-table-component";
 import { StudentDetail } from "../../../../interface/student.interface";
 import { Class } from "../../../../interface/studentClass.interface";
-import { FaEye, FaPen, FaPlus } from "react-icons/fa6";
+import { FaEye, FaPlus } from "react-icons/fa6";
 import { ModalAddStudentInClass } from "./modalAddSiswaInClass";
 import { useNavigate } from "react-router-dom";
+import { FaAngleDoubleUp } from "react-icons/fa";
+import { ModalNextGradeStudentInClass } from "./modalNextGradeSiswaInClass";
+import { romanToNumber } from "../../../../utils/myFunctions";
+
+interface Option {
+  value: string;
+  label: string;
+}
 
 interface DaftarSiswaProps {
   onRefreshData: () => void;
   dataStudentsInClass: StudentDetail[];
   dataAllStudents: StudentDetail[];
+  optionsClass: Option[];
   dataClass: Class;
   loading: boolean;
 }
@@ -18,6 +27,7 @@ export const CardDaftarSiswaDetailKelas: React.FC<DaftarSiswaProps> = ({
   onRefreshData,
   dataStudentsInClass,
   dataAllStudents,
+  optionsClass,
   dataClass,
   loading,
 }) => {
@@ -53,13 +63,6 @@ export const CardDaftarSiswaDetailKelas: React.FC<DaftarSiswaProps> = ({
       cell: (row: StudentDetail) => row.nisn,
       width: "100px",
     },
-    // {
-    //   name: "Jurusan",
-    //   selector: (row: StudentDetail) => row.Major.majorCode || "",
-    //   sortable: true,
-    //   cell: (row: StudentDetail) => row.Major.majorCode || "",
-    //   width: "100px",
-    // },
     {
       name: "No.Telp",
       selector: (row: StudentDetail) => row.phone,
@@ -79,21 +82,16 @@ export const CardDaftarSiswaDetailKelas: React.FC<DaftarSiswaProps> = ({
         <>
           <button
             className="btn btn-info btn-sm text me-2 text-light"
-            onClick={() => navigate(`detail/${row.nis}`)}
+            onClick={() =>
+              navigate(`/manajemen-siswa/daftar-siswa/detail/${row.nis}`)
+            }
             disabled={loading}
           >
             <FaEye />
           </button>
-          <button
-            className="btn btn-warning btn-sm text me-2 text-light"
-            onClick={() => navigate(`update/${row.nis}`)}
-            disabled={loading}
-          >
-            <FaPen />
-          </button>
         </>
       ),
-      width: "150px",
+      width: "80px",
     },
   ];
 
@@ -111,7 +109,7 @@ export const CardDaftarSiswaDetailKelas: React.FC<DaftarSiswaProps> = ({
             right: 0,
             bottom: 0,
             backgroundColor: "rgba(255, 255, 255, 0.7)",
-            zIndex: 9999,
+            zIndex: 20,
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
@@ -140,16 +138,38 @@ export const CardDaftarSiswaDetailKelas: React.FC<DaftarSiswaProps> = ({
           </div>
         </div>
         <div className="col-12 col-lg-9">
-          <button className="btn border-success text-success me-3">
-            Export to Excel
-          </button>
-          <button
-            className="btn border-blue text-blue"
-            data-bs-toggle="modal"
-            data-bs-target="#modalAddStudentInClass"
-          >
-            <FaPlus className="me-2 fs-5" /> Tambah Siswa
-          </button>
+          <div className="">
+            <button className="mb-3 mb-md-0 btn border-success text-success me-3">
+              Export to Excel
+            </button>
+            <button
+              className="mb-3 mb-md-0 btn border-blue text-blue me-3"
+              data-bs-toggle="modal"
+              data-bs-target="#modalAddStudentInClass"
+            >
+              <FaPlus className="me-2 fs-5" /> Tambah Siswa
+            </button>
+            <button
+              className="mb-3 mb-md-0 btn border-blue text-blue"
+              data-bs-toggle="modal"
+              data-bs-target="#modalNextGradeStudentInClass"
+            >
+              <FaAngleDoubleUp className="me-2 fs-5" /> Naik Kelas
+            </button>
+          </div>
+          <ModalNextGradeStudentInClass
+            onRefreshData={onRefreshData}
+            dataStudentsInClass={dataStudentsInClass}
+            optionsClass={optionsClass.filter(
+              (data) =>
+                data.label.split("-")[1] === dataClass.majorCode &&
+                parseInt(data.value) !== dataClass.id &&
+                romanToNumber(data.label.split("-")[0]) >
+                  romanToNumber(dataClass.name.split("-")[0])
+            )}
+            dataClass={dataClass}
+            keySearch=""
+          />
           <ModalAddStudentInClass
             onRefreshData={onRefreshData}
             dataAllStudents={dataAllStudents}
@@ -177,9 +197,9 @@ export const CardDaftarSiswaDetailKelas: React.FC<DaftarSiswaProps> = ({
       <DataTable
         columns={columnsStudentInClass}
         data={filterDataStudentInClass}
-        selectableRows
         pagination
         highlightOnHover
+        className="mt-3"
         customStyles={{
           rows: {
             style: {
@@ -187,6 +207,15 @@ export const CardDaftarSiswaDetailKelas: React.FC<DaftarSiswaProps> = ({
                 backgroundColor: "#f5f5f5",
                 color: "#007bff",
               },
+            },
+          },
+          headCells: {
+            style: {
+              backgroundColor: "var(--blue-color)",
+              color: "#ffffff",
+              fontWeight: "bold",
+              textAlign: "center",
+              border: "0.1px solid #ddd",
             },
           },
         }}

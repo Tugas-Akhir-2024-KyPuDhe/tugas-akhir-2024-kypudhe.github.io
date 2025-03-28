@@ -4,6 +4,7 @@ export interface School {
     id?: number,
     name: string,
     about: string,
+    historySchool: string,
     vision: string,
     mission: string,
     address: string,
@@ -27,4 +28,19 @@ export interface GetConfigSchool {
 export interface ResponseUpdateSchool {
     message: string,
     status: number
+}
+
+export interface Statistik {
+    id?: number,
+    name: string,
+    student: number
+    teacher: number
+    staff: number
+    major: number
+    alumni: number
+}
+export interface ResponseStatistikSchool {
+    message: string,
+    status: number
+    data: Statistik
 }

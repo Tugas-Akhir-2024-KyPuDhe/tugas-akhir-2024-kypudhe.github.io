@@ -4,14 +4,20 @@ import { useNavigate } from "react-router-dom";
 import { FaEye, FaPen } from "react-icons/fa6";
 import StaffService from "../../../../services/staffService";
 import { StaffDetail } from "../../../../interface/staff.interface";
+import { exportToPDFDaftarPegawai } from "../../../../utils/printDocument/daftarPegawai/PDFDaftarPegawai";
+import CourseService from "../../../../services/courseService";
+import { Course } from "../../../../interface/course.interface";
+import { exportToExcelDaftarPegawai } from "../../../../utils/printDocument/daftarPegawai/ExcelDaftarPegawai";
 
 export const Table: React.FC = () => {
   const staffService = StaffService();
+  const courseService = CourseService();
   const navigate = useNavigate();
 
   const [data, setData] = useState<StaffDetail[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [allCourse, setAllCourse] = useState<Course[]>([]);
 
   const getData = async () => {
     setLoading(true);
@@ -20,8 +26,23 @@ export const Table: React.FC = () => {
       if (response.data && response.data.length > 0) {
         setData(response.data);
       }
+      getAllCourse();
     } catch (error) {
       console.error("Error fetching Staff data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getAllCourse = async () => {
+    setLoading(true);
+    try {
+      const response = await courseService.getAllCourses();
+      if (response.data && response.data.length > 0) {
+        setAllCourse(response.data);
+      }
+    } catch (error) {
+      console.error("Error fetching Course data:", error);
     } finally {
       setLoading(false);
     }
@@ -103,7 +124,7 @@ export const Table: React.FC = () => {
 
   return (
     <>
-      <div
+      {/* <div
         className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
         style={{ backgroundColor: "#fff", position: "relative" }}
       >
@@ -116,7 +137,7 @@ export const Table: React.FC = () => {
               right: 0,
               bottom: 0,
               backgroundColor: "rgba(255, 255, 255, 0.7)",
-              zIndex: 9999,
+              zIndex: 20,
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
@@ -130,13 +151,14 @@ export const Table: React.FC = () => {
 
         <div className="row g-3 d-flex justify-content-between">
           <div className="col-12 col-md-4 m-auto">
-            <div className="fw-bold">
-            Import Data Excel              
-              </div> 
-              <div className="text-muted">
-                Format harus sesuai <a href="#" className="text-decoration-none">seperti ini</a>
-              </div>
+            <div className="fw-bold">Import Data Excel</div>
+            <div className="text-muted">
+              Format harus sesuai{" "}
+              <a href="#" className="text-decoration-none">
+                seperti ini
+              </a>
             </div>
+          </div>
           <div className="col-12 col-md-8">
             <div className="input-group mb-3">
               <input
@@ -153,7 +175,7 @@ export const Table: React.FC = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       <div
         className="shadow p-4 m-1 m-lg-4 m-md-4 my-4 rounded"
@@ -168,7 +190,7 @@ export const Table: React.FC = () => {
               right: 0,
               bottom: 0,
               backgroundColor: "rgba(255, 255, 255, 0.7)",
-              zIndex: 9999,
+              zIndex: 20,
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
@@ -197,9 +219,36 @@ export const Table: React.FC = () => {
             </div>
           </div>
           <div className="col-6 col-lg-3 col-md-3">
-            <button className="btn border-success text-success">
-              Export to Excel
-            </button>
+            <div className="btn-group">
+              <div className="dropdown">
+                <button
+                  className="btn border-success text-success dropdown-toggle"
+                  type="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Export Data
+                </button>
+                <ul className="dropdown-menu">
+                  <li>
+                    <button
+                      className="dropdown-item"
+                      onClick={() => exportToExcelDaftarPegawai(data, "data")}
+                    >
+                      Excel
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => exportToPDFDaftarPegawai(data, allCourse)}
+                      className="dropdown-item"
+                    >
+                      PDF
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
           <div className="col-6 col-lg-3 col-md-3">
             <input
@@ -211,10 +260,10 @@ export const Table: React.FC = () => {
               style={{ fontSize: "1.1em" }}
             />
           </div>
-        </div>
-        <div className="col-12">
-          <div className="pt-2">
-            Total : <span className="fw-bold">{data.length}</span>
+          <div className="col-12">
+            <div className="">
+              Total : <span className="fw-bold">{data.length}</span>
+            </div>
           </div>
         </div>
         <DataTable
@@ -222,6 +271,7 @@ export const Table: React.FC = () => {
           data={filterData}
           pagination
           highlightOnHover
+          className="mt-3"
           customStyles={{
             rows: {
               style: {
@@ -229,6 +279,15 @@ export const Table: React.FC = () => {
                   backgroundColor: "#f5f5f5",
                   color: "#007bff",
                 },
+              },
+            },
+            headCells: {
+              style: {
+                backgroundColor: "var(--blue-color)",
+                color: "#ffffff",
+                fontWeight: "bold",
+                textAlign: "center",
+                border: "0.1px solid #ddd",
               },
             },
           }}

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
-import { Toast } from "../../../../utils/myFunctions";
+import { Toast, toolbarOptions } from "../../../../utils/myFunctions";
 import { useNavigate, useParams } from "react-router-dom";
 import JurusanService from "../../../../services/jurusanService";
 import { HeaderTitlePage } from "../../../../components/headerTitlePage";
 import { optionsPrioritas } from "../../../../utils/optionsData";
 import { AxiosError } from "axios";
+import ReactQuill from "react-quill";
 
 interface FormState {
   id?: number;
@@ -86,15 +87,9 @@ export const FormJurusanPage: React.FC = () => {
     setErrorsForms((prevErrors) => ({ ...prevErrors, [name]: "" }));
   };
 
-  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
-    setErrorsForms((prevErrors) => ({ ...prevErrors, [name]: "" }));
+  const handleDescriptionChange = (value: string) => {
+    setFormData((prev) => ({ ...prev, description: value }));
+    setErrorsForms((prevErrors) => ({ ...prevErrors, description: "" }));
   };
 
   const handleSelectChange = (
@@ -192,7 +187,7 @@ export const FormJurusanPage: React.FC = () => {
               right: 0,
               bottom: 0,
               backgroundColor: "rgba(255, 255, 255, 0.7)",
-              zIndex: 9999,
+              zIndex: 20,
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
@@ -265,7 +260,35 @@ export const FormJurusanPage: React.FC = () => {
             <div className="col-12">
               <div className="form-group mb-3">
                 <label className="mb-2">Deskripsi *</label>
-                <textarea
+                <ReactQuill
+                  theme="snow"
+                  value={formData.description}
+                  onChange={handleDescriptionChange}
+                  modules={{ toolbar: toolbarOptions }}
+                  formats={[
+                    "header",
+                    "font",
+                    "size",
+                    "bold",
+                    "italic",
+                    "underline",
+                    "strike",
+                    "blockquote",
+                    "list",
+                    "bullet",
+                    "indent",
+                    "link",
+                    "image",
+                    "video",
+                    "align",
+                    "color",
+                    "background",
+                  ]}
+                />
+                {errorsForms.description && (
+                  <div className="invalid-form">Deskripsi masih kosong!</div>
+                )}
+                {/* <textarea
                   name="description"
                   className={`form-control ${
                     errorsForms.description ? "is-invalid" : ""
@@ -273,7 +296,7 @@ export const FormJurusanPage: React.FC = () => {
                   placeholder="Masukkan deskripsi"
                   value={formData.description}
                   onChange={handleTextareaChange}
-                />
+                /> */}
                 {errorsForms.description && (
                   <div className="invalid-form">Deskripsi masih kosong!</div>
                 )}

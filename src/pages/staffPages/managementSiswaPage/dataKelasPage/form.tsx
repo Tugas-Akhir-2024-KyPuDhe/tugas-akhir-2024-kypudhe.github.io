@@ -11,18 +11,22 @@ import { FormState } from "../../../../interface/studentClass.interface";
 import { AxiosError } from "axios";
 import { optionsGrade } from "../../../../utils/optionsData";
 import StaffService from "../../../../services/staffService";
+import AcademicYearService from "../../../../services/academicYearService";
+import { IAcademicYear } from "../../../../interface/academicYear.interface";
 
 export const FormDataKelasMangementSiswaPage: React.FC = () => {
   const navigate = useNavigate();
   const majorService = JurusanService();
   const staffService = StaffService();
   const classService = ClassStudentService();
+  const academicYearService = AcademicYearService();
 
   const { id } = useParams<{ id: string }>();
   const [errorsForms, setErrorsForms] = useState<{ [key: string]: string }>({});
   const [loadingForm, setloadingForm] = useState(true);
   const [dataMajor, setDataMajor] = useState<Fajusek[]>([]);
   const [dataTeachers, setdataTeachers] = useState<StaffDetails[]>([]);
+  const [dataAcademicYear, setdataAcademicYear] = useState<IAcademicYear[]>([]);
   const optionsMajor = [
     ...dataMajor.map((data) => ({
       value: data.majorCode,
@@ -32,6 +36,12 @@ export const FormDataKelasMangementSiswaPage: React.FC = () => {
   const optionsTeacher = [
     ...dataTeachers.map((data) => ({
       value: data.id.toString(),
+      label: data.name,
+    })),
+  ];
+  const optionsAcademicYear = [
+    ...dataAcademicYear.map((data) => ({
+      value: data.name,
       label: data.name,
     })),
   ];
@@ -94,9 +104,30 @@ export const FormDataKelasMangementSiswaPage: React.FC = () => {
     }
   };
 
+  const getAcademicYear = async () => {
+    setloadingForm(true);
+    try {
+      const response = await academicYearService.getAllAcademicYears();
+      setdataAcademicYear(response.data);
+      if (!id) {
+        if (response.data && response.data.length > 0) {
+          setFormData((prev) => ({
+            ...prev,
+            academicYear: response.data[0]?.name || "",
+          }));
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setloadingForm(false);
+    }
+  };
+
   useEffect(() => {
     getTeacher();
     getMajor();
+    getAcademicYear();
   }, []);
 
   useEffect(() => {
@@ -274,7 +305,7 @@ export const FormDataKelasMangementSiswaPage: React.FC = () => {
               right: 0,
               bottom: 0,
               backgroundColor: "rgba(255, 255, 255, 0.7)",
-              zIndex: 9999,
+              zIndex: 20,
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
@@ -302,15 +333,26 @@ export const FormDataKelasMangementSiswaPage: React.FC = () => {
             <div className="col-12 col-lg-6 col-md-6">
               <div className="form-group mb-3">
                 <label className="mb-2 fw-medium">Tahun Ajaran *</label>
-                <input
-                  type="text"
-                  name="academicYear"
-                  className={`form-control ${
-                    errorsForms.academicYear ? "is-invalid" : ""
-                  }`}
-                  placeholder="Masukkan Tahun Ajaran.."
-                  value={formData.academicYear}
-                  onChange={handleInputChange}
+                <Select
+                  options={optionsAcademicYear}
+                  value={optionsAcademicYear.find((option) => {
+                    return option.value === formData.academicYear;
+                  })}
+                  onChange={(option) => handleSelectChange("academicYear", option)}
+                  placeholder="Pilih Tahun Ajaran"
+                  isSearchable={false}
+                  className="form-control-lg px-0 pt-0"
+                  styles={{
+                    control: (baseStyles) => ({
+                      ...baseStyles,
+                      fontSize: "0.955rem",
+                      borderRadius: "8px",
+                    }),
+                    option: (provided) => ({
+                      ...provided,
+                      fontSize: "1rem",
+                    }),
+                  }}
                 />
                 {errorsForms.academicYear && (
                   <div className="invalid-form">Tahun Ajaran masih kosong!</div>
