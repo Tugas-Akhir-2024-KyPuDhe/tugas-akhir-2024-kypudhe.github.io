@@ -21,7 +21,7 @@ jobs:
         uses: appleboy/scp-action@master
         with:
           source: ./dist/*
-          target: /var/www/portal/
+          target: /var/www/html/portal/
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
