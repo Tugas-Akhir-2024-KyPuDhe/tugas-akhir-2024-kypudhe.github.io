@@ -266,7 +266,7 @@ export const badgeStatusHistory = (data: string): string => {
   if (lowerCaseData === "aktif") {
     return "bg-blue";
   } else if (lowerCaseData === "lulus") {
-    return "text-bg-success";
+    return "bg-blue";
   } else if (lowerCaseData === "naik kelas") {
     return "text-bg-success";
   } else {

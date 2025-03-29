@@ -118,7 +118,7 @@ export const ModalNextGradeStudentInClass: React.FC<
     }
 
     const payload: PayloadInsertStundets = {
-      id: parseInt(selectedClass.value),
+      id: selectedClass.value,
       collectionNis: collectionNis,
     };
     try {
@@ -146,7 +146,7 @@ export const ModalNextGradeStudentInClass: React.FC<
           onRefreshData();
           Toast.fire({
             icon: "success",
-            title: `Siswa berhasil ditambah kedalam kelas`,
+            title: `Siswa berhasil dipindahkan kelas`,
             timer: 4500,
           });
         }

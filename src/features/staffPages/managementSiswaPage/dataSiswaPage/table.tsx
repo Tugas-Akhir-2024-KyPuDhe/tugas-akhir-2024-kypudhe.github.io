@@ -106,11 +106,21 @@ export const Table: React.FC = () => {
     },
     {
       name: "Kelas",
-      selector: (row: StudentDetail) =>
-        row.status == "New" ? "Siswa Baru" : row.class.name.split("-")[0],
+      selector: (row: StudentDetail) => {
+        if (row.status === "New") return "Siswa Baru";
+        if (row.status === "Lulus") return "Lulus";
+        return row.class?.name?.split("-")[0] || "";
+      },
       sortable: true,
-      cell: (row: StudentDetail) =>
-        row.status == "New" ? <div className="text-blue w-100 text-center">Siswa Baru</div> : row.class.name.split("-")[0],
+      cell: (row: StudentDetail) => {
+        if (row.status === "New") {
+          return <div className="text-blue w-100 text-center fw-bold">Siswa Baru</div>;
+        }
+        if (row.status === "Lulus") {
+          return <div className="text-green w-100 text-center fw-bold">Lulus</div>;
+        }
+        return row.class?.name?.split("-")[0] || "";
+      },
       width: "100px",
     },
     {

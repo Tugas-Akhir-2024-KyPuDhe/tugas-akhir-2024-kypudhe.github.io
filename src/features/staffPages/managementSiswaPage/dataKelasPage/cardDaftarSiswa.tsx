@@ -37,6 +37,13 @@ export const CardDaftarSiswaDetailKelas: React.FC<DaftarSiswaProps> = ({
     user.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const optionsClassLulus = [
+    {
+      value: "00",
+      label: `Lulus`,
+    },
+  ];
+
   const columnsStudentInClass = [
     {
       name: "No",
@@ -160,13 +167,17 @@ export const CardDaftarSiswaDetailKelas: React.FC<DaftarSiswaProps> = ({
           <ModalNextGradeStudentInClass
             onRefreshData={onRefreshData}
             dataStudentsInClass={dataStudentsInClass}
-            optionsClass={optionsClass.filter(
-              (data) =>
-                data.label.split("-")[1] === dataClass.majorCode &&
-                parseInt(data.value) !== dataClass.id &&
-                romanToNumber(data.label.split("-")[0]) >
-                  romanToNumber(dataClass.name.split("-")[0])
-            )}
+            optionsClass={
+              dataClass?.name.split("-")[0] !== "XII"
+                ? optionsClass.filter(
+                    (data) =>
+                      data.label.split("-")[1] === dataClass.majorCode &&
+                      parseInt(data.value) !== dataClass.id &&
+                      romanToNumber(data.label.split("-")[0]) >
+                        romanToNumber(dataClass.name.split("-")[0])
+                  )
+                : optionsClassLulus
+            }
             dataClass={dataClass}
             keySearch=""
           />

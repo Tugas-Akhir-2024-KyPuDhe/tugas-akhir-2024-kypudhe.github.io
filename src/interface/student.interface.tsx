@@ -61,6 +61,6 @@ export interface ParentOfStudent {
   }
 
   export interface PayloadInsertStundets {
-    id: number;
+    id: string;
     collectionNis: string[];
   }
