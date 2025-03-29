@@ -93,7 +93,7 @@ export const ModalAddStudentInClass: React.FC<ModalAddStudentInClassProps> = ({
     }
 
     const payload: PayloadInsertStundets = {
-      id: dataClass.id,
+      id: dataClass.id.toString(),
       collectionNis: collectionNis,
     };
     try {
