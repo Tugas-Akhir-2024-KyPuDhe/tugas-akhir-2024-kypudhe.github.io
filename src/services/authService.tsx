@@ -166,11 +166,11 @@ const AuthService = () => {
   ): Promise<UpdateUserResponse> => {
     try {
       const response = await axios.put<UpdateUserResponse>(
-        `${apiUrl}/api/auth/update/student/${id}`,
+        `${apiUrl}/api/student/update/${id}`,
         data,
         {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
             authorization: `Bearer ${userLoginCookie?.token}`,
           },
         }

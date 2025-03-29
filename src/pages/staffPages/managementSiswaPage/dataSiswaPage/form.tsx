@@ -127,9 +127,9 @@ export const FormSiswaMangementSiswaPage: React.FC = () => {
       }
     });
 
-    // Check if media is required (only when adding a new banner)
-    // if (!formData.id && !formData.media) {
-    //   newErrors.media = "Media is required.";
+    // Check if photo is required (only when adding a new banner)
+    // if (!formData.id && !formData.photo) {
+    //   newErrors.photo = "Foto is required.";
     // }
 
     if (Object.keys(newErrors).length > 0) {
@@ -435,7 +435,7 @@ export const FormSiswaMangementSiswaPage: React.FC = () => {
                 <div className="input-group mb-3">
                   <input
                     type="file"
-                    name="media"
+                    name="photo"
                     accept=".jpeg, .jpg, .png, .gif"
                     className="form-control fs-6"
                     id="inputGroupFile02"
@@ -448,8 +448,8 @@ export const FormSiswaMangementSiswaPage: React.FC = () => {
                     Upload
                   </label>
                 </div>
-                {errorsForms.media && (
-                  <div className="invalid-form">Media masih kosong!</div>
+                {errorsForms.photo && (
+                  <div className="invalid-form">Foto masih kosong!</div>
                 )}
               </div>
             </div>
