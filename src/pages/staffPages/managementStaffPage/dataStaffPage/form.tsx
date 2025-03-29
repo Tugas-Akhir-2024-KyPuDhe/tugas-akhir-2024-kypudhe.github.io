@@ -13,6 +13,7 @@ import { showConfirmationDialog, Toast } from "../../../../utils/myFunctions";
 import CourseService from "../../../../services/courseService";
 import { Course } from "../../../../interface/course.interface";
 import { AxiosError } from "axios";
+import AuthService from "../../../../services/authService";
 
 interface FormState {
   id?: number;
@@ -39,11 +40,13 @@ export const FormStaffMangementStaffPage: React.FC = () => {
 
   const { id } = useParams<{ id: string }>();
   const staffService = StaffService();
+  const authService = AuthService();
   const courseService = CourseService();
 
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [errorsForms, setErrorsForms] = useState<{ [key: string]: string }>({});
   const [loadingForm, setloadingForm] = useState(true);
+  const [statusNewPassword, setStatusNewPassword] = useState(false);
 
   const [dataCourse, setdataCourse] = useState<Course[]>([]);
   const optionsCourse = [
@@ -248,6 +251,48 @@ export const FormStaffMangementStaffPage: React.FC = () => {
       console.error("Error processing banner:", error);
     } finally {
       setloadingForm(false);
+    }
+  };
+
+  const handleResetPassword = async () => {
+    const result = await showConfirmationDialog({
+      title: `Ingin Mereset Password Akun<br>${formData.name} - ${formData.nip}?`,
+      icon: "warning",
+      confirmButtonText: "Ya, Reset!",
+      cancelButtonText: "Batal",
+    });
+
+    if (result.isConfirmed) {
+      setloadingForm(true);
+      try {
+        const response = await authService.resetPassword(formData.id!);
+        if (response.status === 200) {
+          setFormData({ ...formData, password: response.data.newPassword });
+          setStatusNewPassword(true);
+          Toast.fire({
+            icon: "success",
+            title: "Password berhasil direset!",
+            timer: 4000,
+          });
+        }
+      } catch (error) {
+        const axiosError = error as AxiosError;
+        if (axiosError.response?.status === 401) {
+          return Toast.fire({
+            icon: "error",
+            title: `Gagal, Anda Tidak Memiliki Akses!`,
+            timer: 4000,
+          });
+        }
+        Toast.fire({
+          icon: "error",
+          title: `Gagal, Terjadi Kesalahan!`,
+          timer: 4000,
+        });
+        console.error("Error reset password:", error);
+      } finally {
+        setloadingForm(false);
+      }
     }
   };
 
@@ -500,27 +545,42 @@ export const FormStaffMangementStaffPage: React.FC = () => {
               </div>
             )}
             {id && (
-              <div className="col-12 col-lg-12">
-                <div className="form-group mb-3">
-                  <label className="mb-2 fw-medium">Password *</label>
-                  <input
-                    type="text"
-                    name="password"
-                    className={`form-control ${
-                      errorsForms.password ? "is-invalid" : ""
-                    }`}
-                    placeholder="Password akun siswa.."
-                    value={formData.password}
-                    onChange={handleInputChange}
-                  />
-                  <small id="helpId" className="text-muted">
-                    *Password Dienkripsi
-                  </small>
-                  {errorsForms.password && (
-                    <div className="invalid-form">password masih kosong!</div>
-                  )}
+              <>
+                <div className="col-12 col-md-6">
+                  <div className="form-group mb-3">
+                    <label className="mb-2 fw-medium">Password *</label>
+                    <input
+                      type="text"
+                      disabled
+                      name="password"
+                      className={`form-control ${
+                        errorsForms.password ? "is-invalid" : ""
+                      }`}
+                      placeholder="Password akun staff.."
+                      value={formData.password}
+                      onChange={handleInputChange}
+                    />
+                    <small id="helpId" className="text-muted">
+                      { statusNewPassword ? "Password Baru User" : "*Password Dienkripsi" }
+                    </small>
+                    {errorsForms.password && (
+                      <div className="invalid-form">password masih kosong!</div>
+                    )}
+                  </div>
                 </div>
-              </div>
+                <div className="col-12 col-md-6 m-aut">
+                  <div className="form-group mb-3">
+                    <label className="mb-2 fw-medium">&nbsp;</label>
+                    <button
+                      className="btn btn-danger w-100"
+                      type="button"
+                      onClick={() => handleResetPassword()}
+                    >
+                      Reset Password
+                    </button>
+                  </div>
+                </div>
+              </>
             )}
 
             <div className="col-12">

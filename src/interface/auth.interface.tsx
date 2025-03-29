@@ -57,6 +57,11 @@ export interface UpdateUserResponse {
   status: number;
   message: string;
 }
+export interface ResetPasswordResponse {
+  status: number;
+  message: string;
+  data: { newPassword: string };
+}
 
 export interface LoginData {
   username: string;
@@ -73,7 +78,6 @@ export interface TokenValidationResponse {
   valid: boolean;
   status: number;
   role: string;
-  
 }
 
 export interface UpdatedBiodata {
@@ -84,7 +88,6 @@ export interface UpdatedBiodata {
   gender: string;
   birthPlace: string;
 }
-
 
 export interface BaseUserDetails {
   id: number;
@@ -107,7 +110,7 @@ export interface StudentDetails extends BaseUserDetails {
   nisn: string;
   startYear: string;
   endYear: string | null;
-  Major: Fajusek
+  Major: Fajusek;
 }
 
 // Staff-specific details
@@ -129,7 +132,7 @@ export interface GetUsersResponse<T> {
 // Updated generic response interface to handle both student and staff data
 export interface UserDataResponse<T> {
   status: number;
-  data: T[];  // Should be an array of `T`
+  data: T[]; // Should be an array of `T`
 }
 
 export interface FormCreateStudent {
@@ -164,9 +167,9 @@ export interface StudentDetail {
   gender: string;
   nis: string;
   nisn: string;
-  Major: Fajusek
-  class: Class
-  ParentOfStudent: ParentOfStudent[]
+  Major: Fajusek;
+  class: Class;
+  ParentOfStudent: ParentOfStudent[];
   HistoryClass: StudentHistory[];
   user: {
     username: string;
@@ -174,7 +177,7 @@ export interface StudentDetail {
   };
 }
 
-export interface ResponseGetStudentDetail{
+export interface ResponseGetStudentDetail {
   status: number;
   message: string;
   data: StudentDetail;

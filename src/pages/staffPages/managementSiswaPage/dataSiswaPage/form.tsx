@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
-import { convertStartEndYear, Toast } from "../../../../utils/myFunctions";
+import {
+  convertStartEndYear,
+  showConfirmationDialog,
+  Toast,
+} from "../../../../utils/myFunctions";
 import { useNavigate, useParams } from "react-router-dom";
 import { HeaderTitlePage } from "../../../../components/headerTitlePage";
 import AuthService from "../../../../services/authService";
@@ -8,7 +12,7 @@ import { optionsGender, optionsStartYear } from "../../../../utils/optionsData";
 import { AxiosError } from "axios";
 
 interface FormState {
-  id?: number;
+  id?: number | null;
   password?: string;
   name: string;
   birthPlace: string;
@@ -27,6 +31,7 @@ export const FormSiswaMangementSiswaPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const studentService = AuthService();
   const [formData, setFormData] = useState<FormState>({
+    id: null,
     password: "",
     name: "",
     birthPlace: "",
@@ -41,47 +46,48 @@ export const FormSiswaMangementSiswaPage: React.FC = () => {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [errorsForms, setErrorsForms] = useState<{ [key: string]: string }>({});
   const [loadingForm, setloadingForm] = useState(true);
+  const [statusNewPassword, setStatusNewPassword] = useState(false);
 
   useEffect(() => {
-    const getDataSiswa = async () => {
-      if (id) {
-        try {
-          const response = await studentService.getStudentByNis(parseInt(id));
-          const data = response.data;
-          setFormData({
-            id: data.id,
-            password: data.user.password,
-            name: data.name,
-            birthPlace: data.birthPlace,
-            address: data.address,
-            nis: data.nis,
-            nisn: data.nisn,
-            gender: data.gender,
-            phone: data.phone,
-            email: data.email,
-            startYear: convertStartEndYear(data.startYear),
-          });
-          setImageUrl(data.photo?.url);
-        } catch (error) {
-          const axiosError = error as AxiosError;
-          if (axiosError.response?.status === 404) {
-            Toast.fire({
-              icon: "error",
-              title: `Data Tidak Ditemukan!`,
-              timer: 4000,
-            });
-            navigate("/")
-          }
-        } finally {
-          setloadingForm(false);
-        }
-      } else {
-        setloadingForm(false);
-      }
-    };
-
     getDataSiswa();
   }, []);
+
+  const getDataSiswa = async () => {
+    if (id) {
+      try {
+        const response = await studentService.getStudentByNis(parseInt(id));
+        const data = response.data;
+        setFormData({
+          id: data.id,
+          password: data.user.password,
+          name: data.name,
+          birthPlace: data.birthPlace,
+          address: data.address,
+          nis: data.nis,
+          nisn: data.nisn,
+          gender: data.gender,
+          phone: data.phone,
+          email: data.email,
+          startYear: convertStartEndYear(data.startYear),
+        });
+        setImageUrl(data.photo?.url);
+      } catch (error) {
+        const axiosError = error as AxiosError;
+        if (axiosError.response?.status === 404) {
+          Toast.fire({
+            icon: "error",
+            title: `Data Tidak Ditemukan!`,
+            timer: 4000,
+          });
+          navigate("/");
+        }
+      } finally {
+        setloadingForm(false);
+      }
+    } else {
+      setloadingForm(false);
+    }
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, files } = e.target;
@@ -169,6 +175,47 @@ export const FormSiswaMangementSiswaPage: React.FC = () => {
     }
   };
 
+  const handleResetPassword = async () => {
+    const result = await showConfirmationDialog({
+      title: `Ingin Mereset Password Akun<br>${formData.name} - ${formData.nis}/${formData.nisn}?`,
+      icon: "warning",
+      confirmButtonText: "Ya, Reset!",
+      cancelButtonText: "Batal",
+    });
+
+    if (result.isConfirmed) {
+      setloadingForm(true);
+      try {
+        const response = await studentService.resetPassword(formData.id!);
+        if (response.status === 200) {
+          setFormData({ ...formData, password: response.data.newPassword });
+          setStatusNewPassword(true);
+          Toast.fire({
+            icon: "success",
+            title: "Password berhasil direset!",
+            timer: 4000,
+          });
+        }
+      } catch (error) {
+        const axiosError = error as AxiosError;
+        if (axiosError.response?.status === 401) {
+          return Toast.fire({
+            icon: "error",
+            title: `Gagal, Anda Tidak Memiliki Akses!`,
+            timer: 4000,
+          });
+        }
+        Toast.fire({
+          icon: "error",
+          title: `Gagal, Terjadi Kesalahan!`,
+          timer: 4000,
+        });
+        console.error("Error reset password:", error);
+      } finally {
+        setloadingForm(false);
+      }
+    }
+  };
   return (
     <>
       <HeaderTitlePage
@@ -393,27 +440,42 @@ export const FormSiswaMangementSiswaPage: React.FC = () => {
               </div>
             </div>
             {id && (
-              <div className="col-12 col-lg-12">
-                <div className="form-group mb-3">
-                  <label className="mb-2 fw-medium">Password *</label>
-                  <input
-                    type="text"
-                    name="password"
-                    className={`form-control ${
-                      errorsForms.password ? "is-invalid" : ""
-                    }`}
-                    placeholder="Password akun siswa.."
-                    value={formData.password}
-                    onChange={handleInputChange}
-                  />
-                  <small id="helpId" className="text-muted">
-                    *Password Dienkripsi
-                  </small>
-                  {errorsForms.password && (
-                    <div className="invalid-form">password masih kosong!</div>
-                  )}
+              <>
+                <div className="col-12 col-md-6">
+                  <div className="form-group mb-3">
+                    <label className="mb-2 fw-medium">Password *</label>
+                    <input
+                      type="text"
+                      disabled
+                      name="password"
+                      className={`form-control ${
+                        errorsForms.password ? "is-invalid" : ""
+                      }`}
+                      placeholder="Password akun siswa.."
+                      value={formData.password}
+                      onChange={handleInputChange}
+                    />
+                    <small id="helpId" className="text-muted">
+                    { statusNewPassword ? "Password Baru User" : "*Password Dienkripsi" }
+                    </small>
+                    {errorsForms.password && (
+                      <div className="invalid-form">password masih kosong!</div>
+                    )}
+                  </div>
                 </div>
-              </div>
+                <div className="col-12 col-md-6 m-aut">
+                  <div className="form-group mb-3">
+                    <label className="mb-2 fw-medium">&nbsp;</label>
+                    <button
+                      className="btn btn-danger w-100"
+                      type="button"
+                      onClick={() => handleResetPassword()}
+                    >
+                      Reset Password
+                    </button>
+                  </div>
+                </div>
+              </>
             )}
             <div className="col-12">
               <div className="form-group mb-3">

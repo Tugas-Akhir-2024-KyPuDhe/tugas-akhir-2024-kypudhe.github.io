@@ -12,6 +12,7 @@ import {
   ResponseGetStudentDetail,
   ResponseUpdatePhotoUser,
   PayloadChangePassword,
+  ResetPasswordResponse,
 } from "./../interface/auth.interface";
 import useCookie from "react-use-cookie";
 import { FormParentOfStudent } from "../interface/student.interface";
@@ -49,6 +50,23 @@ const AuthService = () => {
       const response = await axios.post<UpdateUserResponse>(
         `${apiUrl}/api/auth/change-password`,
         data,
+        {
+          headers: {
+            authorization: `Bearer ${userLoginCookie.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  };
+
+  const resetPassword = async (id: number): Promise<ResetPasswordResponse> => {
+    try {
+      const response = await axios.post<ResetPasswordResponse>(
+        `${apiUrl}/api/auth/reset-password/${id}`,{},
         {
           headers: {
             authorization: `Bearer ${userLoginCookie.token}`,
@@ -271,6 +289,7 @@ const AuthService = () => {
     updatePhotoUser,
     updateDataParent,
     changePassword,
+    resetPassword,
   };
 };
 
