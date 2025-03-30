@@ -110,9 +110,10 @@ export const ModalAddGaleri: React.FC<ModalAddGaleriProps> = ({
       }
     } catch (error) {
       setLoading(false);
+      console.log(error);
       Toast.fire({
         icon: "error",
-        title: `${error}`,
+        title: `Error! Terjadi kesalahan, coba lagi`,
       });
     } finally {
       setLoading(false);

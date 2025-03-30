@@ -156,7 +156,7 @@ export const FormFacilityPage: React.FC = () => {
       setloadingForm(false);
       Toast.fire({
         icon: "error",
-        title: `${error}`,
+        title: `Error! Terjadi kesalahan, coba lagi`,
       });
       console.error("Error processing facility:", error);
     }

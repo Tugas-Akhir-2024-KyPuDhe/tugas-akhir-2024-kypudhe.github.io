@@ -159,7 +159,7 @@ export const FormBannerPage: React.FC = () => {
       setloadingForm(false);
       Toast.fire({
         icon: "error",
-        title: `${error}`,
+        title: `Error! Terjadi kesalahan, coba lagi`,
       });
       console.error("Error processing banner:", error);
     }

@@ -122,7 +122,7 @@ export const FormAcademicYearPage: React.FC = () => {
       }
       Toast.fire({
         icon: "error",
-        title: `${error}`,
+        title: `Error! Terjadi kesalahan, coba lagi`,
       });
       console.error("Error processing tahun ajaran:", error);
     } finally {

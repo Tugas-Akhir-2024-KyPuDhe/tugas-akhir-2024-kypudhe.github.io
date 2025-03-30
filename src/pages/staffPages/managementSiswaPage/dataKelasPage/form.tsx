@@ -278,7 +278,7 @@ export const FormDataKelasMangementSiswaPage: React.FC = () => {
       }
       Toast.fire({
         icon: "error",
-        title: `${error}`,
+        title: `Error! Terjadi kesalahan, coba lagi`,
       });
     }
   };
