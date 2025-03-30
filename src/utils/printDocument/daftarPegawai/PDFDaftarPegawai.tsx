@@ -276,7 +276,7 @@ const PDFDaftarPegawai: React.FC<PDFProps> = ({ data, TA, allCourse }) => {
                   )}
                   
                   <Text style={[styles.bodyCell, styles.col3]}>
-                    {course ? `${course.name} (${course.grade})` : `Kode: ${mapelCode}`}
+                    {course ? `${course.name} (${course.grade})` : ``}
                   </Text>
                   
                   {courseIndex === 0 ? (
