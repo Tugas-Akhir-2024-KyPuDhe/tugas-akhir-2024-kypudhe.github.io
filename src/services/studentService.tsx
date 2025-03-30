@@ -41,7 +41,7 @@ const StudentService = () => {
   };
 
   const getStudentByNis = async (
-    nis: number
+    nis: string
   ): Promise<ResponseGetStudent<StudentDetail>> => {
     try {
       const response = await axios.get<ResponseGetStudent<StudentDetail>>(

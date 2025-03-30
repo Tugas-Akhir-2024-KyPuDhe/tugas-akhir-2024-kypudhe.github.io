@@ -38,7 +38,7 @@ export const DetailSiswaMangementSiswa: React.FC = () => {
     const getDataSiswa = async () => {
       if (id) {
         try {
-          const response = await studentService.getStudentByNis(parseFloat(id));
+          const response = await studentService.getStudentByNis(id);
           const data = response.data;
           await getStudentHistory(response.data.id.toString());
           setData(response.data);

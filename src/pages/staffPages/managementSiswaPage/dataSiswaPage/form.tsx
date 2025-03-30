@@ -82,7 +82,7 @@ export const FormSiswaMangementSiswaPage: React.FC = () => {
   const getDataSiswa = async () => {
     if (id) {
       try {
-        const response = await studentService.getStudentByNis(parseInt(id));
+        const response = await studentService.getStudentByNis(id);
         const data = response.data;
         setFormData({
           id: data.id,

@@ -203,7 +203,7 @@ const AuthService = () => {
   };
 
   const getStudentByNis = async (
-    nis: number
+    nis: string
   ): Promise<ResponseGetStudentDetail> => {
     try {
       const response = await axios.get<ResponseGetStudentDetail>(

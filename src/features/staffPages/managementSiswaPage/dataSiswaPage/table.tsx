@@ -88,14 +88,14 @@ export const Table: React.FC = () => {
       selector: (row: StudentDetail) => row.nis,
       sortable: true,
       cell: (row: StudentDetail) => row.nis,
-      width: "100px",
+      width: "130px",
     },
     {
       name: "NISN",
       selector: (row: StudentDetail) => row.nisn,
       sortable: true,
       cell: (row: StudentDetail) => row.nisn,
-      width: "100px",
+      width: "130px",
     },
     {
       name: "Jurusan",
@@ -130,12 +130,12 @@ export const Table: React.FC = () => {
       cell: (row: StudentDetail) => row.phone,
       width: "120px",
     },
-    {
-      name: "Email",
-      selector: (row: StudentDetail) => row.email,
-      sortable: true,
-      cell: (row: StudentDetail) => row.email,
-    },
+    // {
+    //   name: "Email",
+    //   selector: (row: StudentDetail) => row.email,
+    //   sortable: true,
+    //   cell: (row: StudentDetail) => row.email,
+    // },
     {
       name: "Action",
       cell: (row: StudentDetail) => (
