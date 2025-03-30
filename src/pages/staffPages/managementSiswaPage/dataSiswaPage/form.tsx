@@ -10,6 +10,8 @@ import { HeaderTitlePage } from "../../../../components/headerTitlePage";
 import AuthService from "../../../../services/authService";
 import { optionsGender, optionsStartYear } from "../../../../utils/optionsData";
 import { AxiosError } from "axios";
+import { Fajusek } from "../../../../interface/fajusek.interfase";
+import JurusanService from "../../../../services/jurusanService";
 
 interface FormState {
   id?: number | null;
@@ -21,6 +23,7 @@ interface FormState {
   nisn: string;
   gender: string;
   phone: string;
+  majorCode: string;
   email: string;
   startYear: string;
 }
@@ -30,6 +33,7 @@ export const FormSiswaMangementSiswaPage: React.FC = () => {
 
   const { id } = useParams<{ id: string }>();
   const studentService = AuthService();
+  const majorService = JurusanService();
   const [formData, setFormData] = useState<FormState>({
     id: null,
     password: "",
@@ -40,6 +44,7 @@ export const FormSiswaMangementSiswaPage: React.FC = () => {
     nisn: "",
     gender: optionsGender[0].value,
     phone: "",
+    majorCode: "",
     email: "",
     startYear: optionsStartYear[4].value,
   });
@@ -50,7 +55,29 @@ export const FormSiswaMangementSiswaPage: React.FC = () => {
 
   useEffect(() => {
     getDataSiswa();
+    getMajor();
   }, []);
+
+  const [dataMajor, setDataMajor] = useState<Fajusek[]>([]);
+  const optionsMajor = [
+    ...dataMajor.map((data) => ({
+      value: data.majorCode,
+      label: data.name,
+    })),
+  ];
+
+  const getMajor = async () => {
+    setloadingForm(true);
+    try {
+      const response = await majorService.all();
+      setDataMajor(response.data);
+      setFormData({...formData, majorCode: response.data[0].majorCode})
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setloadingForm(false);
+    }
+  };
 
   const getDataSiswa = async () => {
     if (id) {
@@ -67,6 +94,7 @@ export const FormSiswaMangementSiswaPage: React.FC = () => {
           nisn: data.nisn,
           gender: data.gender,
           phone: data.phone,
+          majorCode: 'RPL',
           email: data.email,
           startYear: convertStartEndYear(data.startYear),
         });
@@ -305,6 +333,32 @@ export const FormSiswaMangementSiswaPage: React.FC = () => {
                 )}
               </div>
             </div>
+            <div className="col-12">
+              <div className="form-group mb-3">
+                <label className="mb-2 fw-medium">Jurusan *</label>
+                <Select
+                  options={optionsMajor}
+                  value={optionsMajor.find((option) => {
+                    return option.value === formData.majorCode;
+                  })}
+                  onChange={(option) => handleSelectChange("majorCode", option)}
+                  placeholder="Pilih Jurusan"
+                  isSearchable={false}
+                  className="form-control-lg px-0 pt-0"
+                  styles={{
+                    control: (baseStyles) => ({
+                      ...baseStyles,
+                      fontSize: "0.955rem",
+                      borderRadius: "8px",
+                    }),
+                    option: (provided) => ({
+                      ...provided,
+                      fontSize: "1rem",
+                    }),
+                  }}
+                />
+              </div>
+            </div>
             <div className="col-12 col-lg-3">
               <div className="form-group mb-3">
                 <label className="mb-2 fw-medium">Tahun Mulai *</label>
@@ -336,7 +390,7 @@ export const FormSiswaMangementSiswaPage: React.FC = () => {
             </div>
             <div className="col-12 col-lg-3">
               <div className="form-group mb-3">
-                <label className="mb-2 fw-medium">No Telp *</label>
+                <label className="mb-2 fw-medium">No Telp</label>
                 <input
                   type="text"
                   name="phone"
@@ -362,7 +416,7 @@ export const FormSiswaMangementSiswaPage: React.FC = () => {
             </div>
             <div className="col-12 col-lg-6">
               <div className="form-group mb-3">
-                <label className="mb-2 fw-medium">Email *</label>
+                <label className="mb-2 fw-medium">Email</label>
                 <input
                   type="text"
                   name="email"
@@ -378,7 +432,7 @@ export const FormSiswaMangementSiswaPage: React.FC = () => {
                 )}
               </div>
             </div>
-            <div className="col-12 col-lg-9">
+            <div className="col-12 col-md-6 col-lg-9">
               <div className="form-group mb-3">
                 <label className="mb-2 fw-medium">Tempat Tanggal Lahir</label>
                 <input
@@ -396,7 +450,7 @@ export const FormSiswaMangementSiswaPage: React.FC = () => {
                 )}
               </div>
             </div>
-            <div className="col-12 col-lg-3 col-md-3">
+            <div className="col-12 col-md-6 col-lg-3">
               <div className="form-group mb-3">
                 <label className="mb-2 fw-medium">Jenis Kelamin</label>
                 <Select
@@ -424,7 +478,7 @@ export const FormSiswaMangementSiswaPage: React.FC = () => {
             </div>
             <div className="col-12">
               <div className="form-group mb-3">
-                <label className="mb-2 fw-medium">Alamat *</label>
+                <label className="mb-2 fw-medium">Alamat</label>
                 <textarea
                   name="address"
                   className={`form-control ${
@@ -456,7 +510,9 @@ export const FormSiswaMangementSiswaPage: React.FC = () => {
                       onChange={handleInputChange}
                     />
                     <small id="helpId" className="text-muted">
-                    { statusNewPassword ? "Password Baru User" : "*Password Dienkripsi" }
+                      {statusNewPassword
+                        ? "Password Baru User"
+                        : "*Password Dienkripsi"}
                     </small>
                     {errorsForms.password && (
                       <div className="invalid-form">password masih kosong!</div>

@@ -237,9 +237,26 @@ export const ProfilePage = () => {
                 allCourse={allCourse}
                 //STUDENT
                 nis={profileDetail.details[0].nis || ""}
-                currentClass={profileDetail.details[0].HistoryClass && profileDetail.details[0].HistoryClass![0].currentClass.name || ""}
-                currentClassUuid={profileDetail.details[0].HistoryClass && profileDetail.details[0].HistoryClass![0].uuid || ""}
-                currentHoomRoomTeacher={profileDetail.details[0].HistoryClass && profileDetail.details[0].HistoryClass![0].currentClass.homeRoomTeacher.name || ""}
+                currentClass={
+                  (profileDetail.details[0].HistoryClass &&
+                    profileDetail.details[0].HistoryClass![0] &&
+                    profileDetail.details[0].HistoryClass![0].currentClass
+                      .name) ||
+                  "Belum masuk kedalam Kelas"
+                }
+                currentClassUuid={
+                  (profileDetail.details[0].HistoryClass &&
+                    profileDetail.details[0].HistoryClass![0] &&
+                    profileDetail.details[0].HistoryClass![0].uuid) ||
+                  ""
+                }
+                currentHoomRoomTeacher={
+                  (profileDetail.details[0].HistoryClass &&
+                    profileDetail.details[0].HistoryClass![0] &&
+                    profileDetail.details[0].HistoryClass![0].currentClass
+                      .homeRoomTeacher.name) ||
+                  "Belum masuk kedalam Kelas"
+                }
                 nisn={profileDetail.details[0].nisn || 0}
               />
               {(userLoginCookie.role === "STUDENT" ||
@@ -302,7 +319,7 @@ export const ProfilePage = () => {
                             .toString() || "-"
                         }
                         studentStatus={
-                         profileDetail?.details?.[0]?.status || "-"
+                          profileDetail?.details?.[0]?.status || "-"
                         }
                       />
                     )}
@@ -336,7 +353,10 @@ export const ProfilePage = () => {
                       />
                     )}
                     {activeMenu === "riwayat-akademik" && (
-                      <CardRiwayatAkademik nis={profileDetail?.details[0].nis || ""} data={DataStudentHistory} />
+                      <CardRiwayatAkademik
+                        nis={profileDetail?.details[0].nis || ""}
+                        data={DataStudentHistory}
+                      />
                     )}
 
                     {/* === TEACHER */}

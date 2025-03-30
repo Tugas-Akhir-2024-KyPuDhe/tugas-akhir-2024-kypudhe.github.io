@@ -98,6 +98,10 @@ export const convertStatusHistory = (status: string): JSX.Element => {
     <>
       <span className="badge text-bg-success">{status}</span>
     </>
+  ) : status.toLocaleLowerCase() === "new" ? (
+    <>
+      <span className="badge bg-blue">{status}</span>
+    </>
   ) : status.toLocaleLowerCase() === "lulus" ? (
     <>
       <span className="badge text-bg-success">{status}</span>
