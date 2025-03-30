@@ -136,8 +136,8 @@ export const HomePage = () => {
               />
               <CardInformasi
                 icon={<FaGraduationCap className="display-6" />}
-                title="Total Siswa"
-                total={dataStatistik?.student || 0}
+                title="Total Alumni"
+                total={dataStatistik?.alumni || 0}
                 bgColor="#A8DADC"
               />
             </div>
