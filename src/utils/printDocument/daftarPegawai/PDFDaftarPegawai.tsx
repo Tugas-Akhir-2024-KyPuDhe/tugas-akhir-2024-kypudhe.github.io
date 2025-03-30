@@ -11,7 +11,10 @@ import {
 import { StaffDetail } from "../../../interface/staff.interface";
 import { Course } from "../../../interface/course.interface";
 
-export const exportToPDFDaftarPegawai = async (data: StaffDetail[], allCourse: Course[]) => {
+export const exportToPDFDaftarPegawai = async (
+  data: StaffDetail[],
+  allCourse: Course[]
+) => {
   const MyDocument = (
     <PDFDaftarPegawai data={data} TA={"2024/2025"} allCourse={allCourse} />
   );
@@ -196,120 +199,99 @@ interface PDFProps {
   TA: string;
 }
 
-const PDFDaftarPegawai: React.FC<PDFProps> = ({ data, TA, allCourse }) => (
-  <Document>
-    <Page size="A3" style={styles.page} orientation="landscape">
-      {/* Title */}
+const PDFDaftarPegawai: React.FC<PDFProps> = ({ data, TA, allCourse }) => {
+  let rowCounter = 0;
 
-      <Text style={styles.title}>Daftar Pegawai - TA {TA}</Text>
-      <Text style={[styles.title, { marginBottom: "10px" }]}>
-        SMK Negeri 1 Lumban Julu
-      </Text>
+  return (
+    <Document>
+      <Page size="A3" style={styles.page} orientation="landscape">
+        <Text style={styles.title}>Daftar Pegawai - TA {TA}</Text>
+        <Text style={[styles.title, { marginBottom: "10px" }]}>
+          SMK Negeri 1 Lumban Julu
+        </Text>
 
-      {/* Table Header */}
-      <View style={styles.table}>
-        <View style={[styles.bgSuccess, styles.row]}>
-          <Text style={[styles.header, styles.colNo, styles.textCenter]}>
-            No
-          </Text>
-          <Text style={[styles.header, styles.col4]}>Nama Pegawai</Text>
-          <Text style={[styles.header, styles.col1]}>Status Pegawai</Text>
-          <Text style={[styles.header, styles.col4]}>NIP</Text>
-          <Text style={[styles.header, styles.col1]}>JK</Text>
-          <Text style={[styles.header, styles.col2]}>No.Telp</Text>
-          <Text style={[styles.header, styles.col3]}>Email</Text>
-          <Text style={[styles.header, styles.col3]}>Mapel</Text>
-          <Text style={[styles.header, styles.col2]}>Jabatan</Text>
-        </View>
+        <View style={styles.table}>
+          <View style={[styles.bgSuccess, styles.row]}>
+            <Text style={[styles.header, styles.colNo, styles.textCenter]}>No</Text>
+            <Text style={[styles.header, styles.col4]}>Nama Pegawai</Text>
+            <Text style={[styles.header, styles.col1]}>Status Pegawai</Text>
+            <Text style={[styles.header, styles.col4]}>NIP</Text>
+            <Text style={[styles.header, styles.col1]}>JK</Text>
+            <Text style={[styles.header, styles.col2]}>No.Telp</Text>
+            <Text style={[styles.header, styles.col3]}>Email</Text>
+            <Text style={[styles.header, styles.col3]}>Mapel</Text>
+            <Text style={[styles.header, styles.col2]}>Jabatan</Text>
+          </View>
 
-        {/* Table Body */}
-        {data.map((item, index) => {
-          const mapelList = item?.mapel
-            .map((mapelCode) =>
-              allCourse.find((course) => course.code === mapelCode)
-            )
-            .filter(Boolean);
+          {data.map((item) => {
+            rowCounter++; // Increment counter untuk setiap staff
 
-          return mapelList.map((course, courseIndex) => (
-            <View
-              style={styles.row}
-              key={`${item.nip}-${course?.code}-${courseIndex}`}
-            >
-              {/* Baris pertama untuk guru */}
-              {courseIndex === 0 ? (
-                <>
-                  {/* Nomor */}
-                  <Text
-                    style={[
-                      styles.bodyCell,
-                      styles.bgSuccess,
-                      styles.colNo,
-                      styles.textCenter,
-                    ]}
-                  >
-                    {index - data[index].mapel.length}
+            // Handle staff tanpa mapel
+            if (!item.mapel || item.mapel.length === 0) {
+              return (
+                <View style={styles.row} key={`${item.nip}-no-course`}>
+                  <Text style={[styles.bodyCell, styles.bgSuccess, styles.colNo, styles.textCenter]}>
+                    {rowCounter}
                   </Text>
-                  {/* Nama */}
-                  <Text style={[styles.bodyCell, styles.col4]}>
-                    {item.name}
-                  </Text>
-                  {/* Tipe */}
-                  <Text
-                    style={[styles.bodyCell, styles.col1, styles.textCenter]}
-                  >
-                    {item.type}
-                  </Text>
-                  {/* NIP */}
+                  <Text style={[styles.bodyCell, styles.col4]}>{item.name}</Text>
+                  <Text style={[styles.bodyCell, styles.col1, styles.textCenter]}>{item.type}</Text>
                   <Text style={[styles.bodyCell, styles.col4]}>{item.nip}</Text>
-                  {/* Gender */}
-                  <Text
-                    style={[styles.bodyCell, styles.col1, styles.textCenter]}
-                  >
-                    {item.gender}
+                  <Text style={[styles.bodyCell, styles.col1, styles.textCenter]}>{item.gender}</Text>
+                  <Text style={[styles.bodyCell, styles.col2, styles.textCenter]}>{item.phone}</Text>
+                  <Text style={[styles.bodyCell, styles.col3, styles.textCenter]}>{item.email}</Text>
+                  <Text style={[styles.bodyCell, styles.col3]}>-</Text>
+                  <Text style={[styles.bodyCell, styles.col2]}>{item.position}</Text>
+                </View>
+              );
+            }
+
+            // Handle staff dengan mapel
+            return item.mapel.map((mapelCode, courseIndex) => {
+              const course = allCourse.find(c => c.code === mapelCode);
+              
+              return (
+                <View style={styles.row} key={`${item.nip}-${mapelCode}-${courseIndex}`}>
+                  {courseIndex === 0 ? (
+                    <>
+                      <Text style={[styles.bodyCell, styles.bgSuccess, styles.colNo, styles.textCenter]}>
+                        {rowCounter}
+                      </Text>
+                      <Text style={[styles.bodyCell, styles.col4]}>{item.name}</Text>
+                      <Text style={[styles.bodyCell, styles.col1, styles.textCenter]}>{item.type}</Text>
+                      <Text style={[styles.bodyCell, styles.col4]}>{item.nip}</Text>
+                      <Text style={[styles.bodyCell, styles.col1, styles.textCenter]}>{item.gender}</Text>
+                      <Text style={[styles.bodyCell, styles.col2, styles.textCenter]}>{item.phone}</Text>
+                      <Text style={[styles.bodyCell, styles.col3, styles.textCenter]}>{item.email}</Text>
+                    </>
+                  ) : (
+                    <>
+                      <Text style={[styles.bodyCell, styles.colNo, styles.bgSuccess]}></Text>
+                      <Text style={[styles.bodyCell, styles.col4]}></Text>
+                      <Text style={[styles.bodyCell, styles.col1]}></Text>
+                      <Text style={[styles.bodyCell, styles.col4]}></Text>
+                      <Text style={[styles.bodyCell, styles.col1]}></Text>
+                      <Text style={[styles.bodyCell, styles.col2]}></Text>
+                      <Text style={[styles.bodyCell, styles.col3]}></Text>
+                    </>
+                  )}
+                  
+                  <Text style={[styles.bodyCell, styles.col3]}>
+                    {course ? `${course.name} (${course.grade})` : `Kode: ${mapelCode}`}
                   </Text>
-                  {/* Phone */}
-                  <Text
-                    style={[styles.bodyCell, styles.col2, styles.textCenter]}
-                  >
-                    {item.phone}
-                  </Text>
-                  {/* Email */}
-                  <Text
-                    style={[styles.bodyCell, styles.col3, styles.textCenter]}
-                  >
-                    {item.email}
-                  </Text>
-                </>
-              ) : (
-                <>
-                  {/* Kosongkan kolom selain mapel */}
-                  <Text style={[styles.bodyCell, styles.colNo, styles.bgSuccess]}></Text>
-                  <Text style={[styles.bodyCell, styles.col4]}></Text>
-                  <Text style={[styles.bodyCell, styles.col1]}></Text>
-                  <Text style={[styles.bodyCell, styles.col4]}></Text>
-                  <Text style={[styles.bodyCell, styles.col1]}></Text>
-                  <Text style={[styles.bodyCell, styles.col2]}></Text>
-                  <Text style={[styles.bodyCell, styles.col3]}></Text>
-                </>
-              )}
-              {/* Mapel */}
-              <Text style={[styles.bodyCell, styles.col3]}>
-                {course?.name} ({course?.grade})
-              </Text>
-              {/* Jabatan hanya di baris pertama */}
-              {courseIndex === 0 ? (
-                <Text style={[styles.bodyCell, styles.col2]}>
-                  {item.position}
-                </Text>
-              ) : (
-                <Text style={[styles.bodyCell, styles.col2]}></Text>
-              )}
-            </View>
-          ));
-        })}
-      </View>
-    </Page>
-  </Document>
-);
+                  
+                  {courseIndex === 0 ? (
+                    <Text style={[styles.bodyCell, styles.col2]}>{item.position}</Text>
+                  ) : (
+                    <Text style={[styles.bodyCell, styles.col2]}></Text>
+                  )}
+                </View>
+              );
+            });
+          })}
+        </View>
+      </Page>
+    </Document>
+  );
+};
 
 export default PDFDaftarPegawai;
