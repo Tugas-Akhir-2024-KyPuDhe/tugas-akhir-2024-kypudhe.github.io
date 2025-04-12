@@ -125,7 +125,7 @@ export const LoginPage: React.FC = () => {
                 <h5 className="card-title text-center mb-2 h3 fw-bold">
                   Login
                 </h5>
-                <p>Login Terlebih Dahulu Untuk Mengakses Portal Sekolah</p>
+                <p>Silahkan Login Terlebih Dahulu Untuk Mengakses Portal Sekolah</p>
               </div>
               <form onSubmit={handleLogin}>
                 <div className="mb-3">
