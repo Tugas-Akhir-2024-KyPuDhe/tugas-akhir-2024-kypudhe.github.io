@@ -9,7 +9,10 @@ import {
   showConfirmationDialog,
   Toast,
 } from "../../../utils/myFunctions";
-import { FormStateStudentGrade, StudentsGrades } from "../../../interface/studentGrade.interface";
+import {
+  FormStateStudentGrade,
+  StudentsGrades,
+} from "../../../interface/studentGrade.interface";
 import { FaPenToSquare } from "react-icons/fa6";
 
 interface CardProps {
@@ -60,10 +63,11 @@ export const CardNilaiKelas: React.FC<CardProps> = ({
 
       data.class.student.forEach((student) => {
         // const studentGrade = student.StudentsGrades[0] || {};
-        const studentGrade = student.StudentsGrades.find(
-          (grade) => grade.courseCode === data.courseDetail.code
-        ) || {} as StudentsGrades;
-        
+        const studentGrade =
+          student.StudentsGrades.find(
+            (grade) => grade.courseCode === data.courseDetail.code
+          ) || ({} as StudentsGrades);
+
         initialGrades[student.nis] = {
           courseCode: data.courseDetail.code || "",
           classId: studentGrade.classId,
@@ -150,12 +154,28 @@ export const CardNilaiKelas: React.FC<CardProps> = ({
     }
   };
 
+  const [totalPercentage, setTotalPercentage] = useState<number>(0);
+  const [isValidPercentage, setIsValidPercentage] = useState<boolean>(false);
   const handleWeightChange = (field: string, value: string) => {
     // Update nilai bobot
-    setWeights((prev) => ({
-      ...prev,
-      [field]: parseFloat(value) || 0,
-    }));
+    setWeights((prev) => {
+      const newWeights = {
+        ...prev,
+        [field]: parseFloat(value) || 0,
+      };
+
+      // Hitung total persentase setelah update
+      const total = Object.values(newWeights).reduce(
+        (sum, weight) => sum + weight,
+        0
+      );
+      console.log(total);
+
+      setTotalPercentage(total);
+      setIsValidPercentage(parseInt(total.toFixed(1)) === 1); 
+
+      return newWeights;
+    });
 
     // Update nilai persentase
     setWeightPercentages((prev) => ({
@@ -178,7 +198,12 @@ export const CardNilaiKelas: React.FC<CardProps> = ({
     const studentGrades = grades[studentId];
     if (!studentGrades) return "0.00"; // Pastikan mengembalikan string agar konsisten
 
-    // Ambil nilai siswa dengan default 0 jika undefined
+    // Fungsi helper untuk mengubah "" menjadi "0"
+    const emptyToZero = (value: string | undefined) => {
+      return value === "" ? "0" : value || "0";
+    };
+
+    // Ambil nilai siswa dengan default 0 jika undefined atau string kosong
     const {
       task = "0",
       UH = "0",
@@ -187,6 +212,16 @@ export const CardNilaiKelas: React.FC<CardProps> = ({
       portofolio = "0",
       proyek = "0",
     } = studentGrades;
+
+    // Gunakan fungsi helper untuk memastikan "" menjadi "0"
+    const normalizedTask = emptyToZero(task);
+    const normalizedUH = emptyToZero(UH);
+    const normalizedPTS = emptyToZero(PTS);
+    const normalizedPAS = emptyToZero(PAS);
+    const normalizedPortofolio = emptyToZero(portofolio);
+    const normalizedProyek = emptyToZero(proyek);
+
+    console.log(studentGrades);
 
     // Ambil bobot dengan default 0 jika undefined
     const {
@@ -210,17 +245,17 @@ export const CardNilaiKelas: React.FC<CardProps> = ({
     // Hindari pembagian dengan nol
     if (totalWeight === 0) return "-";
 
-    // Hitung nilai akhir
+    // Hitung nilai akhir dengan nilai yang sudah dinormalisasi
     const finalGrade =
-      (parseFloat(task) * taskWeight +
-        parseFloat(UH) * UHWeight +
-        parseFloat(PTS) * PTSWeight +
-        parseFloat(PAS) * PASWeight +
-        parseFloat(portofolio) * portofolioWeight +
-        parseFloat(proyek) * proyekWeight) /
+      (parseFloat(normalizedTask) * taskWeight +
+        parseFloat(normalizedUH) * UHWeight +
+        parseFloat(normalizedPTS) * PTSWeight +
+        parseFloat(normalizedPAS) * PASWeight +
+        parseFloat(normalizedPortofolio) * portofolioWeight +
+        parseFloat(normalizedProyek) * proyekWeight) /
       totalWeight;
 
-      return Math.floor(finalGrade).toString();
+    return Math.floor(finalGrade).toString();
   };
 
   const columns = [
@@ -593,10 +628,21 @@ export const CardNilaiKelas: React.FC<CardProps> = ({
               </div>
             </div>
           </div>
+          <div className="col-12 mb-4">
+            <div className="alert alert-info">
+              Total Bobot: <strong>{totalPercentage.toFixed(2)}%</strong>
+              {!isValidPercentage && (
+                <span className="text-danger ms-2">
+                  (Total bobot harus tepat 100%)
+                </span>
+              )}
+            </div>
+          </div>
           <div className="col-12">
             <button
               className="btn btn-success py-2 px-4"
               onClick={handleGenerateFinalGrades}
+              disabled={!isValidPercentage}
             >
               <FaPenToSquare className="me-3" /> Generate Nilai
             </button>
