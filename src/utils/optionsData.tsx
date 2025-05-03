@@ -3,6 +3,14 @@ export const optionsStatus = [
   { value: "NonActive", label: "Non Aktif" },
 ];
 
+export const optionsStatusProblem = [
+  { value: "baru", label: "Baru" },
+  { value: "pending", label: "Pending" },
+  { value: "perbaikan", label: "Perbaikan" },
+  { value: "selesai", label: "Selesai" },
+  { value: "ditolak", label: "Ditolak" },
+];
+
 export const optionsGrade = [
   { value: "X", label: "X" },
   { value: "XI", label: "XI" },

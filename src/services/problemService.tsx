@@ -7,7 +7,7 @@ interface ProblemService {
   getAllProblems: () => Promise<IResponse<IProblem[]>>;
   getProblemById: (id: number) => Promise<IResponse<IProblem>>;
   addProblem: (formData: FormData) => Promise<IResponse>;
-  updateProblem: (id: number, formData: FormData) => Promise<IResponse>;
+  updateProblem: (id: number, data: IProblem) => Promise<IResponse>;
   deleteProblem: (id: number) => Promise<IResponse>;
 }
 
@@ -83,15 +83,14 @@ const ProblemService = (): ProblemService => {
 
   const updateProblem = async (
     id: number,
-    formData: FormData
+    data: IProblem
   ): Promise<IResponse> => {
     try {
       const response: AxiosResponse<IResponse> = await axios.put(
         `${apiUrl}/api/problem-report/update/${id}`,
-        formData,
+        data,
         {
           headers: {
-            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${userLoginCookie.token}`,
           },
         }

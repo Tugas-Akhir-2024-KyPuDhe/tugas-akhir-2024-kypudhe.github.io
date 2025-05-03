@@ -82,6 +82,13 @@ export const Table: React.FC = () => {
       cell: (row: StaffDetail) => row.position!,
       width: "170px",
     },
+    {
+      name: "Peran",
+      selector: (row: StaffDetail) => row.user?.roles[0].name === "TEACHER" ? "Guru" : "Stafrf",
+      sortable: true,
+      cell: (row: StaffDetail) => row.user?.roles[0].name === "TEACHER" ? "Guru" : "Stafrf",
+      width: "120px",
+    },
     // {
     //   name: "Mapel",
     //   selector: (row: StaffDetail) => row.mapel!,

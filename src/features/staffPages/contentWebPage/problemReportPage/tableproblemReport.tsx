@@ -1,10 +1,10 @@
 import React from "react";
 import DataTable from "react-data-table-component";
 import { StyleSheetManager } from "styled-components";
-import { FaTrash } from "react-icons/fa";
-// import { FaEye } from "react-icons/fa6";
-// import { useNavigate } from "react-router-dom";
+import { FaEye, FaTrash } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 import { IProblem } from "../../../../interface/problem.interface";
+import { convertStatusProblem } from "../../../../utils/myFunctions";
 
 type TableProblemReportProps = {
   loading: boolean;
@@ -21,7 +21,7 @@ export const TableProblemReport: React.FC<TableProblemReportProps> = ({
   handleChangekeySearch,
   handleDetelete,
 }) => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const columns = [
     {
@@ -47,13 +47,6 @@ export const TableProblemReport: React.FC<TableProblemReportProps> = ({
       cell: (row: IProblem) => row.problemDescription,
     },
     {
-      name: "Pengirim",
-      selector: (row: IProblem) => row.idName,
-      sortable: true,
-      cell: (row: IProblem) => row.idName,
-      width: "150px",
-    },
-    {
       name: "No WA",
       selector: (row: IProblem) => row.telp,
       sortable: true,
@@ -74,17 +67,24 @@ export const TableProblemReport: React.FC<TableProblemReportProps> = ({
       width: "120px",
     },
     {
+      name: "Status",
+      selector: (row: IProblem) => row.status,
+      sortable: true,
+      cell: (row: IProblem) => convertStatusProblem(row.status),
+      width: "100px",
+    },
+    {
       name: "Action",
       selector: (row: IProblem) => row.idName,
       cell: (row: IProblem) => (
         <div className="w-100 text-center">
-          {/* <button
+          <button
             className="btn btn-info btn-sm text me-2 text-light"
             onClick={() => navigate(`detail/${row.id}`)}
             disabled={loading}
           >
             <FaEye />
-          </button> */}
+          </button>
           <button
             className="btn btn-danger btn-sm"
             onClick={() => handleDetelete(row.id)}
@@ -94,7 +94,7 @@ export const TableProblemReport: React.FC<TableProblemReportProps> = ({
           </button>
         </div>
       ),
-      width: "100px",
+      width: "150px",
     },
   ];
 

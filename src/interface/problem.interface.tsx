@@ -13,8 +13,9 @@ export interface IProblem {
   idName: string;
   pageProblem: string;
   problemDescription: string;
-  media: Media;
+  media?: Media;
   telp: string;
-  createdAt: string;
-  updatedAt: string;
+  status: string;
+  createdAt?: string;
+  updatedAt?: string;
 }

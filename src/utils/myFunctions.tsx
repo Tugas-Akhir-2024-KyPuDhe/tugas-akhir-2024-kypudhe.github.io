@@ -313,3 +313,20 @@ export const convertToPercentage = (value: string) => {
   if (isNaN(floatValue)) return "0%";
   return `${(floatValue * 100).toFixed(0)}%`;
 };
+
+export const convertStatusProblem = (status: string): JSX.Element => {
+  switch (status.toLowerCase()) {
+    case 'baru':
+      return <span className="badge text-bg-secondary">Baru</span>;
+    case 'pending':
+      return <span className="badge text-bg-warning text-light">Pending</span>;
+    case 'perbaikan':
+      return <span className="badge text-bg-info text-light">Perbaikan</span>;
+    case 'selesai':
+      return <span className="badge text-bg-success">Selesai</span>;
+    case 'ditolak':
+      return <span className="badge text-bg-danger">Ditolak</span>;
+    default:
+      return <span className="badge text-bg-light">Unknown</span>;
+  }
+};

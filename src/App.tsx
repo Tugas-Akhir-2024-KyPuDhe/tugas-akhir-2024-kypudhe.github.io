@@ -48,6 +48,7 @@ import {
   ChangePasswordPage,
   FormProblemReportPage,
   ProblemReportPage,
+  DetailProblemReportPage,
 } from "./pages";
 import { SideBar } from "./components/sidebar";
 import PrivateRoute from "./components/privateRoute";
@@ -425,6 +426,15 @@ function App() {
               element={
                 <PrivateRoute
                   Component={ProblemReportPage}
+                  Role={["STAFF"]}
+                />
+              }
+            />
+            <Route
+              path="/config/kendala/laporan-kendala/detail/:id"
+              element={
+                <PrivateRoute
+                  Component={DetailProblemReportPage}
                   Role={["STAFF"]}
                 />
               }
