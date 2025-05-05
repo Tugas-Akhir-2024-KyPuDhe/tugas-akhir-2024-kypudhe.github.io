@@ -5,7 +5,7 @@ export interface IResponse<T = unknown> {
 }
 
 export interface IStudyTracer {
-  id: number;
+  id?: number | null;
   uuid: string;
   name: string;
   ttl: string;
@@ -22,6 +22,7 @@ export interface IStudyTracer {
   isSatisfactionMet: string;
   disSatisfactionFactors: string;
   studyIssues: string;
+  statusApprove: string;
   createdAt: string;
   updatedAt: string;
 }

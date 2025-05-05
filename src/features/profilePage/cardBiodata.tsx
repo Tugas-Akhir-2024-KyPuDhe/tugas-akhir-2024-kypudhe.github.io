@@ -267,7 +267,7 @@ export const CardBiodata: React.FC<Biodata> = ({
               Batal
             </button>
             <button
-              className="btn btn-warning text-light"
+              className="btn bg-blue text-light"
               onClick={() => onSaveUpdate(updatedData)}
               disabled={loadingUpdateData}
             >

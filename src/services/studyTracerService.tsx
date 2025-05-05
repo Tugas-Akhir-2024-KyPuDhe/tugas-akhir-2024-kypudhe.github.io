@@ -7,7 +7,7 @@ interface StudyTracerService {
   getAllStudyTracers: () => Promise<IResponse<IStudyTracer[]>>;
   getStudyTracerById: (id: number) => Promise<IResponse<IStudyTracer>>;
   addStudyTracer: (formData: FormData) => Promise<IResponse>;
-  updateStudyTracer: (id: number, formData: FormData) => Promise<IResponse>;
+  updateStudyTracer: (id: number, data: IStudyTracer) => Promise<IResponse>;
   deleteStudyTracer: (id: number) => Promise<IResponse>;
 }
 
@@ -77,15 +77,14 @@ const StudyTracerService = (): StudyTracerService => {
 
   const updateStudyTracer = async (
     id: number,
-    formData: FormData
+    data: IStudyTracer
   ): Promise<IResponse> => {
     try {
       const response: AxiosResponse<IResponse> = await axios.put(
         `${apiUrl}/api/study-tracer/update/${id}`,
-        formData,
+        data,
         {
           headers: {
-            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${userLoginCookie.token}`,
           },
         }

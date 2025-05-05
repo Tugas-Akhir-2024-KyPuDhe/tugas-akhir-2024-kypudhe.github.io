@@ -4,7 +4,7 @@ import { Toast } from "../../../../utils/myFunctions";
 import { useNavigate, useParams } from "react-router-dom";
 import useCookie from "react-use-cookie";
 import { HeaderTitlePage } from "../../../../components/headerTitlePage";
-import { optionsStatus } from "../../../../utils/optionsData";
+import { optionsSem, optionsStatus } from "../../../../utils/optionsData";
 import { AxiosError } from "axios";
 import { IpayloadAcademicYear } from "../../../../interface/academicYear.interface";
 import AcademicYearService from "../../../../services/academicYearService";
@@ -22,21 +22,62 @@ export const FormAcademicYearPage: React.FC = () => {
     status: optionsStatus[0].value,
     createdBy: userLoginCookie.name,
   });
+  const [selectedYear, setSelectedYear] = useState<{
+    value: string;
+    label: string;
+  } | null>(null);
+  const [selectedSemester, setSelectedSemester] = useState<{
+    value: string;
+    label: string;
+  } | null>(null);
   const [errorsForms, setErrorsForms] = useState<{ [key: string]: string }>({});
   const [loadingForm, setloadingForm] = useState(true);
+
+  // Generate tahun ajaran options (±5 tahun dari tahun sekarang)
+  const generateYearOptions = () => {
+    const currentYear = new Date().getFullYear();
+    const years = [];
+
+    for (let i = -5; i <= 5; i++) {
+      const year = currentYear + i;
+      years.push({
+        value: `${year}/${year + 1}`,
+        label: `${year}/${year + 1}`,
+      });
+    }
+
+    return years;
+  };
+
+  const yearOptions = generateYearOptions();
 
   useEffect(() => {
     const getData = async () => {
       if (id) {
         try {
-          const response = await academicYearService.getAcademicYearById(parseInt(id));
+          const response = await academicYearService.getAcademicYearById(
+            parseInt(id)
+          );
           const data = response.data;
+
+          // Split existing name into year and semester
+          const parts = data.name.split(" ");
+          const yearPart = parts[0];
+          const semesterPart = parts[1];
+
           setFormData({
             id: data.id,
             name: data.name,
             status: data.status,
             createdBy: data.createdBy,
           });
+
+          setSelectedYear(
+            yearOptions.find((option) => option.value === yearPart) || null
+          );
+          setSelectedSemester(
+            optionsSem.find((option) => option.value === semesterPart) || null
+          );
         } catch (error) {
           const axiosError = error as AxiosError;
           if (axiosError.response?.status === 404) {
@@ -58,38 +99,46 @@ export const FormAcademicYearPage: React.FC = () => {
     getData();
   }, []);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, files } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: files ? files[0] : value,
-    }));
-    setErrorsForms((prevErrors) => ({ ...prevErrors, [name]: "" }));
-  };
+  useEffect(() => {
+    // Update name whenever year or semester changes
+    if (selectedYear && selectedSemester) {
+      setFormData((prev) => ({
+        ...prev,
+        name: `${selectedYear.value} ${selectedSemester.value}`,
+      }));
+    }
+  }, [selectedYear, selectedSemester]);
 
   const handleSelectChange = (
     name: string,
-    selectedOption: { value: string } | null
+    selectedOption: { value: string; label: string } | null
   ) => {
-    setFormData((prev) => ({
-      ...prev,
-      [name]: selectedOption ? selectedOption.value : "",
-    }));
+    if (name === "year") {
+      setSelectedYear(selectedOption);
+    } else if (name === "semester") {
+      setSelectedSemester(selectedOption);
+    } else if (name === "status") {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: selectedOption ? selectedOption.value : "",
+      }));
+    }
+
+    setErrorsForms((prevErrors) => ({ ...prevErrors, [name]: "" }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const requiredFields = ["name"];
     const newErrors: { [key: string]: string } = {};
 
-    requiredFields.forEach((field) => {
-      if (!formData[field as keyof typeof formData]) {
-        newErrors[field] = `${
-          field.charAt(0).toUpperCase() + field.slice(1)
-        } is required.`;
-      }
-    });
+    if (!selectedYear) {
+      newErrors.year = "Tahun Ajaran harus dipilih";
+    }
+
+    if (!selectedSemester) {
+      newErrors.semester = "Semester harus dipilih";
+    }
 
     if (Object.keys(newErrors).length > 0) {
       setErrorsForms(newErrors);
@@ -100,14 +149,19 @@ export const FormAcademicYearPage: React.FC = () => {
     try {
       let response;
       if (formData.id) {
-        response = await academicYearService.updateAcademicYear(formData.id, formData);
+        response = await academicYearService.updateAcademicYear(
+          formData.id,
+          formData
+        );
       } else {
         response = await academicYearService.addAcademicYear(formData);
       }
       if (response.status === 201 || response.status === 200) {
         Toast.fire({
           icon: "success",
-          title: `Tahun Ajaran Berhasil ${formData.id ? "Diupdate" : "Ditambah"}`,
+          title: `Tahun Ajaran Berhasil ${
+            formData.id ? "Diupdate" : "Ditambah"
+          }`,
         });
         navigate(-1);
       }
@@ -165,21 +219,65 @@ export const FormAcademicYearPage: React.FC = () => {
         )}
         <form onSubmit={handleSubmit}>
           <div className="row">
-            <div className="col-12">
+            <div className="col-12 col-md-6">
               <div className="form-group mb-3">
                 <label className="mb-2 fw-medium">Tahun Ajaran *</label>
-                <input
-                  type="text"
-                  name="name"
-                  className={`form-control ${
-                    errorsForms.name ? "is-invalid" : ""
-                  }`}
-                  placeholder="Masukkan Tahun Ajaran.."
-                  value={formData.name}
-                  onChange={handleInputChange}
+                <Select
+                  isSearchable={false}
+                  options={yearOptions}
+                  value={selectedYear}
+                  onChange={(option) => handleSelectChange("year", option)}
+                  placeholder="Pilih Tahun Ajaran"
+                  className="form-control-lg px-0 pt-0"
+                  styles={{
+                    control: (baseStyles) => ({
+                      ...baseStyles,
+                      fontSize: "0.955rem",
+                      minHeight: "48px",
+                      borderRadius: "8px",
+                      borderColor: errorsForms.year
+                        ? "#dc3545"
+                        : baseStyles.borderColor,
+                    }),
+                    option: (provided) => ({
+                      ...provided,
+                      fontSize: "1rem",
+                    }),
+                  }}
                 />
-                {errorsForms.name && (
-                  <div className="invalid-form">Tahun Ajaran masih kosong!</div>
+                {errorsForms.year && (
+                  <div className="invalid-form">{errorsForms.year}</div>
+                )}
+              </div>
+            </div>
+            <div className="col-12 col-md-6">
+              <div className="form-group mb-3">
+                <label className="mb-2 fw-medium">Semester *</label>
+                <Select
+                  isSearchable={false}
+                  options={optionsSem}
+                  value={selectedSemester}
+                  onChange={(option) => handleSelectChange("semester", option)}
+                  placeholder="Pilih Semester"
+                  className="form-control-lg px-0 pt-0"
+                  styles={{
+                    control: (baseStyles) => ({
+                      ...baseStyles,
+                      fontSize: "0.955rem",
+                      minHeight: "48px",
+                      borderRadius: "8px",
+                      borderColor: errorsForms.semester
+                        ? "#dc3545"
+                        : baseStyles.borderColor,
+                    }),
+                    option: (provided) => ({
+                      ...provided,
+                      fontSize: "1rem",
+                    }),
+                  }}
+                />
+                {errorsForms.semester && (
+                  <div className="invalid-form">{errorsForms.semester}</div>
                 )}
               </div>
             </div>
@@ -187,6 +285,7 @@ export const FormAcademicYearPage: React.FC = () => {
               <div className="form-group mb-3">
                 <label className="mb-2 fw-medium">Status</label>
                 <Select
+                  isSearchable={false}
                   options={optionsStatus}
                   value={optionsStatus.find(
                     (option) => option.value === formData.status

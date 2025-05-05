@@ -330,3 +330,16 @@ export const convertStatusProblem = (status: string): JSX.Element => {
       return <span className="badge text-bg-light">Unknown</span>;
   }
 };
+
+export const convertStatusStudyTracer = (status: string): JSX.Element => {
+  switch (status.toLowerCase()) {
+    case 'pending':
+      return <span className="badge text-bg-warning text-light">Pending</span>;
+    case 'disetujui':
+      return <span className="badge text-bg-success text-light">Disetujui</span>;
+    case 'ditolak':
+      return <span className="badge text-bg-danger">Ditolak</span>;
+    default:
+      return <span className="badge text-bg-light">Unknown</span>;
+  }
+};

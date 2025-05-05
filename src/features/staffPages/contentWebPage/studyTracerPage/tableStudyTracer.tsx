@@ -5,6 +5,7 @@ import { FaTrash } from "react-icons/fa";
 import { FaEye } from "react-icons/fa6";
 import { IStudyTracer } from "../../../../interface/studyTracer.interface";
 import { useNavigate } from "react-router-dom";
+import { convertStatusStudyTracer } from "../../../../utils/myFunctions";
 
 type TableStudyTracerProps = {
   loading: boolean;
@@ -26,7 +27,9 @@ export const TableStudyTracer: React.FC<TableStudyTracerProps> = ({
   const columns = [
     {
       name: "No",
-      cell: (_row: IStudyTracer, index: number) => <div className="w-100 text-center">{index + 1}</div>,
+      cell: (_row: IStudyTracer, index: number) => (
+        <div className="w-100 text-center">{index + 1}</div>
+      ),
       width: "50px",
     },
     {
@@ -39,29 +42,44 @@ export const TableStudyTracer: React.FC<TableStudyTracerProps> = ({
       name: "Gender",
       selector: (row: IStudyTracer) => row.gender,
       sortable: true,
-      cell: (row: IStudyTracer) => <div className="w-100 text-center">{row.gender}</div>,
-      width: '140px',
+      cell: (row: IStudyTracer) => (
+        <div className="w-100 text-center">{row.gender}</div>
+      ),
+      width: "140px",
     },
     {
       name: "No. Telp",
       selector: (row: IStudyTracer) => row.phone,
       sortable: true,
       cell: (row: IStudyTracer) => row.phone,
-      width: '140px',
+      width: "140px",
     },
     {
       name: "Tamatan",
       selector: (row: IStudyTracer) => row.endYear,
       sortable: true,
-      cell: (row: IStudyTracer) => <div className="w-100 text-center">{row.endYear}</div>,
-      width: '120px',
+      cell: (row: IStudyTracer) => (
+        <div className="w-100 text-center">{row.endYear}</div>
+      ),
+      width: "120px",
     },
     {
       name: "Status",
       selector: (row: IStudyTracer) => row.employmentStatus,
       sortable: true,
       cell: (row: IStudyTracer) => row.employmentStatus,
-      width: '140px',
+      width: "140px",
+    },
+    {
+      name: "Persetujuan",
+      selector: (row: IStudyTracer) => row.statusApprove,
+      sortable: true,
+      cell: (row: IStudyTracer) => (
+        <div className="w-100 text-center">
+          {convertStatusStudyTracer(row.statusApprove)}
+        </div>
+      ),
+      width: "140px",
     },
     {
       name: "Action",

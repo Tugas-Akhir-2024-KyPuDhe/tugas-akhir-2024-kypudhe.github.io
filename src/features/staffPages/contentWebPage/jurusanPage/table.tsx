@@ -3,11 +3,11 @@ import DataTable from "react-data-table-component";
 import { StyleSheetManager } from "styled-components";
 import {
   formatDateTime,
-  showConfirmationDialog,
-  Toast,
+  // showConfirmationDialog,
+  // Toast,
 } from "../../../../utils/myFunctions";
-import { FaTrash } from "react-icons/fa";
-import Swal from "sweetalert2";
+// import { FaTrash } from "react-icons/fa";
+// import Swal from "sweetalert2";
 import { FaPen } from "react-icons/fa6";
 import { Fajusek } from "../../../../interface/fajusek.interfase";
 import { useNavigate } from "react-router-dom";
@@ -33,34 +33,34 @@ export const Table: React.FC = () => {
     }
   };
 
-  const handleDelete = async (id: number) => {
-    const result = await showConfirmationDialog({
-      title: "Ingin menghapus Jurusan ini?",
-      icon: "warning",
-      confirmButtonText: "Ya, Hapus!",
-      cancelButtonText: "Batal",
-    });
+  // const handleDelete = async (id: number) => {
+  //   const result = await showConfirmationDialog({
+  //     title: "Ingin menghapus Jurusan ini?",
+  //     icon: "warning",
+  //     confirmButtonText: "Ya, Hapus!",
+  //     cancelButtonText: "Batal",
+  //   });
 
-    if (result.isConfirmed) {
-      setLoading(true); // Set loading to true when deletion starts
-      try {
-        const response = await jurusanService.destroy(id);
-        if (response.status === 200) {
-          getData();
-          Toast.fire({
-            icon: "success",
-            title: "Jurusan berhasil dihapus",
-            timer: 4000,
-          });
-        }
-      } catch (error) {
-        console.error("Error deleting Jurusan:", error);
-        Swal.fire("Gagal", "Terjadi kesalahan saat menghapus Jurusan", "error");
-      } finally {
-        setLoading(false); // Set loading to false once the operation is complete
-      }
-    }
-  };
+  //   if (result.isConfirmed) {
+  //     setLoading(true); // Set loading to true when deletion starts
+  //     try {
+  //       const response = await jurusanService.destroy(id);
+  //       if (response.status === 200) {
+  //         getData();
+  //         Toast.fire({
+  //           icon: "success",
+  //           title: "Jurusan berhasil dihapus",
+  //           timer: 4000,
+  //         });
+  //       }
+  //     } catch (error) {
+  //       console.error("Error deleting Jurusan:", error);
+  //       Swal.fire("Gagal", "Terjadi kesalahan saat menghapus Jurusan", "error");
+  //     } finally {
+  //       setLoading(false); // Set loading to false once the operation is complete
+  //     }
+  //   }
+  // };
 
   const columns = [
     {
@@ -86,7 +86,7 @@ export const Table: React.FC = () => {
       name: "Action",
       selector: (row: Fajusek) => row.name,
       cell: (row: Fajusek) => (
-        <>
+        <div className="w-100 text-center">
           <button
             className="btn btn-warning btn-sm text me-2 text-light"
             onClick={() => navigate(`update/${row.id}`)}
@@ -94,16 +94,16 @@ export const Table: React.FC = () => {
           >
             <FaPen />
           </button>
-          <button
+          {/* <button
             className="btn btn-danger btn-sm"
             onClick={() => handleDelete(row.id)}
             disabled={loading}
           >
             <FaTrash />
-          </button>
-        </>
+          </button> */}
+        </div>
       ),
-      width: "150px",
+      width: "100px",
     },
   ];
 

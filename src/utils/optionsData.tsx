@@ -3,12 +3,23 @@ export const optionsStatus = [
   { value: "NonActive", label: "Non Aktif" },
 ];
 
+export const optionsSem = [
+  { value: "Ganjil", label: "Ganjil" },
+  { value: "Genap", label: "Genap" },
+];
+
 export const optionsStatusProblem = [
   { value: "baru", label: "Baru" },
   { value: "pending", label: "Pending" },
   { value: "perbaikan", label: "Perbaikan" },
   { value: "selesai", label: "Selesai" },
   { value: "ditolak", label: "Ditolak" },
+];
+
+export const optionsStatusStudyTracer = [
+  { value: "Pending", label: "Pending" },
+  { value: "Disetujui", label: "Disetujui" },
+  { value: "Ditolak", label: "Ditolak" },
 ];
 
 export const optionsGrade = [
