@@ -42,6 +42,29 @@ const StudentAttendanceService = () => {
     }
   };
 
+  const getAttendanceInClassWeekly = async (
+    classId: number,
+    date_start: string,
+    date_end: string
+  ): Promise<IGetSummaryAttendance> => {
+    try {
+      const response = await axios.get<IGetSummaryAttendance>(
+        `${apiUrl}/api/student-attendance/weekly?classId=${classId}&date_start=${date_start}&date_end=${date_end}`,
+        {
+          headers: {
+            authorization: `Bearer ${userLoginCookie?.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        handleUnauthorized(error.response?.status || 0);
+      }
+      throw error;
+    }
+  };
+
   const getAttendanceSummaryInClass = async (
     classId: number,
   ): Promise<IGetSummaryAttendance> => {
@@ -154,6 +177,7 @@ const StudentAttendanceService = () => {
 
   return {
     getAttendanceInClass,
+    getAttendanceInClassWeekly,
     createAttendanceInClass,
     updateStudentAttendanceInClass,
     updateFinalAttendanceInClass,

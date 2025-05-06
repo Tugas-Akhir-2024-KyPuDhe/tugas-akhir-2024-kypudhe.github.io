@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   IDataSummaryAttendance,
   IDetailStudentAttendance,
@@ -6,15 +6,20 @@ import {
 import {
   bgColorAttendance,
   formatTanggal,
+  getCurrentWeekDateRange,
+  getDayFromNo,
+  getNextWeekDateRange,
   statusAttendance,
 } from "../../../../utils/myFunctions";
 import { Tooltip } from "react-tooltip";
 import { Class } from "../../../../interface/studentClass.interface";
+
 interface AbsensiProps {
   loading: boolean;
   data: IDataSummaryAttendance[];
   dataHeader: IDetailStudentAttendance[];
   kelas?: Class;
+  onDateChange: (startDate: string, endDate: string) => void;
 }
 
 export const DaftarAbsensi: React.FC<AbsensiProps> = ({
@@ -22,7 +27,62 @@ export const DaftarAbsensi: React.FC<AbsensiProps> = ({
   data,
   dataHeader,
   kelas,
+  onDateChange,
 }) => {
+  const { startDate: initialStartDate, endDate: initialEndDate } = getCurrentWeekDateRange();
+  
+  const [dateRange, setDateRange] = useState({
+    startDate: initialStartDate,
+    endDate: initialEndDate,
+  });
+
+  // Handler untuk perubahan tanggal
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, id } = e.target;
+    
+    if (id === "startDate") {
+      const newDateRange = {
+        startDate: value,
+        endDate: getNextWeekDateRange(value, 0).endDate
+      };
+      setDateRange(newDateRange);
+      onDateChange(newDateRange.startDate, newDateRange.endDate);
+    } else if (id === "endDate") {
+      // Untuk endDate, kita hitung startDate-nya (Senin)
+      const endDate = new Date(value);
+      const dayOfWeek = endDate.getDay();
+      const diffToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+      
+      const startDate = new Date(endDate);
+      startDate.setDate(endDate.getDate() - diffToMonday);
+      
+      const formattedStartDate = startDate.toISOString().split('T')[0];
+      
+      const newDateRange = {
+        startDate: formattedStartDate,
+        endDate: value
+      };
+      setDateRange(newDateRange);
+      onDateChange(newDateRange.startDate, newDateRange.endDate);
+    }
+  };
+
+  // Handler untuk navigasi minggu
+  const navigateWeek = (direction: number) => {
+    const newDateRange = getNextWeekDateRange(dateRange.startDate, direction);
+    setDateRange(newDateRange);
+    onDateChange(newDateRange.startDate, newDateRange.endDate);
+  };
+
+  // Format tanggal untuk tampilan
+  const formatDisplayDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('id-ID', {
+      day: 'numeric',
+      month: 'short',
+    });
+  };
+
   return (
     <>
       {kelas && (
@@ -110,7 +170,7 @@ export const DaftarAbsensi: React.FC<AbsensiProps> = ({
         )}
 
         <div className="row g-3">
-          <div className="col-12">
+          <div className="col-12 col-md-6">
             <div className="fw-bold position-relative pb-2">
               Daftar Absensi Siswa
               <div
@@ -123,6 +183,50 @@ export const DaftarAbsensi: React.FC<AbsensiProps> = ({
                   backgroundColor: "var(--blue-color)",
                 }}
               />
+            </div>
+          </div>
+          <div className="col-12 col-md-6 fw-medium">
+            <div className="row gy-3 align-items-center">
+              <div className="col-auto">
+                <button 
+                  className="btn btn-outline-primary btn-sm"
+                  onClick={() => navigateWeek(-1)}
+                >
+                  &lt;
+                </button>
+              </div>
+              <div className="col">
+                <input
+                  type="date"
+                  id="startDate"
+                  className="form-control form-control-sm"
+                  value={dateRange.startDate}
+                  onChange={handleDateChange}
+                />
+              </div>
+              <div className="d-none d-md-block col-auto">-</div>
+              <div className="col ">
+                <input
+                  type="date"
+                  id="endDate"
+                  className="form-control form-control-sm"
+                  value={dateRange.endDate}
+                  onChange={handleDateChange}
+                />
+              </div>
+              <div className="col-auto">
+                <button 
+                  className="btn btn-outline-primary btn-sm"
+                  onClick={() => navigateWeek(1)}
+                >
+                  &gt;
+                </button>
+              </div>
+            </div>
+            <div className="row mt-1">
+              <div className="col text-center text-muted small">
+                {formatDisplayDate(dateRange.startDate)} - {formatDisplayDate(dateRange.endDate)}
+              </div>
             </div>
           </div>
           <div className="col-12">
@@ -159,7 +263,7 @@ export const DaftarAbsensi: React.FC<AbsensiProps> = ({
                           scope="col"
                           style={{ fontSize: "0.9rem", width: "30px" }}
                         >
-                          {index + 1}
+                          {getDayFromNo(index + 1)}
                         </th>
                       ))}
                   </tr>
@@ -171,7 +275,7 @@ export const DaftarAbsensi: React.FC<AbsensiProps> = ({
                         <td className="text-center py-3">{index + 1}</td>
                         <td className="py-3">{siswa.nis}</td>
                         <td className="py-3">{siswa.name}</td>
-                        {siswa.absensi.reverse().map((attendance, index2) => {
+                        {siswa.absensi.map((attendance, index2) => {
                           const tooltipId = `tooltip-${index}-${index2}`;
                           return (
                             <td

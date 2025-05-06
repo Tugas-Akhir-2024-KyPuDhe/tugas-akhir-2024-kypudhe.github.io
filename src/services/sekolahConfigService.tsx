@@ -37,11 +37,11 @@ const ConfigSchoolService = (): ConfigSchoolService => {
     try {
       const response: AxiosResponse<GetConfigSchool> = await axios.get(
         `${apiUrl}/api/config-school/get`,
-        {
-          headers: {
-            Authorization: `Bearer ${userLoginCookie.token}`,
-          },
-        }
+        // {
+        //   headers: {
+        //     Authorization: `Bearer ${userLoginCookie.token}`,
+        //   },
+        // }
       );
       return response.data;
     } catch (error) {

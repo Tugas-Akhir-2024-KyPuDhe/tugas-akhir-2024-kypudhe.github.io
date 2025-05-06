@@ -10,6 +10,7 @@ import { AxiosError } from "axios";
 import {
   decodeToken,
   formatDate,
+  getCurrentWeekDateRange,
   showConfirmationDialog,
   Toast,
 } from "../../../../utils/myFunctions";
@@ -60,6 +61,11 @@ export const DetailKelasSiswaPage: React.FC = () => {
   const [dataAttendanceStudent, setDataAttendanceStudent] = useState<
     AttendanceMonth[]
   >([]);
+  const [dateRange] = useState({
+    startDate: "",
+    endDate: "",
+  });
+
   const [cookieLogin] = useCookie("userLoginCookie", "");
   const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
   const dtoken = decodeToken(userLoginCookie.token);
@@ -85,8 +91,14 @@ export const DetailKelasSiswaPage: React.FC = () => {
             parseInt(response.data.currentClassId),
             today
           );
-          await handleGetSummaryAttendance(
-            parseInt(response.data.currentClassId)
+          // await handleGetSummaryAttendance(
+          //   parseInt(response.data.currentClassId)
+          // );
+          const { startDate, endDate } = getCurrentWeekDateRange();
+          await handleGetAttendanceWeekly(
+            parseInt(response.data.currentClassId),
+            startDate,
+            endDate
           );
           await getClass(
             parseInt(response.data.currentClassId),
@@ -139,7 +151,7 @@ export const DetailKelasSiswaPage: React.FC = () => {
       const havePosition = dataRes?.StudentPositionInClass.filter(
         (dt) => dt.student.nis == dtoken.nis
       );
-      
+
       if (havePosition.length > 0) {
         console.log(statusHistory);
         if (statusHistory === "Aktif") {
@@ -162,6 +174,46 @@ export const DetailKelasSiswaPage: React.FC = () => {
       }
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleGetAttendanceWeekly = async (
+    classId: number,
+    date_start: string,
+    date_end: string
+  ) => {
+    try {
+      setLoadingAttendance(true);
+      const response = await studentAttendance.getAttendanceInClassWeekly(
+        classId,
+        date_start,
+        date_end
+      );
+      if (response.status === 200) {
+        setListAllStudentsAttendance(response.data);
+        setListAllStudentsAttendanceHeader(response.data[0]?.absensi || []);
+        // setDateRange({ startDate, endDate }); // Simpan date range terakhir
+      }
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      if (axiosError.response?.status === 404) {
+        setListAllStudentsAttendance([]);
+        setListAllStudentsAttendanceHeader([]);
+      }
+      console.error(error);
+    } finally {
+      setLoadingAttendance(false);
+    }
+  };
+
+  // Fungsi untuk handle perubahan tanggal dari komponen DaftarAbsensi
+  const handleDateRangeChange = async (startDate: string, endDate: string) => {
+    if (data?.currentClassId) {
+      await handleGetAttendanceWeekly(
+        parseInt(data.currentClassId),
+        startDate,
+        endDate
+      );
     }
   };
 
@@ -190,26 +242,26 @@ export const DetailKelasSiswaPage: React.FC = () => {
     }
   };
 
-  const handleGetSummaryAttendance = async (classId: number) => {
-    try {
-      setLoadingAttendance(true);
-      const response = await studentAttendance.getAttendanceSummaryInClass(
-        classId
-      );
-      if (response.status === 200) {
-        setListAllStudentsAttendance(response.data);
-        setListAllStudentsAttendanceHeader(response.data[0].absensi);
-      }
-    } catch (error) {
-      const axiosError = error as AxiosError;
-      if (axiosError.response?.status === 404) {
-        setListAllStudentsAttendance(null);
-      }
-      console.error(error);
-    } finally {
-      setLoadingAttendance(false);
-    }
-  };
+  // const handleGetSummaryAttendance = async (classId: number) => {
+  //   try {
+  //     setLoadingAttendance(true);
+  //     const response = await studentAttendance.getAttendanceSummaryInClass(
+  //       classId
+  //     );
+  //     if (response.status === 200) {
+  //       setListAllStudentsAttendance(response.data);
+  //       setListAllStudentsAttendanceHeader(response.data[0].absensi);
+  //     }
+  //   } catch (error) {
+  //     const axiosError = error as AxiosError;
+  //     if (axiosError.response?.status === 404) {
+  //       setListAllStudentsAttendance(null);
+  //     }
+  //     console.error(error);
+  //   } finally {
+  //     setLoadingAttendance(false);
+  //   }
+  // };
 
   const handleCreateAttendance = async (classId: number, dateAtt: string) => {
     try {
@@ -230,7 +282,12 @@ export const DetailKelasSiswaPage: React.FC = () => {
           timer: 4000,
         });
         handleGetAttendance(classId, dateAtt);
-        handleGetSummaryAttendance(classId);
+        // handleGetSummaryAttendance(classId);
+        await handleGetAttendanceWeekly(
+          classId,
+          dateRange.startDate,
+          dateRange.endDate
+        );
       }
     } catch (error) {
       const axiosError = error as AxiosError;
@@ -274,7 +331,12 @@ export const DetailKelasSiswaPage: React.FC = () => {
           timer: 4000,
         });
         handleGetAttendance(classId, dateAtt);
-        handleGetSummaryAttendance(classId);
+        // handleGetSummaryAttendance(classId);
+        await handleGetAttendanceWeekly(
+          classId,
+          dateRange.startDate,
+          dateRange.endDate
+        );
       }
     } catch (error) {
       const axiosError = error as AxiosError;
@@ -315,7 +377,12 @@ export const DetailKelasSiswaPage: React.FC = () => {
             timer: 4000,
           });
           await handleGetAttendance(classId, dateAtt);
-          await handleGetSummaryAttendance(classId);
+          // await handleGetSummaryAttendance(classId);
+          await handleGetAttendanceWeekly(
+            classId,
+            dateRange.startDate,
+            dateRange.endDate
+          );
         }
       } catch (error) {
         const axiosError = error as AxiosError;
@@ -386,9 +453,10 @@ export const DetailKelasSiswaPage: React.FC = () => {
             data={listAllStudentsAttendance!}
             dataHeader={listAllStudentsAttendanceHeader!}
             kelas={data.currentClass}
+            onDateChange={handleDateRangeChange}
           />
         ) : (
-          "sdf"
+          "no option"
         ))}
     </>
   );

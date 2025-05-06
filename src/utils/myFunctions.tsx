@@ -316,15 +316,15 @@ export const convertToPercentage = (value: string) => {
 
 export const convertStatusProblem = (status: string): JSX.Element => {
   switch (status.toLowerCase()) {
-    case 'baru':
+    case "baru":
       return <span className="badge text-bg-secondary">Baru</span>;
-    case 'pending':
+    case "pending":
       return <span className="badge text-bg-warning text-light">Pending</span>;
-    case 'perbaikan':
+    case "perbaikan":
       return <span className="badge text-bg-info text-light">Perbaikan</span>;
-    case 'selesai':
+    case "selesai":
       return <span className="badge text-bg-success">Selesai</span>;
-    case 'ditolak':
+    case "ditolak":
       return <span className="badge text-bg-danger">Ditolak</span>;
     default:
       return <span className="badge text-bg-light">Unknown</span>;
@@ -333,13 +333,78 @@ export const convertStatusProblem = (status: string): JSX.Element => {
 
 export const convertStatusStudyTracer = (status: string): JSX.Element => {
   switch (status.toLowerCase()) {
-    case 'pending':
+    case "pending":
       return <span className="badge text-bg-warning text-light">Pending</span>;
-    case 'disetujui':
-      return <span className="badge text-bg-success text-light">Disetujui</span>;
-    case 'ditolak':
+    case "disetujui":
+      return (
+        <span className="badge text-bg-success text-light">Disetujui</span>
+      );
+    case "ditolak":
       return <span className="badge text-bg-danger">Ditolak</span>;
     default:
       return <span className="badge text-bg-light">Unknown</span>;
+  }
+};
+
+export function getWeekDateRange(date: Date | string = new Date()) {
+  const referenceDate = typeof date === "string" ? new Date(date) : date;
+
+  const dayOfWeek = referenceDate.getDay(); // 0 (Minggu) sampai 6 (Sabtu)
+  const diffToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+
+  const monday = new Date(referenceDate);
+  monday.setDate(referenceDate.getDate() - diffToMonday);
+
+  const sunday = new Date(monday);
+  sunday.setDate(monday.getDate() + 6);
+
+  // Format tanggal ke YYYY-MM-DD
+  const formatDate = (date: Date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  return {
+    startDate: formatDate(monday),
+    endDate: formatDate(sunday),
+  };
+}
+
+// Mendapatkan rentang tanggal minggu ini (Senin-Minggu)
+export function getCurrentWeekDateRange() {
+  return getWeekDateRange(new Date());
+}
+
+// Mendapatkan rentang tanggal minggu berikutnya atau sebelumnya
+export function getNextWeekDateRange(
+  currentStartDate: string,
+  direction: number = 1
+) {
+  const monday = new Date(currentStartDate);
+  monday.setDate(monday.getDate() + direction * 7);
+
+  return getWeekDateRange(monday);
+}
+
+export const getDayFromNo = (no: number, full: boolean = false) => {
+  switch (no) {
+    case 1:
+      return `${full ? "Senin" : "S"} `;
+    case 2:
+      return `${full ? "Selasa" : "S"} `;
+    case 3:
+      return `${full ? "Rabu" : "R"} `;
+    case 4:
+      return `${full ? "Kamis" : "K"} `;
+    case 5:
+      return `${full ? "Jumat" : "J"} `;
+    case 6:
+      return `${full ? "Sabtu" : "S"} `;
+    case 7:
+      return `${full ? "Minggu" : "M"} `;
+    default:
+      return "Tidak Diketahui";
   }
 };

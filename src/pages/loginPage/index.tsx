@@ -4,7 +4,9 @@ import AuthService from "../../services/authService";
 import { Toast } from "../../utils/myFunctions";
 import { AxiosError } from "axios";
 import useCookie from "react-use-cookie";
-import logoTutWuri from "./../../assets/images/logo-tut-wuri-handayani.png";
+// import logoTutWuri from "./../../assets/images/logo-tut-wuri-handayani.png";
+import { School } from "../../interface/school.interface";
+import ConfigSchoolService from "../../services/sekolahConfigService";
 
 interface LoginForm {
   username: string;
@@ -13,6 +15,7 @@ interface LoginForm {
 
 export const LoginPage: React.FC = () => {
   const authService = AuthService();
+  const configSchool = ConfigSchoolService();
   const navigate = useNavigate();
   const [formLogin, setFormLogin] = useState<LoginForm>({
     username: "",
@@ -24,8 +27,16 @@ export const LoginPage: React.FC = () => {
   const [loadingFormLogin, setloadingFormLogin] = useState(false);
   const [cookieLogin, setCookieLogin] = useCookie("userLoginCookie", "");
   const userLoginCookie = cookieLogin ? JSON.parse(cookieLogin) : null;
+  const [dataConfig, setDataConfig] = useState<School>();
 
-
+  const getDataConfig = async () => {
+    try {
+      const response = await configSchool.getConfigSchool();
+      setDataConfig(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -100,6 +111,10 @@ export const LoginPage: React.FC = () => {
   };
 
   useEffect(() => {
+    getDataConfig();
+  }, []);
+
+  useEffect(() => {
     const isAuthenticated = userLoginCookie?.token;
 
     if (isAuthenticated) {
@@ -117,7 +132,7 @@ export const LoginPage: React.FC = () => {
             <div className="w-100 p-4 px-4">
               <div className="img-logo text-center mb-5">
                 <img
-                  src={logoTutWuri}
+                  src={dataConfig?.logo?.url}
                   alt=""
                   className="img-fluid mb-3"
                   width="180"
@@ -125,7 +140,9 @@ export const LoginPage: React.FC = () => {
                 <h5 className="card-title text-center mb-2 h3 fw-bold">
                   Login
                 </h5>
-                <p>Silahkan Login Terlebih Dahulu Untuk Mengakses Portal Sekolah</p>
+                <p>
+                  Silahkan Login Terlebih Dahulu Untuk Mengakses Portal Sekolah
+                </p>
               </div>
               <form onSubmit={handleLogin}>
                 <div className="mb-3">
