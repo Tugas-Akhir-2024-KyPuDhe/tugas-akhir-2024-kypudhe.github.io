@@ -95,7 +95,7 @@ export const TableStudyTracer: React.FC<TableStudyTracerProps> = ({
           </button>
           <button
             className="btn btn-danger btn-sm"
-            onClick={() => handleDetelete(row.id)}
+            onClick={() => handleDetelete(row.id!)}
             disabled={loading}
           >
             <FaTrash />

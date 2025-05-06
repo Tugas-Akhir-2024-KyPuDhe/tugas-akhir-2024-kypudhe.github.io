@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { HeaderTitlePage } from "../../../components/headerTitlePage";
 import { useNavigate, useParams } from "react-router-dom";
-import { decodeToken, Toast } from "../../../utils/myFunctions";
+import { decodeToken, getCurrentWeekDateRange, Toast } from "../../../utils/myFunctions";
 import StaffService from "../../../services/staffService";
 import useCookie from "react-use-cookie";
 import { CourseInClass } from "../../../interface/courseInClass.interface";
@@ -43,6 +43,8 @@ export const DetailJadwalMengajarPage: React.FC = () => {
   const [data, setData] = useState<CourseInClass>();
   const [teacherName, setTeacherName] = useState("");
 
+  const [currentClassId, setCurrentClassId] = useState<number>()
+
   const [activeMenu, setActiveMenu] = useState("daftar-siswa");
   const handleMenuClick = (menu: string) => {
     if (!loading) {
@@ -50,26 +52,65 @@ export const DetailJadwalMengajarPage: React.FC = () => {
     }
   };
 
-  const handleGetSummaryAttendance = async (classId: number) => {
+  const handleGetAttendanceWeekly = async (
+    classId: number,
+    date_start: string,
+    date_end: string
+  ) => {
     try {
       setLoadingAttendance(true);
-      const response = await studentAttendance.getAttendanceSummaryInClass(
-        classId
+      const response = await studentAttendance.getAttendanceInClassWeekly(
+        classId,
+        date_start,
+        date_end
       );
       if (response.status === 200) {
         setListAllStudentsAttendance(response.data);
-        setListAllStudentsAttendanceHeader(response.data[0].absensi);
+        setListAllStudentsAttendanceHeader(response.data[0]?.absensi || []);
+        // setDateRange({ startDate, endDate }); // Simpan date range terakhir
       }
     } catch (error) {
       const axiosError = error as AxiosError;
       if (axiosError.response?.status === 404) {
-        setListAllStudentsAttendance(null);
+        setListAllStudentsAttendance([]);
+        setListAllStudentsAttendanceHeader([]);
       }
       console.error(error);
     } finally {
       setLoadingAttendance(false);
     }
   };
+
+  const handleDateRangeChange = async (startDate: string, endDate: string) => {
+    if (id) {
+      await handleGetAttendanceWeekly(
+        currentClassId!,
+        startDate,
+        endDate
+      );
+    }
+  };
+
+  // const handleGetSummaryAttendance = async (classId: number) => {
+  //   try {
+  //     setLoadingAttendance(true);
+  //     const response = await studentAttendance.getAttendanceSummaryInClass(
+  //       classId
+  //     );
+  //     if (response.status === 200) {
+  //       setListAllStudentsAttendance(response.data);
+  //       setListAllStudentsAttendanceHeader(response.data[0].absensi);
+  //     }
+  //   } catch (error) {
+  //     const axiosError = error as AxiosError;
+  //     if (axiosError.response?.status === 404) {
+  //       setListAllStudentsAttendance(null);
+  //     }
+  //     console.error(error);
+  //   } finally {
+  //     setLoadingAttendance(false);
+  //   }
+  // };
 
   const getData = async () => {
     if (id) {
@@ -80,8 +121,15 @@ export const DetailJadwalMengajarPage: React.FC = () => {
           dtoken.username,
           id
         );
-        await handleGetSummaryAttendance(
-          response.data.CourseInClass[0].class.id
+        setCurrentClassId(response.data.CourseInClass[0].class.id)
+        // await handleGetSummaryAttendance(
+        //   response.data.CourseInClass[0].class.id
+        // );
+        const { startDate, endDate } = getCurrentWeekDateRange();
+        await handleGetAttendanceWeekly(
+          response.data.CourseInClass[0].class.id,
+          startDate,
+          endDate
         );
         setTeacherName(response.data.name);
         setData(response.data.CourseInClass[0]);
@@ -144,6 +192,7 @@ export const DetailJadwalMengajarPage: React.FC = () => {
             loading={loading || loadingAttendance}
             data={listAllStudentsAttendance!}
             dataHeader={listAllStudentsAttendanceHeader!}
+            onDateChange={handleDateRangeChange}
           />
         ) : (
           <CardNilaiKelas

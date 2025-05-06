@@ -131,12 +131,14 @@ export const LoginPage: React.FC = () => {
           <div className="col-lg-4 vh-100 ">
             <div className="w-100 p-4 px-4">
               <div className="img-logo text-center mb-5">
-                <img
-                  src={dataConfig?.logo?.url}
-                  alt=""
-                  className="img-fluid mb-3"
-                  width="180"
-                />
+                {dataConfig?.logo && (
+                  <img
+                    src={dataConfig?.logo?.url}
+                    alt=""
+                    className="img-fluid mb-3"
+                    width="180"
+                  />
+                )}
                 <h5 className="card-title text-center mb-2 h3 fw-bold">
                   Login
                 </h5>

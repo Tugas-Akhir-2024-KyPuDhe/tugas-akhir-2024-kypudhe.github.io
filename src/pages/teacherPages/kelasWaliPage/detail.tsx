@@ -7,7 +7,7 @@ import { AxiosError } from "axios";
 import ClassStudentService from "../../../services/classStudentService";
 import { Class } from "../../../interface/studentClass.interface";
 import { CardDaftarSiswaKelas } from "../../../features/teacherPages/kelasWaliPage/cardDaftarSiswaKelas";
-import { showConfirmationDialog, Toast } from "../../../utils/myFunctions";
+import { getCurrentWeekDateRange, showConfirmationDialog, Toast } from "../../../utils/myFunctions";
 import { NavSubMenu } from "../../../components/navSubmenu";
 import { CardPerangkatKelas } from "../../../features/teacherPages/kelasWaliPage/cardPerangkatKelas";
 import { StudentDetail } from "../../../interface/student.interface";
@@ -88,6 +88,45 @@ export const DetailKelasWaliPage: React.FC = () => {
     }
   };
 
+  const handleGetAttendanceWeekly = async (
+    classId: number,
+    date_start: string,
+    date_end: string
+  ) => {
+    try {
+      setLoadingAttendance(true);
+      const response = await studentAttendance.getAttendanceInClassWeekly(
+        classId,
+        date_start,
+        date_end
+      );
+      if (response.status === 200) {
+        setListAllStudentsAttendance(response.data);
+        setListAllStudentsAttendanceHeader(response.data[0]?.absensi || []);
+        // setDateRange({ startDate, endDate }); // Simpan date range terakhir
+      }
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      if (axiosError.response?.status === 404) {
+        setListAllStudentsAttendance([]);
+        setListAllStudentsAttendanceHeader([]);
+      }
+      console.error(error);
+    } finally {
+      setLoadingAttendance(false);
+    }
+  };
+
+  const handleDateRangeChange = async (startDate: string, endDate: string) => {
+    if (id) {
+      await handleGetAttendanceWeekly(
+        parseInt(id),
+        startDate,
+        endDate
+      );
+    }
+  };
+
   const getData = async () => {
     if (id) {
       try {
@@ -96,7 +135,13 @@ export const DetailKelasWaliPage: React.FC = () => {
         const response = await classService.getClassById(parseInt(id));
         setData(response.data);
         setstudents(response.data.student);
-        await handleGetSummaryAttendance(parseInt(id));
+        // await handleGetSummaryAttendance(parseInt(id));
+        const { startDate, endDate } = getCurrentWeekDateRange();
+        await handleGetAttendanceWeekly(
+          parseInt(id),
+          startDate,
+          endDate
+        );
       } catch (error) {
         const axiosError = error as AxiosError;
         if (axiosError.response?.status === 404) {
@@ -119,26 +164,26 @@ export const DetailKelasWaliPage: React.FC = () => {
     }
   };
 
-  const handleGetSummaryAttendance = async (classId: number) => {
-    try {
-      setLoadingAttendance(true);
-      const response = await studentAttendance.getAttendanceSummaryInClass(
-        classId
-      );
-      if (response.status === 200) {
-        setListAllStudentsAttendance(response.data);
-        setListAllStudentsAttendanceHeader(response.data[0].absensi);
-      }
-    } catch (error) {
-      const axiosError = error as AxiosError;
-      if (axiosError.response?.status === 404) {
-        setListAllStudentsAttendance(null);
-      }
-      console.error(error);
-    } finally {
-      setLoadingAttendance(false);
-    }
-  };
+  // const handleGetSummaryAttendance = async (classId: number) => {
+  //   try {
+  //     setLoadingAttendance(true);
+  //     const response = await studentAttendance.getAttendanceSummaryInClass(
+  //       classId
+  //     );
+  //     if (response.status === 200) {
+  //       setListAllStudentsAttendance(response.data);
+  //       setListAllStudentsAttendanceHeader(response.data[0].absensi);
+  //     }
+  //   } catch (error) {
+  //     const axiosError = error as AxiosError;
+  //     if (axiosError.response?.status === 404) {
+  //       setListAllStudentsAttendance(null);
+  //     }
+  //     console.error(error);
+  //   } finally {
+  //     setLoadingAttendance(false);
+  //   }
+  // };
 
   const optionsStudents = [
     ...students.map((data) => ({
@@ -377,6 +422,7 @@ export const DetailKelasWaliPage: React.FC = () => {
             loading={loading || loadingAttendance}
             data={listAllStudentsAttendance!}
             dataHeader={listAllStudentsAttendanceHeader!}
+            onDateChange={handleDateRangeChange}
           />
         ) : activeMenu === "nilai-akhir-siswa" ? (
           <CardNilaiKelas loading={loading} data={data!} />
