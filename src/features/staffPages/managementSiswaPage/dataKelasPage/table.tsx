@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { FaEye, FaPen } from "react-icons/fa6";
 import ClassStudentService from "../../../../services/classStudentService";
 import { Class } from "../../../../interface/studentClass.interface";
+import { convertStatusClass } from "../../../../utils/myFunctions";
 
 export const Table: React.FC = () => {
   const classService = ClassStudentService();
@@ -56,19 +57,32 @@ export const Table: React.FC = () => {
       cell: (row: Class) => row.name,
       width: "100px",
     },
-    {
-      name: "Kapasitas",
-      selector: (row: Class) => row.capacity,
-      sortable: true,
-      cell: (row: Class) => <div className="w-100 text-center">{row.capacity}</div>,
-      width: "120px",
-    },
+    // {
+    //   name: "Kapasitas",
+    //   selector: (row: Class) => row.capacity,
+    //   sortable: true,
+    //   cell: (row: Class) => (
+    //     <div className="w-100 text-center">{row.capacity}</div>
+    //   ),
+    //   width: "120px",
+    // },
     {
       name: "Wali Kelas",
       selector: (row: Class) => row.homeRoomTeacher.name,
       sortable: true,
       cell: (row: Class) => row.homeRoomTeacher.name,
       // width: "100px",
+    },
+    {
+      name: "Status",
+      selector: (row: Class) => row.status,
+      sortable: true,
+      cell: (row: Class) => (
+        <div className="w-100 text-center">
+          {convertStatusClass(row.status)}
+        </div>
+      ),
+      width: "100px",
     },
     {
       name: "Action",
@@ -83,9 +97,7 @@ export const Table: React.FC = () => {
           </button>
           <button
             className="btn btn-warning btn-sm text me-2 text-light"
-            onClick={() =>
-              navigate(`update/${row.id}`)
-            }
+            onClick={() => navigate(`update/${row.id}`)}
             disabled={loading}
           >
             <FaPen />

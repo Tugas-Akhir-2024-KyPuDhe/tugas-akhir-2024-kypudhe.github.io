@@ -133,6 +133,7 @@ export const ModalNextGradeStudentInClass: React.FC<
       if (result.isConfirmed) {
         const response = await classService.insertStudentInClass(payload);
         if (response.status === 201) {
+          await classService.updateStatusClass(dataClass.id, 2); //selesai
           const modalElement = document.getElementById(
             "modalAddStudentInClass"
           ) as HTMLDivElement | null;

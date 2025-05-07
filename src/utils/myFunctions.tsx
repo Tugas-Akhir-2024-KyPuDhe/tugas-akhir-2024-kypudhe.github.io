@@ -408,3 +408,14 @@ export const getDayFromNo = (no: number, full: boolean = false) => {
       return "Tidak Diketahui";
   }
 };
+
+export const convertStatusClass = (status: number): JSX.Element => {
+  switch (status) {
+    case 1:
+      return <span className="badge bg-blue text-light">Aktif</span>;
+    case 2:
+      return <span className="badge text-bg-success text-light">Selesai</span>;
+    default:
+      return <span className="badge text-bg-light">Unknown</span>;
+  }
+};

@@ -130,7 +130,7 @@ export const DetailKelasWaliPage: React.FC = () => {
   const getData = async () => {
     if (id) {
       try {
-        
+         
         setLoading(true);
         const response = await classService.getClassById(parseInt(id));
         setData(response.data);

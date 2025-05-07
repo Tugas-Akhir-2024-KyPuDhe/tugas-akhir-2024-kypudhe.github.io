@@ -161,7 +161,7 @@ export const Table: React.FC = () => {
   ];
 
   const filterData = data.filter((user) =>
-    user.name.toLowerCase().includes(searchTerm.toLowerCase())
+    user.name.toLowerCase().includes(searchTerm.toLowerCase()) || user.nis.toLowerCase().includes(searchTerm.toLowerCase()) || user.nisn.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleSelectChange = async (

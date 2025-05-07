@@ -30,6 +30,7 @@ export interface Class {
   staffId: number;
   academicYear: string;
   capacity: number;
+  status: number;
   createdAt: string;
   updatedAt: string;
   StudentPositionInClass: IStudentPositionInClass[];

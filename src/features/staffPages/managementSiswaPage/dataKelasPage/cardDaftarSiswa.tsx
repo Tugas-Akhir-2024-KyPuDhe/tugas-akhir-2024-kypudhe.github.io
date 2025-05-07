@@ -149,20 +149,24 @@ export const CardDaftarSiswaDetailKelas: React.FC<DaftarSiswaProps> = ({
             <button className="mb-3 mb-md-0 btn border-success text-success me-3">
               Export to Excel
             </button>
-            <button
-              className="mb-3 mb-md-0 btn border-blue text-blue me-3"
-              data-bs-toggle="modal"
-              data-bs-target="#modalAddStudentInClass"
-            >
-              <FaPlus className="me-2 fs-5" /> Tambah Siswa
-            </button>
-            <button
-              className="mb-3 mb-md-0 btn border-blue text-blue"
-              data-bs-toggle="modal"
-              data-bs-target="#modalNextGradeStudentInClass"
-            >
-              <FaAngleDoubleUp className="me-2 fs-5" /> Naik Kelas
-            </button>
+            {dataClass && dataClass.status == 1 && (
+              <>
+                <button
+                  className="mb-3 mb-md-0 btn border-blue text-blue me-3"
+                  data-bs-toggle="modal"
+                  data-bs-target="#modalAddStudentInClass"
+                >
+                  <FaPlus className="me-2 fs-5" /> Tambah Siswa
+                </button>
+                <button
+                  className="mb-3 mb-md-0 btn border-blue text-blue"
+                  data-bs-toggle="modal"
+                  data-bs-target="#modalNextGradeStudentInClass"
+                >
+                  <FaAngleDoubleUp className="me-2 fs-5" /> Naik Kelas
+                </button>
+              </>
+            )}
           </div>
           <ModalNextGradeStudentInClass
             onRefreshData={onRefreshData}

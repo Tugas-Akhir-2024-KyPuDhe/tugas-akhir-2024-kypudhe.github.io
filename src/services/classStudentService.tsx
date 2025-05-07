@@ -101,6 +101,29 @@ const ClassStudentService = () => {
     }
   };
 
+  const updateStatusClass = async (
+    id: number,
+    status: number
+  ): Promise<ResponseAction> => {
+    try {
+      const response = await axios.put<ResponseAction>(
+        `${apiUrl}/api/class/update/status/${id}`,
+        { status },
+        {
+          headers: {
+            authorization: `Bearer ${userLoginCookie?.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        handleUnauthorized(error.response?.status || 0);
+      }
+      throw error;
+    }
+  };
+
   const insertStudentInClass = async (
     data: PayloadInsertStundets
   ): Promise<ResponseAction> => {
@@ -126,6 +149,7 @@ const ClassStudentService = () => {
   return {
     createClass,
     updateClass,
+    updateStatusClass,
     getAllClass,
     getClassById,
     insertStudentInClass,
