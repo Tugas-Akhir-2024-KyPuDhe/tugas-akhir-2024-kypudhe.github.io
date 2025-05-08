@@ -95,6 +95,8 @@ export const LoginPage: React.FC = () => {
       }
     } catch (error) {
       const axiosError = error as AxiosError;
+      console.log(error);
+      
       if (axiosError.response?.status === 400) {
         Toast.fire({
           icon: "error",

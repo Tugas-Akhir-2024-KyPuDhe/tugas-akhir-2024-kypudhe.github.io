@@ -930,6 +930,35 @@ export const ListMenu = () => {
               Sekolah
             </MenuItem>
             <MenuItem
+              onClick={() => handleMenuClick("/config/formula-nilai")}
+              icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
+              style={{
+                position: "relative",
+                backgroundColor: selectedMenu.includes("/config/formula-nilai")
+                  ? "#E5EAF2"
+                  : "",
+              }}
+              className={`fw-medium ${
+                selectedMenu.includes("/config/formula-nilai")
+                  ? "text-blue"
+                  : "text-dark-soft"
+              }`}
+            >
+              {selectedMenu.includes("/config/formula-nilai") && (
+                <div
+                  style={{
+                    position: "absolute",
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                    width: "4px",
+                    backgroundColor: "var(--blue-color)",
+                  }}
+                />
+              )}
+              Formula Nilai
+            </MenuItem>
+            <MenuItem
               onClick={() => handleMenuClick("/config/kendala/laporan-kendala")}
               icon={<FaCircle style={{ fontSize: "0.5rem" }} />}
               style={{

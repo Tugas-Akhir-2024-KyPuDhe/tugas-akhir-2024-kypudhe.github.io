@@ -49,6 +49,8 @@ import {
   FormProblemReportPage,
   ProblemReportPage,
   DetailProblemReportPage,
+  GradeFormulaPage,
+  FormGradeFormulaPage,
 } from "./pages";
 import { SideBar } from "./components/sidebar";
 import PrivateRoute from "./components/privateRoute";
@@ -417,6 +419,33 @@ function App() {
               element={
                 <PrivateRoute
                   Component={FormAcademicYearPage}
+                  Role={["STAFF"]}
+                />
+              }
+            />
+            <Route
+              path="/config/formula-nilai"
+              element={
+                <PrivateRoute
+                  Component={GradeFormulaPage}
+                  Role={["STAFF"]}
+                />
+              }
+            />
+            <Route
+              path="/config/formula-nilai/tambah"
+              element={
+                <PrivateRoute
+                  Component={FormGradeFormulaPage}
+                  Role={["STAFF"]}
+                />
+              }
+            />
+            <Route
+              path="/config/formula-nilai/update/:id"
+              element={
+                <PrivateRoute
+                  Component={FormGradeFormulaPage}
                   Role={["STAFF"]}
                 />
               }

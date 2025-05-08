@@ -15,7 +15,6 @@ import { DetailKelasWaliPage } from './teacherPages/kelasWaliPage/detail';
 // import { DaftarKelasNilaiSiswaPage } from './teacherPages/jadwalMengajarPage/daftarKelasPage/nilaiSiswaPage';
 // import { DetailKelasPage } from './teacherPages/jadwalMengajarPage/daftarKelasPage/detail';
 
-
 //STAFF
 import { FormJurusanPage } from './staffPages/contentWebPage/jurusanPage/form';
 import { FormEkskulPage } from './staffPages/contentWebPage/ekskulPage/form';
@@ -48,6 +47,8 @@ import { AcademicYearPage } from './staffPages/configPage/academicYearPage';
 import { FormAcademicYearPage } from './staffPages/configPage/academicYearPage/formAcademicYear';
 import { ProblemReportPage } from './staffPages/configPage/problemReportpage';
 import { DetailProblemReportPage } from './staffPages/configPage/problemReportpage/detailProblemPage';
+import { GradeFormulaPage } from './staffPages/configPage/gradeFormulaPage';
+import { FormGradeFormulaPage } from './staffPages/configPage/gradeFormulaPage/formgradeFormula';
 
 //STUDENT
 import { AbsensiPage } from './studentPages/absensiPage/index';
@@ -66,4 +67,4 @@ import { ProfilePage } from './profilePage';
 import { NotFoundPage } from './notFoundPage';
 import { FormProblemReportPage } from './problemReportpage/form';
 
-export { NotFoundPage, HomePage, LoginPage, ArticlePage, FormArticlePage, DetailArticlePage, BannerPage, FormBannerPage, NilaiPage, KelasPage, MapelPage, AbsensiPage, SchoolPage, FacilityPage, FormFacilityPage, JurusanPage, FormJurusanPage, EkskulPage, FormEkskulPage, ProfilePage, DataSiswaMangementSiswaPage, FormSiswaMangementSiswaPage, DetailSiswaMangementSiswa, GaleriPage, FormGaleriPage, UpdateGaleriColletion, DataKelasMangementSiswaPage,FormDataKelasMangementSiswaPage, DetailKelasMangementSiswaPage, DataMapelMangementSiswaPage, FormMapelMangementSiswaPage, DataStaffMangementStaffPage,FormStaffMangementStaffPage, DetailKelasSiswaPage, BeritaPage, DetailStaffMangementSiswa, JadwalMengajarPage, DetailJadwalMengajarPage, KelasWaliPage, DetailKelasWaliPage, StudyTracerPage, AcademicYearPage, FormAcademicYearPage, DetailStudyTracerPage, ChangePasswordPage, FormProblemReportPage, ProblemReportPage, DetailProblemReportPage }
+export { NotFoundPage, HomePage, LoginPage, ArticlePage, FormArticlePage, DetailArticlePage, BannerPage, FormBannerPage, NilaiPage, KelasPage, MapelPage, AbsensiPage, SchoolPage, FacilityPage, FormFacilityPage, JurusanPage, FormJurusanPage, EkskulPage, FormEkskulPage, ProfilePage, DataSiswaMangementSiswaPage, FormSiswaMangementSiswaPage, DetailSiswaMangementSiswa, GaleriPage, FormGaleriPage, UpdateGaleriColletion, DataKelasMangementSiswaPage,FormDataKelasMangementSiswaPage, DetailKelasMangementSiswaPage, DataMapelMangementSiswaPage, FormMapelMangementSiswaPage, DataStaffMangementStaffPage,FormStaffMangementStaffPage, DetailKelasSiswaPage, BeritaPage, DetailStaffMangementSiswa, JadwalMengajarPage, DetailJadwalMengajarPage, KelasWaliPage, DetailKelasWaliPage, StudyTracerPage, AcademicYearPage, FormAcademicYearPage, DetailStudyTracerPage, ChangePasswordPage, FormProblemReportPage, ProblemReportPage, DetailProblemReportPage, GradeFormulaPage, FormGradeFormulaPage }
